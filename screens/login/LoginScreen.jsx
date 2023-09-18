@@ -1,4 +1,4 @@
-import LoginBtn from '@assets/Icons/Buttons';
+import { LoginBtn } from '@assets/Icons/Buttons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';

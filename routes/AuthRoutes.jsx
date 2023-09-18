@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '@screens/login/LoginScreen';
 import SelectTypeScreen from '@screens/signup/SelectTypeScreen';
 import DoctorGetInfoScreen from '@screens/signup/doctor/DoctorGetInfoScreen';
+import HospitalGetInfoScreen from '@screens/signup/doctor/HospitalGetInfoScreen';
 import PatientGetInfoScreen from '@screens/signup/patient/PatientGetInfoScreen';
 import { Auth } from 'context/AuthContext';
 import React, { useState } from 'react';
@@ -9,19 +10,19 @@ import React, { useState } from 'react';
 const Stack = createNativeStackNavigator();
 
 function AuthRoutes() {
-  //의사 회원가입 API 전송
+  //의사 회원가입 API 전송 객체
   const [doctorSignUpRequest, setDoctorSignUpRequest] = useState({
     email: '',
     name: '',
     password: '',
     contact: '',
-    certificationAddress: '',
+    certificateAddress: '',
     address: '',
-    merdicalSpeciality: '',
+    medicalSpeciality: '',
     selfDescription: '',
   });
 
-  //환자 회원가입 API 전송
+  //환자 회원가입 API 전송 객체
   const [patientSignUpRequest, setPatientSignUpRequest] = useState({
     email: '',
     name: '',
@@ -54,6 +55,13 @@ function AuthRoutes() {
         <Stack.Screen
           name={'doctorGetInfoScreen'}
           component={DoctorGetInfoScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={'hospitalGetInfoScreen'}
+          component={HospitalGetInfoScreen}
           options={{
             headerShown: false,
           }}
