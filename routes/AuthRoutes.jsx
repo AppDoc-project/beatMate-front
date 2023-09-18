@@ -3,6 +3,7 @@ import LoginScreen from '@screens/login/LoginScreen';
 import SelectTypeScreen from '@screens/signup/SelectTypeScreen';
 import DoctorGetInfoScreen from '@screens/signup/doctor/DoctorGetInfoScreen';
 import HospitalGetInfoScreen from '@screens/signup/doctor/HospitalGetInfoScreen';
+import GetAuthCodeScreen from '@screens/signup/patient/GetAuthCodeScreen';
 import PatientGetInfoScreen from '@screens/signup/patient/PatientGetInfoScreen';
 import { Auth } from 'context/AuthContext';
 import React, { useState } from 'react';
@@ -69,6 +70,13 @@ function AuthRoutes() {
         <Stack.Screen
           name={'patientGetInfoScreen'}
           component={PatientGetInfoScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={'getAuthCodeScreen'}
+          component={GetAuthCodeScreen}
           options={{
             headerShown: false,
           }}

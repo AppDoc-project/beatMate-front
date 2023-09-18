@@ -48,7 +48,7 @@ function DoctorGetInfoScreen(props) {
       <MainInfoTxt2>
         <Text style={{ color: 'navy' }}>정보</Text>를 입력해주세요!
       </MainInfoTxt2>
-      <SubTxt>모든 항목을 입력해주세요. (필수)</SubTxt>
+      <SubTitleTxt>모든 항목을 입력해주세요. (필수)</SubTitleTxt>
 
       <Info>
         <Component>
@@ -58,6 +58,7 @@ function DoctorGetInfoScreen(props) {
 
         <Component>
           <Txt>연락처를 입력해주세요.</Txt>
+          <SubTxt>예시와 같은 형식으로 작성해주세요.</SubTxt>
           <Input
             value={contact}
             onChangeText={onChangeContact}
@@ -68,6 +69,7 @@ function DoctorGetInfoScreen(props) {
 
         <Component>
           <Txt>이메일을 입력해주세요.</Txt>
+          <SubTxt>본 이메일을 사용해서 로그인을 하게 됩니다.</SubTxt>
           <Input
             value={email}
             onChangeText={onChangeEmail}
@@ -77,7 +79,8 @@ function DoctorGetInfoScreen(props) {
         </Component>
 
         <Component>
-          <Txt>비밀번호를 입력해주세요.</Txt>
+          <Txt>비밀번호</Txt>
+          <SubTxt>최소 8자, 최대 18자 가능 / 영문소문자, 숫자 반드시 포함</SubTxt>
           <Input
             value={password}
             onChangeText={onChangePassword}
@@ -118,12 +121,18 @@ const MainInfoTxt2 = styled.Text`
   margin-top: ${RFValue(5)}px;
 `;
 
-const SubTxt = styled.Text`
+const SubTitleTxt = styled.Text`
   color: lightgray;
   margin-left: ${wp(4.8)}px;
   margin-top: ${hp(1.23)}px;
   margin-bottom: ${hp(3)}px;
   font-size: ${RFValue(16)}px;
+`;
+
+const SubTxt = styled.Text`
+  color: lightgray;
+  font-size: ${RFValue(13)}px;
+  margin-top: ${hp(1)}px;
 `;
 
 const Info = styled.View`
