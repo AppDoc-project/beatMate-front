@@ -24,6 +24,7 @@
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^4.7.1",
     "react-native-screens": "^3.24.0",
+    "react-native-svg": "13.9.0",
     "react-native-vector-icons": "^10.0.0",
     "react-native-webview": "^13.3.1",
     "styled-components": "^6.0.7"
@@ -38,7 +39,7 @@
     "eslint-plugin-react": "^7.33.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^3.0.1",
-    "pretty-format": "^29.6.2",
+    "pretty-format": "^29.7.0",
     "prop-types": "^15.8.1"
   },
   "eslintConfig": {
