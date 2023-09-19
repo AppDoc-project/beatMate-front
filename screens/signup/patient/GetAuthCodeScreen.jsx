@@ -36,7 +36,7 @@ function GetAuthCodeScreen(props) {
   return (
     <Container>
       <Logo>AppDoc</Logo>
-      <InfoText>{email}로 인증 코드가 포함된 메일을 보냈습니다.</InfoText>
+      <InfoText>{email}로 메일을 보냈습니다.</InfoText>
       <Component>
         <Txt>인증 코드를 입력해주세요.</Txt>
         <Input value={code} onChangeText={onChangeCode} />
@@ -80,8 +80,9 @@ const InfoText = styled.Text`
   font-style: normal;
   font-weight: 700;
   margin-top: ${hp(12)}px;
-  margin-left: ${wp(-24)}px;
+  width: ${wp(100)}px;
   margin-bottom: ${hp(2)}px;
+  margin-left: ${wp(15)}px;
 `;
 
 const Component = styled.View`
