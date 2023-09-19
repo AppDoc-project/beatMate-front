@@ -81,7 +81,7 @@ function HospitalGetInfoScreen(props) {
           </Txt>
           <ImageUp onPress={uploadImage}>
             <Text>이미지 업로드하기</Text>
-            <Image source={{ uri: imgUrl }} />
+            {imgUrl !== '' && <Image source={{ uri: imgUrl }} />}
           </ImageUp>
         </Component>
 
