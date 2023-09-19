@@ -3,8 +3,9 @@ import { PreviousBtn } from '@assets/SignUp/SelectUserScreen';
 import SelectMedicalSpecialityTab from '@components/signup/SelectMedicalSpecialityTab';
 import { useNavigation } from '@react-navigation/native';
 import { Auth } from 'context/AuthContext';
-import React, { useContext } from 'react';
-import { View, Text } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import React, { useContext, useState } from 'react';
+import { View, Text, Image } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
@@ -17,10 +18,36 @@ function HospitalGetInfoScreen(props) {
   const navigation = useNavigation();
   const { certificateAddress, address, medicalSpeciality, selfDescription } = doctorSignUpRequest;
 
-  const onChangeCertificateAddress = (text) =>
-    setDoctorSignUpRequest((prev) => ({ ...prev, certificateAddress: text }));
   const onChangeAddress = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, address: text }));
   const onChangeSelfDescription = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, selfDescription: text }));
+
+  //자격증 사진 업로드
+  //사진 이미지 주소
+  const [imgUrl, setImgUrl] = useState('');
+  //권한 요청
+  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+
+  const uploadImage = async () => {
+    //권한이 없다면 물어보고, 승인X하면 함수 종료
+    if (!status?.granted) {
+      const permission = await requestPermission();
+      if (!permission.granted) {
+        return null;
+      }
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 1,
+      aspect: [1, 1],
+    });
+    if (result.canceled) {
+      return null; //이미지 업로드 취소한 경우
+    }
+    //이미지 업로드 결과 및 이미지 경로 업데이트
+    console.log(result);
+    setImgUrl(result.uri);
+  };
 
   const onPressPreviousBtn = () => {
     setDoctorSignUpRequest((prev) => ({
@@ -49,15 +76,13 @@ function HospitalGetInfoScreen(props) {
       <Info>
         <Component>
           <Txt>
-            자격증 번호를 입력해주세요.
+            자격증 사진을 업로드해주세요.
             <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
           </Txt>
-          <Input
-            value={certificateAddress}
-            onChangeText={onChangeCertificateAddress}
-            placeholder="( 예시. 01-234-345 )"
-            placeholderTextColor="lightgray"
-          />
+          <ImageUp onPress={uploadImage}>
+            <Text>이미지 업로드하기</Text>
+            <Image source={{ uri: imgUrl }} />
+          </ImageUp>
         </Component>
 
         <Component>
@@ -126,6 +151,8 @@ const Info = styled.View`
   margin-top: ${RFValue(20)}px;
   flex: 1;
 `;
+
+const ImageUp = styled.TouchableOpacity``;
 
 const Component = styled.View`
   margin-left: ${wp(4.8)}px;
