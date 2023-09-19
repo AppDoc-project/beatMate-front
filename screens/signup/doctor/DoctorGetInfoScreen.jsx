@@ -52,7 +52,7 @@ function DoctorGetInfoScreen(props) {
       // 작성 조건에 어긋나는 경우 알림
       Alert.alert('알림', '비밀번호는 최소 8자, 최대 18자, 영문 소문자와 숫자를 반드시 포함해야 합니다.');
     } else {
-      navigation.navigate('getAuthCodeScreen');
+      navigation.navigate('hospitalGetInfoScreen');
     }
   };
 
