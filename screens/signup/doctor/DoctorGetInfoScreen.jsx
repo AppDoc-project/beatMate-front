@@ -34,13 +34,10 @@ function DoctorGetInfoScreen(props) {
 
   const onPressContinueBtn = () => {
     if (name.length < 2 || name.length > 10) {
-      // 작성 조건에 어긋나는 경우 알림
       Alert.alert('알림', '이름은 2자 이상 10자 이하로 빈칸 없이 입력해주세요.');
     } else if (contact.length !== 11) {
-      // 작성 조건에 어긋나는 경우 알림
       Alert.alert('알림', '연락처는 11자여야 합니다.');
     } else if (!email || email.length > 50 || !email.includes('@')) {
-      // 작성 조건에 어긋나는 경우 알림
       Alert.alert('알림', '이메일은 최대 50자이며 이메일 형식이어야 합니다.');
     } else if (
       !password ||
@@ -49,7 +46,6 @@ function DoctorGetInfoScreen(props) {
       !/[a-z]/.test(password) ||
       !/\d/.test(password)
     ) {
-      // 작성 조건에 어긋나는 경우 알림
       Alert.alert('알림', '비밀번호는 최소 8자, 최대 18자, 영문 소문자와 숫자를 반드시 포함해야 합니다.');
     } else {
       navigation.navigate('hospitalGetInfoScreen');
