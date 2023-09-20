@@ -1,7 +1,8 @@
 import { PreviousBtn, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 import { Auth } from 'context/AuthContext';
-import { format as prettyFormat } from 'pretty-format';
+import format from 'pretty-format';
 import React, { useContext, useEffect } from 'react';
 import { Alert, Text } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -20,6 +21,29 @@ function DoctorGetInfoScreen(props) {
   const onChangeContact = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, contact: text }));
   const onChangeEmail = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, email: text }));
   const onChangePassword = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, password: text }));
+
+  const onPressCheckEmail = () => {
+    // 이메일 중복 여부 확인
+    const inputEmail = { email };
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    console.log(inputEmail);
+    axios
+      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/join/duplication`, inputEmail, axiosConfig)
+      .then((response) => {
+        const { data } = response;
+        console.log(format(data));
+
+        // 서버 응답에서 code와 subCode를 검사하여 알림 표시
+        if (data.code === 400 && data.subCode === 401) {
+          Alert.alert('알림', '중복된 이메일입니다. 다른 이메일을 작성해주세요.');
+        }
+      })
+      .catch((error) => console.log(format(error)));
+  };
 
   const onPressPreviousBtn = () => {
     setDoctorSignUpRequest((prev) => ({
@@ -53,7 +77,7 @@ function DoctorGetInfoScreen(props) {
   };
 
   useEffect(() => {
-    console.log(prettyFormat(doctorSignUpRequest));
+    console.log(format(doctorSignUpRequest));
   }, [doctorSignUpRequest]);
 
   return (
@@ -83,7 +107,12 @@ function DoctorGetInfoScreen(props) {
         </Component>
 
         <Component>
-          <Txt>이메일을 입력해주세요.</Txt>
+          <FirstLow>
+            <Txt>이메일을 입력해주세요.</Txt>
+            <Check onPress={onPressCheckEmail}>
+              <Text style={{ color: 'navy' }}>이메일 중복 확인</Text>
+            </Check>
+          </FirstLow>
           <SubTxt>본 이메일을 사용해서 로그인을 하게 됩니다.</SubTxt>
           <Input
             value={email}
@@ -179,6 +208,19 @@ const Input = styled.TextInput`
   font-size: ${RFValue(16)}px;
   font-weight: bold;
   padding: ${RFValue(10)}px;
+`;
+
+const FirstLow = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const Check = styled.TouchableOpacity`
+  margin-left: ${wp(4.8)}px;
+  border-color: navy;
+  border-width: 1px;
+  padding: 3px;
+  border-radius: 8px;
 `;
 
 export default DoctorGetInfoScreen;
