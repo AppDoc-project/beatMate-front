@@ -1,5 +1,6 @@
 import { PreviousBtn, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 import { Auth } from 'context/AuthContext';
 import { format as prettyFormat } from 'pretty-format';
 import React, { useContext, useEffect } from 'react';
@@ -32,7 +33,7 @@ function PatientGetInfoScreen(props) {
     navigation.navigate('loginScreen');
   };
 
-  const onPressContinueBtn = () => {
+  const onPressAlertBtn = () => {
     if (name.length < 2 || name.length > 10) {
       Alert.alert('알림', '이름은 2자 이상 10자 이하로 빈칸 없이 입력해주세요.');
     } else if (contact.length !== 11) {
@@ -47,9 +48,21 @@ function PatientGetInfoScreen(props) {
       !/\d/.test(password)
     ) {
       Alert.alert('알림', '비밀번호는 최소 8자, 최대 18자, 영문 소문자와 숫자를 반드시 포함해야 합니다.');
-    } else {
-      navigation.navigate('getAuthCodeScreen');
     }
+  };
+
+  const onPressContinueBtn = () => {
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    console.log(patientSignUpRequest);
+    axios
+      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/join/patient`, patientSignUpRequest, axiosConfig)
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error));
+    navigation.navigate('getAuthCodeScreen');
   };
 
   useEffect(() => {
@@ -111,7 +124,10 @@ function PatientGetInfoScreen(props) {
         width={wp(100)}
         marginBottom={hp(6.15)}
         justifyContent="center"
-        onPress={onPressContinueBtn}
+        onPress={() => {
+          onPressAlertBtn();
+          onPressContinueBtn();
+        }}
       />
     </Container>
   );
