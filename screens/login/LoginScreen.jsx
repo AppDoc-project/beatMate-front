@@ -1,9 +1,12 @@
 import { LoginBtn } from '@assets/Icons/Buttons';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { format } from 'pretty-format';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 function LoginScreen(props) {
   const navigation = useNavigation();
@@ -14,10 +17,34 @@ function LoginScreen(props) {
   const onChangeEmail = (text) => setEmail(text);
   const onChangePassword = (text) => setPassword(text);
 
+  const { setItem } = useAsyncStorage('authorization');
+
   const onPressLoginBtn = () => {
-    if (email && password) {
-      navigation.navigate('selectTypeScreen');
-    }
+    // 로그인
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        email: email,
+        password: password,
+      },
+    };
+
+    axios
+      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/login`, {}, axiosConfig)
+      .then((response) => {
+        console.log(format(response.data));
+        const authorizationHeader = response.headers.authorization;
+
+        if (authorizationHeader) {
+          setItem(authorizationHeader) // AsyncStorage에 저장
+            .then(() => {
+              axios.defaults.headers.common['Authorization'] = authorizationHeader;
+              navigation.navigate('homeScreen');
+            })
+            .catch((error) => console.log(format(error)));
+        }
+      })
+      .catch((error) => console.log(format(error)));
   };
 
   const onPressSignUpBtn = () => {

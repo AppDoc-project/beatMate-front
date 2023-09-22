@@ -55,7 +55,7 @@ function GetAuthCodeScreen(props) {
     console.log(authEmail);
     axios
       .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/validate/patient`, authEmail, axiosConfig)
-      .then((data) => console.log(format(data)))
+      .then((data) => console.log(format(data.data)))
       .catch((error) => console.log(format(error)));
 
     if (code) {
