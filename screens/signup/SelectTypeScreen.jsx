@@ -1,10 +1,11 @@
-import { DoctorSelect, PatientSelect, PreviousBtn, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
+import { DoctorSelect, PatientSelect, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
 import { UserInfo } from 'context/UserInfoContext';
 import React, { useContext } from 'react';
 import { Text } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
 function SelectTypeScreen() {
@@ -30,6 +31,7 @@ function SelectTypeScreen() {
 
   return (
     <Container>
+      <AntDesign name="left" size={32} marginLeft={5} marginTop={50} onPress={onPressPreviousBtn} />
       <MainInfoTxt1>사용자님,</MainInfoTxt1>
       <MainInfoTxt2>
         <Text style={{ color: 'navy' }}>유형</Text>을 선택해주세요!
@@ -55,8 +57,6 @@ function SelectTypeScreen() {
         </SignUp>
       </BottomWrapper>
 
-      <PreviousBtn marginBottom={hp(2)} marginLeft={wp(4.8)} onPress={onPressPreviousBtn} />
-
       <ContinueBtn
         fontColor={userType ? 'white' : 'navy'}
         backColor={userType ? 'navy' : 'white'}
@@ -78,7 +78,7 @@ const MainInfoTxt1 = styled.Text`
   font-size: ${RFValue(22)}px;
   font-weight: bold;
   margin-left: ${wp(4.8)}px;
-  margin-top: ${hp(18.7)}px;
+  margin-top: ${hp(12)}px;
 `;
 
 const MainInfoTxt2 = styled.Text`

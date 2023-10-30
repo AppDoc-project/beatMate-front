@@ -1,13 +1,14 @@
 import { FinishBtn } from '@assets/Icons/Buttons';
-import { PreviousBtn } from '@assets/SignUp/SelectUserScreen';
 import SelectMedicalSpecialityTab from '@components/signup/SelectMedicalSpecialityTab';
 import { useNavigation } from '@react-navigation/native';
 import { Auth } from 'context/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useContext, useState } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, SafeAreaView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
 function HospitalGetInfoScreen(props) {
@@ -67,77 +68,83 @@ function HospitalGetInfoScreen(props) {
   };
 
   return (
-    <Container>
-      <MainInfoTxt1>사용자님,</MainInfoTxt1>
-      <MainInfoTxt2>
-        <Text style={{ color: 'navy' }}>병원 정보</Text>를 입력해주세요!
-      </MainInfoTxt2>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
+        <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
 
-      <Info>
-        <Component>
-          <Txt>
-            자격증 사진을 업로드해주세요.
-            <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
-          </Txt>
-          <ImageUp onPress={uploadImage}>
-            <Text>이미지 업로드하기</Text>
-            {imgUrl !== '' && <Image source={{ uri: imgUrl }} />}
-          </ImageUp>
-        </Component>
+        <MainInfoTxt1>사용자님,</MainInfoTxt1>
+        <MainInfoTxt2>
+          <Text style={{ color: 'navy' }}>병원 정보</Text>를 입력해주세요!
+        </MainInfoTxt2>
 
-        <Component>
-          <Txt>
-            주소를 입력해주세요.{' '}
-            <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
-          </Txt>
-          <Input
-            value={address}
-            onChangeText={onChangeAddress}
-            placeholder="( 예시. 서울특별시 마포구 와우산로36 )"
-            placeholderTextColor="lightgray"
+        <Info>
+          <Component>
+            <Txt>
+              자격증 사진 + 사업자 등록증 / 재직증명서를{'\n'}업로드해주세요.{'\n'}
+              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}>
+                하나의 PDF 파일로 만들어서 업로드해주세요. (필수)
+              </Text>
+            </Txt>
+
+            <ImageUp onPress={uploadImage}>
+              <Text>이미지 업로드하기</Text>
+              {imgUrl !== '' && <Image source={{ uri: imgUrl }} />}
+            </ImageUp>
+          </Component>
+
+          <Component>
+            <Txt>
+              주소를 입력해주세요.{' '}
+              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
+            </Txt>
+            <Input
+              value={address}
+              onChangeText={onChangeAddress}
+              placeholder="( 예시. 서울특별시 마포구 와우산로36 )"
+              placeholderTextColor="lightgray"
+            />
+          </Component>
+
+          <SelectMedicalSpecialityTab />
+
+          <Component>
+            <Txt>
+              자기소개를 입력해주세요.{' '}
+              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (선택)</Text>
+            </Txt>
+            <Input
+              value={selfDescription}
+              onChangeText={onChangeSelfDescription}
+              placeholder="( 예시. 안녕하세요~ 꿈나무의원 의사입니다. )"
+              placeholderTextColor="lightgray"
+            />
+          </Component>
+        </Info>
+
+        <View style={{ marginBottom: hp(3) }}>
+          <FinishBtn
+            fontColor={certificateAddress && address && medicalSpeciality ? 'white' : 'navy'}
+            backColor={certificateAddress && address && medicalSpeciality ? 'navy' : 'white'}
+            width={wp(100)}
+            justifyContent="center"
+            onPress={onPressContinueBtn}
           />
-        </Component>
-
-        <SelectMedicalSpecialityTab />
-
-        <Component>
-          <Txt>
-            자기소개를 입력해주세요.{' '}
-            <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (선택)</Text>
-          </Txt>
-          <Input
-            value={selfDescription}
-            onChangeText={onChangeSelfDescription}
-            placeholder="( 예시. 안녕하세요~ 꿈나무의원 의사입니다. )"
-            placeholderTextColor="lightgray"
-          />
-        </Component>
-      </Info>
-
-      <View style={{ marginBottom: hp(3) }}>
-        <PreviousBtn marginBottom={hp(0)} marginLeft={wp(4.8)} onPress={onPressPreviousBtn} />
-        <FinishBtn
-          fontColor={certificateAddress && address && medicalSpeciality ? 'white' : 'navy'}
-          backColor={certificateAddress && address && medicalSpeciality ? 'navy' : 'white'}
-          width={wp(100)}
-          justifyContent="center"
-          onPress={onPressContinueBtn}
-        />
-      </View>
-    </Container>
+        </View>
+      </Container>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
-  background-color: white;
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
+  background-color: white;
 `;
 
 const MainInfoTxt1 = styled.Text`
   font-size: ${RFValue(22)}px;
   font-weight: bold;
   margin-left: ${wp(4.8)}px;
-  margin-top: ${hp(10)}px;
+  margin-top: ${hp(2)}px;
 `;
 
 const MainInfoTxt2 = styled.Text`

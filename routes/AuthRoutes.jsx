@@ -21,6 +21,7 @@ function AuthRoutes() {
     address: '',
     medicalSpeciality: '',
     selfDescription: '',
+    dateOfBirth: '',
   });
 
   //환자 회원가입 API 전송 객체
@@ -29,6 +30,7 @@ function AuthRoutes() {
     name: '',
     password: '',
     contact: '',
+    dateOfBirth: '',
   });
 
   return (
