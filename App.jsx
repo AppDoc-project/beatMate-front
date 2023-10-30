@@ -1,9 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from '@screens/community/HomeScreen';
 import { UserInfo } from 'context/UserInfoContext';
 import { React, useState } from 'react';
 import AuthRoutes from 'routes/AuthRoutes';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -14,13 +14,6 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="auth">
           <Stack.Screen name="auth" component={AuthRoutes} options={{ headerShown: false }} />
-          <Stack.Screen
-            name={'homeScreen'}
-            component={HomeScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
         </Stack.Navigator>
       </NavigationContainer>
     </UserInfo.Provider>
