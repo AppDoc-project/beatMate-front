@@ -1,25 +1,34 @@
+import Postcode from '@actbase/react-daum-postcode';
 import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
 import { Auth } from 'context/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useContext, useState } from 'react';
-import { View, Text, Image, SafeAreaView } from 'react-native';
+import { View, Text, Image, SafeAreaView, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from 'react-native-modal';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
 function HospitalGetInfoScreen(props) {
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const {
     doctor: [doctorSignUpRequest, setDoctorSignUpRequest],
   } = useContext(Auth);
 
   const navigation = useNavigation();
   const { certificateAddress, address, hospitalName } = doctorSignUpRequest;
+  const [extraAddress, setExtraAddress] = useState('');
 
   const onChangeAddress = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, address: text }));
   const onChangeHospitalName = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, hospitalName: text }));
+  const onChangeExtraAddress = (text) => setExtraAddress(text);
+  const getTogetherAddress = () => {
+    onChangeAddress(address + ' ' + extraAddress);
+  };
 
   //자격증 사진 업로드
   //사진 이미지 주소
@@ -60,6 +69,7 @@ function HospitalGetInfoScreen(props) {
   };
 
   const onPressContinueBtn = () => {
+    getTogetherAddress();
     if (certificateAddress && address && hospitalName) {
       navigation.navigate('hospitalGetInfoScreen2');
     }
@@ -103,11 +113,28 @@ function HospitalGetInfoScreen(props) {
               주소를 입력해주세요.{' '}
               <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
             </Txt>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Text>우편번호찾기</Text>
+            </TouchableOpacity>
+            <AddressSpace>
+              <Text style={{ fontSize: RFValue(14), fontWeight: 'bold' }}>{address}</Text>
+            </AddressSpace>
+            <Modal isVisible={isModalVisible}>
+              <Postcode
+                style={{ width: 380, height: 600 }}
+                jsOptions={{ animation: true, hideMapBtn: true }}
+                onSelected={(data) => {
+                  onChangeAddress(data.address); // 주소 선택 시 선택된 주소 업데이트
+                  setModalVisible(false);
+                }}
+              />
+            </Modal>
             <Input
-              value={address}
-              onChangeText={onChangeAddress}
-              placeholder="( 예시. 서울특별시 마포구 와우산로36 )"
+              value={extraAddress} // 주소 입력 필드에 선택된 주소 또는 기존 주소 표시
+              onChangeText={onChangeExtraAddress}
+              placeholder="상세주소를 입력하세요."
               placeholderTextColor="lightgray"
+              editable={address !== null}
             />
           </Component>
         </Info>
@@ -164,7 +191,7 @@ const Txt = styled.Text`
   font-size: ${RFValue(16)}px;
 `;
 
-const Input = styled.TextInput`
+const AddressSpace = styled.View`
   background-color: transparent;
   position: relative;
 
@@ -177,6 +204,23 @@ const Input = styled.TextInput`
 
   padding-left: ${RFValue(4)}px;
   font-size: ${RFValue(16)}px;
+  font-weight: bold;
+  padding: ${RFValue(10)}px;
+`;
+
+const Input = styled.TextInput`
+  background-color: transparent;
+  position: relative;
+
+  top: ${hp(1.5)}px;
+  width: ${wp(90.4)}px;
+  height: ${hp(5)}px;
+  border-radius: 8px;
+  border-color: lightgray;
+  border-width: 1px;
+
+  padding-left: ${RFValue(4)}px;
+  font-size: ${RFValue(14)}px;
   font-weight: bold;
   padding: ${RFValue(10)}px;
 `;
