@@ -128,7 +128,7 @@ const Input = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(90.4)}px;
-  height: ${hp(6.28)}px;
+  height: ${hp(5)}px;
   border-radius: 8px;
   border-color: lightgray;
   border-width: 1px;

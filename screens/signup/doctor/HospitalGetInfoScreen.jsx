@@ -1,5 +1,4 @@
-import { FinishBtn } from '@assets/Icons/Buttons';
-import SelectMedicalSpecialityTab from '@components/signup/SelectMedicalSpecialityTab';
+import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
 import { Auth } from 'context/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
@@ -17,10 +16,10 @@ function HospitalGetInfoScreen(props) {
   } = useContext(Auth);
 
   const navigation = useNavigation();
-  const { certificateAddress, address, medicalSpeciality, selfDescription } = doctorSignUpRequest;
+  const { certificateAddress, address, hospitalName } = doctorSignUpRequest;
 
   const onChangeAddress = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, address: text }));
-  const onChangeSelfDescription = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, selfDescription: text }));
+  const onChangeHospitalName = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, hospitalName: text }));
 
   //자격증 사진 업로드
   //사진 이미지 주소
@@ -55,15 +54,14 @@ function HospitalGetInfoScreen(props) {
       ...prev,
       certificateAddress: '',
       address: '',
-      medicalSpeciality: '',
-      selfDescription: '',
+      hospitalName: '',
     }));
     navigation.navigate('doctorGetInfoScreen');
   };
 
   const onPressContinueBtn = () => {
-    if (certificateAddress && address && medicalSpeciality) {
-      navigation.navigate('loginScreen');
+    if (certificateAddress && address && hospitalName) {
+      navigation.navigate('hospitalGetInfoScreen2');
     }
   };
 
@@ -94,6 +92,14 @@ function HospitalGetInfoScreen(props) {
 
           <Component>
             <Txt>
+              병원 이름을 입력해주세요.{' '}
+              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
+            </Txt>
+            <Input value={hospitalName} onChangeText={onChangeHospitalName} />
+          </Component>
+
+          <Component>
+            <Txt>
               주소를 입력해주세요.{' '}
               <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
             </Txt>
@@ -104,27 +110,12 @@ function HospitalGetInfoScreen(props) {
               placeholderTextColor="lightgray"
             />
           </Component>
-
-          <SelectMedicalSpecialityTab />
-
-          <Component>
-            <Txt>
-              자기소개를 입력해주세요.{' '}
-              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (선택)</Text>
-            </Txt>
-            <Input
-              value={selfDescription}
-              onChangeText={onChangeSelfDescription}
-              placeholder="( 예시. 안녕하세요~ 꿈나무의원 의사입니다. )"
-              placeholderTextColor="lightgray"
-            />
-          </Component>
         </Info>
 
         <View style={{ marginBottom: hp(3) }}>
-          <FinishBtn
-            fontColor={certificateAddress && address && medicalSpeciality ? 'white' : 'navy'}
-            backColor={certificateAddress && address && medicalSpeciality ? 'navy' : 'white'}
+          <ContinueBtn
+            fontColor={certificateAddress && address ? 'white' : 'navy'}
+            backColor={certificateAddress && address ? 'navy' : 'white'}
             width={wp(100)}
             justifyContent="center"
             onPress={onPressContinueBtn}
@@ -177,7 +168,7 @@ const Input = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(90.4)}px;
-  height: ${hp(6.28)}px;
+  height: ${hp(5)}px;
   border-radius: 8px;
   border-color: lightgray;
   border-width: 1px;

@@ -3,6 +3,7 @@ import LoginScreen from '@screens/login/LoginScreen';
 import SelectTypeScreen from '@screens/signup/SelectTypeScreen';
 import DoctorGetInfoScreen from '@screens/signup/doctor/DoctorGetInfoScreen';
 import HospitalGetInfoScreen from '@screens/signup/doctor/HospitalGetInfoScreen';
+import HospitalGetInfoScreen2 from '@screens/signup/doctor/HospitalGetInfoScreen2';
 import GetAuthCodeScreen from '@screens/signup/patient/GetAuthCodeScreen';
 import PatientGetInfoScreen from '@screens/signup/patient/PatientGetInfoScreen';
 import { Auth } from 'context/AuthContext';
@@ -22,6 +23,7 @@ function AuthRoutes() {
     medicalSpeciality: '',
     selfDescription: '',
     dateOfBirth: '',
+    hospitalName: '',
   });
 
   //환자 회원가입 API 전송 객체
@@ -65,6 +67,13 @@ function AuthRoutes() {
         <Stack.Screen
           name={'hospitalGetInfoScreen'}
           component={HospitalGetInfoScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={'hospitalGetInfoScreen2'}
+          component={HospitalGetInfoScreen2}
           options={{
             headerShown: false,
           }}
