@@ -67,7 +67,7 @@ function DoctorGetInfoScreen(props) {
       Alert.alert('알림', '연락처는 11자여야 합니다.');
     } else if (!email || email.length > 50 || !email.includes('@')) {
       Alert.alert('알림', '이메일은 최대 50자이며 이메일 형식이어야 합니다.');
-    } else if (dateOfBirth.length < 6 || !dateOfBirth.includes('-')) {
+    } else if (dateOfBirth.length < 8 || !dateOfBirth.includes('-')) {
       Alert.alert('알림', '형식에 맞추어서 생년월일을 작성해주세요.');
     } else if (
       !password ||
