@@ -21,33 +21,7 @@ function HospitalGetInfoScreen(props) {
   const onChangeAddress = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, address: text }));
   const onChangeHospitalName = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, hospitalName: text }));
 
-  //자격증 사진 업로드
-  //사진 이미지 주소
-  const [imgUrl, setImgUrl] = useState('');
-  //권한 요청
-  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
-
-  const uploadImage = async () => {
-    //권한이 없다면 물어보고, 승인X하면 함수 종료
-    if (!status?.granted) {
-      const permission = await requestPermission();
-      if (!permission.granted) {
-        return null;
-      }
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-      quality: 1,
-      aspect: [1, 1],
-    });
-    if (result.canceled) {
-      return null; //이미지 업로드 취소한 경우
-    }
-    //이미지 업로드 결과 및 이미지 경로 업데이트
-    console.log(result);
-    setImgUrl(result.uri);
-  };
+  const uploadPdf = () => {};
 
   const onPressPreviousBtn = () => {
     setDoctorSignUpRequest((prev) => ({
@@ -84,10 +58,9 @@ function HospitalGetInfoScreen(props) {
               </Text>
             </Txt>
 
-            <ImageUp onPress={uploadImage}>
-              <Text>이미지 업로드하기</Text>
-              {imgUrl !== '' && <Image source={{ uri: imgUrl }} />}
-            </ImageUp>
+            <PdfUp onPress={uploadPdf}>
+              <Text>📂 파일 올리기</Text>
+            </PdfUp>
           </Component>
 
           <Component>
@@ -150,7 +123,7 @@ const Info = styled.View`
   flex: 1;
 `;
 
-const ImageUp = styled.TouchableOpacity``;
+const PdfUp = styled.TouchableOpacity``;
 
 const Component = styled.View`
   margin-left: ${wp(4.8)}px;
