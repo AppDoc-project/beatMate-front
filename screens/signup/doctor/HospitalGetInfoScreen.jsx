@@ -21,7 +21,33 @@ function HospitalGetInfoScreen(props) {
   const onChangeAddress = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, address: text }));
   const onChangeHospitalName = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, hospitalName: text }));
 
-  const uploadPdf = () => {};
+  //자격증 사진 업로드
+  //사진 이미지 주소
+  const [imgUrl, setImgUrl] = useState('');
+  //권한 요청
+  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+
+  const uploadImage = async () => {
+    //권한이 없다면 물어보고, 승인X하면 함수 종료
+    if (!status?.granted) {
+      const permission = await requestPermission();
+      if (!permission.granted) {
+        return null;
+      }
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 1,
+      aspect: [1, 1],
+    });
+    if (result.canceled) {
+      return null; //이미지 업로드 취소한 경우
+    }
+    //이미지 업로드 결과 및 이미지 경로 업데이트
+    console.log(result);
+    setImgUrl(result.uri);
+  };
 
   const onPressPreviousBtn = () => {
     setDoctorSignUpRequest((prev) => ({
@@ -54,13 +80,14 @@ function HospitalGetInfoScreen(props) {
             <Txt>
               자격증 사진 + 사업자 등록증 / 재직증명서를{'\n'}업로드해주세요.{'\n'}
               <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}>
-                하나의 PDF 파일로 만들어서 업로드해주세요. (필수)
+                해당 되는 사진들을 모두 업로드해주세요. (필수)
               </Text>
             </Txt>
 
-            <PdfUp onPress={uploadPdf}>
-              <Text>📂 파일 올리기</Text>
-            </PdfUp>
+            <ImageUp onPress={uploadImage}>
+              <Text>📂 이미지 업로드하기</Text>
+              {imgUrl !== '' && <Image source={{ uri: imgUrl }} />}
+            </ImageUp>
           </Component>
 
           <Component>
@@ -123,7 +150,9 @@ const Info = styled.View`
   flex: 1;
 `;
 
-const PdfUp = styled.TouchableOpacity``;
+const ImageUp = styled.TouchableOpacity`
+  margin-top: ${hp(2)}px;
+`;
 
 const Component = styled.View`
   margin-left: ${wp(4.8)}px;
