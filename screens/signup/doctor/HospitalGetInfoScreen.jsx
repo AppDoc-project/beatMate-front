@@ -1,118 +1,168 @@
-import { FinishBtn } from '@assets/Icons/Buttons';
-import { PreviousBtn } from '@assets/SignUp/SelectUserScreen';
-import SelectMedicalSpecialityTab from '@components/signup/SelectMedicalSpecialityTab';
+import Postcode from '@actbase/react-daum-postcode';
+import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
 import { Auth } from 'context/AuthContext';
-import React, { useContext } from 'react';
-import { View, Text } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import React, { useContext, useState } from 'react';
+import { View, Text, Image, SafeAreaView, TouchableOpacity } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from 'react-native-modal';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
 function HospitalGetInfoScreen(props) {
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const {
     doctor: [doctorSignUpRequest, setDoctorSignUpRequest],
   } = useContext(Auth);
 
   const navigation = useNavigation();
-  const { certificateAddress, address, medicalSpeciality, selfDescription } = doctorSignUpRequest;
+  const { certificateAddress, address, hospitalName } = doctorSignUpRequest;
+  const [extraAddress, setExtraAddress] = useState('');
 
-  const onChangeCertificateAddress = (text) =>
-    setDoctorSignUpRequest((prev) => ({ ...prev, certificateAddress: text }));
   const onChangeAddress = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, address: text }));
-  const onChangeSelfDescription = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, selfDescription: text }));
+  const onChangeHospitalName = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, hospitalName: text }));
+  const onChangeExtraAddress = (text) => setExtraAddress(text);
+  const getTogetherAddress = () => {
+    onChangeAddress(address + ' ' + extraAddress);
+  };
+
+  //자격증 사진 업로드
+  //사진 이미지 주소
+  const [imgUrl, setImgUrl] = useState('');
+  //권한 요청
+  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+
+  const uploadImage = async () => {
+    //권한이 없다면 물어보고, 승인X하면 함수 종료
+    if (!status?.granted) {
+      const permission = await requestPermission();
+      if (!permission.granted) {
+        return null;
+      }
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 1,
+      aspect: [1, 1],
+    });
+    if (result.canceled) {
+      return null; //이미지 업로드 취소한 경우
+    }
+    //이미지 업로드 결과 및 이미지 경로 업데이트
+    console.log(result);
+    setImgUrl(result.uri);
+  };
 
   const onPressPreviousBtn = () => {
     setDoctorSignUpRequest((prev) => ({
       ...prev,
       certificateAddress: '',
       address: '',
-      medicalSpeciality: '',
-      selfDescription: '',
+      hospitalName: '',
     }));
     navigation.navigate('doctorGetInfoScreen');
   };
 
   const onPressContinueBtn = () => {
-    if (certificateAddress && address && medicalSpeciality) {
-      navigation.navigate('loginScreen');
+    getTogetherAddress();
+    if (certificateAddress && address && hospitalName) {
+      navigation.navigate('hospitalGetInfoScreen2');
     }
   };
 
   return (
-    <Container>
-      <MainInfoTxt1>사용자님,</MainInfoTxt1>
-      <MainInfoTxt2>
-        <Text style={{ color: 'navy' }}>병원 정보</Text>를 입력해주세요!
-      </MainInfoTxt2>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
+        <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
 
-      <Info>
-        <Component>
-          <Txt>
-            자격증 번호를 입력해주세요.
-            <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
-          </Txt>
-          <Input
-            value={certificateAddress}
-            onChangeText={onChangeCertificateAddress}
-            placeholder="( 예시. 01-234-345 )"
-            placeholderTextColor="lightgray"
+        <MainInfoTxt1>사용자님,</MainInfoTxt1>
+        <MainInfoTxt2>
+          <Text style={{ color: 'navy' }}>병원 정보</Text>를 입력해주세요!
+        </MainInfoTxt2>
+
+        <Info>
+          <Component>
+            <Txt>
+              자격증 사진 + 사업자 등록증 / 재직증명서를{'\n'}업로드해주세요.{'\n'}
+              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}>
+                해당 되는 사진들을 모두 업로드해주세요. (필수)
+              </Text>
+            </Txt>
+
+            <ImageUp onPress={uploadImage}>
+              <Text>📂 이미지 업로드하기</Text>
+              {imgUrl !== '' && <Image source={{ uri: imgUrl }} />}
+            </ImageUp>
+          </Component>
+
+          <Component>
+            <Txt>
+              병원 이름을 입력해주세요.{' '}
+              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
+            </Txt>
+            <Input value={hospitalName} onChangeText={onChangeHospitalName} />
+          </Component>
+
+          <Component>
+            <Txt>
+              주소를 입력해주세요.{' '}
+              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
+            </Txt>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Text>우편번호찾기</Text>
+            </TouchableOpacity>
+            <AddressSpace>
+              <Text style={{ fontSize: RFValue(14), fontWeight: 'bold' }}>{address}</Text>
+            </AddressSpace>
+            <Modal isVisible={isModalVisible}>
+              <Postcode
+                style={{ width: 380, height: 600 }}
+                jsOptions={{ animation: true, hideMapBtn: true }}
+                onSelected={(data) => {
+                  onChangeAddress(data.address); // 주소 선택 시 선택된 주소 업데이트
+                  setModalVisible(false);
+                }}
+              />
+            </Modal>
+            <Input
+              value={extraAddress} // 주소 입력 필드에 선택된 주소 또는 기존 주소 표시
+              onChangeText={onChangeExtraAddress}
+              placeholder="상세주소를 입력하세요."
+              placeholderTextColor="lightgray"
+              editable={address !== null}
+            />
+          </Component>
+        </Info>
+
+        <View style={{ marginBottom: hp(3) }}>
+          <ContinueBtn
+            fontColor={certificateAddress && address ? 'white' : 'navy'}
+            backColor={certificateAddress && address ? 'navy' : 'white'}
+            width={wp(100)}
+            justifyContent="center"
+            onPress={onPressContinueBtn}
           />
-        </Component>
-
-        <Component>
-          <Txt>
-            주소를 입력해주세요.{' '}
-            <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (필수)</Text>
-          </Txt>
-          <Input
-            value={address}
-            onChangeText={onChangeAddress}
-            placeholder="( 예시. 서울특별시 마포구 와우산로36 )"
-            placeholderTextColor="lightgray"
-          />
-        </Component>
-
-        <SelectMedicalSpecialityTab />
-
-        <Component>
-          <Txt>
-            자기소개를 입력해주세요.{' '}
-            <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (선택)</Text>
-          </Txt>
-          <Input
-            value={selfDescription}
-            onChangeText={onChangeSelfDescription}
-            placeholder="( 예시. 안녕하세요~ 꿈나무의원 의사입니다. )"
-            placeholderTextColor="lightgray"
-          />
-        </Component>
-      </Info>
-
-      <View style={{ marginBottom: hp(3) }}>
-        <PreviousBtn marginBottom={hp(0)} marginLeft={wp(4.8)} onPress={onPressPreviousBtn} />
-        <FinishBtn
-          fontColor={certificateAddress && address && medicalSpeciality ? 'white' : 'navy'}
-          backColor={certificateAddress && address && medicalSpeciality ? 'navy' : 'white'}
-          width={wp(100)}
-          justifyContent="center"
-          onPress={onPressContinueBtn}
-        />
-      </View>
-    </Container>
+        </View>
+      </Container>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
-  background-color: white;
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
+  background-color: white;
 `;
 
 const MainInfoTxt1 = styled.Text`
   font-size: ${RFValue(22)}px;
   font-weight: bold;
   margin-left: ${wp(4.8)}px;
-  margin-top: ${hp(10)}px;
+  margin-top: ${hp(2)}px;
 `;
 
 const MainInfoTxt2 = styled.Text`
@@ -127,6 +177,10 @@ const Info = styled.View`
   flex: 1;
 `;
 
+const ImageUp = styled.TouchableOpacity`
+  margin-top: ${hp(2)}px;
+`;
+
 const Component = styled.View`
   margin-left: ${wp(4.8)}px;
   margin-bottom: ${hp(4)}px;
@@ -137,19 +191,36 @@ const Txt = styled.Text`
   font-size: ${RFValue(16)}px;
 `;
 
-const Input = styled.TextInput`
+const AddressSpace = styled.View`
   background-color: transparent;
   position: relative;
 
   top: ${hp(1.5)}px;
   width: ${wp(90.4)}px;
-  height: ${hp(6.28)}px;
+  height: ${hp(5)}px;
   border-radius: 8px;
   border-color: lightgray;
   border-width: 1px;
 
   padding-left: ${RFValue(4)}px;
   font-size: ${RFValue(16)}px;
+  font-weight: bold;
+  padding: ${RFValue(10)}px;
+`;
+
+const Input = styled.TextInput`
+  background-color: transparent;
+  position: relative;
+
+  top: ${hp(1.5)}px;
+  width: ${wp(90.4)}px;
+  height: ${hp(5)}px;
+  border-radius: 8px;
+  border-color: lightgray;
+  border-width: 1px;
+
+  padding-left: ${RFValue(4)}px;
+  font-size: ${RFValue(14)}px;
   font-weight: bold;
   padding: ${RFValue(10)}px;
 `;

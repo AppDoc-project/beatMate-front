@@ -1,7 +1,9 @@
 import { GetReAuthCodeBtn, JoinBtn } from '@assets/Icons/Buttons';
 import { PreviousBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 import { Auth } from 'context/AuthContext';
+import format from 'pretty-format';
 import React, { useContext, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -23,11 +25,39 @@ function GetAuthCodeScreen(props) {
     navigation.navigate('patientGetInfoScreen');
   };
 
-  const onPressGetReAuthCodeBtn = () => {
-    //백엔드에게 다시 회원 정보 객체 전송 부분 추가 작성필요
+  //재발급 받기
+  const onPressReCodeBtn = () => {
+    console.log('Button Clicked');
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    console.log(patientSignUpRequest);
+    axios
+      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/join/patient`, patientSignUpRequest, axiosConfig)
+      .then((data) => console.log(format(data)))
+      .catch((error) => console.log(format(error)));
   };
 
+  //인증 (등록하기)
   const onPressJoinBtn = () => {
+    const authEmail = {
+      email: email,
+      code: code,
+    };
+
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    console.log(authEmail);
+    axios
+      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/validate/patient`, authEmail, axiosConfig)
+      .then((data) => console.log(format(data.data)))
+      .catch((error) => console.log(format(error)));
+
     if (code) {
       navigation.navigate('loginScreen');
     }
@@ -42,13 +72,9 @@ function GetAuthCodeScreen(props) {
         <Input value={code} onChangeText={onChangeCode} />
       </Component>
       <BtnGroup>
-        <GetReAuthCodeBtn
-          width={wp(100)}
-          justifyContent="center"
-          onPress={onPressGetReAuthCodeBtn}
-          marginBottom={hp(-2)}
-          marginTop={hp(-7)}
-        />
+        <ReBtn onPress={onPressReCodeBtn}>
+          <GetReAuthCodeBtn width={wp(100)} justifyContent="center" />
+        </ReBtn>
 
         <JoinBtn
           fontColor={code ? 'white' : 'navy'}
@@ -102,7 +128,7 @@ const Input = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(90.4)}px;
-  height: ${hp(6.28)}px;
+  height: ${hp(5)}px;
   border-radius: 8px;
   border-color: lightgray;
   border-width: 1px;
@@ -115,6 +141,11 @@ const Input = styled.TextInput`
 
 const BtnGroup = styled.View`
   flex: 1;
+`;
+
+const ReBtn = styled.TouchableOpacity`
+  margin-bottom: ${hp(-2)}px;
+  margin-top: ${hp(-7)}px;
 `;
 
 export default GetAuthCodeScreen;

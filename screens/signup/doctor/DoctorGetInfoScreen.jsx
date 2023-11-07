@@ -1,11 +1,14 @@
-import { PreviousBtn, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
+import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 import { Auth } from 'context/AuthContext';
-import { format as prettyFormat } from 'pretty-format';
+import format from 'pretty-format';
 import React, { useContext, useEffect } from 'react';
-import { Alert, Text } from 'react-native';
+import { Alert, Text, SafeAreaView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
 function DoctorGetInfoScreen(props) {
@@ -14,12 +17,36 @@ function DoctorGetInfoScreen(props) {
   } = useContext(Auth);
 
   const navigation = useNavigation();
-  const { name, contact, email, password } = doctorSignUpRequest;
+  const { name, contact, email, password, dateOfBirth } = doctorSignUpRequest;
 
   const onChangeName = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, name: text }));
   const onChangeContact = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, contact: text }));
   const onChangeEmail = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, email: text }));
   const onChangePassword = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, password: text }));
+  const onChangeDateOfBirth = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, dateOfBirth: text }));
+
+  const onPressCheckEmail = () => {
+    // 이메일 중복 여부 확인
+    const inputEmail = { email };
+    const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    console.log(inputEmail);
+    axios
+      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/join/duplication`, inputEmail, axiosConfig)
+      .then((response) => {
+        const { data } = response;
+        console.log(format(data));
+
+        // 서버 응답에서 code와 subCode를 검사하여 알림 표시
+        if (data.code === 400 && data.subCode === 401) {
+          Alert.alert('알림', '중복된 이메일입니다. 다른 이메일을 작성해주세요.');
+        }
+      })
+      .catch((error) => console.log(format(error)));
+  };
 
   const onPressPreviousBtn = () => {
     setDoctorSignUpRequest((prev) => ({
@@ -28,20 +55,20 @@ function DoctorGetInfoScreen(props) {
       contact: '',
       email: '',
       password: '',
+      dateOfBirth: '',
     }));
-    navigation.navigate('loginScreen');
+    navigation.navigate('selectTypeScreen');
   };
 
   const onPressContinueBtn = () => {
     if (name.length < 2 || name.length > 10) {
-      // 작성 조건에 어긋나는 경우 알림
       Alert.alert('알림', '이름은 2자 이상 10자 이하로 빈칸 없이 입력해주세요.');
     } else if (contact.length !== 11) {
-      // 작성 조건에 어긋나는 경우 알림
       Alert.alert('알림', '연락처는 11자여야 합니다.');
     } else if (!email || email.length > 50 || !email.includes('@')) {
-      // 작성 조건에 어긋나는 경우 알림
       Alert.alert('알림', '이메일은 최대 50자이며 이메일 형식이어야 합니다.');
+    } else if (dateOfBirth.length < 8 || !dateOfBirth.includes('-')) {
+      Alert.alert('알림', '형식에 맞추어서 생년월일을 작성해주세요.');
     } else if (
       !password ||
       password.length < 8 ||
@@ -49,7 +76,6 @@ function DoctorGetInfoScreen(props) {
       !/[a-z]/.test(password) ||
       !/\d/.test(password)
     ) {
-      // 작성 조건에 어긋나는 경우 알림
       Alert.alert('알림', '비밀번호는 최소 8자, 최대 18자, 영문 소문자와 숫자를 반드시 포함해야 합니다.');
     } else {
       navigation.navigate('hospitalGetInfoScreen');
@@ -57,80 +83,99 @@ function DoctorGetInfoScreen(props) {
   };
 
   useEffect(() => {
-    console.log(prettyFormat(doctorSignUpRequest));
+    console.log(format(doctorSignUpRequest));
   }, [doctorSignUpRequest]);
 
   return (
-    <Container>
-      <MainInfoTxt1>사용자님,</MainInfoTxt1>
-      <MainInfoTxt2>
-        <Text style={{ color: 'navy' }}>정보</Text>를 입력해주세요!
-      </MainInfoTxt2>
-      <SubTitleTxt>모든 항목을 입력해주세요. (필수)</SubTitleTxt>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
+        <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
+        <MainInfoTxt1>사용자님,</MainInfoTxt1>
+        <MainInfoTxt2>
+          <Text style={{ color: 'navy' }}>정보</Text>를 입력해주세요!
+        </MainInfoTxt2>
+        <SubTitleTxt>모든 항목을 입력해주세요. (필수)</SubTitleTxt>
 
-      <Info>
-        <Component>
-          <Txt>이름을 입력해주세요.</Txt>
-          <SubTxt>한글로 빈칸없이 작성해주세요.</SubTxt>
-          <Input value={name} onChangeText={onChangeName} />
-        </Component>
+        <Info>
+          <Component>
+            <Txt>이름을 입력해주세요.</Txt>
+            <SubTxt>한글로 빈칸없이 작성해주세요.</SubTxt>
+            <Input value={name} onChangeText={onChangeName} />
+          </Component>
 
-        <Component>
-          <Txt>연락처를 입력해주세요.</Txt>
-          <SubTxt>예시와 같은 형식으로 작성해주세요.</SubTxt>
-          <Input
-            value={contact}
-            onChangeText={onChangeContact}
-            placeholder="( 예시. 01012345678 )"
-            placeholderTextColor="lightgray"
-          />
-        </Component>
+          <Component>
+            <Txt>생년월일을 입력해주세요.</Txt>
+            <SubTxt>아래와 같은 형식으로 작성해주세요.</SubTxt>
+            <Input
+              value={dateOfBirth}
+              onChangeText={onChangeDateOfBirth}
+              placeholder="( 예시. 2000-12-12)"
+              placeholderTextColor="lightgray"
+            />
+          </Component>
 
-        <Component>
-          <Txt>이메일을 입력해주세요.</Txt>
-          <SubTxt>본 이메일을 사용해서 로그인을 하게 됩니다.</SubTxt>
-          <Input
-            value={email}
-            onChangeText={onChangeEmail}
-            placeholder="( 예시. kedighyfn345@gmail.com )"
-            placeholderTextColor="lightgray"
-          />
-        </Component>
+          <Component>
+            <Txt>연락처를 입력해주세요.</Txt>
+            <SubTxt>예시와 같은 형식으로 작성해주세요.</SubTxt>
+            <Input
+              value={contact}
+              onChangeText={onChangeContact}
+              placeholder="( 예시. 01012345678 )"
+              placeholderTextColor="lightgray"
+            />
+          </Component>
 
-        <Component>
-          <Txt>비밀번호</Txt>
-          <SubTxt>최소 8자, 최대 18자 가능 / 영문소문자, 숫자 반드시 포함</SubTxt>
-          <Input
-            value={password}
-            onChangeText={onChangePassword}
-            placeholder="( 예시 : kejfhnwi375 )"
-            placeholderTextColor="lightgray"
-          />
-        </Component>
-      </Info>
-      <PreviousBtn marginBottom={hp(2)} marginLeft={wp(4.8)} onPress={onPressPreviousBtn} />
-      <ContinueBtn
-        fontColor={name && contact && email && password ? 'white' : 'navy'}
-        backColor={name && contact && email && password ? 'navy' : 'white'}
-        width={wp(100)}
-        marginBottom={hp(6.15)}
-        justifyContent="center"
-        onPress={onPressContinueBtn}
-      />
-    </Container>
+          <Component>
+            <FirstLow>
+              <Txt>이메일을 입력해주세요.</Txt>
+              <Check onPress={onPressCheckEmail}>
+                <Text style={{ color: 'navy' }}>이메일 중복 확인</Text>
+              </Check>
+            </FirstLow>
+            <SubTxt>본 이메일을 사용해서 로그인을 하게 됩니다.</SubTxt>
+            <Input
+              value={email}
+              onChangeText={onChangeEmail}
+              placeholder="( 예시. kedighyfn345@gmail.com )"
+              placeholderTextColor="lightgray"
+            />
+          </Component>
+
+          <Component>
+            <Txt>비밀번호</Txt>
+            <SubTxt>최소 8자, 최대 18자 가능 / 영문소문자, 숫자 반드시 포함</SubTxt>
+            <Input
+              value={password}
+              onChangeText={onChangePassword}
+              placeholder="( 예시. kejfhnwi375 )"
+              placeholderTextColor="lightgray"
+            />
+          </Component>
+        </Info>
+
+        <ContinueBtn
+          fontColor={name && contact && email && password && dateOfBirth ? 'white' : 'navy'}
+          backColor={name && contact && email && password && dateOfBirth ? 'navy' : 'white'}
+          width={wp(100)}
+          marginBottom={hp(6.15)}
+          justifyContent="center"
+          onPress={onPressContinueBtn}
+        />
+      </Container>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
-  background-color: white;
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
+  background-color: white;
 `;
 
 const MainInfoTxt1 = styled.Text`
   font-size: ${RFValue(22)}px;
   font-weight: bold;
   margin-left: ${wp(4.8)}px;
-  margin-top: ${hp(6)}px;
+  margin-top: ${hp(2)}px;
 `;
 
 const MainInfoTxt2 = styled.Text`
@@ -174,7 +219,7 @@ const Input = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(90.4)}px;
-  height: ${hp(6.28)}px;
+  height: ${hp(5)}px;
   border-radius: 8px;
   border-color: lightgray;
   border-width: 1px;
@@ -183,6 +228,19 @@ const Input = styled.TextInput`
   font-size: ${RFValue(16)}px;
   font-weight: bold;
   padding: ${RFValue(10)}px;
+`;
+
+const FirstLow = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const Check = styled.TouchableOpacity`
+  margin-left: ${wp(4.8)}px;
+  border-color: navy;
+  border-width: 1px;
+  padding: 3px;
+  border-radius: 8px;
 `;
 
 export default DoctorGetInfoScreen;
