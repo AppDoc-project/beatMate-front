@@ -7,6 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import CommunityScreenNavigator from './community/CommunityNavigators';
 import HomeScreenNavigator from './home/HomeScreenNavigator';
+import MyPageScreenNavigator from './mypage/MyPageScreenNavigators';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,6 +43,22 @@ function HomeTabRoutes(props) {
               <MaterialCommunityIcons name={'comment-text-multiple'} size={RFValue(20)} color={COLORS.black} />
             ) : (
               <MaterialCommunityIcons name={'comment-text-multiple'} size={RFValue(20)} color={COLORS.lightgray} />
+            ),
+        }}
+      />
+      <Tab.Screen
+        name="mypage"
+        component={MyPageScreenNavigator}
+        options={{
+          headerShown: false,
+          tabBarLabel: '내 정보',
+          tabBarActiveTintColor: COLORS.black,
+          tabBarInactiveTintColor: COLORS.gray,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Ionicons name={'person'} size={RFValue(20)} color={COLORS.black} />
+            ) : (
+              <Ionicons name={'person'} size={RFValue(20)} color={COLORS.lightgray} />
             ),
         }}
       />
