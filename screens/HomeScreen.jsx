@@ -10,11 +10,11 @@ function HomeScreen(props) {
   return (
     <Container>
       <BellIcon name={'bell'} size={RFValue(25)} />
-      <MainTxt>AppDoc</MainTxt>
+      <MainTxt>BeatMate</MainTxt>
       <Section>
         <ShowTime>
           <TotalTxt>
-            <TimeTxt style={{ marginBottom: 2 }}>임박한 상담</TimeTxt>
+            <TimeTxt style={{ marginBottom: 2 }}>임박한 레슨</TimeTxt>
             <TimeTxt>
               <Text style={{ color: COLORS.subMiddleblue }}>01:00:59 </Text>남음
             </TimeTxt>
@@ -23,14 +23,14 @@ function HomeScreen(props) {
         </ShowTime>
         <SecondRow>
           <ManageConsult>
-            <Txt>상담 관리</Txt>
+            <Txt>레슨 관리</Txt>
           </ManageConsult>
           <RightSection>
             <MidBox style={{ marginBottom: RFValue(10) }}>
               <Txt>예약 관리</Txt>
             </MidBox>
             <MidBox>
-              <Txt>의사 찾기</Txt>
+              <Txt>강사 찾기</Txt>
             </MidBox>
           </RightSection>
         </SecondRow>
@@ -39,7 +39,7 @@ function HomeScreen(props) {
             <Txt>커뮤니티</Txt>
           </SmallBox>
           <SmallBox>
-            <Txt>AI 상담</Txt>
+            <Txt>채팅</Txt>
           </SmallBox>
           <SmallBox>
             <Txt>내 정보</Txt>
