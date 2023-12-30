@@ -14,7 +14,7 @@ export default function App() {
   return (
     <UserInfo.Provider value={{ userType, setUserType }}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="home-tab">
+        <Stack.Navigator initialRouteName="auth">
           <Stack.Screen name="auth" component={AuthRoutes} options={{ headerShown: false }} />
           <Stack.Screen
             name={'home-tab'}

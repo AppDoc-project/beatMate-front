@@ -51,9 +51,13 @@ function LoginScreen(props) {
     navigation.navigate('selectTypeScreen');
   };
 
+  const onPressFindPasswordBtn = () => {
+    navigation.navigate('selectTypeScreen');
+  };
+
   return (
     <Container>
-      <Logo>AppDoc</Logo>
+      <Logo>BeatMate</Logo>
       <Email>
         <MainText>이메일</MainText>
         <Input value={email} onChangeText={onChangeEmail} placeholderTextColor="gray" />
@@ -73,10 +77,18 @@ function LoginScreen(props) {
       />
 
       <BottomWrapper>
-        <Question>계정이 없나요?</Question>
-        <SignUp onPress={onPressSignUpBtn}>
-          <SignUpTxt>회원가입하기</SignUpTxt>
-        </SignUp>
+        <First>
+          <Question>계정이 없나요?</Question>
+          <SignUp onPress={onPressSignUpBtn}>
+            <SignUpTxt>회원가입하기</SignUpTxt>
+          </SignUp>
+        </First>
+        <Second>
+          <Question>비밀번호를 잊었나요?</Question>
+          <SignUp onPress={onPressFindPasswordBtn}>
+            <SignUpTxt>비밀번호찾기</SignUpTxt>
+          </SignUp>
+        </Second>
       </BottomWrapper>
     </Container>
   );
@@ -129,7 +141,7 @@ const BottomWrapper = styled.View`
   width: 100%;
   justify-content: center;
   margin-top: 60px;
-  flex-direction: row;
+  align-items: center;
 `;
 
 const Question = styled.Text`
@@ -147,6 +159,15 @@ const SignUpTxt = styled.Text`
   font-style: normal;
   font-weight: 700;
   text-decoration-line: underline;
+`;
+
+const First = styled.Text`
+  flex-direction: row;
+  margin-bottom: ${hp(1)}px;
+`;
+
+const Second = styled.Text`
+  flex-direction: row;
 `;
 
 export default LoginScreen;
