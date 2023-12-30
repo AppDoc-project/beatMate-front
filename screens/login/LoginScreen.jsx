@@ -1,14 +1,20 @@
 import { LoginBtn } from '@assets/Icons/Buttons';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { login } from 'api/auth';
 import axios from 'axios';
 import { format } from 'pretty-format';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { Auth } from 'context/AuthContext';
 
 function LoginScreen(props) {
+  const {
+    loginUserInfo: [loginUser, setLoginUser],
+  } = useContext(Auth);
+
   const navigation = useNavigation();
 
   const [email, setEmail] = useState('');
@@ -20,31 +26,25 @@ function LoginScreen(props) {
   const { setItem } = useAsyncStorage('authorization');
 
   const onPressLoginBtn = () => {
-    // 로그인
-    const axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-        email: email,
-        password: password,
-      },
-    };
-
-    axios
-      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/login`, {}, axiosConfig)
-      .then((response) => {
-        console.log(format(response.data));
-        const authorizationHeader = response.headers.authorization;
-
+    // 이메일과 비밀번호를 가지고 로그인 함수 호출
+    login(email, password)
+      .then((res) => {
+        console.log('HEHE');
+        console.log(format(res.data));
+        const authorizationHeader = res.headers.authorization;
         if (authorizationHeader) {
-          setItem(authorizationHeader) // AsyncStorage에 저장
+          // AsyncStorage에 토큰 저장
+          setItem(authorizationHeader)
             .then(() => {
+              // axios 기본 헤더에 토큰 추가
               axios.defaults.headers.common['Authorization'] = authorizationHeader;
-              navigation.navigate('homeScreen');
+              navigation.navigate('home-tab');
             })
-            .catch((error) => console.log(format(error)));
+            .catch((error) => console.log(format(error), 'HI'));
         }
       })
-      .catch((error) => console.log(format(error)));
+
+      .catch((error) => console.log(format(error), 'HIII'));
   };
 
   const onPressSignUpBtn = () => {

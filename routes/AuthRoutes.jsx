@@ -35,11 +35,20 @@ function AuthRoutes() {
     dateOfBirth: '',
   });
 
+  //현재 접속자 정보 객체
+  const [loginUser, setLoginUser] = useState({
+    id: null,
+    email: '',
+    name: '',
+    isTutor: false,
+  });
+
   return (
     <Auth.Provider
       value={{
         doctor: [doctorSignUpRequest, setDoctorSignUpRequest],
         patient: [patientSignUpRequest, setPatientSignUpRequest],
+        loginUserInfo: [loginUser, setLoginUser],
       }}
     >
       <Stack.Navigator initialRouteName="loginScreen">
