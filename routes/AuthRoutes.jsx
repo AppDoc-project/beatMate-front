@@ -1,38 +1,34 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '@screens/login/LoginScreen';
 import SelectTypeScreen from '@screens/signup/SelectTypeScreen';
-import DoctorGetInfoScreen from '@screens/signup/doctor/DoctorGetInfoScreen';
-import HospitalGetInfoScreen from '@screens/signup/doctor/HospitalGetInfoScreen';
-import HospitalGetInfoScreen2 from '@screens/signup/doctor/HospitalGetInfoScreen2';
-import GetAuthCodeScreen from '@screens/signup/patient/GetAuthCodeScreen';
-import PatientGetInfoScreen from '@screens/signup/patient/PatientGetInfoScreen';
+import DoctorGetInfoScreen from '@screens/signup/tutor/DoctorGetInfoScreen';
+import HospitalGetInfoScreen from '@screens/signup/tutor/HospitalGetInfoScreen';
+import HospitalGetInfoScreen2 from '@screens/signup/tutor/HospitalGetInfoScreen2';
+import GetAuthCodeScreen from '@screens/signup/tutee/GetAuthCodeScreen';
+import TuteeGetInfoScreen from '@screens/signup/tutee/TuteeGetInfoScreen';
 import { Auth } from 'context/AuthContext';
 import React, { useState } from 'react';
 
 const Stack = createNativeStackNavigator();
 
 function AuthRoutes() {
-  //의사 회원가입 API 전송 객체
-  const [doctorSignUpRequest, setDoctorSignUpRequest] = useState({
+  //강사(tutor) 회원가입 API 전송 객체
+  const [tutorSignUpRequest, setTutorSignUpRequest] = useState({
     email: '',
     name: '',
     password: '',
     contact: '',
-    certificateAddress: '',
-    address: '',
-    medicalSpeciality: '',
+    authenticationAddress: [''],
+    specialities: [''],
     selfDescription: '',
-    dateOfBirth: '',
-    hospitalName: '',
   });
 
-  //환자 회원가입 API 전송 객체
-  const [patientSignUpRequest, setPatientSignUpRequest] = useState({
+  //수강생(tutee) 회원가입 API 전송 객체
+  const [tuteeSignUpRequest, setTuteeSignUpRequest] = useState({
     email: '',
     name: '',
     password: '',
     contact: '',
-    dateOfBirth: '',
   });
 
   //현재 접속자 정보 객체
@@ -46,8 +42,8 @@ function AuthRoutes() {
   return (
     <Auth.Provider
       value={{
-        doctor: [doctorSignUpRequest, setDoctorSignUpRequest],
-        patient: [patientSignUpRequest, setPatientSignUpRequest],
+        tutor: [tutorSignUpRequest, setTutorSignUpRequest],
+        tutee: [tuteeSignUpRequest, setTuteeSignUpRequest],
         loginUserInfo: [loginUser, setLoginUser],
       }}
     >
@@ -88,8 +84,8 @@ function AuthRoutes() {
           }}
         />
         <Stack.Screen
-          name={'patientGetInfoScreen'}
-          component={PatientGetInfoScreen}
+          name={'TuteeGetInfoScreen'}
+          component={TuteeGetInfoScreen}
           options={{
             headerShown: false,
           }}

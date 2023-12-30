@@ -1,4 +1,4 @@
-import { DoctorSelect, PatientSelect, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
+import { TutorSelect, TuteeSelect, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
 import { UserInfo } from 'context/UserInfoContext';
 import React, { useContext } from 'react';
@@ -21,7 +21,7 @@ function SelectTypeScreen() {
     if (userType === 1) {
       navigation.navigate('doctorGetInfoScreen');
     } else if (userType === 2) {
-      navigation.navigate('patientGetInfoScreen');
+      navigation.navigate('TuteeGetInfoScreen');
     }
   };
 
@@ -38,12 +38,12 @@ function SelectTypeScreen() {
       </MainInfoTxt2>
       <SubTxt>한 가지 유형을 선택해주세요. (필수)</SubTxt>
       <SelectOption>
-        <DoctorSelect
+        <TutorSelect
           backColor={userType === 1 ? '#EBF5FF' : '#FFFFFF'}
           fontColor={userType === 1 ? 'black' : '#666666'}
           onPress={() => setUserType(1)}
         />
-        <PatientSelect
+        <TuteeSelect
           backColor={userType === 2 ? '#EBF5FF' : '#FFFFFF'}
           fontColor={userType === 2 ? 'black' : '#666666'}
           onPress={() => setUserType(2)}

@@ -3,12 +3,12 @@ import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { login } from 'api/auth';
 import axios from 'axios';
+import { Auth } from 'context/AuthContext';
 import { format } from 'pretty-format';
 import React, { useState, useContext } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
-import { Auth } from 'context/AuthContext';
 
 function LoginScreen(props) {
   const {
@@ -29,7 +29,6 @@ function LoginScreen(props) {
     // 이메일과 비밀번호를 가지고 로그인 함수 호출
     login(email, password)
       .then((res) => {
-        console.log('HEHE');
         console.log(format(res.data));
         const authorizationHeader = res.headers.authorization;
         if (authorizationHeader) {
@@ -38,13 +37,25 @@ function LoginScreen(props) {
             .then(() => {
               // axios 기본 헤더에 토큰 추가
               axios.defaults.headers.common['Authorization'] = authorizationHeader;
+
+              // 데이터에서 필요한 정보 추출하여 loginUser 객체 업데이트
+              const userData = res.data.object;
+              const { id, email, name, tutor } = userData;
+              setLoginUser({ id, email, name, isTutor: tutor });
+
+              console.log('Login User:', {
+                id: loginUser.id,
+                email: loginUser.email,
+                name: loginUser.name,
+                isTutor: loginUser.isTutor,
+              });
+
               navigation.navigate('home-tab');
             })
-            .catch((error) => console.log(format(error), 'HI'));
+            .catch((error) => console.log(format(error)));
         }
       })
-
-      .catch((error) => console.log(format(error), 'HIII'));
+      .catch((error) => console.log(format(error)));
   };
 
   const onPressSignUpBtn = () => {

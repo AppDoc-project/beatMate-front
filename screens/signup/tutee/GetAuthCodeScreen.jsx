@@ -22,7 +22,7 @@ function GetAuthCodeScreen(props) {
 
   const onPressPreviousBtn = () => {
     setCode('');
-    navigation.navigate('patientGetInfoScreen');
+    navigation.navigate('TuteeGetInfoScreen');
   };
 
   //재발급 받기
