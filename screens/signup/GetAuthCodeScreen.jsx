@@ -1,5 +1,4 @@
 import { GetReAuthCodeBtn, JoinBtn } from '@assets/Icons/Buttons';
-import { PreviousBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { Auth } from 'context/AuthContext';
@@ -8,14 +7,25 @@ import React, { useContext, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
+import { UserInfo } from 'context/UserInfoContext';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 function GetAuthCodeScreen(props) {
+  const { userType } = useContext(UserInfo);
   const {
-    patient: [patientSignUpRequest],
+    tutor: [tutorSignUpRequest],
+    tutee: [tuteeSignUpRequest],
   } = useContext(Auth);
 
   const navigation = useNavigation();
-  const { email } = patientSignUpRequest;
+  let email;
+
+  //userType에 따라 email 가져옴
+  if (userType === 'tutor') {
+    email = tutorSignUpRequest.email;
+  } else if (userType === 'tutee') {
+    email = tuteeSignUpRequest.email;
+  }
 
   const [code, setCode] = useState('');
   const onChangeCode = (text) => setCode(text);
@@ -28,11 +38,7 @@ function GetAuthCodeScreen(props) {
   //재발급 받기
   const onPressReCodeBtn = () => {
     console.log('Button Clicked');
-    const axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+
     console.log(patientSignUpRequest);
     axios
       .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/join/patient`, patientSignUpRequest, axiosConfig)
@@ -47,11 +53,6 @@ function GetAuthCodeScreen(props) {
       code: code,
     };
 
-    const axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
     console.log(authEmail);
     axios
       .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/validate/patient`, authEmail, axiosConfig)
@@ -65,6 +66,8 @@ function GetAuthCodeScreen(props) {
 
   return (
     <Container>
+      <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
+
       <Logo>AppDoc</Logo>
       <InfoText>{email}로 메일을 보냈습니다.</InfoText>
       <Component>
@@ -84,7 +87,6 @@ function GetAuthCodeScreen(props) {
           onPress={onPressJoinBtn}
         />
       </BtnGroup>
-      <PreviousBtn marginBottom={hp(10)} onPress={onPressPreviousBtn} marginLeft={wp(-72)} />
     </Container>
   );
 }

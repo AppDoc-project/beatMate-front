@@ -1,11 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '@screens/login/LoginScreen';
+import GetAuthCodeScreen from '@screens/signup/GetAuthCodeScreen';
 import SelectTypeScreen from '@screens/signup/SelectTypeScreen';
-import DoctorGetInfoScreen from '@screens/signup/tutor/DoctorGetInfoScreen';
-import HospitalGetInfoScreen from '@screens/signup/tutor/HospitalGetInfoScreen';
-import HospitalGetInfoScreen2 from '@screens/signup/tutor/HospitalGetInfoScreen2';
-import GetAuthCodeScreen from '@screens/signup/tutee/GetAuthCodeScreen';
 import TuteeGetInfoScreen from '@screens/signup/tutee/TuteeGetInfoScreen';
+import TutorGetInfoScreen1 from '@screens/signup/tutor/TutorGetInfoScreen1';
+import TutorGetInfoScreen2 from '@screens/signup/tutor/TutorGetInfoScreen2';
 import { Auth } from 'context/AuthContext';
 import React, { useState } from 'react';
 
@@ -18,8 +17,8 @@ function AuthRoutes() {
     name: '',
     password: '',
     contact: '',
-    authenticationAddress: [''],
-    specialities: [''],
+    authenticationAddress: [],
+    specialities: [],
     selfDescription: '',
   });
 
@@ -47,7 +46,7 @@ function AuthRoutes() {
         loginUserInfo: [loginUser, setLoginUser],
       }}
     >
-      <Stack.Navigator initialRouteName="loginScreen">
+      <Stack.Navigator initialRouteName="tutorGetInfoScreen2">
         <Stack.Screen
           name={'loginScreen'}
           component={LoginScreen}
@@ -63,28 +62,21 @@ function AuthRoutes() {
           }}
         />
         <Stack.Screen
-          name={'doctorGetInfoScreen'}
-          component={DoctorGetInfoScreen}
+          name={'tutorGetInfoScreen1'}
+          component={TutorGetInfoScreen1}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name={'hospitalGetInfoScreen'}
-          component={HospitalGetInfoScreen}
+          name={'tutorGetInfoScreen2'}
+          component={TutorGetInfoScreen2}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name={'hospitalGetInfoScreen2'}
-          component={HospitalGetInfoScreen2}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name={'TuteeGetInfoScreen'}
+          name={'tuteeGetInfoScreen'}
           component={TuteeGetInfoScreen}
           options={{
             headerShown: false,

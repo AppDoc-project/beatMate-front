@@ -18,10 +18,10 @@ function SelectTypeScreen() {
   };
 
   const onPressContinueBtn = () => {
-    if (userType === 1) {
-      navigation.navigate('doctorGetInfoScreen');
-    } else if (userType === 2) {
-      navigation.navigate('TuteeGetInfoScreen');
+    if (userType === 'tutor') {
+      navigation.navigate('tutorGetInfoScreen1');
+    } else if (userType === 'tutee') {
+      navigation.navigate('tuteeGetInfoScreen');
     }
   };
 
@@ -39,14 +39,14 @@ function SelectTypeScreen() {
       <SubTxt>한 가지 유형을 선택해주세요. (필수)</SubTxt>
       <SelectOption>
         <TutorSelect
-          backColor={userType === 1 ? '#EBF5FF' : '#FFFFFF'}
-          fontColor={userType === 1 ? 'black' : '#666666'}
-          onPress={() => setUserType(1)}
+          backColor={userType === 'tutor' ? '#EBF5FF' : '#FFFFFF'}
+          fontColor={userType === 'tutor' ? 'black' : '#666666'}
+          onPress={() => setUserType('tutor')}
         />
         <TuteeSelect
-          backColor={userType === 2 ? '#EBF5FF' : '#FFFFFF'}
-          fontColor={userType === 2 ? 'black' : '#666666'}
-          onPress={() => setUserType(2)}
+          backColor={userType === 'tutee' ? '#EBF5FF' : '#FFFFFF'}
+          fontColor={userType === 'tutee' ? 'black' : '#666666'}
+          onPress={() => setUserType('tutee')}
         />
       </SelectOption>
 

@@ -1,6 +1,6 @@
 import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
+import { checkSingleEmail, signupTutee } from 'api/auth';
 import { Auth } from 'context/AuthContext';
 import format from 'pretty-format';
 import React, { useContext } from 'react';
@@ -10,7 +10,6 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
-import { checkSingleEmail } from 'api/auth';
 
 function TuteeGetInfoScreen(props) {
   const {
@@ -26,8 +25,11 @@ function TuteeGetInfoScreen(props) {
   const onChangePassword = (text) => setTuteeSignUpRequest((prev) => ({ ...prev, password: text }));
 
   const onPressCheckEmail = () => {
-    console.log(format(email));
-    checkSingleEmail(email)
+    const data = {
+      email: email,
+    };
+
+    checkSingleEmail(data)
       .then((res) => {
         const { data } = res;
         console.log(format(data));
@@ -62,25 +64,25 @@ function TuteeGetInfoScreen(props) {
       !password ||
       password.length < 8 ||
       password.length > 18 ||
-      !/[a-z]/.test(password) ||
-      !/\d/.test(password)
+      !/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@~_])[a-zA-Z\d!@~_]+/.test(password)
     ) {
-      Alert.alert('알림', '비밀번호는 최소 8자, 최대 18자, 영문 소문자와 숫자를 반드시 포함해야 합니다.');
+      Alert.alert(
+        '알림',
+        '비밀번호는 최소 8자, 최대 18자, 1개 이상의 알파벳, 숫자, 특수문자를 반드시 포함해야 합니다.',
+      );
     }
   };
 
   const onPressContinueBtn = () => {
-    const axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
     console.log(tuteeSignUpRequest);
-    axios
-      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/join/patient`, tuteeSignUpRequest, axiosConfig)
-      .then((data) => console.log(format(data)))
+
+    signupTutee(tuteeSignUpRequest) // 객체 형태로 이메일 전달
+      .then((res) => {
+        const { data } = res;
+        console.log(format(data));
+        navigation.navigate('getAuthCodeScreen');
+      })
       .catch((error) => console.log(format(error)));
-    navigation.navigate('getAuthCodeScreen');
   };
 
   return (
@@ -88,7 +90,7 @@ function TuteeGetInfoScreen(props) {
       <Container>
         <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
 
-        <MainInfoTxt1>사용자님,</MainInfoTxt1>
+        <MainInfoTxt1>수강생님,</MainInfoTxt1>
         <MainInfoTxt2>
           <Text style={{ color: 'navy' }}>정보</Text>를 입력해주세요!
         </MainInfoTxt2>
@@ -130,11 +132,11 @@ function TuteeGetInfoScreen(props) {
 
           <Component>
             <Txt>비밀번호</Txt>
-            <SubTxt>최소 8자, 최대 18자 가능 / 영문소문자, 숫자 반드시 포함</SubTxt>
+            <SubTxt>최소 8자, 최대 18자 가능 / 알파벳, 숫자, 특수문자 반드시 포함</SubTxt>
             <Input
               value={password}
               onChangeText={onChangePassword}
-              placeholder="( 예시 : kejfhnwi375 )"
+              placeholder="( 예시 : kejwi375@! )"
               placeholderTextColor="lightgray"
             />
           </Component>

@@ -8,7 +8,7 @@ import HomeTabRoutes from 'routes/HomeTabRoutes';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [userType, setUserType] = useState(''); //1이면 doctor, 2면 patient
+  const [userType, setUserType] = useState(''); //회원가입시 구분 위해. tutor, tutee
 
   // 나중에 initialRouteName 변경해야함.
   return (
