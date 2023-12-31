@@ -1,17 +1,18 @@
 import { GetReAuthCodeBtn, JoinBtn } from '@assets/Icons/Buttons';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
+import { signupTutee, validTuteeEmail, validTutorEmail } from 'api/auth';
 import { Auth } from 'context/AuthContext';
+import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import React, { useContext, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { styled } from 'styled-components/native';
-import { UserInfo } from 'context/UserInfoContext';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { styled } from 'styled-components/native';
 
 function GetAuthCodeScreen(props) {
   const { userType } = useContext(UserInfo);
+
   const {
     tutor: [tutorSignUpRequest],
     tutee: [tuteeSignUpRequest],
@@ -39,11 +40,19 @@ function GetAuthCodeScreen(props) {
   const onPressReCodeBtn = () => {
     console.log('Button Clicked');
 
-    console.log(patientSignUpRequest);
-    axios
-      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/join/patient`, patientSignUpRequest, axiosConfig)
-      .then((data) => console.log(format(data)))
-      .catch((error) => console.log(format(error)));
+    if (userType === 'tutor') {
+      console.log(tutorSignUpRequest);
+    } else if (userType === 'tutee') {
+      console.log(tuteeSignUpRequest);
+
+      signupTutee(tuteeSignUpRequest)
+        .then((res) => {
+          const { data } = res;
+          console.log(format(data));
+          navigation.navigate('getAuthCodeScreen');
+        })
+        .catch((error) => console.log(format(error)));
+    }
   };
 
   //인증 (등록하기)
@@ -54,13 +63,24 @@ function GetAuthCodeScreen(props) {
     };
 
     console.log(authEmail);
-    axios
-      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/validate/patient`, authEmail, axiosConfig)
-      .then((data) => console.log(format(data.data)))
-      .catch((error) => console.log(format(error)));
 
-    if (code) {
-      navigation.navigate('loginScreen');
+    if (userType === 'tutor') {
+      console.log(tutorSignUpRequest);
+      validTutorEmail(authEmail)
+        .then((res) => {
+          const { data } = res;
+          console.log(format(data));
+          navigation.navigate('home-tab');
+        })
+        .catch((error) => console.log(format(error)));
+    } else if (userType === 'tutee') {
+      validTuteeEmail(authEmail)
+        .then((res) => {
+          const { data } = res;
+          console.log(format(data));
+          navigation.navigate('home-tab');
+        })
+        .catch((error) => console.log(format(error)));
     }
   };
 

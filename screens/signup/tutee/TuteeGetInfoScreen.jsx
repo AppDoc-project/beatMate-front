@@ -76,7 +76,7 @@ function TuteeGetInfoScreen(props) {
   const onPressContinueBtn = () => {
     console.log(tuteeSignUpRequest);
 
-    signupTutee(tuteeSignUpRequest) // 객체 형태로 이메일 전달
+    signupTutee(tuteeSignUpRequest)
       .then((res) => {
         const { data } = res;
         console.log(format(data));

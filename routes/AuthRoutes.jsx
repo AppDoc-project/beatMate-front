@@ -46,7 +46,7 @@ function AuthRoutes() {
         loginUserInfo: [loginUser, setLoginUser],
       }}
     >
-      <Stack.Navigator initialRouteName="tutorGetInfoScreen2">
+      <Stack.Navigator initialRouteName="loginScreen">
         <Stack.Screen
           name={'loginScreen'}
           component={LoginScreen}
