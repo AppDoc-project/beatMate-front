@@ -30,20 +30,11 @@ function AuthRoutes() {
     contact: '',
   });
 
-  //현재 접속자 정보 객체
-  const [loginUser, setLoginUser] = useState({
-    id: null,
-    email: '',
-    name: '',
-    isTutor: false,
-  });
-
   return (
     <Auth.Provider
       value={{
         tutor: [tutorSignUpRequest, setTutorSignUpRequest],
         tutee: [tuteeSignUpRequest, setTuteeSignUpRequest],
-        loginUserInfo: [loginUser, setLoginUser],
       }}
     >
       <Stack.Navigator initialRouteName="loginScreen">
