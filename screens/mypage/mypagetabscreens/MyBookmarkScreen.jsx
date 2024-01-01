@@ -6,28 +6,28 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import styled from 'styled-components/native';
 
 function MyBookmarkScreen(props) {
-    return (
-        <Mybookmark>
-            <Category>자유게시판</Category>
-            <Title>북마크 화면</Title>
-            <Content>나는 내용이다아아아아아</Content>
-            <Postinfo>
-            <Date>2023.12.26</Date>
-            <Commentbox>
-              <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
-              21
-            </Commentbox>
-            <Bookmarkbox>
-              <Bookmarkicon name={'heart'} size={RFValue(11)} color={'#BB271A'} />
-              12
-            </Bookmarkbox>
-            </Postinfo>
-          </Mybookmark>
-    );
+  return (
+    <Mybookmark>
+      <Category>자유게시판</Category>
+      <Title>북마크 화면</Title>
+      <Content>나는 내용이다아아아아아</Content>
+      <Postinfo>
+        <Date>2023.12.26</Date>
+        <Commentbox>
+          <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
+          21
+        </Commentbox>
+        <Bookmarkbox>
+          <Bookmarkicon name={'heart'} size={RFValue(11)} color={'#BB271A'} />
+          12
+        </Bookmarkbox>
+      </Postinfo>
+    </Mybookmark>
+  );
 }
 
 const Mybookmark = styled.View`
-  height : 125px;
+  height: 125px;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
 `;
