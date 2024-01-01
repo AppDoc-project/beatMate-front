@@ -24,35 +24,36 @@ function ImageUpload({ authenticationAddress }) {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
-      quality: 1,
+      quality: 0.1, // 예시로 품질을 0.5로 설정
       aspect: [1, 1],
       base64: false,
+      width: 500, // 이미지의 너비를 500px로 조정
+      height: 500, // 이미지의 높이를 500px로 조정
     });
 
     if (!result.canceled) {
-      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, result.uri]);
+      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, result]);
     }
   };
 
   // 사진 전송 API
   const handleUpload = async () => {
-    console.log(format(authenticationAddress));
-
-    console.log(selectedImages);
-
-    console.log('HI');
-
     const formData = new FormData();
     selectedImages.forEach((image, index) => {
-      formData.append(`files[${index}]`, image);
+      const file = {
+        uri: image.uri,
+        type: 'image/jpeg', // 이미지 타입 설정 (JPEG 예시)
+        name: `${index}.jpg`, // 파일명 설정
+      };
+      formData.append(`image[${index}]`, file); // FormData에 이미지 추가
     });
 
     postImages(formData)
       .then((res) => {
         const { data } = res;
-        console.log(format(data));
+        console.log(format(data)); // 서버 응답 확인
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => console.log(format(error))); // 에러 처리
   };
 
   const removeImage = (indexToRemove) => {
@@ -75,7 +76,7 @@ function ImageUpload({ authenticationAddress }) {
         {selectedImages.map((image, index) => (
           <TouchableOpacity key={index} onPress={() => removeImage(index)}>
             <View style={styles.imageContainer}>
-              <Image source={{ uri: image }} style={styles.image} />
+              <Image source={{ uri: image.uri }} style={styles.image} />
             </View>
           </TouchableOpacity>
         ))}
@@ -101,7 +102,6 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',
-
     marginLeft: wp(-1),
   },
   imageContainer: {
