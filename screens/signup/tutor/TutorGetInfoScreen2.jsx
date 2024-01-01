@@ -28,7 +28,7 @@ function TutorGetInfoScreen2(props) {
       specialities: [''],
       selfDescription: '',
     }));
-    navigation.navigate('tutorGetInforScreen1');
+    navigation.navigate('tutorGetInfoScreen1');
   };
 
   const onPressContinueBtn = () => {};

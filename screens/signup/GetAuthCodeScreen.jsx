@@ -88,7 +88,7 @@ function GetAuthCodeScreen(props) {
     <Container>
       <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
 
-      <Logo>AppDoc</Logo>
+      <Logo>BeatMate</Logo>
       <InfoText>{email}로 메일을 보냈습니다.</InfoText>
       <Component>
         <Txt>인증 코드를 입력해주세요.</Txt>
