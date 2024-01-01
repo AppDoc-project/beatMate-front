@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MyPageScreen from '@screens/mypage/MyPageScreen';
+import StudentMyPageScreen from '@screens/mypage/StudentMyPageScreen';
 import React from 'react';
 
 const Stack = createNativeStackNavigator();
@@ -9,7 +9,7 @@ function MyPageScreenNavigator(props) {
     <Stack.Navigator initialRouteName="myPageScreen">
       <Stack.Screen
         name={'myPageScreen'}
-        component={MyPageScreen}
+        component={StudentMyPageScreen}
         options={{
           headerShown: false,
         }}
