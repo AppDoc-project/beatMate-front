@@ -39,6 +39,10 @@ const postImages = (data) =>
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+    data: {
+      files: data, // 여기서 data는 FormData 객체
+    },
   });
+
 
 export { signupTutor, signupTutee, logout, validTuteeEmail, validTutorEmail, login, checkSingleEmail, postImages };
