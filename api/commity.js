@@ -1,16 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import { client } from './client';
 
+// 커뮤니티 리스트 가져오기 
 const getCommunitySection = async () => {
   try {
-    const token = await AsyncStorage.getItem('access_token'); // 비동기적으로 AsyncStorage에서 토큰 가져오기
-
+    const token = await AsyncStorage.getItem('access_token');
     console.log(token); // 토큰 확인 (디버깅용)
 
     const response = await client.get('/community/list', {
       headers: {
-        Authorization: `${token}`, // 백틱(`)을 사용하여 토큰을 삽입
+        Authorization: token, // 바로 토큰 값 넣기
       },
     });
 
