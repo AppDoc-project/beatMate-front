@@ -8,18 +8,29 @@ import { styled } from 'styled-components/native';
 
 function SelectBtn(props) {
   const {
-    doctor: [doctorSignUpRequest, setDoctorSignUpRequest],
+    tutor: [tutorSignUpRequest, setTutorSignUpRequest],
   } = useContext(Auth);
 
-  const { medicalSpeciality } = doctorSignUpRequest;
+  const { specialities } = tutorSignUpRequest;
 
-  // 해당 버튼을 눌렀을 때, medicalSpeciality 값을 변경
   const onPressMedicalSpeciality = () => {
     const { english } = props;
-    setDoctorSignUpRequest((prev) => ({ ...prev, medicalSpeciality: english }));
+    const updatedSpecialities = specialities || [];
+
+    // 빈 값인지 확인하고 빈 값이 아니면서 포함되지 않은 경우에만 추가
+    if (english && !updatedSpecialities.includes(english)) {
+      const newSpecialities = [...updatedSpecialities, english];
+      setTutorSignUpRequest((prev) => ({ ...prev, specialities: newSpecialities }));
+      console.log('Added:', english, 'Specialities:', newSpecialities);
+    } else if (updatedSpecialities.includes(english)) {
+      // 포함된 경우, 해당 값을 삭제하도록 수정
+      const filteredSpecialities = updatedSpecialities.filter((item) => item !== english);
+      setTutorSignUpRequest((prev) => ({ ...prev, specialities: filteredSpecialities }));
+      console.log('Removed:', english, 'Specialities:', filteredSpecialities);
+    }
   };
 
-  const isButtonSelected = medicalSpeciality === props.english; // 선택 여부 확인
+  const isButtonSelected = specialities && specialities.includes(props.english);
 
   return (
     <Btn onPress={onPressMedicalSpeciality} selected={isButtonSelected}>
@@ -33,21 +44,22 @@ SelectBtn.propTypes = {
   speciality: PropTypes.string.isRequired,
 };
 
-function SelectMedicalSpecialityTab(props) {
+function SelectSpecialityTab(props) {
   const datas = [
-    { speciality: '내과', english: 'INTERNAL_MEDICINE' },
-    { speciality: '외과', english: 'SURGERY' },
-    { speciality: '정형외과', english: 'ORTHOPEDICS' },
-    { speciality: '안과', english: 'OPHTHALMOLOGY' },
-    { speciality: '이비인후과', english: 'OTORHINOLARYNGOLOGY' },
-    { speciality: '피부과', english: 'DERMATOLOGY' },
-    { speciality: '치과', english: 'DENTISTRY' },
-    { speciality: '비뇨기과', english: 'UROLOGY' },
-    { speciality: '성형외과', english: 'PLASTICSURGERY' },
+    { speciality: '피아노', english: 'PIANO' },
+    { speciality: '기타', english: 'GUITAR' },
+    { speciality: '보컬', english: 'VOCAL' },
+    { speciality: '드럼', english: 'DRUM' },
+    { speciality: '베이스', english: 'BASS' },
+    { speciality: '음악이론', english: 'MUSIC_THEORY' },
+    { speciality: '작곡', english: 'COMPOSITION' },
+    { speciality: '관악기', english: 'WIND_INSTRUMENT' },
+    { speciality: '현악기', english: 'STRING_INSTRUMENT' },
+    { speciality: '건반악기', english: 'KEYBOARD_INSTRUMENT' },
   ];
 
   // 데이터를 3개씩 그룹화
-  const chunkSize = 3;
+  const chunkSize = 5;
   const specialityGroups = Array.from({ length: Math.ceil(datas.length / chunkSize) }, (_, i) =>
     datas.slice(i * chunkSize, i * chunkSize + chunkSize),
   );
@@ -65,10 +77,10 @@ function SelectMedicalSpecialityTab(props) {
     <Container>
       <Component>
         <Txt>
-          의료분야를 선택해주세요.{' '}
+          음악 분야를 선택해주세요.{' '}
           <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}>
             {' '}
-            (택1 필수. 중복 불가)
+            (택1 필수. 다중 선택 가능)
           </Text>
         </Txt>
         {rows}
@@ -82,12 +94,10 @@ const Container = styled.View``;
 const TypeText = styled.Text`
   color: ${(props) => (props.selected ? 'navy' : 'lightgray')};
   font-weight: bold;
-  font-size: ${RFValue(16)}px;
+  font-size: ${RFValue(14)}px;
 `;
 
 const Component = styled.View`
-  margin-left: ${wp(4.8)}px;
-  margin-bottom: ${hp(4)}px;
   margin-right: ${wp(4.8)}px;
 `;
 
@@ -104,8 +114,8 @@ const Row = styled.View`
 
 const Btn = styled.TouchableOpacity`
   top: ${hp(1.5)}px;
-  width: ${wp(25)}px;
-  height: ${hp(5.5)}px;
+  width: ${wp(17)}px;
+  height: ${hp(4)}px;
   border-radius: ${RFValue(8)}px;
   border-color: ${(props) => (props.selected ? 'navy' : 'lightgray')};
   border-width: 1px;
@@ -113,4 +123,4 @@ const Btn = styled.TouchableOpacity`
   align-items: center;
 `;
 
-export default SelectMedicalSpecialityTab;
+export default SelectSpecialityTab;

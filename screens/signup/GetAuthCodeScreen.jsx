@@ -1,43 +1,58 @@
 import { GetReAuthCodeBtn, JoinBtn } from '@assets/Icons/Buttons';
-import { PreviousBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
+import { signupTutee, validTuteeEmail, validTutorEmail } from 'api/auth';
 import { Auth } from 'context/AuthContext';
+import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import React, { useContext, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
 function GetAuthCodeScreen(props) {
+  const { userType } = useContext(UserInfo);
+
   const {
-    patient: [patientSignUpRequest],
+    tutor: [tutorSignUpRequest],
+    tutee: [tuteeSignUpRequest],
   } = useContext(Auth);
 
   const navigation = useNavigation();
-  const { email } = patientSignUpRequest;
+  let email;
+
+  //userType에 따라 email 가져옴
+  if (userType === 'tutor') {
+    email = tutorSignUpRequest.email;
+  } else if (userType === 'tutee') {
+    email = tuteeSignUpRequest.email;
+  }
 
   const [code, setCode] = useState('');
   const onChangeCode = (text) => setCode(text);
 
   const onPressPreviousBtn = () => {
     setCode('');
-    navigation.navigate('patientGetInfoScreen');
+    navigation.navigate('TuteeGetInfoScreen');
   };
 
   //재발급 받기
   const onPressReCodeBtn = () => {
     console.log('Button Clicked');
-    const axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    console.log(patientSignUpRequest);
-    axios
-      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/join/patient`, patientSignUpRequest, axiosConfig)
-      .then((data) => console.log(format(data)))
-      .catch((error) => console.log(format(error)));
+
+    if (userType === 'tutor') {
+      console.log(tutorSignUpRequest);
+    } else if (userType === 'tutee') {
+      console.log(tuteeSignUpRequest);
+
+      signupTutee(tuteeSignUpRequest)
+        .then((res) => {
+          const { data } = res;
+          console.log(format(data));
+          navigation.navigate('getAuthCodeScreen');
+        })
+        .catch((error) => console.log(format(error)));
+    }
   };
 
   //인증 (등록하기)
@@ -47,25 +62,33 @@ function GetAuthCodeScreen(props) {
       code: code,
     };
 
-    const axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
     console.log(authEmail);
-    axios
-      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/validate/patient`, authEmail, axiosConfig)
-      .then((data) => console.log(format(data.data)))
-      .catch((error) => console.log(format(error)));
 
-    if (code) {
-      navigation.navigate('loginScreen');
+    if (userType === 'tutor') {
+      console.log(tutorSignUpRequest);
+      validTutorEmail(authEmail)
+        .then((res) => {
+          const { data } = res;
+          console.log(format(data));
+          navigation.navigate('home-tab');
+        })
+        .catch((error) => console.log(format(error)));
+    } else if (userType === 'tutee') {
+      validTuteeEmail(authEmail)
+        .then((res) => {
+          const { data } = res;
+          console.log(format(data));
+          navigation.navigate('home-tab');
+        })
+        .catch((error) => console.log(format(error)));
     }
   };
 
   return (
     <Container>
-      <Logo>AppDoc</Logo>
+      <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
+
+      <Logo>BeatMate</Logo>
       <InfoText>{email}로 메일을 보냈습니다.</InfoText>
       <Component>
         <Txt>인증 코드를 입력해주세요.</Txt>
@@ -84,7 +107,6 @@ function GetAuthCodeScreen(props) {
           onPress={onPressJoinBtn}
         />
       </BtnGroup>
-      <PreviousBtn marginBottom={hp(10)} onPress={onPressPreviousBtn} marginLeft={wp(-72)} />
     </Container>
   );
 }

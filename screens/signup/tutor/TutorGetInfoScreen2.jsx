@@ -1,5 +1,5 @@
-import { FinishBtn } from '@assets/Icons/Buttons';
-import SelectMedicalSpecialityTab from '@components/signup/SelectMedicalSpecialityTab';
+import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
+import ImageUpload from '@components/signup/ImageUpload';
 import { useNavigation } from '@react-navigation/native';
 import { Auth } from 'context/AuthContext';
 import React, { useContext } from 'react';
@@ -9,44 +9,55 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
+import SelectSpecialityTab from '@components/signup/SelectSpecialityTab';
 
-function HospitalGetInfoScreen2(props) {
+function TutorGetInfoScreen2(props) {
   const {
-    doctor: [doctorSignUpRequest, setDoctorSignUpRequest],
+    tutor: [tutorSignUpRequest, setTutorSignUpRequest],
   } = useContext(Auth);
 
   const navigation = useNavigation();
-  const { medicalSpeciality, selfDescription } = doctorSignUpRequest;
+  const { authenticationAddress, specialities, selfDescription } = tutorSignUpRequest;
 
-  const onChangeSelfDescription = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, selfDescription: text }));
+  const onChangeSelfDescription = (text) => setTutorSignUpRequest((prev) => ({ ...prev, selfDescription: text }));
 
   const onPressPreviousBtn = () => {
-    setDoctorSignUpRequest((prev) => ({
+    setTutorSignUpRequest((prev) => ({
       ...prev,
-      medicalSpeciality: '',
+      authenticationAddress: [''],
+      specialities: [''],
       selfDescription: '',
     }));
-    navigation.navigate('hospitalGetInfoScreen');
+    navigation.navigate('tutorGetInfoScreen1');
   };
 
-  const onPressContinueBtn = () => {
-    if (medicalSpeciality) {
-      navigation.navigate('loginScreen');
-    }
-  };
+  const onPressContinueBtn = () => {};
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
         <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
 
-        <MainInfoTxt1>사용자님,</MainInfoTxt1>
+        <MainInfoTxt1>강사님,</MainInfoTxt1>
         <MainInfoTxt2>
-          <Text style={{ color: 'navy' }}>병원 정보</Text>를 입력해주세요!
+          <Text style={{ color: 'navy' }}>정보</Text>를 입력해주세요!
         </MainInfoTxt2>
 
         <Info>
-          <SelectMedicalSpecialityTab />
+          <Component>
+            <SelectSpecialityTab />
+          </Component>
+
+          <Component>
+            <Txt>
+              강사 자격을 인증할 수 있는 이미지를 첨부해주세요.{'\n'}
+              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}>
+                최소 1장 이상, 최대 5장까지 첨부가 가능합니다. (필수){'\n'}해당 이미지들로 강사 자격 심사가 진행될
+                예정입니다.{'\n'}
+              </Text>
+            </Txt>
+            <ImageUpload authenticationAddress={authenticationAddress} />
+          </Component>
 
           <Component>
             <Txt>
@@ -56,16 +67,16 @@ function HospitalGetInfoScreen2(props) {
             <Input
               value={selfDescription}
               onChangeText={onChangeSelfDescription}
-              placeholder="( 예시. 안녕하세요~ 꿈나무의원 의사입니다. )"
+              placeholder="( 예시: 안녕하세요~ 바이올리니스트 김땡땡입니다.)"
               placeholderTextColor="lightgray"
             />
           </Component>
         </Info>
 
         <View style={{ marginBottom: hp(3) }}>
-          <FinishBtn
-            fontColor={medicalSpeciality ? 'white' : 'navy'}
-            backColor={medicalSpeciality ? 'navy' : 'white'}
+          <ContinueBtn
+            fontColor={authenticationAddress && specialities ? 'white' : 'navy'}
+            backColor={authenticationAddress && specialities ? 'navy' : 'white'}
             width={wp(100)}
             justifyContent="center"
             onPress={onPressContinueBtn}
@@ -122,9 +133,9 @@ const Input = styled.TextInput`
   border-width: 1px;
 
   padding-left: ${RFValue(4)}px;
-  font-size: ${RFValue(16)}px;
+  font-size: ${RFValue(14)}px;
   font-weight: bold;
   padding: ${RFValue(10)}px;
 `;
 
-export default HospitalGetInfoScreen2;
+export default TutorGetInfoScreen2;
