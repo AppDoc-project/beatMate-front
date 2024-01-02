@@ -6,6 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import styled from 'styled-components/native';
 
 function HomeScreen(props) {
+  
   return (
     <Container>
       <BellIcon name={'bell'} size={RFValue(25)} />

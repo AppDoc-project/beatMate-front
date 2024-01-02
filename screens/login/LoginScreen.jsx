@@ -1,5 +1,4 @@
 import { LoginBtn } from '@assets/Icons/Buttons';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { login } from 'api/auth';
 import axios from 'axios';
@@ -9,11 +8,12 @@ import React, { useState, useContext } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function LoginScreen(props) {
   const {
     loginUserInfo: [loginUser, setLoginUser],
-  } = useContext(UserInfo); // AuthContext가 아니라 UserInfoContext로 수정
+  } = useContext(UserInfo);
 
   const navigation = useNavigation();
 
@@ -23,42 +23,24 @@ function LoginScreen(props) {
   const onChangeEmail = (text) => setEmail(text);
   const onChangePassword = (text) => setPassword(text);
 
-  const { setItem } = useAsyncStorage('authorization');
-
   const onPressLoginBtn = () => {
-    // 이메일과 비밀번호를 가지고 로그인 함수 호출
     login(email, password)
-      .then((res) => {
-        console.log(format(res.data));
-        const authorizationHeader = res.headers.authorization;
-        if (authorizationHeader) {
-          // AsyncStorage에 토큰 저장
-          setItem(authorizationHeader)
-            .then(() => {
-              // axios 기본 헤더에 토큰 추가
-              axios.defaults.headers.common['Authorization'] = authorizationHeader;
-
-              // 데이터에서 필요한 정보 추출하여 loginUser 객체 업데이트
-              const userData = res.data.object;
-              const { id, email, name, tutor } = userData;
-              setLoginUser({ id, email, name, isTutor: tutor });
-
-              console.log(loginUser);
-
-              console.log('Login User:', {
-                id: id,
-                email: email,
-                name: name,
-                isTutor: tutor,
-              });
-
-              navigation.navigate('home-tab');
-            })
-            .catch((error) => console.log(format(error)));
-        }
+      .then(async (res) => {
+        const token = res.headers.authorization; // 실제 응답 객체에서 헤더에서 토큰을 가져오는 부분
+  
+        // AsyncStorage에 토큰 저장
+        await AsyncStorage.setItem('access_token', token);
+  
+        // 데이터에서 필요한 정보 추출하여 loginUser 객체 업데이트
+        const userData = res.data.object;
+        const { id, email, name, tutor } = userData;
+        setLoginUser({ id, email, name, isTutor: tutor });
+  
+        navigation.navigate('home-tab');
       })
       .catch((error) => console.log(format(error)));
   };
+  
 
   const onPressSignUpBtn = () => {
     navigation.navigate('selectTypeScreen');
@@ -67,6 +49,7 @@ function LoginScreen(props) {
   const onPressFindPasswordBtn = () => {
     navigation.navigate('selectTypeScreen');
   };
+
 
   return (
     <Container>

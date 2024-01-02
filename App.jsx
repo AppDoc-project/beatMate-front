@@ -12,7 +12,7 @@ export default function App() {
 
   //현재 접속자 정보 객체
   const [loginUser, setLoginUser] = useState({
-    id: null,
+    id: 0,
     email: '',
     name: '',
     isTutor: false,

@@ -40,20 +40,20 @@ function ImageUpload({ authenticationAddress }) {
   const handleUpload = async () => {
     const formData = new FormData();
     selectedImages.forEach((image, index) => {
-      const files = {
+      const file = {
         uri: image.uri,
-        type: 'image/jpg', // 이미지 타입 설정 (JPEG 예시)
+        type: 'image/jpeg', // 이미지 타입 설정 (JPEG 예시)
         name: `${index}.jpg`, // 파일명 설정
       };
-      formData.append(`files[${index}]`, files); // FormData에 이미지 추가
+      formData.append(`files`, file); // FormData에 이미지 추가
     });
 
     postImages(formData)
       .then((res) => {
         const { data } = res;
-        console.log(JSON.stringify(data)); // 서버 응답 확인
+        console.log(format(data)); // 서버 응답 확인
       })
-      .catch((error) => console.log(JSON.stringify(error))); // 에러 처리
+      .catch((error) => console.log(format(error))); // 에러 처리
   };
 
   const removeImage = (indexToRemove) => {
