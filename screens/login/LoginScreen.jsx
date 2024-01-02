@@ -3,7 +3,7 @@ import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { login } from 'api/auth';
 import axios from 'axios';
-import { Auth } from 'context/AuthContext';
+import { UserInfo } from 'context/UserInfoContext'; // AuthContext가 아니라 UserInfoContext로 수정
 import { format } from 'pretty-format';
 import React, { useState, useContext } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -13,7 +13,7 @@ import { styled } from 'styled-components/native';
 function LoginScreen(props) {
   const {
     loginUserInfo: [loginUser, setLoginUser],
-  } = useContext(Auth);
+  } = useContext(UserInfo); // AuthContext가 아니라 UserInfoContext로 수정
 
   const navigation = useNavigation();
 
@@ -43,11 +43,13 @@ function LoginScreen(props) {
               const { id, email, name, tutor } = userData;
               setLoginUser({ id, email, name, isTutor: tutor });
 
+              console.log(loginUser);
+
               console.log('Login User:', {
-                id: loginUser.id,
-                email: loginUser.email,
-                name: loginUser.name,
-                isTutor: loginUser.isTutor,
+                id: id,
+                email: email,
+                name: name,
+                isTutor: tutor,
               });
 
               navigation.navigate('home-tab');
