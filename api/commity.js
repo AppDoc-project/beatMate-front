@@ -1,5 +1,6 @@
-import { client } from './client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { client } from './client';
 
 const getCommunitySection = async () => {
   try {
@@ -20,8 +21,4 @@ const getCommunitySection = async () => {
   }
 };
 
-
-
-
 export { getCommunitySection };
-
