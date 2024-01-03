@@ -1,10 +1,12 @@
 import { GetReAuthCodeBtn, JoinBtn } from '@assets/Icons/Buttons';
 import { useNavigation } from '@react-navigation/native';
 import { signupTutee, validTuteeEmail, validTutorEmail } from 'api/auth';
+import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
 import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { Text, SafeAreaView } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -29,7 +31,63 @@ function GetAuthCodeScreen(props) {
   }
 
   const [code, setCode] = useState('');
-  const onChangeCode = (text) => setCode(text);
+  const [timeLeft, setTimeLeft] = useState(180); // 초 단위로 남은 시간 저장
+  const [timerRunning, setTimerRunning] = useState(false); // 타이머 동작 여부
+
+  // 이 함수는 남은 시간을 받아서 '분:초' 형태로 변환해주는 함수입니다.
+  const formatTime = (timeLeft) => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    return `${minutes}분 ${seconds < 10 ? `0${seconds}` : seconds}초`;
+  };
+
+  const startTimer = () => {
+    if (!timerRunning) {
+      setTimerRunning(true);
+      setTimeLeft(180); // 타이머 초기화
+    }
+  };
+
+  // 포커스 여부에 따라 타이머 상태 변경
+  useEffect(() => {
+    const onFocus = navigation.addListener('focus', () => {
+      startTimer();
+    });
+
+    const onBlur = navigation.addListener('blur', () => {
+      setTimerRunning(false); // 화면이 blur되면 타이머 중지
+    });
+
+    return () => {
+      onFocus(); // 이벤트 리스너 정리
+      onBlur(); // 이벤트 리스너 정리
+    };
+  }, [navigation]);
+
+  // 타이머 로직
+  useEffect(() => {
+    let timer;
+    if (timerRunning && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+      }, 1000);
+    } else if (timeLeft === 0) {
+      // 시간이 종료되면 추가 작업 수행
+      clearInterval(timer);
+      // 여기에 alert를 띄우고 이전 페이지로 이동하는 코드를 넣어줄게요.
+      alert('시간이 종료되었습니다.');
+      navigation.navigate('TuteeGetInfoScreen'); // 이전 페이지로 이동
+    }
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [timerRunning, timeLeft]);
+
+  const onChangeCode = (text) => {
+    setCode(text);
+    startTimer(); // 코드 입력 시 타이머 시작
+  };
 
   const onPressPreviousBtn = () => {
     setCode('');
@@ -85,29 +143,33 @@ function GetAuthCodeScreen(props) {
   };
 
   return (
-    <Container>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
+      <Container>
+        <Logo>BeatMate</Logo>
+        <InfoText>{email}로 메일을 보냈습니다.</InfoText>
+        <Component>
+          <Txt>인증 코드를 입력해주세요.</Txt>
+          <Txt>
+            남은 시간: <Text style={{ color: COLORS.main }}>{formatTime(timeLeft)}</Text>
+          </Txt>
+          <Input value={code} onChangeText={onChangeCode} />
+        </Component>
+        <BtnGroup>
+          <ReBtn onPress={onPressReCodeBtn}>
+            <GetReAuthCodeBtn width={wp(100)} justifyContent="center" />
+          </ReBtn>
 
-      <Logo>BeatMate</Logo>
-      <InfoText>{email}로 메일을 보냈습니다.</InfoText>
-      <Component>
-        <Txt>인증 코드를 입력해주세요.</Txt>
-        <Input value={code} onChangeText={onChangeCode} />
-      </Component>
-      <BtnGroup>
-        <ReBtn onPress={onPressReCodeBtn}>
-          <GetReAuthCodeBtn width={wp(100)} justifyContent="center" />
-        </ReBtn>
-
-        <JoinBtn
-          fontColor={code ? 'white' : 'navy'}
-          backColor={code ? 'navy' : 'white'}
-          width={wp(100)}
-          justifyContent="center"
-          onPress={onPressJoinBtn}
-        />
-      </BtnGroup>
-    </Container>
+          <JoinBtn
+            fontColor={code ? 'white' : 'navy'}
+            backColor={code ? 'navy' : 'white'}
+            width={wp(100)}
+            justifyContent="center"
+            onPress={onPressJoinBtn}
+          />
+        </BtnGroup>
+      </Container>
+    </SafeAreaView>
   );
 }
 
@@ -142,6 +204,7 @@ const Component = styled.View`
 const Txt = styled.Text`
   font-weight: bold;
   font-size: ${RFValue(16)}px;
+  margin-bottom: 10px;
 `;
 
 const Input = styled.TextInput`

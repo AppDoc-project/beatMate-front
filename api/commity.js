@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { client } from './client';
 
-// 커뮤니티 리스트 가져오기 
+// 커뮤니티 리스트 가져오기
 const getCommunitySection = async () => {
   try {
     const token = await AsyncStorage.getItem('access_token');
