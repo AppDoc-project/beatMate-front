@@ -75,8 +75,8 @@ function GetAuthCodeScreen(props) {
       // 시간이 종료되면 추가 작업 수행
       clearInterval(timer);
       // 여기에 alert를 띄우고 이전 페이지로 이동하는 코드를 넣어줄게요.
-      alert('시간이 종료되었습니다.');
-      navigation.navigate('TuteeGetInfoScreen'); // 이전 페이지로 이동
+      alert('시간이 종료되었습니다. 다시 인증해주세요.');
+      navigation.navigate('tuteeGetInfoScreen'); // 이전 페이지로 이동
     }
 
     return () => {
@@ -91,7 +91,7 @@ function GetAuthCodeScreen(props) {
 
   const onPressPreviousBtn = () => {
     setCode('');
-    navigation.navigate('TuteeGetInfoScreen');
+    navigation.navigate('tuteeGetInfoScreen');
   };
 
   //재발급 받기
