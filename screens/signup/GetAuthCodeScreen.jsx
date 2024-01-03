@@ -1,6 +1,6 @@
 import { GetReAuthCodeBtn, JoinBtn } from '@assets/Icons/Buttons';
 import { useNavigation } from '@react-navigation/native';
-import { signupTutee, validTuteeEmail, validTutorEmail } from 'api/auth';
+import { signupTutee, signupTutor, validTuteeEmail, validTutorEmail } from 'api/auth';
 import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
 import { UserInfo } from 'context/UserInfoContext';
@@ -100,6 +100,23 @@ function GetAuthCodeScreen(props) {
 
     if (userType === 'tutor') {
       console.log(tutorSignUpRequest);
+      // authenticationAddress 배열을 string으로 변환하여 새로운 객체 생성
+      const newAuthenticationAddress = JSON.stringify(tutorSignUpRequest.authenticationAddress);
+      const newTutorSignUpRequest = {
+        ...tutorSignUpRequest, // 기존의 값 복사
+        authenticationAddress: newAuthenticationAddress, // string으로 변환된 배열 할당
+      };
+
+      signupTutor(newTutorSignUpRequest)
+        .then((res) => {
+          const { data } = res;
+          console.log(format(data));
+        })
+        .catch((error) => console.log(format(error)));
+
+      // 타이머를 초기화하고 3분으로 재설정
+      setTimeLeft(180);
+      setTimerRunning(true);
     } else if (userType === 'tutee') {
       console.log(tuteeSignUpRequest);
 
@@ -107,7 +124,10 @@ function GetAuthCodeScreen(props) {
         .then((res) => {
           const { data } = res;
           console.log(format(data));
-          navigation.navigate('getAuthCodeScreen');
+
+          // 타이머를 초기화하고 3분으로 재설정
+          setTimeLeft(180);
+          setTimerRunning(true);
         })
         .catch((error) => console.log(format(error)));
     }

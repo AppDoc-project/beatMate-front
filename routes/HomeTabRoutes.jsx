@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { COLORS } from 'colors';
+import { Auth } from 'context/AuthContext';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Auth } from 'context/AuthContext';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import CommunityScreenNavigator from './community/CommunityNavigators';
 import HomeScreenNavigator from './home/HomeScreenNavigator';
 import MyPageScreenNavigator from './mypage/MyPageScreenNavigators';
