@@ -1,6 +1,8 @@
 import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import ImageUpload from '@components/signup/ImageUpload';
+import SelectSpecialityTab from '@components/signup/SelectSpecialityTab';
 import { useNavigation } from '@react-navigation/native';
+import { signupTutor } from 'api/auth';
 import { Auth } from 'context/AuthContext';
 import React, { useContext } from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
@@ -9,7 +11,6 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
-import SelectSpecialityTab from '@components/signup/SelectSpecialityTab';
 
 function TutorGetInfoScreen2(props) {
   const {

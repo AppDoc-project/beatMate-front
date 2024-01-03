@@ -14,7 +14,7 @@ const logout = () => client.post(`/auth/logout`);
 // 튜티 이메일 인증
 const validTuteeEmail = (data) => client.post('/auth/validate/tutee', data, {});
 
-// 튜티 이메일 인증
+// 튜터 이메일 인증
 const validTutorEmail = (data) => client.post('/auth/validate/tutor', data, {});
 
 // 로그인

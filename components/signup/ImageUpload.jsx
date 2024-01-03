@@ -50,8 +50,10 @@ function ImageUpload({ authenticationAddress }) {
 
     postImages(formData)
       .then((res) => {
-        const { data } = res;
-        console.log(format(data)); // 서버 응답 확인
+        console.log(res); // 서버 응답 확인
+
+        authenticationAddress = res.data.data; // 매개변수로 받은 객체의 속성을 변경
+        console.log(authenticationAddress);
       })
       .catch((error) => console.log(format(error))); // 에러 처리
   };

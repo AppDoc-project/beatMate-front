@@ -11,6 +11,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
+
 function TuteeGetInfoScreen(props) {
   const {
     tutee: [tuteeSignUpRequest, setTuteeSignUpRequest],
