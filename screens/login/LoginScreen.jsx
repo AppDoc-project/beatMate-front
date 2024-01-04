@@ -45,7 +45,7 @@ function LoginScreen(props) {
   };
 
   const onPressFindPasswordBtn = () => {
-    navigation.navigate('selectTypeScreen');
+    navigation.navigate('getAuthEmail');
   };
 
 

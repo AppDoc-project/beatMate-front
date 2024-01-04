@@ -44,5 +44,25 @@ const postImages = (data) =>
     },
   });
 
+// 비밀번호 찾기: 메일 입력
+const getNewEmail = (email) => client.get('/auth/password/code?email=' + email);
 
-export { signupTutor, signupTutee, logout, validTuteeEmail, validTutorEmail, login, checkSingleEmail, postImages };
+// 비밀번호 찾기: 인증코드 입력
+const getNewAuthCode = (data) => client.post('/auth/password/code', data, {});
+
+// 비밀번호 찾기: 비밀번호 변경
+const changeNewPassword = (data) => client.patch('/auth/password', data, {});
+
+export {
+  signupTutor,
+  signupTutee,
+  logout,
+  validTuteeEmail,
+  validTutorEmail,
+  login,
+  checkSingleEmail,
+  postImages,
+  getNewEmail,
+  getNewAuthCode,
+  changeNewPassword,
+};
