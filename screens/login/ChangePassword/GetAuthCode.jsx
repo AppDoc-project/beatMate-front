@@ -82,7 +82,7 @@ const GetAuthCodeScreen = ({ route }) => {
 
   //재발급 받기
   const onPressReCodeBtn = () => {
-    getNewEmail({ email })
+    getNewEmail(email)
       .then((res) => {
         const { data } = res;
         console.log(format(data));
@@ -101,11 +101,13 @@ const GetAuthCodeScreen = ({ route }) => {
       code: authCode,
     };
 
-    getNewAuthCode({ authEmail })
+    getNewAuthCode(authEmail)
       .then((res) => {
+        const token = res.headers.token; // 실제 응답 객체에서 헤더에서 토큰을 가져오는 부분
+        console.log(token);
         const { data } = res;
         console.log(format(data));
-        navigation.navigate('getChangedPassword', { email, authCode });
+        navigation.navigate('getChangedPassword', { email, token });
       })
       .catch((error) => console.log(format(error)));
   };

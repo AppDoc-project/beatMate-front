@@ -1,5 +1,8 @@
 import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
+import { changeNewPassword } from 'api/auth';
+import format from 'pretty-format';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -7,7 +10,8 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
-function GetAuthEmail(props) {
+function GetChangedPassword({ route }) {
+  const { email, token } = route.params;
   const navigation = useNavigation();
 
   const [changedPassword, setChangedPassword] = useState('');
@@ -17,11 +21,32 @@ function GetAuthEmail(props) {
   };
 
   const onPressPreviousBtn = () => {
-    navigation.navigate('getAuthCode');
-  };
+    navigation.navigate('getAuthEmail');
+  }; 
 
   const onPressContinueBtn = () => {
-    navigation.navigate('homeScreen');
+    const data = {
+      code: token,
+      password: changedPassword,
+      email: email,
+    }
+
+    changeNewPassword(data)
+      .then((res) => {
+        const { data } = res;
+        console.log(format(data));
+        navigation.navigate('loginScreen');
+      })
+      .catch((error) => console.log(format(error)));
+  };
+
+  GetChangedPassword.propTypes = {
+    route: PropTypes.shape({
+      params: PropTypes.shape({
+        email: PropTypes.string.isRequired,
+        token: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
   };
 
   return (
@@ -78,17 +103,19 @@ const Input = styled.TextInput`
 
 const BtnGroup = styled.View`
   flex: 1;
+  margin-top: ${hp(10)}px;
 `;
 
 const SubTxt = styled.Text`
   color: lightgray;
-  font-size: ${RFValue(13)}px;
+  font-size: ${RFValue(12.5)}px;
   margin-top: ${hp(1)}px;
 `;
 
 const Component = styled.View`
   margin-left: ${wp(4.8)}px;
   margin-bottom: ${hp(4)}px;
+  margin-top: ${hp(4)}px;
 `;
 
 const Txt = styled.Text`
@@ -96,4 +123,4 @@ const Txt = styled.Text`
   font-size: ${RFValue(16)}px;
 `;
 
-export default GetAuthEmail;
+export default GetChangedPassword;
