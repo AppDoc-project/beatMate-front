@@ -1,9 +1,9 @@
 import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
+import { checkSingleEmail } from 'api/auth';
 import { Auth } from 'context/AuthContext';
 import format from 'pretty-format';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Alert, Text, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -11,33 +11,27 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
-function DoctorGetInfoScreen(props) {
+function TutorGetInfoScreen1(props) {
   const {
-    doctor: [doctorSignUpRequest, setDoctorSignUpRequest],
+    tutor: [tutorSignUpRequest, setTutorSignUpRequest],
   } = useContext(Auth);
 
   const navigation = useNavigation();
-  const { name, contact, email, password, dateOfBirth } = doctorSignUpRequest;
+  const { email, name, password, contact } = tutorSignUpRequest;
 
-  const onChangeName = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, name: text }));
-  const onChangeContact = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, contact: text }));
-  const onChangeEmail = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, email: text }));
-  const onChangePassword = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, password: text }));
-  const onChangeDateOfBirth = (text) => setDoctorSignUpRequest((prev) => ({ ...prev, dateOfBirth: text }));
+  const onChangeName = (text) => setTutorSignUpRequest((prev) => ({ ...prev, name: text }));
+  const onChangeContact = (text) => setTutorSignUpRequest((prev) => ({ ...prev, contact: text }));
+  const onChangeEmail = (text) => setTutorSignUpRequest((prev) => ({ ...prev, email: text }));
+  const onChangePassword = (text) => setTutorSignUpRequest((prev) => ({ ...prev, password: text }));
 
   const onPressCheckEmail = () => {
-    // 이메일 중복 여부 확인
-    const inputEmail = { email };
-    const axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const data = {
+      email: email,
     };
-    console.log(inputEmail);
-    axios
-      .post(`${process.env.EXPO_PUBLIC_DEV_SERVER}/auth/join/duplication`, inputEmail, axiosConfig)
-      .then((response) => {
-        const { data } = response;
+
+    checkSingleEmail(data)
+      .then((res) => {
+        const { data } = res;
         console.log(format(data));
 
         // 서버 응답에서 code와 subCode를 검사하여 알림 표시
@@ -49,13 +43,12 @@ function DoctorGetInfoScreen(props) {
   };
 
   const onPressPreviousBtn = () => {
-    setDoctorSignUpRequest((prev) => ({
+    setTutorSignUpRequest((prev) => ({
       ...prev,
       name: '',
       contact: '',
       email: '',
       password: '',
-      dateOfBirth: '',
     }));
     navigation.navigate('selectTypeScreen');
   };
@@ -67,30 +60,26 @@ function DoctorGetInfoScreen(props) {
       Alert.alert('알림', '연락처는 11자여야 합니다.');
     } else if (!email || email.length > 50 || !email.includes('@')) {
       Alert.alert('알림', '이메일은 최대 50자이며 이메일 형식이어야 합니다.');
-    } else if (dateOfBirth.length < 8 || !dateOfBirth.includes('-')) {
-      Alert.alert('알림', '형식에 맞추어서 생년월일을 작성해주세요.');
     } else if (
       !password ||
       password.length < 8 ||
       password.length > 18 ||
-      !/[a-z]/.test(password) ||
-      !/\d/.test(password)
+      !/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@~_])[a-zA-Z\d!@~_]+/.test(password)
     ) {
-      Alert.alert('알림', '비밀번호는 최소 8자, 최대 18자, 영문 소문자와 숫자를 반드시 포함해야 합니다.');
+      Alert.alert(
+        '알림',
+        '비밀번호는 최소 8자, 최대 18자, 1개 이상의 알파벳, 숫자, 특수문자를 반드시 포함해야 합니다.',
+      );
     } else {
-      navigation.navigate('hospitalGetInfoScreen');
+      navigation.navigate('tutorGetInfoScreen2');
     }
   };
-
-  useEffect(() => {
-    console.log(format(doctorSignUpRequest));
-  }, [doctorSignUpRequest]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
         <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
-        <MainInfoTxt1>사용자님,</MainInfoTxt1>
+        <MainInfoTxt1>강사님,</MainInfoTxt1>
         <MainInfoTxt2>
           <Text style={{ color: 'navy' }}>정보</Text>를 입력해주세요!
         </MainInfoTxt2>
@@ -101,17 +90,6 @@ function DoctorGetInfoScreen(props) {
             <Txt>이름을 입력해주세요.</Txt>
             <SubTxt>한글로 빈칸없이 작성해주세요.</SubTxt>
             <Input value={name} onChangeText={onChangeName} />
-          </Component>
-
-          <Component>
-            <Txt>생년월일을 입력해주세요.</Txt>
-            <SubTxt>아래와 같은 형식으로 작성해주세요.</SubTxt>
-            <Input
-              value={dateOfBirth}
-              onChangeText={onChangeDateOfBirth}
-              placeholder="( 예시. 2000-12-12)"
-              placeholderTextColor="lightgray"
-            />
           </Component>
 
           <Component>
@@ -143,19 +121,19 @@ function DoctorGetInfoScreen(props) {
 
           <Component>
             <Txt>비밀번호</Txt>
-            <SubTxt>최소 8자, 최대 18자 가능 / 영문소문자, 숫자 반드시 포함</SubTxt>
+            <SubTxt>최소 8자, 최대 18자 가능 / 알파벳, 숫자, 특수문자 반드시 포함</SubTxt>
             <Input
               value={password}
               onChangeText={onChangePassword}
-              placeholder="( 예시. kejfhnwi375 )"
+              placeholder="( 예시. kejwi375@! )"
               placeholderTextColor="lightgray"
             />
           </Component>
         </Info>
 
         <ContinueBtn
-          fontColor={name && contact && email && password && dateOfBirth ? 'white' : 'navy'}
-          backColor={name && contact && email && password && dateOfBirth ? 'navy' : 'white'}
+          fontColor={name && contact && email && password ? 'white' : 'navy'}
+          backColor={name && contact && email && password ? 'navy' : 'white'}
           width={wp(100)}
           marginBottom={hp(6.15)}
           justifyContent="center"
@@ -243,4 +221,4 @@ const Check = styled.TouchableOpacity`
   border-radius: 8px;
 `;
 
-export default DoctorGetInfoScreen;
+export default TutorGetInfoScreen1;

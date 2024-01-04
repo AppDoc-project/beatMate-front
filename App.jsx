@@ -8,13 +8,20 @@ import HomeTabRoutes from 'routes/HomeTabRoutes';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [userType, setUserType] = useState(''); //1이면 doctor, 2면 patient
+  const [userType, setUserType] = useState(''); //회원가입시 구분 위해. tutor, tutee
 
-  // 나중에 initialRouteName 변경해야함.
+  //현재 접속자 정보 객체
+  const [loginUser, setLoginUser] = useState({
+    id: 0,
+    email: '',
+    name: '',
+    isTutor: false,
+  });
+
   return (
-    <UserInfo.Provider value={{ userType, setUserType }}>
+    <UserInfo.Provider value={{ userType, setUserType, loginUserInfo: [loginUser, setLoginUser] }}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="home-tab">
+        <Stack.Navigator initialRouteName="auth">
           <Stack.Screen name="auth" component={AuthRoutes} options={{ headerShown: false }} />
           <Stack.Screen
             name={'home-tab'}

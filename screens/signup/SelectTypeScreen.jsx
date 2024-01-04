@@ -1,4 +1,4 @@
-import { DoctorSelect, PatientSelect, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
+import { TutorSelect, TuteeSelect, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
 import { UserInfo } from 'context/UserInfoContext';
 import React, { useContext } from 'react';
@@ -8,6 +8,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
+//계정 바뀌었나 확인용
 function SelectTypeScreen() {
   const navigation = useNavigation();
   const { userType, setUserType } = useContext(UserInfo);
@@ -18,10 +19,10 @@ function SelectTypeScreen() {
   };
 
   const onPressContinueBtn = () => {
-    if (userType === 1) {
-      navigation.navigate('doctorGetInfoScreen');
-    } else if (userType === 2) {
-      navigation.navigate('patientGetInfoScreen');
+    if (userType === 'tutor') {
+      navigation.navigate('tutorGetInfoScreen1');
+    } else if (userType === 'tutee') {
+      navigation.navigate('tuteeGetInfoScreen');
     }
   };
 
@@ -38,15 +39,15 @@ function SelectTypeScreen() {
       </MainInfoTxt2>
       <SubTxt>한 가지 유형을 선택해주세요. (필수)</SubTxt>
       <SelectOption>
-        <DoctorSelect
-          backColor={userType === 1 ? '#EBF5FF' : '#FFFFFF'}
-          fontColor={userType === 1 ? 'black' : '#666666'}
-          onPress={() => setUserType(1)}
+        <TutorSelect
+          backColor={userType === 'tutor' ? '#EBF5FF' : '#FFFFFF'}
+          fontColor={userType === 'tutor' ? 'black' : '#666666'}
+          onPress={() => setUserType('tutor')}
         />
-        <PatientSelect
-          backColor={userType === 2 ? '#EBF5FF' : '#FFFFFF'}
-          fontColor={userType === 2 ? 'black' : '#666666'}
-          onPress={() => setUserType(2)}
+        <TuteeSelect
+          backColor={userType === 'tutee' ? '#EBF5FF' : '#FFFFFF'}
+          fontColor={userType === 'tutee' ? 'black' : '#666666'}
+          onPress={() => setUserType('tutee')}
         />
       </SelectOption>
 

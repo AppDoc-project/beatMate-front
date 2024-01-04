@@ -2,11 +2,11 @@ import { COLORS } from 'colors';
 import React from 'react';
 import { Text } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
 function HomeScreen(props) {
+  
   return (
     <Container>
       <BellIcon name={'bell'} size={RFValue(25)} />
