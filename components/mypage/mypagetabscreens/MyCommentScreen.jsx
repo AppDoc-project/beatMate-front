@@ -1,15 +1,14 @@
 import { COLORS } from 'colors';
-import React, { useState } from 'react';
+import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
-function MyBookmarkScreen(props) {
+function MyCommentScreen(props) {
   return (
-    <Mybookmark>
+    <Mycomment>
       <Category>자유게시판</Category>
-      <Title>북마크 화면</Title>
+      <Title>내 댓글 화면</Title>
       <Content>나는 내용이다아아아아아</Content>
       <Postinfo>
         <Date>2023.12.26</Date>
@@ -18,15 +17,15 @@ function MyBookmarkScreen(props) {
           21
         </Commentbox>
         <Bookmarkbox>
-          <Bookmarkicon name={'heart'} size={RFValue(11)} color={'#BB271A'} />
+          <Bookmarkicon name={'heart'} size={RFValue(11)} color={'lightgray'} />
           12
         </Bookmarkbox>
       </Postinfo>
-    </Mybookmark>
+    </Mycomment>
   );
 }
 
-const Mybookmark = styled.View`
+const Mycomment = styled.View`
   height: 125px;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
@@ -90,4 +89,4 @@ const Bookmarkicon = styled(MaterialCommunityIcons)`
   top: 120px;
 `;
 
-export default MyBookmarkScreen;
+export default MyCommentScreen;

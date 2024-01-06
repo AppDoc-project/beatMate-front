@@ -4,9 +4,9 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MyBookmarkScreen from './mypagetabscreens/MyBookmarkScreen';
-import MyCommentScreen from './mypagetabscreens/MyCommentScreen';
-import MyPostScreen from './mypagetabscreens/MyPostScreen';
+import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
+import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
+import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 

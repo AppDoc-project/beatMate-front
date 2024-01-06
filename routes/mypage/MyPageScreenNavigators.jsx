@@ -26,7 +26,7 @@ function MyPageScreenNavigator(props) {
     <Stack.Navigator initialRouteName="myPageScreen">
       {isTutor ? ( //isTutor가 True라면
         <Stack.Screen
-          name={'TutorMyPageScreen'}
+          name={'myPageScreen'}
           component={TutorMyPageScreen}
           options={{
             headerShown: false,
@@ -35,32 +35,27 @@ function MyPageScreenNavigator(props) {
       ) : (
         //isTutor가 false라면
         <Stack.Screen
-          name={'TuteeMyPageScreen'}
+          name={'myPageScreen'}
           component={TuteeMyPageScreen}
           options={{
             headerShown: false,
           }}
         />
       )}
-
-      {isTutor ? ( //isTutor가 True라면
-        <Stack.Screen
-          name={'TutorMyPageSetScreen'}
-          component={TutorMyPageSetScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      ) : (
-        //isTutor가 false라면
-        <Stack.Screen
-          name={'TuteeMyPageSetScreen'}
-          component={TuteeMyPageSetScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      )}
+      <Stack.Screen
+        name={'TutorMyPageSetScreen'}
+        component={TutorMyPageSetScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'TuteeMyPageSetScreen'}
+        component={TuteeMyPageSetScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
