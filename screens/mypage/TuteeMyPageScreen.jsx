@@ -6,19 +6,29 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useNavigation } from '@react-navigation/native';
 
 import MyPostScreen from './mypagetabscreens/MyPostScreen';
 import MyCommentScreen from './mypagetabscreens/MyCommentScreen';
 import MyBookmarkScreen from './mypagetabscreens/MyBookmarkScreen';
 import MyTeacherScreen from './mypagetabscreens/MyTeacherScreen';
+import TuteeMyPageSetScreen from '@screens/mypageset/TuteeMyPageSetScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
 function TuteeMyPageScreen(props) {
+  const navigation = useNavigation();
+
+  const TuteeMyPageSet = () => {
+    navigation.navigate('TuteeMyPageSetScreen');
+  };
+
   return (
     <Container>
       <Infosection>
-        <SettingIcon name={'settings-outline'} size={RFValue(25)} color={'white'} />
+        <Settingbtn onPress={TuteeMyPageSet}>
+          <SettingIcon name={'settings-outline'} size={RFValue(25)} color={'white'} />
+        </Settingbtn>
         <Profileimage name={'user-circle'} size={RFValue(90)} color={'lightgray'} />
         <Userbox>
           <Usertypebox>
@@ -81,6 +91,8 @@ const Infosection = styled.View`
   flex: 0.5;
   background-color: ${COLORS.main};
 `;
+
+const Settingbtn = styled.TouchableOpacity``;
 
 const SettingIcon = styled(Ionicons)`
   position: absolute;

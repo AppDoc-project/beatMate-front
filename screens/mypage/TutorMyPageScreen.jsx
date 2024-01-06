@@ -1,4 +1,5 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
@@ -13,10 +14,24 @@ import MyPostScreen from './mypagetabscreens/MyPostScreen';
 const Tab = createMaterialTopTabNavigator();
 
 function TutorMyPageScreen(props) {
+
+  const navigation = useNavigation();
+
+  const TutorMyPageSet = () => {
+    navigation.navigate('TutorMyPageSetScreen');
+  };
+  
+
   return (
     <Container>
       <Infosection>
-        <SettingIcon name={'settings-outline'} size={RFValue(25)} color={'white'} />
+        <Settingbtn onPress={TutorMyPageSet}>
+          <SettingIcon
+            name={'settings-outline'}
+            size={RFValue(25)}
+            color={'white'}
+          />
+        </Settingbtn>
         <Profileimage name={'user-circle'} size={RFValue(90)} color={'lightgray'} />
         <Userbox>
           <Usertypebox>
@@ -71,6 +86,9 @@ const Container = styled.View`
 const Infosection = styled.View`
   flex: 0.5;
   background-color: ${COLORS.main};
+`;
+
+const Settingbtn = styled.TouchableOpacity`
 `;
 
 const SettingIcon = styled(Ionicons)`

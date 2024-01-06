@@ -12,7 +12,7 @@ function MyCommentScreen(props) {
         <Mycomment>
             <Category>자유게시판</Category>
             <Title>내 댓글 화면</Title>
-            <Comment>re: 나는 댓글</Comment>
+            <Content>나는 내용이다아아아아아</Content>
             <Postinfo>
             <Date>2023.12.26</Date>
             <Commentbox>
@@ -48,7 +48,7 @@ const Title = styled.Text`
   margin: 3px 0px 5px 15px;
 `;
 
-const Comment = styled.Text`
+const Content = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 500;
   color: ${COLORS.black};
