@@ -8,8 +8,15 @@ import MyBookmarkScreen from './mypagetabscreens/MyBookmarkScreen';
 import MyCommentScreen from './mypagetabscreens/MyCommentScreen';
 import MyPostScreen from './mypagetabscreens/MyPostScreen';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useNavigation } from '@react-navigation/native';
 
 function TutorMyPageScreen(props) {
+  const navigation = useNavigation();
+
+  const TutorMyPageSet = () => {
+    navigation.navigate('TutorMyPageSetScreen');
+  };
+
   const [isMyPost, selectMyPost] = useState(true);
   const [isMyComment, selectMyComment] = useState(false);
   const [isMyBookmark, selectMyBookmark] = useState(false);
@@ -35,7 +42,9 @@ function TutorMyPageScreen(props) {
   return (
     <Container>
       <Infosection>
-        <SettingIcon name={'settings-outline'} size={RFValue(25)} color={'white'} />
+        <Settingbtn onPress={TutorMyPageSet}>
+          <SettingIcon name={'settings-outline'} size={RFValue(25)} color={'white'} />
+        </Settingbtn>
         <Profileimage name={'user-circle'} size={RFValue(90)} color={'lightgray'} />
         <Userbox>
           <Usertypebox>
@@ -79,6 +88,8 @@ const Infosection = styled.View`
   flex: 0.5;
   background-color: ${COLORS.main};
 `;
+
+const Settingbtn = styled.TouchableOpacity``;
 
 const SettingIcon = styled(Ionicons)`
   position: absolute;
