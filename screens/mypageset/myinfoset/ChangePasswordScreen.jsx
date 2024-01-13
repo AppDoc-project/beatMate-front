@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Alert } from 'react-native';
+import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 
 function ChangePasswordScreen(props) {
@@ -30,49 +30,51 @@ function ChangePasswordScreen(props) {
   };
 
   return (
-    <Container>
-      <Section>
-        <Txt>변경하실 비밀번호를 입력해주세요.</Txt>
-        <Subtxt>최소 8자, 최대 18자 가능 / 영어 대소문자, 숫자, 특수문자 중 하나 이상 반드시 포함</Subtxt>
-        <Textinput
-          placeholder="새 비밀번호를 입력해주세요."
-          secureTextEntry
-          value={changedPassword}
-          onChangeText={setChangedPassword}
-        />
-      </Section>
-      <Section>
-        <Txt>변경하실 비밀번호를 재입력해주세요.</Txt>
-        <Inputsection>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Container>
+        <Section>
+          <Txt>변경하실 비밀번호를 입력해주세요.</Txt>
+          <Subtxt>최소 8자, 최대 18자 가능 / 영어 대소문자, 숫자, 특수문자 중 하나 이상 반드시 포함</Subtxt>
           <Textinput
-            placeholder="새 비밀번호 재입력해주세요."
+            placeholder="새 비밀번호를 입력해주세요."
             secureTextEntry
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
+            value={changedPassword}
+            onChangeText={setChangedPassword}
           />
-          {changedPassword !== '' && confirmPassword !== '' && (
-            <Checkalert>
-              {changedPassword === confirmPassword ? (
-                <Octicons name="check" size={RFValue(20)} color={COLORS.main} />
-              ) : null}
-            </Checkalert>
-          )}
-        </Inputsection>
-      </Section>
-      <Section>
-        <Text>※ 비밀번호를 변경하기 위해서는 현재 비밀번호를 입력해야 합니다.</Text>
-        <Txt>현재 비밀번호를 입력해주세요.</Txt>
-        <Textinput
-          placeholder="현재 비밀번호를 입력해주세요."
-          secureTextEntry
-          value={currentPassword}
-          onChangeText={setCurrentPassword}
-        />
-      </Section>
-      <Changebtn onPress={ChangePasswordAlert}>
-        <Btntext>변경하기</Btntext>
-      </Changebtn>
-    </Container>
+        </Section>
+        <Section>
+          <Txt>변경하실 비밀번호를 재입력해주세요.</Txt>
+          <Inputsection>
+            <Textinput
+              placeholder="새 비밀번호 재입력해주세요."
+              secureTextEntry
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+            />
+            {changedPassword !== '' && confirmPassword !== '' && (
+              <Checkalert>
+                {changedPassword === confirmPassword ? (
+                  <Octicons name="check" size={RFValue(20)} color={COLORS.main} />
+                ) : null}
+              </Checkalert>
+            )}
+          </Inputsection>
+        </Section>
+        <Section>
+          <Text>※ 비밀번호를 변경하기 위해서는 현재 비밀번호를 입력해야 합니다.</Text>
+          <Txt>현재 비밀번호를 입력해주세요.</Txt>
+          <Textinput
+            placeholder="현재 비밀번호를 입력해주세요."
+            secureTextEntry
+            value={currentPassword}
+            onChangeText={setCurrentPassword}
+          />
+        </Section>
+        <Changebtn onPress={ChangePasswordAlert}>
+          <Btntext>변경하기</Btntext>
+        </Changebtn>
+      </Container>
+    </TouchableWithoutFeedback>
   );
 }
 

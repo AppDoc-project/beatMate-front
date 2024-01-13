@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Alert } from 'react-native';
-import { TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 function ChangePhoneNumberScreen(props) {
   const [currentPassword, setCurrentPassword] = useState('');
