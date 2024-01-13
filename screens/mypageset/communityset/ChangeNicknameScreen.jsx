@@ -24,17 +24,17 @@ function ChangeNicknameScreen(props) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container>
-        <Section>
+        <FirstSection>
           <Txt>변경하실 닉네임을 입력해주세요.</Txt>
-          <Textinput placeholder="익명" value={nickName} onChangeText={setNickName} />
-        </Section>
+          <TextInput placeholder="익명" value={nickName} onChangeText={setNickName} />
+        </FirstSection>
 
-        <Section>
+        <SecondSection>
           <Text>※ 닉네임 변경후 30일 뒤에 재변경이 가능합니다.</Text>
-        </Section>
-        <Changebtn onPress={ChangeNicknameAlert}>
-          <Btntext>변경하기</Btntext>
-        </Changebtn>
+        </SecondSection>
+        <ChangeBtn onPress={ChangeNicknameAlert}>
+          <BtnText>변경하기</BtnText>
+        </ChangeBtn>
       </Container>
     </TouchableWithoutFeedback>
   );
@@ -45,11 +45,20 @@ const Container = styled.View`
   background-color: white;
 `;
 
-const Section = styled.View`
+const FirstSection = styled.View`
+  position: absolute;
+  top: ${hp(13)}px;
+
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
-  margin-top: ${hp(2)}px;
-  margin-bottom: ${hp(2)}px;
+`;
+
+const SecondSection = styled.View`
+  position: absolute;
+  top: ${hp(24)}px;
+
+  margin-left: ${wp(4.8)}px;
+  margin-right: ${wp(4.8)}px;
 `;
 
 const Txt = styled.Text`
@@ -64,7 +73,7 @@ const Text = styled.Text`
   color: ${COLORS.gray};
 `;
 
-const Textinput = styled.TextInput`
+const TextInput = styled.TextInput`
   height: ${hp(5)}px;
   width: ${wp(90)}px;
   border-width: 1px;
@@ -74,7 +83,7 @@ const Textinput = styled.TextInput`
   padding: 0 ${wp(2)}px;
 `;
 
-const Changebtn = styled.TouchableOpacity`
+const ChangeBtn = styled.TouchableOpacity`
   background-color: ${COLORS.white};
   padding: ${hp(1)}px;
   margin: ${hp(2)}px ${wp(4.8)}px;
@@ -86,7 +95,7 @@ const Changebtn = styled.TouchableOpacity`
   right: ${wp(40)}px;
 `;
 
-const Btntext = styled.Text`
+const BtnText = styled.Text`
   color: ${COLORS.main};
   font-size: ${RFValue(16)}px;
   font-weight: bold;

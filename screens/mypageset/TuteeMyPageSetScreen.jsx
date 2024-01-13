@@ -29,7 +29,7 @@ function TuteeMyPageSetScreen(props) {
   };
 
   const Logout = () => {
-    navigation.navigate('LogoutScreen');
+    navigation.navigate('LoginScreen');
   };
 
   const DeleteAccount = () => {
@@ -38,7 +38,7 @@ function TuteeMyPageSetScreen(props) {
 
   return (
     <Container>
-      <Firstlist>
+      <FirstList>
         <Header>내 정보</Header>
         <Btn onPress={PasswordSet}>
           <Txt>비밀번호 변경</Txt>
@@ -46,8 +46,8 @@ function TuteeMyPageSetScreen(props) {
         <Btn onPress={PhoneNumberSet}>
           <Txt>연락처 변경</Txt>
         </Btn>
-      </Firstlist>
-      <Secondlist>
+      </FirstList>
+      <SecondList>
         <Header>커뮤니티</Header>
         <Btn onPress={NicknameSet}>
           <Txt>닉네임 변경</Txt>
@@ -55,8 +55,8 @@ function TuteeMyPageSetScreen(props) {
         <Btn onPress={ProfileImageSet}>
           <Txt>프로필 이미지 변경</Txt>
         </Btn>
-      </Secondlist>
-      <Thirdlist>
+      </SecondList>
+      <ThirdList>
         <Header>기타</Header>
         <Btn onPress={PushAlarmSet}>
           <Txt>푸쉬 알림 여부 설정</Txt>
@@ -67,7 +67,7 @@ function TuteeMyPageSetScreen(props) {
         <Btn onPress={DeleteAccount}>
           <Txt>회원 탈퇴</Txt>
         </Btn>
-      </Thirdlist>
+      </ThirdList>
     </Container>
   );
 }
@@ -77,7 +77,7 @@ const Container = styled.View`
   background-color: white;
 `;
 
-const Firstlist = styled.View`
+const FirstList = styled.View`
   position: absolute;
   top: ${hp(13)}px;
   left: ${wp(5)}px;
@@ -91,7 +91,7 @@ const Firstlist = styled.View`
   border-color: ${COLORS.main};
 `;
 
-const Secondlist = styled.View`
+const SecondList = styled.View`
   position: absolute;
   top: ${hp(31)}px;
   left: ${wp(5)}px;
@@ -105,7 +105,7 @@ const Secondlist = styled.View`
   border-color: ${COLORS.main};
 `;
 
-const Thirdlist = styled.View`
+const ThirdList = styled.View`
   position: absolute;
   top: ${hp(49)}px;
   left: ${wp(5)}px;

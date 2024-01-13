@@ -25,24 +25,24 @@ function ChangePhoneNumberScreen(props) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container>
-        <Section>
+        <FirstSection>
           <Txt>변경하실 연락처를 입력해주세요.</Txt>
-          <Textinput placeholder="" keyboardType="numeric" value={contact} onChangeText={setContact} />
-        </Section>
+          <TextInput placeholder="" keyboardType="numeric" value={contact} onChangeText={setContact} />
+        </FirstSection>
 
-        <Section>
+        <SecondSection>
           <Text>※ 연락처를 변경하기 위해서는 현재 비밀번호를 입력해야 합니다.</Text>
           <Txt>현재 비밀번호를 입력해주세요.</Txt>
-          <Textinput
+          <TextInput
             placeholder="현재 비밀번호를 입력해주세요."
             secureTextEntry
             value={currentPassword}
             onChangeText={setCurrentPassword}
           />
-        </Section>
-        <Changebtn onPress={ChangePhoneNumberAlert}>
+        </SecondSection>
+        <ChangeBtn onPress={ChangePhoneNumberAlert}>
           <Btntext>변경하기</Btntext>
-        </Changebtn>
+        </ChangeBtn>
       </Container>
     </TouchableWithoutFeedback>
   );
@@ -53,11 +53,20 @@ const Container = styled.View`
   background-color: white;
 `;
 
-const Section = styled.View`
+const FirstSection = styled.View`
+  position: absolute;
+  top: ${hp(13)}px;
+
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
-  margin-top: ${hp(2)}px;
-  margin-bottom: ${hp(2)}px;
+`;
+
+const SecondSection = styled.View`
+  position: absolute;
+  top: ${hp(28)}px;
+
+  margin-left: ${wp(4.8)}px;
+  margin-right: ${wp(4.8)}px;
 `;
 
 const Txt = styled.Text`
@@ -72,7 +81,7 @@ const Text = styled.Text`
   color: ${COLORS.gray};
 `;
 
-const Textinput = styled.TextInput`
+const TextInput = styled.TextInput`
   height: ${hp(5)}px;
   width: ${wp(90)}px;
   border-width: 1px;
@@ -82,7 +91,7 @@ const Textinput = styled.TextInput`
   padding: 0 ${wp(2)}px;
 `;
 
-const Changebtn = styled.TouchableOpacity`
+const ChangeBtn = styled.TouchableOpacity`
   background-color: ${COLORS.white};
   padding: ${hp(1)}px;
   margin: ${hp(2)}px ${wp(4.8)}px;

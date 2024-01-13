@@ -37,7 +37,7 @@ function TutorMyPageSetScreen(props) {
   };
 
   const Logout = () => {
-    navigation.navigate('LogoutScreen');
+    navigation.navigate('LoginScreen');
   };
   
   const DeleteAccount = () => {
@@ -46,7 +46,7 @@ function TutorMyPageSetScreen(props) {
 
   return (
     <Container>
-      <Firstlist>
+      <FirstList>
         <Header>내 정보</Header>
         <Btn onPress={PasswordSet}>
           <Txt>비밀번호 변경</Txt>
@@ -57,8 +57,8 @@ function TutorMyPageSetScreen(props) {
         <Btn onPress={IntroSet}>
           <Txt>자기소개 변경</Txt>
         </Btn>
-      </Firstlist>
-      <Secondlist>
+      </FirstList>
+      <SecondList>
         <Header>레슨 정보</Header>
         <Btn onPress={LessonInfoSet}>
           <Txt>레슨 정보 변경</Txt>
@@ -66,14 +66,14 @@ function TutorMyPageSetScreen(props) {
         <Btn onPress={FieldSet}>
           <Txt>분야 변경</Txt>
         </Btn>
-      </Secondlist>
-      <Thirdlist>
+      </SecondList>
+      <ThirdList>
         <Header>커뮤니티</Header>
         <Btn onPress={ProfileImageSet}>
           <Txt>프로필 이미지 변경</Txt>
         </Btn>
-      </Thirdlist>
-      <Fourthlist>
+      </ThirdList>
+      <FourthList>
         <Header>기타</Header>
         <Btn onPress={PushAlarmSet}>
           <Txt>푸쉬 알림 여부 설정</Txt>
@@ -84,7 +84,7 @@ function TutorMyPageSetScreen(props) {
         <Btn onPress={DeleteAccount}>
           <Txt>회원 탈퇴</Txt>
         </Btn>
-      </Fourthlist>
+      </FourthList>
     </Container>
   );
 }
@@ -94,7 +94,7 @@ const Container = styled.View`
   background-color: white;
 `;
 
-const Firstlist = styled.View`
+const FirstList = styled.View`
   position: absolute;
   top: ${hp(13)}px;
   left: ${wp(5)}px;
@@ -108,7 +108,7 @@ const Firstlist = styled.View`
   border-color: ${COLORS.main};
 `;
 
-const Secondlist = styled.View`
+const SecondList = styled.View`
   position: absolute;
   top: ${hp(35)}px;
   left: ${wp(5)}px;
@@ -122,7 +122,7 @@ const Secondlist = styled.View`
   border-color: ${COLORS.main};
 `;
 
-const Thirdlist = styled.View`
+const ThirdList = styled.View`
   position: absolute;
   top: ${hp(53)}px;
   left: ${wp(5)}px;
@@ -136,7 +136,7 @@ const Thirdlist = styled.View`
   border-color: ${COLORS.main};
 `;
 
-const Fourthlist = styled.View`
+const FourthList = styled.View`
   position: absolute;
   top: ${hp(67)}px;
   left: ${wp(5)}px;
