@@ -35,7 +35,7 @@ function TutorMyPageSetScreen(props) {
   const ProfileImageSet = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: ['Cancel', 'Generate number', 'Reset'],
+        options: ['Cancel', '프로필 이미지 변경', '프로필 이미지 삭제'],
         destructiveButtonIndex: 2,
         cancelButtonIndex: 0,
         userInterfaceStyle: 'dark',

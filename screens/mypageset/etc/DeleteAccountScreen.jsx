@@ -9,7 +9,9 @@ function DeleteAccountScreen(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  ValidBooking = () => {};
+  ValidBooking = () => {
+    
+  };
 
   const DeleteAccountAlert = () => {
     // 회원탈퇴 경고창
