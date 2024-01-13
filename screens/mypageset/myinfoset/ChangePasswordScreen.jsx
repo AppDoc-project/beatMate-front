@@ -18,6 +18,7 @@ function ChangePasswordScreen(props) {
   };
 
   const ChangePasswordAlert = () => {
+    // 비밀번호 경고창
     if (!ValidPassword()) {
       Alert.alert(
         '경고',
@@ -127,14 +128,19 @@ const Checkalert = styled.View`
 `;
 
 const Changebtn = styled.TouchableOpacity`
-  background-color: ${COLORS.primary};
+  background-color: ${COLORS.white};
   padding: ${hp(1)}px;
   margin: ${hp(2)}px ${wp(4.8)}px;
   border-radius: ${wp(1)}px;
+  border-colors: ${COLORS.main};
+
+  position: absolute;
+  bottom: ${hp(5)}px;
+  right: ${wp(40)}px;
 `;
 
 const Btntext = styled.Text`
-  color: white;
+  color: ${COLORS.main};
   font-size: ${RFValue(16)}px;
   font-weight: bold;
 `;
