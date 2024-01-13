@@ -3,7 +3,6 @@ import LoginScreen from '@screens/login/LoginScreen';
 import TuteeMyPageScreen from '@screens/mypage/TuteeMyPageScreen';
 import TutorMyPageScreen from '@screens/mypage/TutorMyPageScreen';
 import ChangeNicknameScreen from '@screens/mypageset/communityset/ChangeNicknameScreen';
-import ChangeProfileImageScreen from '@screens/mypageset/communityset/ChangeProfileImageScreen';
 import DeleteAccountScreen from '@screens/mypageset/etc/DeleteAccountScreen';
 import PushAlarmSetScreen from '@screens/mypageset/etc/PushAlarmSetScreen';
 import ChangeFieldScreen from '@screens/mypageset/lessoninfo/ChangeFieldScreen';
@@ -13,7 +12,6 @@ import ChangePasswordScreen from '@screens/mypageset/myinfoset/ChangePasswordScr
 import ChangePhoneNumberScreen from '@screens/mypageset/myinfoset/ChangePhoneNumberScreen';
 import TuteeMyPageSetScreen from '@screens/mypageset/TuteeMyPageSetScreen';
 import TutorMyPageSetScreen from '@screens/mypageset/TutorMyPageSetScreen';
-import SelectTypeScreen from '@screens/signup/SelectTypeScreen';
 import { Auth } from 'context/AuthContext';
 import React, { useContext } from 'react';
 
@@ -31,7 +29,7 @@ function MyPageScreenNavigator(props) {
     우선은 로그인 부분 merge 되기전까지 이렇게 진행하시고, 
     강사부분 보고 싶으면 true, 수강생 보고싶으면 false로만 바꿔주고 재실행 시켜주면됩니다.
   */
-  const isTutor = loginUser?.isTutor || true; // 기본값으로 false 설정
+  const isTutor = loginUser?.isTutor || false; // 기본값으로 false 설정
 
   return (
     <Stack.Navigator
@@ -91,8 +89,6 @@ function MyPageScreenNavigator(props) {
       <Stack.Screen name={'ChangeFieldScreen'} component={ChangeFieldScreen} options={{ title: '분야 변경' }}/>
 
       <Stack.Screen name={'ChangeNicknameScreen'} component={ChangeNicknameScreen} options={{ title: '닉네임 변경' }}/>
-
-      <Stack.Screen name={'ChangeProfileImageScreen'} component={ChangeProfileImageScreen} options={{ title: '프로필 이미지 변경' }}/>
 
       <Stack.Screen name={'PushAlarmSetScreen'} component={PushAlarmSetScreen} options={{ title: '푸쉬 알람 여부 설정' }}/>
 

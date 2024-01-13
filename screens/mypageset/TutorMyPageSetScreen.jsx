@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { COLORS } from 'colors';
 import { useNavigation } from '@react-navigation/native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { ActionSheetIOS } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 function TutorMyPageSetScreen(props) {
   const navigation = useNavigation();
+
+  const [result, setResult] = useState('');
 
   const PasswordSet = () => {
     navigation.navigate('ChangePasswordScreen');
@@ -28,9 +32,24 @@ function TutorMyPageSetScreen(props) {
     navigation.navigate('ChangeFieldScreen');
   };
 
-  const ProfileImageSet = () => {
-    navigation.navigate('ChangeProfileImageScreen');
-  };
+  const ProfileImageSet = () =>
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Cancel', 'Generate number', 'Reset'],
+        destructiveButtonIndex: 2,
+        cancelButtonIndex: 0,
+        userInterfaceStyle: 'dark',
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          // cancel action
+        } else if (buttonIndex === 1) {
+          setResult(String(Math.floor(Math.random() * 100) + 1));
+        } else if (buttonIndex === 2) {
+          setResult(<FontAwesome name={'user-circle'} size={RFValue(90)} color={'lightgray'} />);
+        }
+      },
+    );
 
   const PushAlarmSet = () => {
     navigation.navigate('PushAlarmSetScreen');
@@ -39,7 +58,7 @@ function TutorMyPageSetScreen(props) {
   const Logout = () => {
     navigation.navigate('LoginScreen');
   };
-  
+
   const DeleteAccount = () => {
     navigation.navigate('DeleteAccountScreen');
   };
