@@ -1,23 +1,55 @@
 import { COLORS } from 'colors';
-import React from 'react';
+import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useNavigation } from '@react-navigation/native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+
 import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
 import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
 import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
-import MyTeacherScreen from '@components/mypage/mypagetabscreens/MyTeacherScreen';
-
-const Tab = createMaterialTopTabNavigator();
+import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
 
 function TuteeMyPageScreen(props) {
   const navigation = useNavigation();
 
   const TuteeMyPageSet = () => {
     navigation.navigate('TuteeMyPageSetScreen');
+  };
+
+  const [isMyPost, selectMyPost] = useState(true);
+  const [isMyComment, selectMyComment] = useState(false);
+  const [isMyBookmark, selectMyBookmark] = useState(false);
+  const [isMyTutor, selectMyTutor] = useState(false);
+
+  const onPressMyPostBtn = () => {
+    selectMyPost(true);
+    selectMyComment(false);
+    selectMyBookmark(false);
+    selectMyTutor(false);
+  };
+
+  const onPressMyCommentBtn = () => {
+    selectMyPost(false);
+    selectMyComment(true);
+    selectMyBookmark(false);
+    selectMyTutor(false);
+  };
+
+  const onPressMyBookmarkBtn = () => {
+    selectMyPost(false);
+    selectMyComment(false);
+    selectMyBookmark(true);
+    selectMyTutor(false);
+  };
+
+  const onPressMyTutorBtn = () => {
+    selectMyPost(false);
+    selectMyComment(false);
+    selectMyBookmark(false);
+    selectMyTutor(true);
   };
 
   return (
@@ -36,45 +68,30 @@ function TuteeMyPageScreen(props) {
         </Userbox>
       </Infosection>
 
-      <Tab.Navigator
-        tabBarOptions={{
-          labelStyle: { fontSize: 16, fontWeight: 'bold' },
-          indicatorStyle: { backgroundColor: 'black' },
-        }}
-      >
-        <Tab.Screen
-          name="나의 게시글"
-          component={MyPostScreen}
-          option={{
-            headerShown: false,
-            tabBarLabel: '나의 게시글',
-          }}
-        />
-        <Tab.Screen
-          name="나의 댓글"
-          component={MyCommentScreen}
-          option={{
-            headerShown: false,
-            tabBarLabel: '나의 댓글',
-          }}
-        />
-        <Tab.Screen
-          name="나의 북마크"
-          component={MyBookmarkScreen}
-          option={{
-            headerShown: false,
-            tabBarLabel: '나의 북마크',
-          }}
-        />
-        <Tab.Screen
-          name="찜한 강사"
-          component={MyTeacherScreen}
-          option={{
-            headerShown: false,
-            tabBarLabel: '찜한 강사',
-          }}
-        />
-      </Tab.Navigator>
+      <SelectMenu>
+        <MyPostButton isMyPost={isMyPost} onPress={onPressMyPostBtn}>
+          <MyPostText isMyPost={isMyPost}>나의 게시물</MyPostText>
+        </MyPostButton>
+
+        <MyCommentButton isMyComment={isMyComment} onPress={onPressMyCommentBtn}>
+          <MyCommentText isMyComment={isMyComment}>나의 댓글</MyCommentText>
+        </MyCommentButton>
+
+        <MyBookmarkButton isMyBookmark={isMyBookmark} onPress={onPressMyBookmarkBtn}>
+          <MyBookmarkText isMyBookmark={isMyBookmark}>나의 북마크</MyBookmarkText>
+        </MyBookmarkButton>
+
+        <MyTutorButton isMyTutor={isMyTutor} onPress={onPressMyTutorBtn}>
+          <MyTutorText isMyTutor={isMyTutor}>찜한 강사</MyTutorText>
+        </MyTutorButton>
+      </SelectMenu>
+
+      <ShowMainInfo>
+        {isMyPost && <MyPostScreen />}
+        {isMyComment && <MyCommentScreen />}
+        {isMyBookmark && <MyBookmarkScreen />}
+        {isMyTutor && <MyTutorScreen />}
+      </ShowMainInfo>
     </Container>
   );
 }
@@ -137,5 +154,107 @@ const Userinfocount = styled.Text`
   font-size: ${RFValue(10.5)}px;
   margin: 5px 0px;
 `;
+
+const SelectMenu = styled.View`
+  flex-direction: row;
+  width: 100%;
+  height: ${hp(5)}px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MyPostButton = styled.TouchableOpacity`
+  width: 25%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  border-bottom-width: 2px;
+  border-bottom-color: ${({ isMyPost }) => (isMyPost ? 'black' : COLORS.lightgray)};
+`;
+
+const MyPostText = styled.Text`
+  font-size: ${RFValue(15)}px;
+  ${({ isMyPost }) =>
+    isMyPost
+      ? `
+      font-weight: bold;
+      color: ${COLORS.black};
+      `
+      : `
+      font-weight: normal;
+      color: ${COLORS.lightgray};
+      `}
+`;
+
+const MyCommentButton = styled.TouchableOpacity`
+  width: 25%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  border-bottom-width: 2px;
+  border-bottom-color: ${({ isMyComment }) => (isMyComment ? 'black' : COLORS.lightgray)};
+`;
+
+const MyCommentText = styled.Text`
+  font-size: ${RFValue(15)}px;
+  ${({ isMyComment }) =>
+    isMyComment
+      ? `
+      font-weight: bold;
+      color: ${COLORS.black};
+      `
+      : `
+      font-weight: normal;
+      color: ${COLORS.lightgray};
+      `}
+`;
+
+const MyBookmarkButton = styled.TouchableOpacity`
+  width: 25%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  border-bottom-width: 2px;
+  border-bottom-color: ${({ isMyBookmark }) => (isMyBookmark ? 'black' : COLORS.lightgray)};
+`;
+
+const MyBookmarkText = styled.Text`
+  font-size: ${RFValue(15)}px;
+  ${({ isMyBookmark }) =>
+    isMyBookmark
+      ? `
+      font-weight: bold;
+      color: ${COLORS.black};
+      `
+      : `
+      font-weight: normal;
+      color: ${COLORS.lightgray};
+      `}
+`;
+
+const MyTutorButton = styled.TouchableOpacity`
+  width: 25%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  border-bottom-width: 2px;
+  border-bottom-color: ${({ isMyTutor }) => (isMyTutor ? 'black' : COLORS.lightgray)};
+`;
+
+const MyTutorText = styled.Text`
+  font-size: ${RFValue(15)}px;
+  ${({ isMyTutor }) =>
+    isMyTutor
+      ? `
+      font-weight: bold;
+      color: ${COLORS.black};
+      `
+      : `
+      font-weight: normal;
+      color: ${COLORS.lightgray};
+      `}
+`;
+
+const ShowMainInfo = styled.View``;
 
 export default TuteeMyPageScreen;

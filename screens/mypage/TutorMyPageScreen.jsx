@@ -85,7 +85,7 @@ const Container = styled.View`
 `;
 
 const Infosection = styled.View`
-  flex: 0.5;
+  flex: 0.4;
   background-color: ${COLORS.main};
 `;
 
