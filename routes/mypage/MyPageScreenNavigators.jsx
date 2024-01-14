@@ -29,7 +29,7 @@ function MyPageScreenNavigator(props) {
     우선은 로그인 부분 merge 되기전까지 이렇게 진행하시고, 
     강사부분 보고 싶으면 true, 수강생 보고싶으면 false로만 바꿔주고 재실행 시켜주면됩니다.
   */
-  const isTutor = loginUser?.isTutor || true; // 기본값으로 false 설정
+  const isTutor = loginUser?.isTutor || false; // 기본값으로 false 설정
 
   return (
     <Stack.Navigator

@@ -1,20 +1,31 @@
 import { COLORS } from 'colors';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function ChangePasswordScreen(props) {
   const [currentPassword, setCurrentPassword] = useState('');
   const [changedPassword, setChangedPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
 
   const ValidPassword = () => {
     // 비밀번호가 최소 8자, 최대 18자, 영어 대소문자, 숫자, 특수문자 중 하나 이상을 포함하는지 검사
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,18}$/;
     return passwordRegex.test(changedPassword);
+  };
+
+  const onPressChangeBtn = () => {
+    if (ValidPassword() && inputPassword === currentPassword) {
+      
+    }
+    else {
+      ChangePasswordAlert();
+    }
   };
 
   const ChangePasswordAlert = () => {
@@ -24,7 +35,7 @@ function ChangePasswordScreen(props) {
         '경고',
         '비밀번호는 최소 8자, 최대 18자, 영어 대소문자, 숫자, 특수문자 중 하나 이상을 포함해야 합니다.',
       );
-    } else if (currentPassword !== '현재비밀번호') {
+    } else if (inputPassword !== currentPassword) {
       Alert.alert('경고', '현재 비밀번호가 틀렸습니다.');
     }
   };
@@ -70,7 +81,15 @@ function ChangePasswordScreen(props) {
             onChangeText={setCurrentPassword}
           />
         </ThirdSection>
-        <ChangeBtn onPress={ChangePasswordAlert}>
+        <ChangeBtn
+          fontColor={ValidPassword() && inputPassword === currentPassword ? 'white' : '#144182'}
+          backColor={ValidPassword() && inputPassword === currentPassword ? '#144182' : 'white'}
+          width={wp(100)}
+          marginBottom={hp(6.15)}
+          marginTop={hp(8)}
+          justifyContent="center"
+          onPress={onPressChangeBtn}
+        >
           <BtnText>변경하기</BtnText>
         </ChangeBtn>
       </Container>

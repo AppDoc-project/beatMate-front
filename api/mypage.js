@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { client } from './client';
 
-// 프로필 조회 가져오기 
+// 프로필 조회 가져오기
 const getMyPageSection = async () => {
   try {
     const token = await AsyncStorage.getItem('access_token');
@@ -12,7 +12,7 @@ const getMyPageSection = async () => {
         Authorization: token, // 바로 토큰 값 넣기
       },
     });
-
+    console.log(response);
     return response;
   } catch (error) {
     console.log(error);

@@ -1,5 +1,5 @@
 import { COLORS } from 'colors';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -11,6 +11,7 @@ import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
 import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
 import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
 import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
+import { getMyPageSection } from 'api/mypage';
 
 function TuteeMyPageScreen(props) {
   const navigation = useNavigation();
@@ -52,6 +53,28 @@ function TuteeMyPageScreen(props) {
     selectMyTutor(true);
   };
 
+  const [bookmarkCount, setBookmarkCount] = useState(0);
+  const [name, setName] = useState(0);
+  const [postCount, setPostCount] = useState(0);
+  const [threadCount, setThreadCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCommunityInfo = async () => {
+      try {
+        const data = await getMyPageSection();
+        const { bookmarkCount, name, postCount, threadCount } = data.data.object;
+        setBookmarkCount(bookmarkCount);
+        setName(name);
+        setPostCount(postCount);
+        setThreadCount(threadCount);
+      } catch (error) {
+        console.dir(error);
+      }
+    };
+
+    fetchCommunityInfo();
+  }, []);
+
   return (
     <Container>
       <Infosection>
@@ -63,8 +86,10 @@ function TuteeMyPageScreen(props) {
           <Usertypebox>
             <Usertype>수강생</Usertype>
           </Usertypebox>
-          <Username>김철수</Username>
-          <Userinfocount>게시글 2 | 댓글 16 | 북마크 1 | 찜한 강사 3</Userinfocount>
+          <Username> {`${name}`} </Username>
+          <Userinfocount>
+            {`게시글 ${postCount} | 댓글 ${threadCount} | 북마크 ${bookmarkCount} | 찜한 강사`}
+          </Userinfocount>
         </Userbox>
       </Infosection>
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { COLORS } from 'colors';
@@ -6,10 +6,18 @@ import { useNavigation } from '@react-navigation/native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ActionSheetIOS } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserInfo } from 'context/UserInfoContext';
+import { logout } from 'api/auth';
+import { CommonActions } from '@react-navigation/native';
 
 function TuteeMyPageSetScreen(props) {
   const navigation = useNavigation();
-  
+
+  const {
+    loginUserInfo: [loginUser, setLoginUser],
+  } = useContext(UserInfo);
+
   const [result, setResult] = useState('');
 
   const PasswordSet = () => {
@@ -48,7 +56,22 @@ function TuteeMyPageSetScreen(props) {
   };
 
   const Logout = () => {
-    navigation.navigate('LoginScreen');
+    logout()
+      .then(async (res) => {
+        await AsyncStorage.removeItem('access_token');
+
+        setLoginUser({});
+
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'LoginScreen' }],
+          }),
+        );
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const DeleteAccount = () => {

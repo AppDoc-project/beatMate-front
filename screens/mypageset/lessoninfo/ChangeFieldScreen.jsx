@@ -1,17 +1,50 @@
 import { COLORS } from 'colors';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 function ChangeFieldScreen(props) {
+
   return (
     <Container>
       <FirstSection>
         <Txt>변경된 음악 분야를 선택해주세요.</Txt>
-        <SubTxt1>(택1 필수, 중복 불가)</SubTxt1>
-        <FieldSection></FieldSection>
+        <SubTxt1>(중복 가능)</SubTxt1>
       </FirstSection>
+      <FieldSection1>
+        <FieldBtn>
+          <FieldTxt>피아노</FieldTxt>
+        </FieldBtn>
+        <FieldBtn>
+          <FieldTxt>기타</FieldTxt>
+        </FieldBtn>
+        <FieldBtn>
+          <FieldTxt>보컬</FieldTxt>
+        </FieldBtn>
+      </FieldSection1>
+      <FieldSection2>
+        <FieldBtn>
+          <FieldTxt>드럼</FieldTxt>
+        </FieldBtn>
+        <FieldBtn>
+          <FieldTxt>베이스</FieldTxt>
+        </FieldBtn>
+        <FieldBtn>
+          <FieldTxt>음악이론</FieldTxt>
+        </FieldBtn>
+      </FieldSection2>
+      <FieldSection3>
+        <FieldBtn>
+          <FieldTxt>작곡</FieldTxt>
+        </FieldBtn>
+        <FieldBtn>
+          <FieldTxt>관악기</FieldTxt>
+        </FieldBtn>
+        <FieldBtn>
+          <FieldTxt>건반악기</FieldTxt>
+        </FieldBtn>
+      </FieldSection3>
 
       <SecondSection>
         <Text>※ "레슨 이름"을 변경하기 위해서는 증명서를 재제출해야 합니다.</Text>
@@ -30,7 +63,7 @@ function ChangeFieldScreen(props) {
 
 const Container = styled.View`
   flex: 1;
-  background-color: white;
+  background-color: ${COLORS.white};
 `;
 
 const FirstSection = styled.View`
@@ -45,7 +78,7 @@ const FirstSection = styled.View`
 
 const SecondSection = styled.View`
   position: absolute;
-  top: ${hp(33)}px;
+  top: ${hp(41)}px;
 
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
@@ -59,12 +92,31 @@ const ThirdSection = styled.View`
   margin-right: ${wp(4.8)}px;
 `;
 
-const FieldSection = styled.View`
+const FieldSection1 = styled.View`
   position: absolute;
-  top: ${hp(33)}px;
+  top: ${hp(17)}px;
 
   margin-left: ${wp(4.8)}px;
-  margin-right: ${wp(4.8)}px;
+
+  flex-direction: row;
+`;
+
+const FieldSection2 = styled.View`
+  position: absolute;
+  top: ${hp(23)}px;
+
+  margin-left: ${wp(4.8)}px;
+
+  flex-direction: row;
+`;
+
+const FieldSection3 = styled.View`
+  position: absolute;
+  top: ${hp(29)}px;
+
+  margin-left: ${wp(4.8)}px;
+
+  flex-direction: row;
 `;
 
 const ImageSection = styled.View`
@@ -98,6 +150,25 @@ const Text = styled.Text`
   font-weight: 600;
   margin-bottom: ${hp(1)}px;
   color: ${COLORS.gray};
+`;
+
+const FieldBtn = styled.TouchableOpacity`
+  width: ${wp(23)}px;
+  height: ${hp(5)}px;
+
+  border-radius: 10px;
+  border-color: ${({ select }) => (select ? COLORS.main : COLORS.lightgray)};
+  border-width: 1.5px;
+
+  margin-right: ${wp(11)}px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FieldTxt = styled.Text`
+  font-size: ${RFValue(14)}px;
+  font-weight: bold;
+  color: ${({ select }) => (select ? COLORS.main : COLORS.lightgray)};
 `;
 
 export default ChangeFieldScreen;
