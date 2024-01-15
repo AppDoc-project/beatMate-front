@@ -13,7 +13,7 @@ import ChangePhoneNumberScreen from '@screens/mypageset/myinfoset/ChangePhoneNum
 import TuteeMyPageSetScreen from '@screens/mypageset/TuteeMyPageSetScreen';
 import TutorMyPageSetScreen from '@screens/mypageset/TutorMyPageSetScreen';
 import { UserInfo } from 'context/UserInfoContext';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,17 +22,6 @@ function MyPageScreenNavigator(props) {
   const {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
-
-  // loginUserInfo에서 isTutor 값을 가져오기
-
-  /*
-    우선은 로그인 부분 merge 되기전까지 이렇게 진행하시고, 
-    강사부분 보고 싶으면 true, 수강생 보고싶으면 false로만 바꿔주고 재실행 시켜주면됩니다.
-  */
-
-  useEffect(() => {
-    console.log("hi", loginUser);
-  }, [loginUser]);
 
   const isTutor = loginUser.isTutor;
 

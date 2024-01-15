@@ -89,9 +89,11 @@ function TutorMyPageScreen(props) {
           <Usertypebox>
             <Usertype>강사</Usertype>
           </Usertypebox>
-          <Username>김철수</Username>
+          <Username>{UserInfo.name}</Username>
           <Userintro>안녕하세요.</Userintro>
-          <Userinfocount>게시글 2 | 댓글 16 | 북마크 1</Userinfocount>
+          <Userinfocount>
+            게시글 {UserInfo.postCount} | 댓글 {UserInfo.threadCount} | 북마크 {UserInfo.bookmarkCount}
+          </Userinfocount>
         </Userbox>
       </Infosection>
 
