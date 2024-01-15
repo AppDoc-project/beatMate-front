@@ -70,9 +70,9 @@ function HomeTabRoutes(props) {
             tabBarInactiveTintColor: COLORS.gray,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <MaterialCommunityIcons name={'comment-text-multiple'} size={RFValue(20)} color={COLORS.black} />
+                <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.black} />
               ) : (
-                <MaterialCommunityIcons name={'comment-text-multiple'} size={RFValue(20)} color={COLORS.lightgray} />
+                <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
         />

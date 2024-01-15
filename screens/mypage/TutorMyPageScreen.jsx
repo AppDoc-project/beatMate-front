@@ -1,11 +1,11 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { COLORS } from 'colors';
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import styled from 'styled-components/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import styled from 'styled-components/native';
+
 import MyBookmarkScreen from './mypagetabscreens/MyBookmarkScreen';
 import MyCommentScreen from './mypagetabscreens/MyCommentScreen';
 import MyPostScreen from './mypagetabscreens/MyPostScreen';
