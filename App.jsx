@@ -21,15 +21,17 @@ export default function App() {
   return (
     <UserInfo.Provider value={{ userType, setUserType, loginUserInfo: [loginUser, setLoginUser] }}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="auth">
+        <Stack.Navigator initialRouteName="home-tab">
           <Stack.Screen name="auth" component={AuthRoutes} options={{ headerShown: false }} />
-          <Stack.Screen
-            name={'home-tab'}
-            component={HomeTabRoutes}
-            options={{
-              headerShown: false,
-            }}
-          />
+          {loginUser && (
+            <Stack.Screen
+              name={'home-tab'}
+              component={HomeTabRoutes}
+              options={{
+                headerShown: false,
+              }}
+            />
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </UserInfo.Provider>

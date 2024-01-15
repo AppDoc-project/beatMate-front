@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 export const client = axios.create({
-  baseURL: 'http://192.168.45.207',
+  baseURL: 'http://192.168.45.221',
   withCredentials: true,
 });

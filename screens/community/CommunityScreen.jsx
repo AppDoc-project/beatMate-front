@@ -2,7 +2,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getCommunitySection } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -52,8 +52,6 @@ function CommunityScreen(props) {
       </View>
     );
   }
-
-
 
   return (
     <Container>
