@@ -1,17 +1,18 @@
+import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
+import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
+import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
+import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { getMyPageSection } from 'api/mypage';
 import { COLORS } from 'colors';
+import format from 'pretty-format';
 import React, { useState, useEffect } from 'react';
+import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
-import { useNavigation } from '@react-navigation/native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
-import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
-import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
-import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
-import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
-import { getMyPageSection } from 'api/mypage';
 
 function TuteeMyPageScreen(props) {
   const navigation = useNavigation();
@@ -53,27 +54,42 @@ function TuteeMyPageScreen(props) {
     selectMyTutor(true);
   };
 
-  const [bookmarkCount, setBookmarkCount] = useState(0);
-  const [name, setName] = useState(0);
-  const [postCount, setPostCount] = useState(0);
-  const [threadCount, setThreadCount] = useState(0);
+  const [UserInfo, setUserInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    const fetchCommunityInfo = async () => {
-      try {
-        const data = await getMyPageSection();
-        const { bookmarkCount, name, postCount, threadCount } = data.data.object;
-        setBookmarkCount(bookmarkCount);
-        setName(name);
-        setPostCount(postCount);
-        setThreadCount(threadCount);
-      } catch (error) {
-        console.dir(error);
-      }
-    };
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true);
+      getMyPageSection()
+        .then((res) => {
+          console.log(format(res.data));
+          setUserInfo(res.data.object);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsError(true);
+          setIsLoading(false);
+        });
+    }, []),
+  );
 
-    fetchCommunityInfo();
-  }, []);
+  if (isLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
 
   return (
     <Container>
@@ -86,10 +102,14 @@ function TuteeMyPageScreen(props) {
           <Usertypebox>
             <Usertype>수강생</Usertype>
           </Usertypebox>
-          <Username> {`${name}`} </Username>
-          <Userinfocount>
-            {`게시글 ${postCount} | 댓글 ${threadCount} | 북마크 ${bookmarkCount} | 찜한 강사`}
-          </Userinfocount>
+          {UserInfo && (
+            <>
+              <Username>{UserInfo.name}</Username>
+              <Userinfocount>
+                게시글 {UserInfo.postCount} | 댓글 {UserInfo.threadCount} | 북마크 {UserInfo.bookmarkCount} | 찜한 강사
+              </Userinfocount>
+            </>
+          )}
         </Userbox>
       </Infosection>
 
