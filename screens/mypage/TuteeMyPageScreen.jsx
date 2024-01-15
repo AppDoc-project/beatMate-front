@@ -6,7 +6,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getMyPageSection } from 'api/mypage';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
