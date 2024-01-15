@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import Svg, { G, Rect, Path, Defs } from 'react-native-svg';
+import Svg, { G, Rect, Path, Defs, Mask } from 'react-native-svg';
 
 function LoginBtn(props) {
   const { backColor, fontColor } = props;
@@ -87,4 +87,31 @@ JoinBtn.propTypes = {
   fontColor: PropTypes.string.isRequired,
 };
 
-export { LoginBtn, FinishBtn, GetReAuthCodeBtn, JoinBtn };
+function WriteBtn(props) {
+  return (
+    <Svg width={40} height={40} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <Path d="M40 20c0 11.046-8.954 20-20 20S0 31.046 0 20 8.954 0 20 0s20 8.954 20 20z" fill="#144182" />
+      <Mask
+        id="a"
+        style={{
+          maskType: 'alpha',
+        }}
+        maskUnits="userSpaceOnUse"
+        x={8}
+        y={8}
+        width={24}
+        height={24}
+      >
+        <Path fill="#D9D9D9" d="M8 8H32V32H8z" />
+      </Mask>
+      <G mask="url(#a)">
+        <Path
+          d="M13 27h1.425l9.775-9.775-1.425-1.425L13 25.575V27zm-2 2v-4.25l13.2-13.175c.2-.183.42-.325.663-.425.241-.1.495-.15.762-.15s.525.05.775.15c.25.1.467.25.65.45l1.375 1.4c.2.183.346.4.438.65a2.165 2.165 0 010 1.512 1.874 1.874 0 01-.438.663L15.25 29H11zm12.475-12.475l-.7-.725 1.425 1.425-.725-.7z"
+          fill="#fff"
+        />
+      </G>
+    </Svg>
+  );
+}
+
+export { LoginBtn, FinishBtn, GetReAuthCodeBtn, JoinBtn, WriteBtn };
