@@ -53,8 +53,6 @@ function CommunityScreen(props) {
     );
   }
 
-
-
   return (
     <Container>
       <MainTxt>커뮤니티</MainTxt>
