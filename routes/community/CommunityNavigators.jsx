@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CommunityScreen from '@screens/community/CommunityScreen';
+import WriteNewPostScreen from '@screens/community/WriteNewPostScreen';
 import React from 'react';
 
 const Stack = createNativeStackNavigator();
@@ -12,6 +13,13 @@ function CommunityScreenNavigator(props) {
         component={CommunityScreen}
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'writeNewPostScreen'}
+        component={WriteNewPostScreen}
+        options={{
+          headerTitle: '게시물 작성하기',
         }}
       />
     </Stack.Navigator>

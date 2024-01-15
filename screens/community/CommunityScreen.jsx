@@ -1,7 +1,8 @@
 import { WriteBtn } from '@assets/Icons/Buttons';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getCommunitySection } from 'api/commity';
 import { COLORS } from 'colors';
+import format from 'pretty-format';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -9,7 +10,8 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components/native';
 
-function CommunityScreen(props) {
+function CommunityScreen() {
+  const navigation = useNavigation();
   const [searchKeyword, setSearchKeyword] = useState(''); // 검색 키워드 저장
 
   //게시판 리스트 조회 API
@@ -17,15 +19,17 @@ function CommunityScreen(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
+  const writeNewPost = () => {
+    navigation.navigate('writeNewPostScreen');
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true);
       getCommunitySection()
         .then((res) => {
-          // console.log('Request Headers:', res.headers); // 이 부분에서 요청(request)로 보낸 header를 확인할 수 있습니다.
-          // console.log(format(res.data));
+          console.log(format(res.data));
           setSectionData(res.data);
-          console.log(SectionData);
           setIsLoading(false);
           setIsError(false);
         })
@@ -76,7 +80,9 @@ function CommunityScreen(props) {
         </Grid>
       )}
 
-      <StyledWriteBtn />
+      <Btn onPress={writeNewPost}>
+        <WriteBtn />
+      </Btn>
     </Container>
   );
 }
@@ -144,7 +150,7 @@ const ItemName = styled.Text`
   font-weight: bold;
 `;
 
-const StyledWriteBtn = styled(WriteBtn)`
+const Btn = styled.TouchableOpacity`
   position: absolute;
   right: 20px;
   bottom: 20px;
