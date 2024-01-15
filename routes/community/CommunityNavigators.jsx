@@ -19,7 +19,8 @@ function CommunityScreenNavigator(props) {
         name={'writeNewPostScreen'}
         component={WriteNewPostScreen}
         options={{
-          headerTitle: '게시물 작성하기',
+          title: '게시물 작성하기',
+          headerLeft: () => null, // 뒤로 가기 버튼 없애기
         }}
       />
     </Stack.Navigator>
