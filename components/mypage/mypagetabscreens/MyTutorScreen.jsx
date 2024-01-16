@@ -5,6 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import styled from 'styled-components/native';
 
 function MyTutorScreen(props) {
+
   return (
     <Myteacher>
       <Teacherimage></Teacherimage>
@@ -33,7 +34,7 @@ const Teachcate = styled.Text`
   margin: 35px 0px 10px 130px;
 `;
 
-const Teacherbox = styled.View`
+const Teacherbox = styled.TouchableOpacity`
   flex-direction: row;
 `;
 

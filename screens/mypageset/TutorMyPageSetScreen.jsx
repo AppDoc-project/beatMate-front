@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { COLORS } from 'colors';
@@ -6,9 +6,16 @@ import { useNavigation } from '@react-navigation/native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ActionSheetIOS } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { UserInfo } from 'context/UserInfoContext';
+import { logout } from 'api/auth';
+import { CommonActions } from '@react-navigation/native';
 
 function TutorMyPageSetScreen(props) {
   const navigation = useNavigation();
+
+  const {
+    loginUserInfo: [loginUser, setLoginUser],
+  } = useContext(UserInfo);
 
   const [result, setResult] = useState('');
 
@@ -42,7 +49,7 @@ function TutorMyPageSetScreen(props) {
       },
       (buttonIndex) => {
         if (buttonIndex === 0) {
-          // cancel action
+          // 취소 버튼
         } else if (buttonIndex === 1) {
           setResult(String(Math.floor(Math.random() * 100) + 1));
         } else if (buttonIndex === 2) {
@@ -56,7 +63,24 @@ function TutorMyPageSetScreen(props) {
   };
 
   const Logout = () => {
-    navigation.navigate('LoginScreen');
+    const Logout = () => {
+      logout()
+        .then(async (res) => {
+          await AsyncStorage.removeItem('access_token');
+
+          setLoginUser(null);
+
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'LoginScreen' }],
+            }),
+          );
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
   };
 
   const DeleteAccount = () => {

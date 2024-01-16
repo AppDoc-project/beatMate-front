@@ -42,7 +42,7 @@ function TuteeMyPageSetScreen(props) {
       },
       (buttonIndex) => {
         if (buttonIndex === 0) {
-          // cancel action
+          // 취소 버튼
         } else if (buttonIndex === 1) {
           setResult(String(Math.floor(Math.random() * 100) + 1));
         } else if (buttonIndex === 2) {
@@ -60,7 +60,7 @@ function TuteeMyPageSetScreen(props) {
       .then(async (res) => {
         await AsyncStorage.removeItem('access_token');
 
-        setLoginUser({});
+        setLoginUser(null);
 
         navigation.dispatch(
           CommonActions.reset({

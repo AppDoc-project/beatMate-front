@@ -6,12 +6,13 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 
 function ChangeIntroScreen(props) {
   const [selfDescription, setSelfDescription] = useState('');
+  const [beforeSelfIntro, setBeforeSelfIntro] = useState('');
 
   return (
     <Container>
       <Section>
         <Txt>변경된 자기소개를 입력해주세요.</Txt>
-        <TextInput placeholder="그 전 자기소개 넣기" value={selfDescription} onChangeText={setSelfDescription} />
+        <TextInput placeholder={setBeforeSelfIntro} value={selfDescription} onChangeText={setSelfDescription} />
       </Section>
       <ChangeBtn>
         <BtnText>변경하기</BtnText>

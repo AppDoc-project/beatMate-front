@@ -6,7 +6,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-
 import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
 import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
 import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
@@ -54,7 +53,7 @@ function TuteeMyPageScreen(props) {
   };
 
   const [bookmarkCount, setBookmarkCount] = useState(0);
-  const [name, setName] = useState(0);
+  const [name, setName] = useState('익명');
   const [postCount, setPostCount] = useState(0);
   const [threadCount, setThreadCount] = useState(0);
 

@@ -20,4 +20,5 @@ const getCommunitySection = async () => {
   }
 };
 
+
 export { getCommunitySection };

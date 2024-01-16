@@ -21,9 +21,7 @@ function ChangePasswordScreen(props) {
 
   const onPressChangeBtn = () => {
     if (ValidPassword() && inputPassword === currentPassword) {
-      
-    }
-    else {
+    } else {
       ChangePasswordAlert();
     }
   };

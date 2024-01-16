@@ -1,14 +1,33 @@
+import { getMyPostSection } from 'api/mypage';
 import { COLORS } from 'colors';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
 function MyPostScreen(props) {
+  const [communityName, setCommunityName] = useState('');
+  const [title, setTitle] = useState('');
+
+  useEffect(() => {
+    const fetchPostInfo = async () => {
+      try {
+        const data = await getMyPostSection(1, 4);
+        const { communityName, title } = data;
+        setTitle(title);
+        setCommunityName(communityName);
+      } catch (error) {
+        console.dir(error);
+      }
+    };
+
+    fetchPostInfo();
+  }, []);
+
   return (
     <Mypost>
-      <Category>자유게시판</Category>
-      <Title>내 게시글 화면</Title>
+      <Category>{`${communityName}`}</Category>
+      <Title>{`${title}`}</Title>
       <Content>나는 내용이다아아아아아</Content>
       <Postinfo>
         <Date>2023.12.26</Date>
