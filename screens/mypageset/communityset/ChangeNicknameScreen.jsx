@@ -7,6 +7,7 @@ import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 function ChangeNicknameScreen(props) {
   const [nickName, setNickName] = useState('');
+  const [beforeNickName, setBeforeNickName] = useState('');
 
   const ValidNickname = () => {
     // 닉네임이 최대 10자, 한글, 영문자, 숫자만 포함하는지 검사
@@ -21,18 +22,31 @@ function ChangeNicknameScreen(props) {
     }
   };
 
+  const onPressChangeBtn = () => {
+
+    ChangeNicknameAlert();
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container>
         <FirstSection>
           <Txt>변경하실 닉네임을 입력해주세요.</Txt>
-          <TextInput placeholder="익명" value={nickName} onChangeText={setNickName} />
+          <TextInput placeholder={beforeNickName} value={nickName} onChangeText={setNickName} />
         </FirstSection>
 
         <SecondSection>
           <Text>※ 닉네임 변경후 30일 뒤에 재변경이 가능합니다.</Text>
         </SecondSection>
-        <ChangeBtn onPress={ChangeNicknameAlert}>
+        <ChangeBtn
+          fontColor={nickName ? 'white' : COLORS.main}
+          backColor={nickName ? COLORS.main : 'white'}
+          width={wp(90.4)}
+          marginBottom={hp(6.15)}
+          marginTop={hp(8)}
+          justifyContent="center"
+          onPress={onPressChangeBtn}
+        >
           <BtnText>변경하기</BtnText>
         </ChangeBtn>
       </Container>
@@ -84,21 +98,25 @@ const TextInput = styled.TextInput`
 `;
 
 const ChangeBtn = styled.TouchableOpacity`
-  background-color: ${COLORS.white};
+  width: ${wp(90.4)}px;
+  height: ${hp(5)}px;
+  border: 2px;
+  border-radius: ${wp(3)}px;
+  border-color: ${COLORS.main};
+  border-style: solid;
+
   padding: ${hp(1)}px;
   margin: ${hp(2)}px ${wp(4.8)}px;
-  border-radius: ${wp(1)}px;
-  border-colors: ${COLORS.main};
 
   position: absolute;
-  bottom: ${hp(5)}px;
-  right: ${wp(40)}px;
+  bottom: ${hp(3)}px;
 `;
 
 const BtnText = styled.Text`
   color: ${COLORS.main};
   font-size: ${RFValue(16)}px;
   font-weight: bold;
+  text-align: center;
 `;
 
 export default ChangeNicknameScreen;

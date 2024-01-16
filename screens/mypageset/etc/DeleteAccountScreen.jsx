@@ -4,21 +4,25 @@ import styled from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import Octicons from 'react-native-vector-icons/Octicons';
 
 function DeleteAccountScreen(props) {
   const [email, setEmail] = useState('');
+  const [inputEmail, setInputEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  ValidBooking = () => {
-    
-  };
+  const [inputPassword, setInputPassword] = useState('');
+  const [booking, setBooking] = useState([]);
 
   const DeleteAccountAlert = () => {
     // 회원탈퇴 경고창
-    if (!ValidBooking()) {
+    if (setBooking.length === 0) {
       Alert.alert('경고', '현재 진행 중인 예약이 없어야 탈퇴할 수 있습니다.');
       return;
     }
+  };
+
+  const onPressDeleteAccountBtn = () => {
+    DeleteAccountAlert();
   };
 
   return (
@@ -33,6 +37,11 @@ function DeleteAccountScreen(props) {
             keyboardType="email-address"
             autoCapitalize="none"
           />
+          {email !== '' && inputEmail !== '' && (
+            <CheckAlert>
+              {email === inputEmail ? <Octicons name="check" size={RFValue(20)} color={COLORS.main} /> : null}
+            </CheckAlert>
+          )}
         </FirstSection>
 
         <SecondSection>
@@ -43,13 +52,26 @@ function DeleteAccountScreen(props) {
             value={password}
             onChangeText={setPassword}
           />
+          {password !== '' && inputPassword !== '' && (
+            <CheckAlert>
+              {password === inputPassword ? <Octicons name="check" size={RFValue(20)} color={COLORS.main} /> : null}
+            </CheckAlert>
+          )}
         </SecondSection>
 
         <ThirdSection>
           <Text>※ 회원 탈퇴 후 기존 이메일과 비밀번호로 로그인이 불가능합니다.</Text>
           <Text>※ 현재 진행 중인 예약이 있는 경우 탈퇴가 불가능합니다. </Text>
         </ThirdSection>
-        <DeleteBtn onPress={DeleteAccountAlert}>
+        <DeleteBtn
+          fontColor={DeleteAccountAlert() && email === inputEmail && password === inputPassword ? 'white' : COLORS.main}
+          backColor={DeleteAccountAlert() && email === inputEmail && password === inputPassword ? COLORS.main : 'white'}
+          width={wp(90.4)}
+          marginBottom={hp(6.15)}
+          marginTop={hp(8)}
+          justifyContent="center"
+          onPress={onPressDeleteAccountBtn}
+        >
           <BtnText>회원탈퇴</BtnText>
         </DeleteBtn>
       </Container>
@@ -108,22 +130,32 @@ const TextInput = styled.TextInput`
   padding: 0 ${wp(2)}px;
 `;
 
+const CheckAlert = styled.View`
+  margin-top: ${hp(1)}px;
+  position: absolute;
+  top: ${hp(1)}px;
+  right: ${wp(3)}px;
+`;
+
 const DeleteBtn = styled.TouchableOpacity`
-  background-color: ${COLORS.white};
+  width: ${wp(90.4)}px;
+  height: ${hp(5)}px;
+  border: 2px;
+  border-radius: ${wp(3)}px;
+  border-color: ${COLORS.main};
+  border-style: solid;
+
   padding: ${hp(1)}px;
   margin: ${hp(2)}px ${wp(4.8)}px;
-  border-radius: ${wp(1)}px;
-  border-colors: ${COLORS.main};
 
   position: absolute;
-  bottom: ${hp(5)}px;
-  right: ${wp(40)}px;
+  bottom: ${hp(3)}px;
 `;
 
 const BtnText = styled.Text`
   color: ${COLORS.main};
   font-size: ${RFValue(16)}px;
   font-weight: bold;
+  text-align: center;
 `;
-
 export default DeleteAccountScreen;

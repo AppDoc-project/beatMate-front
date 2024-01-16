@@ -19,13 +19,6 @@ function ChangePasswordScreen(props) {
     return passwordRegex.test(changedPassword);
   };
 
-  const onPressChangeBtn = () => {
-    if (ValidPassword() && inputPassword === currentPassword) {
-    } else {
-      ChangePasswordAlert();
-    }
-  };
-
   const ChangePasswordAlert = () => {
     // 비밀번호 경고창
     if (!ValidPassword()) {
@@ -37,6 +30,8 @@ function ChangePasswordScreen(props) {
       Alert.alert('경고', '현재 비밀번호가 틀렸습니다.');
     }
   };
+
+  const onPressChangeBtn = () => {};
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -80,9 +75,9 @@ function ChangePasswordScreen(props) {
           />
         </ThirdSection>
         <ChangeBtn
-          fontColor={ValidPassword() && inputPassword === currentPassword ? 'white' : '#144182'}
-          backColor={ValidPassword() && inputPassword === currentPassword ? '#144182' : 'white'}
-          width={wp(100)}
+          fontColor={ValidPassword() && inputPassword === currentPassword ? 'white' : COLORS.main}
+          backColor={ValidPassword() && inputPassword === currentPassword ? COLORS.main : 'white'}
+          width={wp(90.4)}
           marginBottom={hp(6.15)}
           marginTop={hp(8)}
           justifyContent="center"
@@ -164,21 +159,25 @@ const CheckAlert = styled.View`
 `;
 
 const ChangeBtn = styled.TouchableOpacity`
-  background-color: ${COLORS.white};
+  width: ${wp(90.4)}px;
+  height: ${hp(5)}px;
+  border: 2px;
+  border-radius: ${wp(3)}px;
+  border-color: ${COLORS.main};
+  border-style: solid;
+
   padding: ${hp(1)}px;
   margin: ${hp(2)}px ${wp(4.8)}px;
-  border-radius: ${wp(1)}px;
-  border-colors: ${COLORS.main};
 
   position: absolute;
-  bottom: ${hp(5)}px;
-  right: ${wp(40)}px;
+  bottom: ${hp(3)}px;
 `;
 
 const BtnText = styled.Text`
   color: ${COLORS.main};
   font-size: ${RFValue(16)}px;
   font-weight: bold;
+  text-align: center;
 `;
 
 export default ChangePasswordScreen;

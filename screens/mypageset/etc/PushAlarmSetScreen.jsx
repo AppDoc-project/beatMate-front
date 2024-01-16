@@ -11,6 +11,8 @@ function PushAlarmSetScreen(props) {
     setPushAlarm(value);
   };
 
+  const onPressChangeBtn = () => {};
+
   return (
     <Container>
       <FirstSection>
@@ -29,7 +31,15 @@ function PushAlarmSetScreen(props) {
           상담 관련 알림 등을 받을 수 없습니다.
         </Text>
       </SecondSection>
-      <ChangeBtn>
+      <ChangeBtn
+        fontColor={pushAlarm ? 'white' : COLORS.main}
+        backColor={pushAlarm ? COLORS.main : 'white'}
+        width={wp(90.4)}
+        marginBottom={hp(6.15)}
+        marginTop={hp(8)}
+        justifyContent="center"
+        onPress={onPressChangeBtn}
+      >
         <BtnText>변경하기</BtnText>
       </ChangeBtn>
     </Container>
@@ -111,21 +121,25 @@ const DenyText = styled.Text`
 `;
 
 const ChangeBtn = styled.TouchableOpacity`
-  background-color: ${COLORS.white};
+  width: ${wp(90.4)}px;
+  height: ${hp(5)}px;
+  border: 2px;
+  border-radius: ${wp(3)}px;
+  border-color: ${COLORS.main};
+  border-style: solid;
+
   padding: ${hp(1)}px;
   margin: ${hp(2)}px ${wp(4.8)}px;
-  border-radius: ${wp(1)}px;
-  border-colors: ${COLORS.main};
 
   position: absolute;
-  bottom: ${hp(5)}px;
-  right: ${wp(40)}px;
+  bottom: ${hp(3)}px;
 `;
 
 const BtnText = styled.Text`
   color: ${COLORS.main};
   font-size: ${RFValue(16)}px;
   font-weight: bold;
+  text-align: center;
 `;
 
 export default PushAlarmSetScreen;

@@ -13,16 +13,6 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
-<<<<<<< HEAD
-import { useNavigation } from '@react-navigation/native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
-import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
-import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
-import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
-import { getMyPageSection } from 'api/mypage';
-=======
->>>>>>> 3257f401ea5317df62a3c9f5c21a426988b152ca
 
 function TuteeMyPageScreen(props) {
   const navigation = useNavigation();
@@ -64,16 +54,9 @@ function TuteeMyPageScreen(props) {
     selectMyTutor(true);
   };
 
-<<<<<<< HEAD
-  const [bookmarkCount, setBookmarkCount] = useState(0);
-  const [name, setName] = useState('익명');
-  const [postCount, setPostCount] = useState(0);
-  const [threadCount, setThreadCount] = useState(0);
-=======
   const [UserInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
->>>>>>> 3257f401ea5317df62a3c9f5c21a426988b152ca
 
   useFocusEffect(
     React.useCallback(() => {

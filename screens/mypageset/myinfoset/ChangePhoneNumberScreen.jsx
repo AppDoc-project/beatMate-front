@@ -7,6 +7,7 @@ import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 function ChangePhoneNumberScreen(props) {
   const [currentPassword, setCurrentPassword] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
   const [contact, setContact] = useState('');
 
   const ValidContact = () => {
@@ -21,6 +22,8 @@ function ChangePhoneNumberScreen(props) {
       Alert.alert('경고', '현재 비밀번호가 틀렸습니다.');
     }
   };
+
+  const onPressChangeBtn = () => {};
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -40,7 +43,15 @@ function ChangePhoneNumberScreen(props) {
             onChangeText={setCurrentPassword}
           />
         </SecondSection>
-        <ChangeBtn onPress={ChangePhoneNumberAlert}>
+        <ChangeBtn
+          fontColor={ValidContact() && inputPassword === currentPassword ? 'white' : COLORS.main}
+          backColor={ValidContact() && inputPassword === currentPassword ? COLORS.main : 'white'}
+          width={wp(90.4)}
+          marginBottom={hp(6.15)}
+          marginTop={hp(8)}
+          justifyContent="center"
+          onPress={onPressChangeBtn}
+        >
           <Btntext>변경하기</Btntext>
         </ChangeBtn>
       </Container>
@@ -92,21 +103,25 @@ const TextInput = styled.TextInput`
 `;
 
 const ChangeBtn = styled.TouchableOpacity`
-  background-color: ${COLORS.white};
+  width: ${wp(90.4)}px;
+  height: ${hp(5)}px;
+  border: 2px;
+  border-radius: ${wp(3)}px;
+  border-color: ${COLORS.main};
+  border-style: solid;
+
   padding: ${hp(1)}px;
   margin: ${hp(2)}px ${wp(4.8)}px;
-  border-radius: ${wp(1)}px;
-  border-colors: ${COLORS.main};
 
   position: absolute;
-  bottom: ${hp(5)}px;
-  right: ${wp(40)}px;
+  bottom: ${hp(3)}px;
 `;
 
 const Btntext = styled.Text`
   color: ${COLORS.main};
   font-size: ${RFValue(16)}px;
   font-weight: bold;
+  text-align: center;
 `;
 
 export default ChangePhoneNumberScreen;

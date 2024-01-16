@@ -5,7 +5,6 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 function ChangeFieldScreen(props) {
-
   return (
     <Container>
       <FirstSection>
@@ -57,6 +56,17 @@ function ChangeFieldScreen(props) {
         <SubTxt2>해당 이미지들로 강사 자격 심사가 진행될 예정입니다.</SubTxt2>
         <ImageSection></ImageSection>
       </ThirdSection>
+      <ChangeBtn
+      // fontColor={ ? 'white' : COLORS.main}
+      // backColor={ ? COLORS.main : 'white'}
+      // width={wp(90.4)}
+      // marginBottom={hp(6.15)}
+      // marginTop={hp(8)}
+      // justifyContent="center"
+      // onPress={onPressChangeBtn}
+      >
+        <BtnText>변경하기</BtnText>
+      </ChangeBtn>
     </Container>
   );
 }
@@ -169,6 +179,28 @@ const FieldTxt = styled.Text`
   font-size: ${RFValue(14)}px;
   font-weight: bold;
   color: ${({ select }) => (select ? COLORS.main : COLORS.lightgray)};
+`;
+
+const ChangeBtn = styled.TouchableOpacity`
+  width: ${wp(90.4)}px;
+  height: ${hp(5)}px;
+  border: 2px;
+  border-radius: ${wp(3)}px;
+  border-color: ${COLORS.main};
+  border-style: solid;
+
+  padding: ${hp(1)}px;
+  margin: ${hp(2)}px ${wp(4.8)}px;
+
+  position: absolute;
+  bottom: ${hp(3)}px;
+`;
+
+const BtnText = styled.Text`
+  color: ${COLORS.main};
+  font-size: ${RFValue(16)}px;
+  font-weight: bold;
+  text-align: center;
 `;
 
 export default ChangeFieldScreen;
