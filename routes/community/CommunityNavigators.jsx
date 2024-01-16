@@ -19,7 +19,7 @@ function CommunityScreenNavigator(props) {
         name={'writeNewPostScreen'}
         component={WriteNewPostScreen}
         options={{
-          title: '게시물 작성하기',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

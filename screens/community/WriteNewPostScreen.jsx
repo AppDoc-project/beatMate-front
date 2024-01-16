@@ -9,19 +9,40 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import UploadImages from '@components/community/newPost/UploadImages';
+import { View, Text, SafeAreaView } from 'react-native';
+import { postNewPost } from 'api/commity';
 
 function WriteNewPostScreen() {
   const navigation = useNavigation();
 
   const [title, setTitle] = useState(''); //제목
   const [content, setContent] = useState(''); //본문
-  const [communityId, setCommunityId] = useState(''); //communityId
+  const [communityId, setCommunityId] = useState(0); //communityId
   const [addresses, setAddresses] = useState([]); //사진들
 
-  const onChangeTitle = (text) => setTitle((prev) => ({ ...prev, name: text }));
-  const onChangeContent = (text) => setContent((prev) => ({ ...prev, name: text }));
+  const onChangeTitle = (text) => setTitle(text);
+  const onChangeContent = (text) => setContent(text);
 
-  const onPressRegisterBtn = () => {};
+  const onPressRegisterBtn = () => {
+    console.log(title);
+
+    const data = {
+      title: title,
+      text: content,
+      communityId: communityId,
+      addresses: addresses,
+    };
+
+    console.log(data);
+
+    postNewPost(data)
+      .then((res) => {
+        const { data } = res;
+        console.log(format(data));
+      })
+      .catch((error) => console.log(format(error)));
+  };
 
   const onPressPreviousBtn = () => {
     setTitle('');
@@ -32,11 +53,15 @@ function WriteNewPostScreen() {
   };
 
   return (
-    <Container>
-      <KeyboardAwareScrollView>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
         <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
-
-        <SelectCategory setCommunityId={setCommunityId} />
+        <Header>
+          <MainTxt>게시글 작성하기</MainTxt>
+        </Header>
+        <CategoryComponent>
+          <SelectCategory setCommunityId={setCommunityId} />
+        </CategoryComponent>
         <Component>
           <TitleInput
             value={title}
@@ -53,6 +78,7 @@ function WriteNewPostScreen() {
             placeholderTextColor="lightgray"
           />
         </Component>
+        <UploadImages addresses={addresses} setAddresses={setAddresses} />
         <RegisterBtn
           fontColor={title && content && communityId ? 'white' : 'navy'}
           backColor={title && content && communityId ? 'navy' : 'white'}
@@ -60,18 +86,40 @@ function WriteNewPostScreen() {
           justifyContent="center"
           onPress={onPressRegisterBtn}
         />
-      </KeyboardAwareScrollView>
-    </Container>
+      </Container>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
-  background-color: ${COLORS.white};
+  background-color: white;
+`;
+
+const CategoryComponent = styled.View`
+  width: ${wp(100)}px;
+  align-items: center;
+  justify-content: center;
+  padding: ${hp(2)}px;
 `;
 
 const Component = styled.View`
   width: ${wp(100)}px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Header = styled.View`
+  justify-content: center;
+  align-items: center;
+  border-bottom-color: lightgray;
+  border-bottom-width: 1px;
+  padding-bottom: ${RFValue(10)}px;
+`;
+
+const MainTxt = styled.Text`
+  font-size: ${RFValue(16)}px;
+  font-weight: bold;
 `;
 
 const TitleInput = styled.TextInput`
@@ -81,7 +129,6 @@ const TitleInput = styled.TextInput`
   top: ${hp(1.5)}px;
   width: ${wp(100)}px;
   height: ${hp(5)}px;
-  border-radius: 8px;
   border-color: lightgray;
   border-width: 1px;
 
@@ -98,9 +145,8 @@ const ContentInput = styled.TextInput`
   top: ${hp(1.5)}px;
   width: ${wp(100)}px;
   height: ${hp(30)}px;
-  border-radius: 8px;
-  border-color: lightgray;
-  border-width: 1px;
+  border-bottom-color: lightgray;
+  border-bottom-width: 1px;
 
   padding-left: ${RFValue(4)}px;
   font-size: ${RFValue(16)}px;

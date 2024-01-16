@@ -1,23 +1,15 @@
 import AddImage from '@assets/PostItem/AddTmage';
 import { postImages } from 'api/auth';
 import { COLORS } from 'colors';
-import { Auth } from 'context/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, Image, TouchableOpacity, View } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 
-function UploadImages() {
-
-  const {
-    tutor: [tutorSignUpRequest, setTutorSignUpRequest],
-  } = useContext(Auth);
-
-  const { authenticationAddress } = tutorSignUpRequest;
-
+function UploadImages({ addresses, setAddresses }) {
   const [selectedImages, setSelectedImages] = useState([]);
 
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
@@ -32,11 +24,11 @@ function UploadImages() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
-      quality: 0.1, // 예시로 품질을 0.5로 설정
+      quality: 0.1,
       aspect: [1, 1],
       base64: false,
-      width: 500, // 이미지의 너비를 500px로 조정
-      height: 500, // 이미지의 높이를 500px로 조정
+      width: 500,
+      height: 500,
     });
 
     if (!result.canceled) {
@@ -44,28 +36,25 @@ function UploadImages() {
     }
   };
 
-  // 사진 전송 API
   const handleUpload = async () => {
     const formData = new FormData();
     selectedImages.forEach((image, index) => {
       const file = {
         uri: image.uri,
-        type: 'image/jpeg', // 이미지 타입 설정 (JPEG 예시)
-        name: `${index}.jpg`, // 파일명 설정
+        type: 'image/jpeg',
+        name: `${index}.jpg`,
       };
-      formData.append(`files`, file); // FormData에 이미지 추가
+      formData.append(`files`, file);
     });
 
     postImages(formData)
       .then((res) => {
-        console.log(res); // 서버 응답 확인
-
-        const updatedSignUpRequest = { ...tutorSignUpRequest }; // 이전 상태의 복사본 생성
-        updatedSignUpRequest.authenticationAddress = res.data.data; // 새로운 값으로 업데이트
-        setTutorSignUpRequest(updatedSignUpRequest); // 새로운 상태로 업데이트
-        console.log(updatedSignUpRequest);
+        const updatedAddresses = { ...addresses };
+        updatedAddresses.addresses = res.data.data;
+        setAddresses(updatedAddresses.addresses);
+        console.log(updatedAddresses.addresses);
       })
-      .catch((error) => console.log(format(error))); // 에러 처리
+      .catch((error) => console.log(format(error)));
   };
 
   const removeImage = (indexToRemove) => {
@@ -74,10 +63,6 @@ function UploadImages() {
       updatedImages.splice(indexToRemove, 1);
       return updatedImages;
     });
-  };
-
-  ImageUpload.propTypes = {
-    authenticationAddress: PropTypes.array.isRequired, // props validation 추가
   };
 
   const remainingSlots = 5 - selectedImages.length;
@@ -106,6 +91,11 @@ function UploadImages() {
     </Container>
   );
 }
+
+UploadImages.propTypes = {
+  addresses: PropTypes.object.isRequired,
+  setAddresses: PropTypes.func.isRequired,
+};
 
 const Container = styled.View``;
 

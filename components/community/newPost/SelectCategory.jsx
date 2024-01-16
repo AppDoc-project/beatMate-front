@@ -3,8 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, Modal, FlatList } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components/native';
+import PropTypes from 'prop-types';
 
-function SelectCategory(setCommunityId) {
+SelectCategory.propTypes = {
+  setCommunityId: PropTypes.func.isRequired,
+};
+
+function SelectCategory({ setCommunityId }) {
   const [isToggled, setToggle] = useState(false);
   const [SectionData, setSectionData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,8 +38,9 @@ function SelectCategory(setCommunityId) {
   const handleOptionClick = (option) => {
     setSelectedObject(option);
     setToggle(false);
-    setCommunityId(selectedObject.id);
+    setCommunityId(option.id);
   };
+
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleOptionClick(item)}>
@@ -78,12 +84,11 @@ function SelectCategory(setCommunityId) {
 }
 
 const Section = styled.View`
-justify-content: center;
-align-items: center;
+  justify-content: center;
+  align-items: center;
 `;
 
-const Button = styled.TouchableOpacity`
-`;
+const Button = styled.TouchableOpacity``;
 
 const SelectText = styled.Text`
   font-size: 15px;
