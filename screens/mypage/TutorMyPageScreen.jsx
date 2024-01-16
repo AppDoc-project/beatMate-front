@@ -1,14 +1,17 @@
-import { COLORS } from 'colors';
-import React, { useState } from 'react';
-import { RFValue } from 'react-native-responsive-fontsize';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import styled from 'styled-components/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
 import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
 import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { getMyPageSection } from 'api/mypage';
+import { COLORS } from 'colors';
+import format from 'pretty-format';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import styled from 'styled-components/native';
 
 function TutorMyPageScreen(props) {
   const navigation = useNavigation();
@@ -38,6 +41,42 @@ function TutorMyPageScreen(props) {
     selectMyComment(false);
     selectMyBookmark(true);
   };
+  const [UserInfo, setUserInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true);
+      getMyPageSection()
+        .then((res) => {
+          console.log(format(res.data));
+          setUserInfo(res.data.object);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsError(true);
+          setIsLoading(false);
+        });
+    }, []),
+  );
+
+  if (isLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
 
   return (
     <Container>
@@ -50,9 +89,11 @@ function TutorMyPageScreen(props) {
           <Usertypebox>
             <Usertype>강사</Usertype>
           </Usertypebox>
-          <Username>김철수</Username>
+          <Username>{UserInfo.name}</Username>
           <Userintro>안녕하세요.</Userintro>
-          <Userinfocount>게시글 2 | 댓글 16 | 북마크 1</Userinfocount>
+          <Userinfocount>
+            게시글 {UserInfo.postCount} | 댓글 {UserInfo.threadCount} | 북마크 {UserInfo.bookmarkCount}
+          </Userinfocount>
         </Userbox>
       </Infosection>
 
