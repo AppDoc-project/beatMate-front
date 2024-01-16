@@ -21,4 +21,23 @@ const getCommunitySection = async () => {
   }
 };
 
-export { getCommunitySection };
+// 특정 게시판에 글 작성하기
+const postNewPost = async (data) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token); // 토큰 확인 (디버깅용)
+
+    const response = await client.post('/community/post', data, {
+      headers: {
+        Authorization: token, // 바로 토큰 값 넣기
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { getCommunitySection, postNewPost };

@@ -48,7 +48,6 @@ function LoginScreen(props) {
     navigation.navigate('getAuthEmail');
   };
 
-
   return (
     <Container>
       <Logo>BeatMate</Logo>
