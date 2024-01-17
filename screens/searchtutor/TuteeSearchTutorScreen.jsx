@@ -4,23 +4,26 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 function TuteeSearchTutorScreen(props) {
   const [searchTutor, setSearchTutor] = useState(''); // 강사 검색 저장
   return (
-    <Container>
-      <SearchBox>
-        <Input
-          value={searchTutor}
-          onChangeText={setSearchTutor}
-          placeholder="검색어를 입력해주세요."
-          placeholderTextColor="lightgray"
-        />
-        <SearchIcon>
-          <Ionicons name="search" size={32} color={COLORS.lightgray} marginLeft={5} />
-        </SearchIcon>
-      </SearchBox>
-    </Container>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Container>
+        <SearchBox>
+          <Input
+            value={searchTutor}
+            onChangeText={setSearchTutor}
+            placeholder="검색어를 입력해주세요."
+            placeholderTextColor="lightgray"
+          />
+          <SearchIcon>
+            <Ionicons name="search" size={32} color={COLORS.lightgray} marginLeft={5} />
+          </SearchIcon>
+        </SearchBox>
+      </Container>
+    </TouchableWithoutFeedback>
   );
 }
 
