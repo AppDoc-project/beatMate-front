@@ -1,17 +1,16 @@
 import { RegisterBtn } from '@assets/Icons/Buttons';
 import SelectCategory from '@components/community/newPost/SelectCategory';
+import UploadImages from '@components/community/newPost/UploadImages';
 import { useNavigation } from '@react-navigation/native';
-import { COLORS } from 'colors';
+import { postNewPost } from 'api/commity';
 import format from 'pretty-format';
 import React, { useState } from 'react';
+import { SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { styled } from 'styled-components/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import UploadImages from '@components/community/newPost/UploadImages';
-import { View, Text, SafeAreaView } from 'react-native';
-import { postNewPost } from 'api/commity';
+import { styled } from 'styled-components/native';
 
 function WriteNewPostScreen() {
   const navigation = useNavigation();
