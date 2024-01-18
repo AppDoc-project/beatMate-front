@@ -11,29 +11,10 @@ const getMyPageSection = async () => {
     const response = await client.get('/community/profile/info', {
       headers: {
         Authorization: token, // 바로 토큰 값 넣기
-      }, 
+      },
     });
 
     return response;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-
-const getMyPostSection = async (page, limit) => {
-  try {
-    const token = await AsyncStorage.getItem('access_token');
-    const response = await client.get(`/community/profile/post`, {
-      headers: {
-        Authorization: token,
-      },
-      params: {
-        page,
-        limit,
-      },
-    });
-    return response.data.data;
   } catch (error) {
     console.log(error);
     throw error;
@@ -44,11 +25,11 @@ const getMyPostSection = async (page, limit) => {
 const getUserWritePost = async () => {
   try {
     const token = await AsyncStorage.getItem('access_token');
-    console.log(token); // 토큰 확인 (디버깅용)
+    console.log(token);
 
-    const response = await client.post('/community/profile/post', {
+    const response = await client.get('/community/profile/post', {
       headers: {
-        Authorization: token, // 바로 토큰 값 넣기
+        Authorization: token,
       },
     });
 
@@ -63,11 +44,11 @@ const getUserWritePost = async () => {
 const getUserCommentPost = async () => {
   try {
     const token = await AsyncStorage.getItem('access_token');
-    console.log(token); // 토큰 확인 (디버깅용)
+    console.log(token);
 
-    const response = await client.post('/community/profile/thread', {
+    const response = await client.get('/community/profile/thread', {
       headers: {
-        Authorization: token, // 바로 토큰 값 넣기
+        Authorization: token,
       },
     });
 
@@ -82,11 +63,11 @@ const getUserCommentPost = async () => {
 const getUserBookmarkPost = async () => {
   try {
     const token = await AsyncStorage.getItem('access_token');
-    console.log(token); // 토큰 확인 (디버깅용)
+    console.log(token);
 
-    const response = await client.post('/community/profile/bookmark', {
+    const response = await client.get('/community/profile/bookmark', {
       headers: {
-        Authorization: token, // 바로 토큰 값 넣기
+        Authorization: token,
       },
     });
 
@@ -97,4 +78,4 @@ const getUserBookmarkPost = async () => {
   }
 };
 
-export { getMyPageSection, getMyPostSection, getUserWritePost, getUserCommentPost, getUserBookmarkPost };
+export { getMyPageSection, getUserWritePost, getUserCommentPost, getUserBookmarkPost };

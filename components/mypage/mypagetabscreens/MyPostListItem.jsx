@@ -1,50 +1,44 @@
-import { getMyPostSection } from 'api/mypage';
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
-import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
-function MyPostScreen(props) {
-  const [communityName, setCommunityName] = useState('');
-  const [title, setTitle] = useState('');
+MyPostListItem.propTypes = {
+  myPosting: PropTypes.object.isRequired,
+};
 
-  useEffect(() => {
-    const fetchPostInfo = async () => {
-      try {
-        const data = await getMyPostSection(1, 4);
-        const { communityName, title } = data;
-        setTitle(title);
-        setCommunityName(communityName);
-      } catch (error) {
-        console.dir(error);
-      }
-    };
+function MyPostListItem({ myPosting }) {
+  const navigation = useNavigation();
 
-    fetchPostInfo();
-  }, []);
+  //게시글 상세 페이지로 이동해야함.
+  const onPressPostingItem = () => {
+    navigation.navigate('');
+  };
 
   return (
-    <Mypost>
-      <Category>{`${communityName}`}</Category>
-      <Title>{`${title}`}</Title>
-      <Content>나는 내용이다아아아아아</Content>
+    <Mypost onPress={onPressPostingItem}>
+      <Category>{myPosting.communityName}</Category>
+      <Title>{myPosting.title}</Title>
+      <Content>{myPosting.text}</Content>
       <Postinfo>
-        <Date>2023.12.26</Date>
+        <Date>{myPosting.createdAt}</Date>
         <Commentbox>
           <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
-          21
+          {myPosting.threadCount}
         </Commentbox>
         <Bookmarkbox>
           <Bookmarkicon name={'heart'} size={RFValue(11)} color={'lightgray'} />
-          12
+          {myPosting.bookmarkCount}
         </Bookmarkbox>
       </Postinfo>
     </Mypost>
   );
 }
 
-const Mypost = styled.View`
+const Mypost = styled.TouchableOpacity`
   height: 125px;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
@@ -108,4 +102,4 @@ const Bookmarkicon = styled(MaterialCommunityIcons)`
   top: 120px;
 `;
 
-export default MyPostScreen;
+export default MyPostListItem;

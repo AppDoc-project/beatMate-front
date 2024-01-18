@@ -1,6 +1,6 @@
 import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
-import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
-import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
+import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentList';
+import MyPostList from '@components/mypage/mypagetabscreens/MyPostList';
 import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getMyPageSection } from 'api/mypage';
@@ -132,7 +132,7 @@ function TuteeMyPageScreen(props) {
       </SelectMenu>
 
       <ShowMainInfo>
-        {isMyPost && <MyPostScreen />}
+        {isMyPost && <MyPostList />}
         {isMyComment && <MyCommentScreen />}
         {isMyBookmark && <MyBookmarkScreen />}
         {isMyTutor && <MyTutorScreen />}
