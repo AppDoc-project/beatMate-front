@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { login } from 'api/auth';
 import { UserInfo } from 'context/UserInfoContext'; // AuthContext가 아니라 UserInfoContext로 수정
 import { format } from 'pretty-format';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
@@ -33,7 +33,7 @@ function LoginScreen(props) {
         // 데이터에서 필요한 정보 추출하여 loginUser 객체 업데이트
         const userData = res.data.object;
         const { id, email, name, tutor } = userData;
-        setLoginUser({ id, email, name, isTutor: tutor });
+        setLoginUser({ id: id, email: email, name: name, isTutor: tutor });
 
         navigation.navigate('home-tab');
       })
@@ -47,6 +47,10 @@ function LoginScreen(props) {
   const onPressFindPasswordBtn = () => {
     navigation.navigate('getAuthEmail');
   };
+
+  useEffect(() => {
+    console.log(loginUser);
+  }, [loginUser]);
 
   return (
     <Container>

@@ -1,35 +1,45 @@
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
+MyPostListItem.propTypes = {
+  myPosting: PropTypes.object.isRequired,
+};
 
+function MyPostListItem({ myPosting }) {
+  const navigation = useNavigation();
 
-function MyCommentScreen(props) {
-    return (
-        <Mycomment>
-            <Category>자유게시판</Category>
-            <Title>내 댓글 화면</Title>
-            <Comment>re: 나는 댓글</Comment>
-            <Postinfo>
-            <Date>2023.12.26</Date>
-            <Commentbox>
-              <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
-              21
-            </Commentbox>
-            <Bookmarkbox>
-              <Bookmarkicon name={'heart'} size={RFValue(11)} color={'lightgray'} />
-              12
-            </Bookmarkbox>
-            </Postinfo>
-          </Mycomment>
-    );
+  //게시글 상세 페이지로 이동해야함.
+  const onPressPostingItem = () => {
+    navigation.navigate('');
+  };
+
+  return (
+    <Mypost onPress={onPressPostingItem}>
+      <Category>{myPosting.communityName}</Category>
+      <Title>{myPosting.title}</Title>
+      <Content>{myPosting.text}</Content>
+      <Postinfo>
+        <Date>{myPosting.createdAt}</Date>
+        <Commentbox>
+          <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
+          {myPosting.threadCount}
+        </Commentbox>
+        <Likebox>
+          <Likeicon name={'heart'} size={RFValue(11)} color={'lightgray'} />
+          {myPosting.likeCount}
+        </Likebox>
+      </Postinfo>
+    </Mypost>
+  );
 }
 
-const Mycomment = styled.View`
-  height : 125px;
+const Mypost = styled.TouchableOpacity`
+  height: 125px;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
 `;
@@ -48,7 +58,7 @@ const Title = styled.Text`
   margin: 3px 0px 5px 15px;
 `;
 
-const Comment = styled.Text`
+const Content = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 500;
   color: ${COLORS.black};
@@ -73,7 +83,7 @@ const Commentbox = styled.Text`
   margin: 0px 3px 5px 15px;
 `;
 
-const Bookmarkbox = styled.Text`
+const Likebox = styled.Text`
   font-size: ${RFValue(10)}px;
   font-weight: bold;
   color: ${COLORS.lightgray};
@@ -86,10 +96,10 @@ const Commenticon = styled(MaterialCommunityIcons)`
   top: 120px;
 `;
 
-const Bookmarkicon = styled(MaterialCommunityIcons)`
+const Likeicon = styled(MaterialCommunityIcons)`
   position: absolute;
   left: 180px;
   top: 120px;
 `;
 
-export default MyCommentScreen;
+export default MyPostListItem;

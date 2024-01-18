@@ -29,7 +29,6 @@ const login = (email, password) =>
       },
     },
   );
-
 // 튜티 & 튜터 중복 이메일 확인
 const checkSingleEmail = (data) => client.post(`/auth/join/duplication`, data, {});
 
