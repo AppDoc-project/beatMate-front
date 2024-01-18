@@ -1,9 +1,9 @@
 import { getCommunitySection } from 'api/commity';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, Modal, FlatList } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
 
 SelectCategory.propTypes = {
   setCommunityId: PropTypes.func.isRequired,
@@ -40,7 +40,6 @@ function SelectCategory({ setCommunityId }) {
     setToggle(false);
     setCommunityId(option.id);
   };
-
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleOptionClick(item)}>
