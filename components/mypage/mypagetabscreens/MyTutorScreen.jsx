@@ -5,7 +5,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import styled from 'styled-components/native';
 
 function MyTutorScreen(props) {
-
   return (
     <Myteacher>
       <Teacherimage></Teacherimage>

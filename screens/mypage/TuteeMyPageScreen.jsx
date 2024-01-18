@@ -1,6 +1,6 @@
-import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkListItem';
-import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentListItem';
-import MyPostList from '@components/mypage/mypagetabscreens/MyPostList';
+import MyBookmarkList from '@components/mypage/mypagetabscreens/List/MyBookmarkList';
+import MyCommentList from '@components/mypage/mypagetabscreens/List/MyCommentList';
+import MyPostList from '@components/mypage/mypagetabscreens/List/MyPostList';
 import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getMyPageSection } from 'api/mypage';
@@ -133,9 +133,9 @@ function TuteeMyPageScreen(props) {
 
       <ShowMainInfo>
         {isMyPost && <MyPostList />}
-        {isMyComment && <MyCommentScreen />}
-        {isMyBookmark && <MyBookmarkScreen />}
-        {isMyTutor && <MyTutorScreen />}
+        {isMyComment && <MyCommentList />}
+        {isMyBookmark && <MyBookmarkList />}
+        {isMyTutor && <MyTutorScreen />} {/* 나중에 찜한 강사 진행 후 수정 필요 */}
       </ShowMainInfo>
     </Container>
   );

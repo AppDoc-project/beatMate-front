@@ -1,25 +1,25 @@
 import { useFocusEffect } from '@react-navigation/native';
-import { getUserCommentPost } from 'api/mypage';
+import { getUserBookmarkPost } from 'api/mypage';
 import format from 'pretty-format';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
-import MyCommentListItem from './MyCommentListItem';
+import MyBookmarkListItem from '../ListItem/MyBookmarkListItem';
 
-function MyCommentList() {
-  //나의 게시물 API
-  const [myCommentData, setmyCommentData] = useState(null);
+function MyBookmarkList() {
+  //나의 북마크 API
+  const [myBookmarkData, setmyBookmarkData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true);
-      getUserCommentPost()
+      getUserBookmarkPost()
         .then((res) => {
           console.log(format(res.data));
-          setmyCommentData(res.data);
+          setmyBookmarkData(res.data);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -49,8 +49,8 @@ function MyCommentList() {
   return (
     <Container>
       <MyPostingListScrollView>
-        {myCommentData.map((myCommentPost) => (
-          <MyCommentListItem key={myCommentPost.id} myCommentPost={myCommentPost} />
+        {myBookmarkData.map((myBookmark) => (
+          <MyBookmarkListItem key={myBookmark.id} myBookmark={myBookmark} />
         ))}
       </MyPostingListScrollView>
     </Container>
@@ -63,4 +63,4 @@ const MyPostingListScrollView = styled.ScrollView`
   flex-grow: 1;
 `;
 
-export default MyCommentList;
+export default MyBookmarkList;

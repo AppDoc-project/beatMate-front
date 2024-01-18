@@ -1,6 +1,6 @@
-import MyBookmarkList from '@components/mypage/mypagetabscreens/MyBookmarkList';
-import MyCommentList from '@components/mypage/mypagetabscreens/MyCommentList';
-import MyPostList from '@components/mypage/mypagetabscreens/MyPostList';
+import MyBookmarkList from '@components/mypage/mypagetabscreens/List/MyBookmarkList';
+import MyCommentList from '@components/mypage/mypagetabscreens/List/MyCommentList';
+import MyPostList from '@components/mypage/mypagetabscreens/List/MyPostList';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getMyPageSection } from 'api/mypage';
 import { COLORS } from 'colors';
