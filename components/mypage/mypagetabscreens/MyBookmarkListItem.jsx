@@ -1,31 +1,44 @@
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
-import React  from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
-function MyBookmarkScreen(props) {
+MyBookmarkListItem.propTypes = {
+  myBookmark: PropTypes.object.isRequired,
+};
+
+function MyBookmarkListItem({ myBookmark }) {
+  const navigation = useNavigation();
+
+  //게시글 상세 페이지로 이동해야함.
+  const onPressPostingItem = () => {
+    navigation.navigate('');
+  };
+
   return (
-    <Mybookmark>
-      <Category>자유게시판</Category>
-      <Title>북마크 화면</Title>
-      <Content>나는 내용이다아아아아아</Content>
+    <Mybookmark onPress={onPressPostingItem}>
+      <Category>{myBookmark.communityName}</Category>
+      <Title>{myBookmark.title}</Title>
+      <Content>{myBookmark.text}</Content>
       <Postinfo>
-        <Date>2023.12.26</Date>
+        <Date>{myBookmark.createdAt}</Date>
         <Commentbox>
           <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
-          21
+          {myBookmark.threadCount}
         </Commentbox>
         <Likebox>
-          <Likeicon name={'heart'} size={RFValue(11)} color={'#BB271A'} />
-          12
+          <Likeicon name={'heart'} size={RFValue(11)} color={'lightgray'} />
+          {myBookmark.likeCount}
         </Likebox>
       </Postinfo>
     </Mybookmark>
   );
 }
 
-const Mybookmark = styled.View`
+const Mybookmark = styled.TouchableOpacity`
   height: 125px;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
@@ -89,4 +102,4 @@ const Likeicon = styled(MaterialCommunityIcons)`
   top: 120px;
 `;
 
-export default MyBookmarkScreen;
+export default MyBookmarkListItem;

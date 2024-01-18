@@ -1,4 +1,4 @@
-import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
+import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkListItem';
 import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentListItem';
 import MyPostList from '@components/mypage/mypagetabscreens/MyPostList';
 import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';

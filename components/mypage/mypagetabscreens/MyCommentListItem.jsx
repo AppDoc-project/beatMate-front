@@ -10,7 +10,7 @@ MyCommentListItem.propTypes = {
   myCommentPost: PropTypes.object.isRequired,
 };
 
-function MyCommentListItem({myCommentPost}) {
+function MyCommentListItem({ myCommentPost }) {
   const navigation = useNavigation();
 
   //게시글 상세 페이지로 이동해야함.
@@ -27,11 +27,11 @@ function MyCommentListItem({myCommentPost}) {
         <Date>{myCommentPost.createdAt}</Date>
         <Commentbox>
           <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
-          {}
+          {myCommentPost.threadCount}
         </Commentbox>
         <Likebox>
           <Likeicon name={'heart'} size={RFValue(11)} color={'lightgray'} />
-          12
+          {myCommentPost.likeCount}
         </Likebox>
       </Postinfo>
     </Mycomment>
