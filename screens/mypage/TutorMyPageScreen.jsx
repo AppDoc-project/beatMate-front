@@ -1,5 +1,5 @@
-import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
-import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentList';
+import MyBookmarkList from '@components/mypage/mypagetabscreens/MyBookmarkList';
+import MyCommentList from '@components/mypage/mypagetabscreens/MyCommentList';
 import MyPostList from '@components/mypage/mypagetabscreens/MyPostList';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getMyPageSection } from 'api/mypage';
@@ -113,8 +113,8 @@ function TutorMyPageScreen(props) {
 
       <ShowMainInfo>
         {isMyPost && <MyPostList />}
-        {isMyComment && <MyCommentScreen />}
-        {isMyBookmark && <MyBookmarkScreen />}
+        {isMyComment && <MyCommentList />}
+        {isMyBookmark && <MyBookmarkList />}
       </ShowMainInfo>
     </Container>
   );

@@ -29,10 +29,10 @@ function MyPostListItem({ myPosting }) {
           <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
           {myPosting.threadCount}
         </Commentbox>
-        <Bookmarkbox>
-          <Bookmarkicon name={'heart'} size={RFValue(11)} color={'lightgray'} />
-          {myPosting.bookmarkCount}
-        </Bookmarkbox>
+        <Likebox>
+          <Likeicon name={'heart'} size={RFValue(11)} color={'lightgray'} />
+          {myPosting.likeCount}
+        </Likebox>
       </Postinfo>
     </Mypost>
   );
@@ -83,7 +83,7 @@ const Commentbox = styled.Text`
   margin: 0px 3px 5px 15px;
 `;
 
-const Bookmarkbox = styled.Text`
+const Likebox = styled.Text`
   font-size: ${RFValue(10)}px;
   font-weight: bold;
   color: ${COLORS.lightgray};
@@ -96,7 +96,7 @@ const Commenticon = styled(MaterialCommunityIcons)`
   top: 120px;
 `;
 
-const Bookmarkicon = styled(MaterialCommunityIcons)`
+const Likeicon = styled(MaterialCommunityIcons)`
   position: absolute;
   left: 180px;
   top: 120px;

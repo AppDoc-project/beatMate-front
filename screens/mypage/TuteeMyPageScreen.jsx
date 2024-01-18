@@ -1,5 +1,5 @@
 import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
-import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentList';
+import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentListItem';
 import MyPostList from '@components/mypage/mypagetabscreens/MyPostList';
 import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
