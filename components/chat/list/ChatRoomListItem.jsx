@@ -24,7 +24,7 @@ function ChatRoomListItem({ room }) {
   const navigation = useNavigation();
   const { target, notReadYet, lastMessage, lastTime } = room;
 
-  console.log("hi")
+  console.log("hi");
   console.log(room);
 
   return (
@@ -89,8 +89,7 @@ const LastChat = styled.Text`
   font-weight: 500;
 `;
 
-const NotRead = styled.Text`
-`;
+const NotRead = styled.Text``;
 
 const SubInfoGroup = styled.View`
   height: 100%;

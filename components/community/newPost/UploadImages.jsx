@@ -6,7 +6,7 @@ import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Text, Image, TouchableOpacity, View } from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 
 function UploadImages({ addresses, setAddresses }) {
