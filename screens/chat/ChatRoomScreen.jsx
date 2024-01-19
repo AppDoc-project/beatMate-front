@@ -4,6 +4,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useRoute } from '@react-navigation/native';
 import { COLORS } from 'colors';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import { styled } from 'styled-components/native';
@@ -14,7 +15,7 @@ import { styled } from 'styled-components/native';
  * @param chatScreenHeaderHeight : 현재 디자인 상 IOS에서 keyboardVerticalOffset을 구하기 위해서는 ChatScreen의 헤더 높이와 ChatRoomScreen의 헤더
  *                                 높이가 필요하다. 따라서 ChatScreen의 헤더 높이를 initialParams를 통해 받아옴
  */
-function ChatRoomScreen() {
+function ChatRoomScreen({ route }) {
   /** 채팅탭을 눌렀을때 최상단에 위치하는 헤더의 높이를 의미 */
   const { chatScreenHeaderHeight } = useRoute().params;
   /** 채팅방을 들어갔을 때 상대방의 정보를 나타내는 헤더 높이 */
@@ -32,16 +33,39 @@ function ChatRoomScreen() {
   const onFocusInput = () => setTabBarHeight(_tabBartHeight);
   const onOutFocusInput = () => setTabBarHeight(0);
 
+  const { room } = route.params; //채팅방 정보 api
+
+  console.log(room.id);
+
   return (
     <Container
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={chatScreenHeaderHeight + chatRoomHeaderHeight + tabBarHeight}
     >
-      <MessageList />
+      <MessageList roomID={room.id}/>
       <MessageInput onFocus={onFocusInput} onBlur={onOutFocusInput} />
     </Container>
   );
 }
+
+ChatRoomScreen.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      room: PropTypes.shape({
+        id: PropTypes.string,
+        target: PropTypes.shape({
+          name: PropTypes.string,
+          userId: PropTypes.number,
+          profile: PropTypes.string,
+        }),
+        notReadYet: PropTypes.number,
+        lastMessage: PropTypes.string,
+        lastTime: PropTypes.string,
+      }),
+      chatScreenHeaderHeight: PropTypes.number,
+    }),
+  }),
+};
 
 const Container = styled(KeyboardAvoidingView)`
   flex: 1;

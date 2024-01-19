@@ -5,7 +5,7 @@ import MyMessage from './MyMessage';
 import OthersMessage from './OthersMessage';
 import DateInfo from '../DateInfo';
 
-function MessageList() {
+function MessageList(roomID) {
   const myUserId = 1;
 
   const [messages] = useState([

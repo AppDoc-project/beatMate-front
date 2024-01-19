@@ -8,28 +8,32 @@ import { styled } from 'styled-components/native';
 
 ChatRoomListItem.propTypes = {
   room: PropTypes.shape({
-    id: PropTypes.number,
-    profile: PropTypes.number,
-    name: PropTypes.string,
-    lastChat: PropTypes.string,
-    lastUpdated: PropTypes.string,
-  }),
+    id: PropTypes.string.isRequired, // 채팅방 id
+    target: PropTypes.shape({
+      name: PropTypes.string.isRequired, // 채팅 상대방 이름
+      userId: PropTypes.number.isRequired, // 채팅 상대방 userId
+      profile: PropTypes.string, // 채팅 상대방 프로필 이미지 URL 또는 null
+    }).isRequired,
+    notReadYet: PropTypes.number.isRequired, // 내가 읽지 않은 메세지 수
+    lastMessage: PropTypes.string.isRequired, // 채팅방 마지막 메세지
+    lastTime: PropTypes.string.isRequired, // 마지막 채팅 시간
+  }).isRequired,
 };
 
 function ChatRoomListItem({ room }) {
   const navigation = useNavigation();
-  const chatRoomId = 1;
-  const { profile, name, lastChat, lastUpdated } = room;
+  const { target, notReadYet, lastMessage, lastTime } = room;
 
   return (
-    <Container onPress={() => navigation.navigate('chat-room', { chatRoomId })}>
-      <Profile source={profile} />
+    <Container onPress={() => navigation.navigate('chat-room', { room })}>
+      <Profile source={target.profile} />
       <ContentGroup>
-        <Name numberOfLines={1}>{name}</Name>
-        <LastChat numberOfLines={1}>{lastChat}</LastChat>
+        <Name numberOfLines={1}>{target.name}</Name>
+        <LastChat numberOfLines={1}>{lastMessage}</LastChat>
+        <NotRead>{notReadYet}</NotRead>
       </ContentGroup>
       <SubInfoGroup>
-        <LastUpdated>{lastUpdated}</LastUpdated>
+        <LastUpdated>{lastTime}</LastUpdated>
       </SubInfoGroup>
     </Container>
   );
@@ -80,6 +84,11 @@ const LastChat = styled.Text`
   color: ${COLORS.black};
   font-size: ${RFValue(12)}px;
   font-weight: 500;
+`;
+
+const NotRead = styled.View`
+  background-color: red;
+  border-radius: 50%;
 `;
 
 const SubInfoGroup = styled.View`

@@ -1,41 +1,50 @@
 import ChatRoomList from '@components/chat/list/ChatRoomList';
-import React from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { getChatList } from 'api/chat';
+import format from 'pretty-format';
+import React, { useState } from 'react';
+import { View, Text } from 'react-native';
 import { styled } from 'styled-components/native';
 
-/**
- *
- * @returns
- */
 function ChatListScreen() {
-  const chatRooms = [
-    {
-      id: 1,
-      profile: require('@assets/profile.png'),
-      name: '김연주',
-      lastChat: '네~ 잘 부탁드리겠습니다 ^^',
-      lastUpdated: '2023.08.18',
-    },
-    {
-      id: 2,
-      profile: require('@assets/profile.png'),
-      name: '김연주',
-      lastChat: '네~ 잘 부탁드리겠습니다 ^^',
-      lastUpdated: '2023.08.18',
-    },
-    {
-      id: 3,
-      profile: require('@assets/profile.png'),
-      name: '김연주',
-      lastChat: '네~ 잘 부탁드리겠습니다 ^^',
-      lastUpdated: '2023.08.18',
-    },
-  ];
+  const [ChatListInfo, setChatListInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  return (
-    <Container>
-      <ChatRoomList rooms={chatRooms} />
-    </Container>
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true);
+      getChatList()
+        .then((res) => {
+          console.log(format(res.data));
+          setChatListInfo(res.data.object);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsError(true);
+          setIsLoading(false);
+        });
+    }, []),
   );
+
+  if (isLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
+
+  return <Container>{ChatListInfo && <ChatRoomList rooms={ChatListInfo} />}</Container>;
 }
 
 const Container = styled.View`
