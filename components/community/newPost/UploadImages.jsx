@@ -1,5 +1,5 @@
 import AddImage from '@assets/PostItem/AddTmage';
-import { postImages } from 'api/auth';
+import { postImages } from 'api/commity';
 import { COLORS } from 'colors';
 import * as ImagePicker from 'expo-image-picker';
 import format from 'pretty-format';

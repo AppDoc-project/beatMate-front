@@ -20,23 +20,31 @@ ChatRoomListItem.propTypes = {
   }).isRequired,
 };
 
+// 날짜 변경하기 함수
+function formatLastTime(lastTime) {
+  const [date] = lastTime.split(' ');
+  const formattedDate = date.split(':').join('.').substring(0, 10);
+  return formattedDate;
+}
+
 function ChatRoomListItem({ room }) {
   const navigation = useNavigation();
   const { target, notReadYet, lastMessage, lastTime } = room;
 
-  console.log("hi");
-  console.log(room);
-
   return (
     <Container onPress={() => navigation.navigate('chat-room', { room })}>
-      <Profile source={target.profile} />
+      <Profile source={target.profile ? { uri: target.profile } : require('@assets/chat/nullProfile.jpg')} />
       <ContentGroup>
         <Name numberOfLines={1}>{target.name}</Name>
         <LastChat numberOfLines={1}>{lastMessage}</LastChat>
-        <NotRead>{notReadYet}</NotRead>
       </ContentGroup>
       <SubInfoGroup>
-        <LastUpdated>{lastTime}</LastUpdated>
+        <LastUpdated>{formatLastTime(lastTime)}</LastUpdated>
+        {notReadYet && (
+          <NotReadContainer>
+            <NotRead>{notReadYet}</NotRead>
+          </NotReadContainer>
+        )}
       </SubInfoGroup>
     </Container>
   );
@@ -64,11 +72,10 @@ const Profile = styled.Image`
 const ContentGroup = styled.View`
   width: 65%;
   height: 100%;
-
+  justify-content: center;
   flex-wrap: wrap;
-  align-items: center;
   align-content: space-around;
-  flex-direction: row;
+  flex-direction: column;
 
   margin-left: ${wp(2)}px;
 `;
@@ -76,7 +83,6 @@ const ContentGroup = styled.View`
 const Name = styled.Text`
   max-width: 70%;
 
-  color: ${COLORS.black};
   font-weight: 700;
   font-size: ${RFValue(14)}px;
 
@@ -84,12 +90,28 @@ const Name = styled.Text`
 `;
 
 const LastChat = styled.Text`
-  color: ${COLORS.black};
   font-size: ${RFValue(12)}px;
   font-weight: 500;
 `;
 
-const NotRead = styled.Text``;
+const NotReadContainer = styled.View`
+  background-color: red;
+  border-radius: 50%;
+  width: ${RFValue(18)}px;
+  height: ${RFValue(18)}px;
+  padding: ${RFValue(4)}px;
+  margin-top: ${RFValue(18)}px;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+`;
+
+const NotRead = styled.Text`
+  color: ${COLORS.white};
+  font-size: ${RFValue(9)}px;
+  font-weight: bold;
+`;
 
 const SubInfoGroup = styled.View`
   height: 100%;
