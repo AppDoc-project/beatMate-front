@@ -24,6 +24,9 @@ function ChatRoomListItem({ room }) {
   const navigation = useNavigation();
   const { target, notReadYet, lastMessage, lastTime } = room;
 
+  console.log("hi")
+  console.log(room);
+
   return (
     <Container onPress={() => navigation.navigate('chat-room', { room })}>
       <Profile source={target.profile} />
@@ -86,9 +89,7 @@ const LastChat = styled.Text`
   font-weight: 500;
 `;
 
-const NotRead = styled.View`
-  background-color: red;
-  border-radius: 50%;
+const NotRead = styled.Text`
 `;
 
 const SubInfoGroup = styled.View`

@@ -17,7 +17,7 @@ function ChatListScreen() {
       getChatList()
         .then((res) => {
           console.log(format(res.data));
-          setChatListInfo(res.data.object);
+          setChatListInfo(res.data);
           setIsLoading(false);
         })
         .catch((err) => {
