@@ -37,7 +37,7 @@ function ChatRoomScreen({ route }) {
 
   const { room } = route.params; //채팅방 정보 api
 
-  console.log(room.id);
+  console.log(room.target.userId);
 
   // 채팅방 들어갈때 모든 메세지 확인 API
   const [isLoading, setIsLoading] = useState(false);
@@ -79,7 +79,7 @@ function ChatRoomScreen({ route }) {
       keyboardVerticalOffset={chatScreenHeaderHeight + chatRoomHeaderHeight + tabBarHeight}
     >
       <MessageList roomID={room.id} />
-      <MessageInput onFocus={onFocusInput} onBlur={onOutFocusInput} />
+      <MessageInput onFocus={onFocusInput} onBlur={onOutFocusInput} targetId={room.target.userId} />
     </Container>
   );
 }

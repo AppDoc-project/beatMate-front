@@ -1,14 +1,13 @@
+import { getMessage } from 'api/chat';
 import { UserInfo } from 'context/UserInfoContext';
+import format from 'pretty-format';
+import PropTypes from 'prop-types';
 import React, { useContext, useState, useEffect } from 'react';
 import { FlatList, Text, View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // AsyncStorage 추가
 
 import MyMessage from './MyMessage';
 import OthersMessage from './OthersMessage';
 import DateInfo from '../DateInfo';
-import { getMessage } from 'api/chat';
-import PropTypes from 'prop-types';
-import format from 'pretty-format';
 
 function MessageList({ roomID }) {
   const {

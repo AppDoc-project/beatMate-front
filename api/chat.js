@@ -62,4 +62,23 @@ const getMessage = async (limit, count, chatRoomId) => {
   }
 };
 
-export { getChatList, readAllMessage, getMessage };
+//채팅 작성하기
+const writeNewChat = async (data) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+
+    const response = await client.post('/chat', data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { getChatList, readAllMessage, getMessage, writeNewChat };
