@@ -6,6 +6,7 @@ import { client } from './client';
 const getChatList = async () => {
   try {
     const token = await AsyncStorage.getItem('access_token');
+    console.log(token); // 토큰 확인 (디버깅용)
 
     const response = await client.get('/chat/room', {
       headers: {
