@@ -91,6 +91,7 @@ const Button = styled.TouchableOpacity``;
 
 const SelectText = styled.Text`
   font-size: 15px;
+  margin-bottom: -10px;
 `;
 
 const ModalContent = styled.View`

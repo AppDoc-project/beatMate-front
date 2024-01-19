@@ -77,7 +77,7 @@ function WriteNewPostScreen() {
             placeholderTextColor="lightgray"
           />
         </Component>
-        <UploadImages addresses={addresses} setAddresses={setAddresses} />
+        <StyledUploadImages addresses={addresses} setAddresses={setAddresses} />
         <RegisterBtn
           fontColor={title && content && communityId ? 'white' : 'navy'}
           backColor={title && content && communityId ? 'navy' : 'white'}
@@ -99,7 +99,7 @@ const CategoryComponent = styled.View`
   width: ${wp(100)}px;
   align-items: center;
   justify-content: center;
-  padding: ${hp(2)}px;
+  padding: ${hp(1)}px;
 `;
 
 const Component = styled.View`
@@ -143,7 +143,7 @@ const ContentInput = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(100)}px;
-  height: ${hp(30)}px;
+  height: ${hp(25)}px;
   border-bottom-color: lightgray;
   border-bottom-width: 1px;
 
@@ -151,6 +151,11 @@ const ContentInput = styled.TextInput`
   font-size: ${RFValue(16)}px;
   font-weight: bold;
   padding: ${RFValue(10)}px;
+  margin-bottom: ${hp(5)}px;
+`;
+
+const StyledUploadImages = styled(UploadImages)`
+  margin-top: ${hp(20)}px;
 `;
 
 export default WriteNewPostScreen;

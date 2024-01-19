@@ -107,8 +107,7 @@ const styles = {
     marginLeft: wp(-1),
   },
   imageContainer: {
-    marginBottom: hp(1),
-    marginRight: wp(1),
+    margin: 5,
   },
   image: {
     width: 100,
