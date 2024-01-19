@@ -49,9 +49,10 @@ function MyCommentList() {
   return (
     <Container>
       <MyPostingListScrollView>
-        {myCommentData.map((myCommentPost) => (
-          <MyCommentListItem key={myCommentPost.id} myCommentPost={myCommentPost} />
-        ))}
+        {myCommentData &&
+          myCommentData.data.map((myCommentPost) => (
+            <MyCommentListItem key={myCommentPost.id} myCommentPost={myCommentPost} />
+          ))}
       </MyPostingListScrollView>
     </Container>
   );

@@ -3,11 +3,19 @@ import { COLORS } from 'colors';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
 MyCommentListItem.propTypes = {
-  myCommentPost: PropTypes.object.isRequired,
+  myCommentPost: PropTypes.shape({
+    communityName: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    threadCount: PropTypes.number.isRequired,
+    likeCount: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 function MyCommentListItem({ myCommentPost }) {
@@ -39,9 +47,10 @@ function MyCommentListItem({ myCommentPost }) {
 }
 
 const Mycomment = styled.TouchableOpacity`
-  height: 125px;
+  height: ${hp(17)}px;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
+  padding: ${RFValue(8)}px;
 `;
 
 const Category = styled.Text`

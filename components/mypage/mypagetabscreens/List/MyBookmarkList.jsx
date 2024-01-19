@@ -49,9 +49,8 @@ function MyBookmarkList() {
   return (
     <Container>
       <MyPostingListScrollView>
-        {myBookmarkData.map((myBookmark) => (
-          <MyBookmarkListItem key={myBookmark.id} myBookmark={myBookmark} />
-        ))}
+        {myBookmarkData &&
+          myBookmarkData.data.map((myBookmark) => <MyBookmarkListItem key={myBookmark.id} myBookmark={myBookmark} />)}
       </MyPostingListScrollView>
     </Container>
   );

@@ -3,14 +3,22 @@ import { COLORS } from 'colors';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
 MyPostListItem.propTypes = {
-  myPosting: PropTypes.object.isRequired,
+  myPostData: PropTypes.shape({
+    communityName: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    threadCount: PropTypes.number.isRequired,
+    likeCount: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
-function MyPostListItem({ myPosting }) {
+function MyPostListItem({ myPostData }) {
   const navigation = useNavigation();
 
   //게시글 상세 페이지로 이동해야함.
@@ -20,18 +28,18 @@ function MyPostListItem({ myPosting }) {
 
   return (
     <Mypost onPress={onPressPostingItem}>
-      <Category>{myPosting.communityName}</Category>
-      <Title>{myPosting.title}</Title>
-      <Content>{myPosting.text}</Content>
+      <Category>{myPostData.communityName}</Category>
+      <Title>{myPostData.title}</Title>
+      <Content>{myPostData.text}</Content>
       <Postinfo>
-        <Date>{myPosting.createdAt}</Date>
+        <Date>{myPostData.createdAt}</Date>
         <Commentbox>
           <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
-          {myPosting.threadCount}
+          {myPostData.threadCount}
         </Commentbox>
         <Likebox>
           <Likeicon name={'heart'} size={RFValue(11)} color={'lightgray'} />
-          {myPosting.likeCount}
+          {myPostData.likeCount}
         </Likebox>
       </Postinfo>
     </Mypost>
@@ -39,9 +47,10 @@ function MyPostListItem({ myPosting }) {
 }
 
 const Mypost = styled.TouchableOpacity`
-  height: 125px;
+  height: ${hp(17)}px;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
+  padding: ${RFValue(8)}px;
 `;
 
 const Category = styled.Text`

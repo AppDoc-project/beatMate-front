@@ -89,10 +89,10 @@ function TutorMyPageScreen(props) {
           <Usertypebox>
             <Usertype>강사</Usertype>
           </Usertypebox>
-          <Username>{UserInfo.name}</Username>
-          <Userintro>안녕하세요.</Userintro>
+          <Username>{UserInfo && UserInfo.name}</Username>
           <Userinfocount>
-            게시글 {UserInfo.postCount} | 댓글 {UserInfo.threadCount} | 북마크 {UserInfo.bookmarkCount}
+            게시글 {UserInfo && UserInfo.postCount} | 댓글 {UserInfo && UserInfo.threadCount} | 북마크{' '}
+            {UserInfo && UserInfo.bookmarkCount}
           </Userinfocount>
         </Userbox>
       </Infosection>
@@ -126,16 +126,24 @@ const Container = styled.View`
 `;
 
 const Infosection = styled.View`
-  flex: 0.4;
   background-color: ${COLORS.main};
+  display: flex;
+  height: ${hp(30)}px;
+  width: 100%;
+  align-items: center;
+  position: relative;
 `;
 
-const Settingbtn = styled.TouchableOpacity``;
-
-const SettingIcon = styled(Ionicons)`
+const Settingbtn = styled.TouchableOpacity`
   position: absolute;
   top: 50px;
   right: 20px;
+`;
+
+const SettingIcon = styled(Ionicons)`
+  position: absolute;
+  top: 0;
+  right: 0;
 `;
 
 const Profileimage = styled(FontAwesome)`
@@ -170,12 +178,6 @@ const Username = styled.Text`
   color: ${COLORS.white};
   font-size: ${RFValue(20)}px;
   font-weight: bold;
-  margin: 5px 0px;
-`;
-
-const Userintro = styled.Text`
-  color: ${COLORS.white};
-  font-size: ${RFValue(14)}px;
   margin: 5px 0px;
 `;
 

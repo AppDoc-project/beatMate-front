@@ -14,7 +14,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
 
-function TuteeMyPageScreen(props) {
+function TuteeMyPageScreen() {
   const navigation = useNavigation();
 
   const TuteeMyPageSet = () => {
@@ -147,16 +147,24 @@ const Container = styled.View`
 `;
 
 const Infosection = styled.View`
-  flex: 0.4;
   background-color: ${COLORS.main};
+  display: flex;
+  height: ${hp(30)}px;
+  width: 100%;
+  align-items: center;
+  position: relative;
 `;
 
-const Settingbtn = styled.TouchableOpacity``;
-
-const SettingIcon = styled(Ionicons)`
+const Settingbtn = styled.TouchableOpacity`
   position: absolute;
   top: 50px;
   right: 20px;
+`;
+
+const SettingIcon = styled(Ionicons)`
+  position: absolute;
+  top: 0;
+  right: 0;
 `;
 
 const Profileimage = styled(FontAwesome)`
