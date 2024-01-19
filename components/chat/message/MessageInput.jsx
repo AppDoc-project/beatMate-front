@@ -17,7 +17,7 @@ MessageInput.propTypes = {
 };
 
 // 메세지 입력 및 전송
-function MessageInput({ onFocus, onBlur, targetId }) {
+function MessageInput({ onFocus, onBlur, targetId, onSendMessage }) {
   const {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
@@ -35,6 +35,8 @@ function MessageInput({ onFocus, onBlur, targetId }) {
       receiverId: targetId,
       text: sendText,
     };
+
+    onSendMessage(data);
 
     console.log(data);
 

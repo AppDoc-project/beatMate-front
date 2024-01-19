@@ -13,7 +13,7 @@ function ChatSideInfo() {
     loginUserInfo: [loginUser],
   } = useContext(Auth);
 
-  const isTutor = loginUser?.isTutor || true; // 기본값으로 true (이거 나중에 없애야함)
+  const isTutor = loginUser?.isTutor;
 
   // const { chatRoomId } = useRoute().params;
 

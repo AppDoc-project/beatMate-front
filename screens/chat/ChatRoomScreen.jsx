@@ -35,6 +35,9 @@ function ChatRoomScreen({ route }) {
   const onFocusInput = () => setTabBarHeight(_tabBartHeight);
   const onOutFocusInput = () => setTabBarHeight(0);
 
+  const [messages, setMessages] = useState([]);
+  const [sendText, setsendText] = useState('');
+
   const { room } = route.params; //채팅방 정보 api
 
   console.log(room.target.userId);
@@ -73,13 +76,25 @@ function ChatRoomScreen({ route }) {
     );
   }
 
+  const handleSendMessage = (messageData) => {
+    // 전송된 메시지로 MessageList를 업데이트합니다.
+    setMessages((prevMessages) => [...prevMessages, messageData]);
+  };
+
   return (
     <Container
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
       keyboardVerticalOffset={chatScreenHeaderHeight + chatRoomHeaderHeight + tabBarHeight}
     >
-      <MessageList roomID={room.id} />
-      <MessageInput onFocus={onFocusInput} onBlur={onOutFocusInput} targetId={room.target.userId} />
+      <MessageList roomID={room.id} messages={messages} />
+      <MessageInput
+        onFocus={onFocusInput}
+        onBlur={onOutFocusInput}
+        targetId={room.target.userId}
+        sendText={sendText}
+        setsendText={setsendText}
+        onSendMessage={handleSendMessage}
+      />
     </Container>
   );
 }
