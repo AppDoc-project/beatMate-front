@@ -135,7 +135,11 @@ function TuteeMyPageScreen() {
         {isMyPost && <MyPostList />}
         {isMyComment && <MyCommentList />}
         {isMyBookmark && <MyBookmarkList />}
-        {isMyTutor && <MyTutorScreen />} {/* 나중에 찜한 강사 진행 후 수정 필요 */}
+        {isMyTutor && (
+          <View>
+            <MyTutorScreen /> {/* 나중에 찜한 강사부분 api 끝나면 수정 필요 */}
+          </View>
+        )}
       </ShowMainInfo>
     </Container>
   );
