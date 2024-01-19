@@ -43,4 +43,23 @@ const readAllMessage = async (chatRoomId) => {
   }
 };
 
-export { getChatList, readAllMessage };
+//채팅방 내용 가져오기 (무한스크롤)
+const getMessage = async (limit, count, chatRoomId) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+
+    const response = await client.get(`/chat?limit=${limit}&count=${count}&id=${chatRoomId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { getChatList, readAllMessage, getMessage };

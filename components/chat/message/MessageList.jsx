@@ -1,40 +1,59 @@
 import { UserInfo } from 'context/UserInfoContext';
-import React, { useContext, useState } from 'react';
-import { FlatList } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { FlatList, Text, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // AsyncStorage 추가
 
 import MyMessage from './MyMessage';
 import OthersMessage from './OthersMessage';
 import DateInfo from '../DateInfo';
+import { getMessage } from 'api/chat';
+import PropTypes from 'prop-types';
+import format from 'pretty-format';
 
-function MessageList(roomID) {
+function MessageList({ roomID }) {
   const {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
 
-  const myUserId = loginUser.id; //현재 내 id
+  const myUserId = loginUser.id; // 현재 내 id
 
-  const [messages] = useState([
-    {
-      messageId: 1,
-      userId: 2,
-      content: '안녕하세요. 바이올린 강사 김연주입니다.',
-    },
-    {
-      messageId: 2,
-      userId: 2,
-      content: '대면 레슨 장소는 홍대입니다.',
-    },
-    {
-      messageId: 3,
-      userId: 1,
-      content: '네! 잘 부탁드리겠습니다~~~~',
-    },
-    {
-      messageId: 4,
-      userId: 2,
-      content: '네! 수강생님 그날 시간 맞춰서 해당 장소로 와주시면 됩니다! 모레 뵙도록 하겠습니다! 감사합니다.',
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
+
+  const [ChatData, setChatData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getMessage(10, messages.length, roomID)
+      .then((res) => {
+        console.log(format(res.data));
+        setIsLoading(false);
+        setChatData(res.data);
+        setMessages((prevMessages) => [...prevMessages, ...res.data.data]);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsError(true);
+        setIsLoading(false);
+      });
+  }, [roomID]);
+
+  if (isLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
 
   return (
     <FlatList
@@ -42,23 +61,27 @@ function MessageList(roomID) {
       onLayout={() => this.flatList.scrollToEnd({ animated: true })}
       data={messages}
       showsVerticalScrollIndicator={false}
-      keyExtractor={(message) => message.messageId}
+      keyExtractor={(message) => message.id} // messageId 대신 id 사용
       ListHeaderComponent={() => <DateInfo />}
       renderItem={({ item, index }) =>
-        item.userId === myUserId ? (
+        item.sender.userId === myUserId ? (
           <MyMessage
             item={item}
-            isLast={index !== messages.length - 1 ? item.userId !== messages[index + 1].userId : true}
+            isLast={index !== messages.length - 1 ? item.sender.userId !== messages[index + 1].sender.userId : true}
           />
         ) : (
           <OthersMessage
             item={item}
-            isLast={index !== messages.length - 1 ? item.userId !== messages[index + 1].userId : true}
+            isLast={index !== messages.length - 1 ? item.sender.userId !== messages[index + 1].sender.userId : true}
           />
         )
       }
     />
   );
 }
+
+MessageList.propTypes = {
+  roomID: PropTypes.string.isRequired,
+};
 
 export default MessageList;
