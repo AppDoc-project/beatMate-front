@@ -3,10 +3,12 @@ import MessageList from '@components/chat/message/MessageList';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useRoute } from '@react-navigation/native';
+import { readAllMessage } from 'api/chat';
 import { COLORS } from 'colors';
+import format from 'pretty-format';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
 /**
@@ -36,6 +38,40 @@ function ChatRoomScreen({ route }) {
   const { room } = route.params; //채팅방 정보 api
 
   console.log(room.id);
+
+  // 채팅방 들어갈때 모든 메세지 확인 API
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    readAllMessage(room.id)
+      .then((res) => {
+        console.log(format(res.data));
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsError(true);
+        setIsLoading(false);
+      });
+  }, [room.id]);
+
+  if (isLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
 
   return (
     <Container

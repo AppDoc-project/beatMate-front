@@ -42,8 +42,8 @@ const Container = styled.View`
 
   border-top-width: 1px;
   border-bottom-width: 1px;
-  border-top-color: ${COLORS.gray01};
-  border-bottom-color: ${COLORS.gray01};
+  border-top-color: ${COLORS.gray};
+  border-bottom-color: ${COLORS.gray};
   background-color: ${COLORS.white};
 `;
 
@@ -66,7 +66,7 @@ const Group = styled.View`
       : `
     width: ${wp(16)}px;
     border-radius: ${RFValue(6)}px;
-    background-color: ${COLORS.gray01};
+    background-color: ${COLORS.gray};
   `}
   padding: ${RFValue(4)}px;
   justify-content: center;

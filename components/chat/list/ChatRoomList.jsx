@@ -23,12 +23,10 @@ ChatRoomList.propTypes = {
 };
 
 function ChatRoomList({ rooms }) {
-  console.log('ChatRoomList 부분');
-  console.log(rooms);
   return (
     <Container>
       <ChatRoomListScrollView>
-        {rooms && rooms.data.map((room) => <ChatRoomListItem key={room.id} room={room} />)}
+        {rooms !== null && rooms.data.map((room) => <ChatRoomListItem key={room.id} room={room} />)}
       </ChatRoomListScrollView>
     </Container>
   );

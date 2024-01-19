@@ -44,7 +44,7 @@ function ChatListScreen() {
     );
   }
 
-  return <Container>{ChatListInfo && <ChatRoomList rooms={ChatListInfo} />}</Container>;
+  return <Container>{ChatListInfo !== null && <ChatRoomList rooms={ChatListInfo} />}</Container>;
 }
 
 const Container = styled.View`

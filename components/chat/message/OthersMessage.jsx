@@ -54,7 +54,7 @@ const TextContainer = styled.View`
   min-width: ${hp(2)}px;
   justify-content: center;
 
-  background-color: ${COLORS.main};
+  background-color: ${COLORS.lightgray01};
 
   border-radius: ${RFValue(8)}px;
   padding-vertical: ${RFValue(4)}px;
@@ -64,12 +64,12 @@ const TextContainer = styled.View`
 const Content = styled.Text`
   font-weight: 500;
   font-size: ${RFValue(12)}px;
-  color: ${COLORS.white};
+  color: ${COLORS.black};
 `;
 
 const Time = styled.Text`
   align-self: flex-end;
-  color: ${COLORS.darkgray};
+  color: ${COLORS.gray};
   font-weight: 600;
   margin-left: ${RFValue(4)}px;
 `;

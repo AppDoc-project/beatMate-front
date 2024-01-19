@@ -40,7 +40,7 @@ function ChatRoomListItem({ room }) {
       </ContentGroup>
       <SubInfoGroup>
         <LastUpdated>{formatLastTime(lastTime)}</LastUpdated>
-        {notReadYet && (
+        {notReadYet !== null && (
           <NotReadContainer>
             <NotRead>{notReadYet}</NotRead>
           </NotReadContainer>
@@ -82,10 +82,8 @@ const ContentGroup = styled.View`
 
 const Name = styled.Text`
   max-width: 70%;
-
   font-weight: 700;
   font-size: ${RFValue(14)}px;
-
   margin-right: ${wp(1)}px;
 `;
 
@@ -119,7 +117,7 @@ const SubInfoGroup = styled.View`
 `;
 
 const LastUpdated = styled.Text`
-  color: ${COLORS.darkgray};
+  color: ${COLORS.gray};
   font-size: ${RFValue(10)}px;
   font-weight: 700;
 `;

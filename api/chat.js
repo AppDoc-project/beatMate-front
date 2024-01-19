@@ -6,7 +6,7 @@ import { client } from './client';
 const getChatList = async () => {
   try {
     const token = await AsyncStorage.getItem('access_token');
-    console.log(token); // 토큰 확인 (디버깅용)
+    console.log(token);
 
     const response = await client.get('/chat/room', {
       headers: {
@@ -21,4 +21,26 @@ const getChatList = async () => {
   }
 };
 
-export { getChatList };
+//채팅방 들어갈때 모든 메세지를 확인하기
+const readAllMessage = async (chatRoomId) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+
+    const response = await client.get('/chat/check', {
+      params: {
+        id: chatRoomId,
+      },
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { getChatList, readAllMessage };

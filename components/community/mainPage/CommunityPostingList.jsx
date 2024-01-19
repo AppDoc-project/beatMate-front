@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { getUserWritePost } from 'api/mypage';
-// import format from 'pretty-format';
-import React, { useEffect, useState } from 'react';
+import format from 'pretty-format';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
@@ -18,7 +18,7 @@ function CommunityPostingList() {
       setIsLoading(true);
       getUserWritePost()
         .then((res) => {
-          // console.log(format(res.data));
+          console.log(format(res.data));
           setmyPostData(res.data);
           setIsLoading(false);
         })
@@ -29,10 +29,6 @@ function CommunityPostingList() {
         });
     }, []),
   );
-
-  useEffect(() => {
-    console.log(myPostDatas);
-  }, [myPostDatas]);
 
   if (isLoading) {
     return (

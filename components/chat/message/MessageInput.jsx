@@ -37,7 +37,7 @@ const Input = styled.TextInput`
   width: ${wp(80)}px;
 
   padding: ${RFValue(12)}px;
-  background-color: ${COLORS.gray02};
+  background-color: ${COLORS.lightgray01};
   border-radius: ${RFValue(18)}px;
   margin-right: ${wp(1)}px;
 `;

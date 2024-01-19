@@ -46,19 +46,19 @@ const TextContainer = styled.View`
   border-radius: ${RFValue(8)}px;
   padding-vertical: ${RFValue(4)}px;
   padding-horizontal: ${RFValue(12)}px;
-  background-color: ${COLORS.gray02};
+  background-color: ${COLORS.main};
 `;
 
 const Content = styled.Text`
   font-weight: 500;
   font-size: ${RFValue(12)}px;
-  color: ${COLORS.black};
+  color: ${COLORS.white};
 `;
 
 const Time = styled.Text`
   margin-right: ${RFValue(4)}px;
   align-self: flex-end;
-  color: ${COLORS.darkgray};
+  color: ${COLORS.gray};
   font-weight: 600;
 `;
 
