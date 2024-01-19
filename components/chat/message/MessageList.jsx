@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { UserInfo } from 'context/UserInfoContext';
+import React, { useContext, useState } from 'react';
 import { FlatList } from 'react-native';
 
 import MyMessage from './MyMessage';
@@ -6,7 +7,11 @@ import OthersMessage from './OthersMessage';
 import DateInfo from '../DateInfo';
 
 function MessageList(roomID) {
-  const myUserId = 1;
+  const {
+    loginUserInfo: [loginUser],
+  } = useContext(UserInfo);
+
+  const myUserId = loginUser.id; //현재 내 id
 
   const [messages] = useState([
     {

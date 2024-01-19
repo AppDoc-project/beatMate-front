@@ -42,7 +42,7 @@ function ChatRoomScreen({ route }) {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={chatScreenHeaderHeight + chatRoomHeaderHeight + tabBarHeight}
     >
-      <MessageList roomID={room.id}/>
+      <MessageList roomID={room.id} />
       <MessageInput onFocus={onFocusInput} onBlur={onOutFocusInput} />
     </Container>
   );

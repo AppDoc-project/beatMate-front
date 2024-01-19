@@ -14,7 +14,7 @@ function ChangeIntroScreen(props) {
     <Container>
       <Section>
         <Txt>변경된 자기소개를 입력해주세요.</Txt>
-        <TextInput placeholder={setBeforeSelfIntro} value={selfDescription} onChangeText={setSelfDescription} />
+        <TextInput placeholder={beforeSelfIntro} value={selfDescription} onChangeText={setSelfDescription} />
       </Section>
       <ChangeBtn
         fontColor={selfDescription ? 'white' : COLORS.main}
@@ -80,6 +80,5 @@ const BtnText = styled.Text`
   font-weight: bold;
   text-align: center;
 `;
-
 
 export default ChangeIntroScreen;

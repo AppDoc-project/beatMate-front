@@ -1,8 +1,8 @@
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import styled from 'styled-components';
 
 function ChangeLessonInfoScreen(props) {
   const [beforeLessonInfo, setBeforeLessonInfo] = useState('');
@@ -11,16 +11,16 @@ function ChangeLessonInfoScreen(props) {
   const [profile, setProfile] = useState('');
 
   const onPressChangeBtn = () => {};
-  
+
   return (
     <Container>
       <FirstSection>
         <Txt>변경된 레슨 정보를 입력해주세요.</Txt>
-        <TextInput placeholder={setBeforeLessonInfo} value={lessonInfo} onChangeText={setLessonInfo} />
+        <TextInput placeholder={beforeLessonInfo} value={lessonInfo} onChangeText={setLessonInfo} />
       </FirstSection>
       <SecondSection>
         <Txt>변경된 강사 약력을 입력해주세요.</Txt>
-        <TextInput placeholder={setBeforeProfile} value={profile} onChangeText={setProfile} />
+        <TextInput placeholder={beforeProfile} value={profile} onChangeText={setProfile} />
       </SecondSection>
       <ChangeBtn
         fontColor={lessonInfo && profile ? 'white' : COLORS.main}
