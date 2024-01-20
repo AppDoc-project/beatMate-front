@@ -1,6 +1,5 @@
 import { WriteBtn } from '@assets/Icons/Buttons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { getCommunitySection } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
@@ -10,59 +9,61 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components/native';
 
-function CommunityScreen() {
+function CommunitySpecificScreen() {
   const navigation = useNavigation();
   const [searchKeyword, setSearchKeyword] = useState(''); // 검색 키워드 저장
 
   //게시판 리스트 조회 API
-  const [SectionData, setSectionData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  //   const [SectionData, setSectionData] = useState(null);
+  //   const [isLoading, setIsLoading] = useState(false);
+  //   const [isError, setIsError] = useState(false);
 
   const writeNewPost = () => {
     navigation.navigate('writeNewPostScreen');
   };
 
-  const moveSpecificScreen = () => {
-    navigation.navigate('communitySpecificScreen');
+  //   useFocusEffect(
+  //     React.useCallback(() => {
+  //       setIsLoading(true);
+  //       getCommunitySection()
+  //         .then((res) => {
+  //           console.log(format(res.data));
+  //           setSectionData(res.data);
+  //           setIsLoading(false);
+  //           setIsError(false);
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //           setIsError(true);
+  //           setIsLoading(false);
+  //         });
+  //     }, [setIsLoading, setSectionData, setIsError]),
+  //   );
+
+  //   if (isLoading) {
+  //     return (
+  //       <View>
+  //         <Text>로딩중...</Text>
+  //       </View>
+  //     );
+  //   }
+
+  //   if (isError) {
+  //     return (
+  //       <View>
+  //         <Text>에러 발생</Text>
+  //       </View>
+  //     );
+  //   }
+
+  const onPressPreviousBtn = () => {
+    navigation.navigate('');
   };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      setIsLoading(true);
-      getCommunitySection()
-        .then((res) => {
-          console.log(format(res.data));
-          setSectionData(res.data);
-          setIsLoading(false);
-          setIsError(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsError(true);
-          setIsLoading(false);
-        });
-    }, [setIsLoading, setSectionData, setIsError]),
-  );
-
-  if (isLoading) {
-    return (
-      <View>
-        <Text>로딩중...</Text>
-      </View>
-    );
-  }
-
-  if (isError) {
-    return (
-      <View>
-        <Text>에러 발생</Text>
-      </View>
-    );
-  }
 
   return (
     <Container>
+      <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
+
       <MainTxt>커뮤니티</MainTxt>
       <SearchBox>
         <Input
@@ -73,16 +74,6 @@ function CommunityScreen() {
         />
         <SearchIcon name="search1" size={30} color={COLORS.lightgray} />
       </SearchBox>
-
-      {SectionData && SectionData.data && (
-        <Grid>
-          {SectionData.data.map((item) => (
-            <Item key={item.id} onPress={moveSpecificScreen}>
-              <ItemName>{item.name}</ItemName>
-            </Item>
-          ))}
-        </Grid>
-      )}
 
       <Btn onPress={writeNewPost}>
         <WriteBtn />
@@ -128,36 +119,10 @@ const SearchIcon = styled(AntDesign)`
   right: 20px;
 `;
 
-const Grid = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: ${hp(20)}px;
-  margin-right: ${wp(5)}px;
-  margin-left: ${wp(5)}px;
-`;
-
-const Item = styled.TouchableOpacity`
-  width: ${wp(25)}px;
-  height: ${wp(25)}px;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: ${hp(2)}px;
-  background-color: ${COLORS.white};
-  border-color: ${COLORS.main};
-  border-radius: 10px;
-  border-width: 3px;
-`;
-
-const ItemName = styled.Text`
-  font-size: ${RFValue(15)}px;
-  font-weight: bold;
-`;
-
 const Btn = styled.TouchableOpacity`
   position: absolute;
   right: 20px;
   bottom: 20px;
 `;
 
-export default CommunityScreen;
+export default CommunitySpecificScreen;
