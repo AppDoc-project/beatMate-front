@@ -14,11 +14,11 @@ function ChangeLessonInfoScreen(props) {
     <Container>
       <FirstSection>
         <Txt>변경된 레슨 정보를 입력해주세요.</Txt>
-        <TextInput placeholder={setBeforeLessonInfo} value={lessonInfo} onChangeText={setLessonInfo} />
+        <TextInput placeholder={beforeLessonInfo} value={lessonInfo} onChangeText={setLessonInfo} />
       </FirstSection>
       <SecondSection>
         <Txt>
-          <TextInput placeholder={setBeforeProfile} value={profile} onChangeText={setProfile} />
+          <TextInput placeholder={beforeProfile} value={profile} onChangeText={setProfile} />
         </Txt>
       </SecondSection>
       <ChangeBtn>
