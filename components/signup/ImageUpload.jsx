@@ -137,7 +137,7 @@ const styles = {
     color: 'black',
     borderWidth: 1.5,
     borderColor: COLORS.main,
-    borderRadius: 5,
+
     overflow: 'hidden',
     padding: 5,
   },

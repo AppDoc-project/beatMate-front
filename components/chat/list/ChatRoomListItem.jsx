@@ -94,7 +94,7 @@ const LastChat = styled.Text`
 
 const NotReadContainer = styled.View`
   background-color: red;
-  border-radius: 50%;
+  border-radius: 50px;
   width: ${RFValue(18)}px;
   height: ${RFValue(18)}px;
   padding: ${RFValue(4)}px;

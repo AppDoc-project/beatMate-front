@@ -62,9 +62,10 @@ function CommunitySpecificScreen() {
 
   return (
     <Container>
-      <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
-
-      <MainTxt>커뮤니티</MainTxt>
+      <Top>
+        <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={onPressPreviousBtn} />
+        <MainTxt>커뮤니티</MainTxt>
+      </Top>
       <SearchBox>
         <Input
           value={searchKeyword}
@@ -88,10 +89,17 @@ const Container = styled.View`
   align-items: center;
 `;
 
+const Top = styled.View`
+  top: ${hp(5)};
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
 const MainTxt = styled.Text`
-  font-size: ${RFValue(22)}px;
+  font-size: ${RFValue(15)}px;
   font-weight: bold;
-  top: ${hp(9)};
+  flex: 1;
 `;
 
 const SearchBox = styled.View`

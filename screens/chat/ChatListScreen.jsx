@@ -2,31 +2,31 @@ import ChatRoomList from '@components/chat/list/ChatRoomList';
 import { useFocusEffect } from '@react-navigation/native';
 import { getChatList } from 'api/chat';
 import format from 'pretty-format';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text } from 'react-native';
 import { styled } from 'styled-components/native';
 
 function ChatListScreen() {
-  const [ChatListInfo, setChatListInfo] = useState(null);
+  const [chatListInfo, setChatListInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setIsLoading(true);
-      getChatList()
-        .then((res) => {
-          console.log(format(res.data));
-          setChatListInfo(res.data);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsError(true);
-          setIsLoading(false);
-        });
-    }, []),
-  );
+  const loadChatList = useCallback(() => {
+    setIsLoading(true);
+    getChatList()
+      .then((res) => {
+        console.log(format(res.data));
+        setChatListInfo(res.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsError(true);
+        setIsLoading(false);
+      });
+  }, []);
+
+  useFocusEffect(loadChatList);
 
   if (isLoading) {
     return (
@@ -44,7 +44,7 @@ function ChatListScreen() {
     );
   }
 
-  return <Container>{ChatListInfo !== null && <ChatRoomList rooms={ChatListInfo} />}</Container>;
+  return <Container>{chatListInfo !== null && <ChatRoomList rooms={chatListInfo} />}</Container>;
 }
 
 const Container = styled.View`
