@@ -26,8 +26,8 @@
     "react-native": "0.72.6",
     "react-native-config": "^1.5.1",
     "react-native-document-picker": "^9.0.1",
-    "react-native-image-picker": "^7.1.0",
     "react-native-gifted-chat": "^2.4.0",
+    "react-native-image-picker": "^7.1.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-modal": "^13.0.1",
     "react-native-responsive-fontsize": "^0.5.1",
@@ -38,6 +38,7 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-vector-icons": "^10.0.3",
     "react-native-webview": "^13.2.2",
+    "socket.io": "^4.7.4",
     "styled-components": "^6.0.7"
   },
   "devDependencies": {
