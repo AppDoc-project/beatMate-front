@@ -8,9 +8,6 @@ const signupTutor = (data) => client.post('/auth/join/tutor', data, {});
 // 튜티 회원가입
 const signupTutee = (data) => client.post('/auth/join/tutee', data, {});
 
-// 로그아웃
-const logout = () => client.post(`/auth/logout`);
-
 // 튜티 이메일 인증
 const validTuteeEmail = (data) => client.post('/auth/validate/tutee', data, {});
 
@@ -55,7 +52,6 @@ const changeNewPassword = (data) => client.patch('/auth/password', data, {});
 export {
   signupTutor,
   signupTutee,
-  logout,
   validTuteeEmail,
   validTutorEmail,
   login,

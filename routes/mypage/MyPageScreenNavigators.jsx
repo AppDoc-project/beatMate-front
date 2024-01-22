@@ -2,13 +2,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '@screens/login/LoginScreen';
 import TuteeMyPageScreen from '@screens/mypage/TuteeMyPageScreen';
 import TutorMyPageScreen from '@screens/mypage/TutorMyPageScreen';
+import MyPageSetScreen from '@screens/mypageset/MyPageSetScreen';
 import ChangeNicknameScreen from '@screens/mypageset/communityset/ChangeNicknameScreen';
 import DeleteAccountScreen from '@screens/mypageset/etc/DeleteAccountScreen';
 import PushAlarmSetScreen from '@screens/mypageset/etc/PushAlarmSetScreen';
 import ChangeIntroScreen from '@screens/mypageset/myinfoset/ChangeIntroScreen';
 import ChangePasswordScreen from '@screens/mypageset/myinfoset/ChangePasswordScreen';
 import ChangePhoneNumberScreen from '@screens/mypageset/myinfoset/ChangePhoneNumberScreen';
-import MyPageSetScreen from '@screens/mypageset/MyPageSetScreen';
 import { UserInfo } from 'context/UserInfoContext';
 import React, { useContext } from 'react';
 
