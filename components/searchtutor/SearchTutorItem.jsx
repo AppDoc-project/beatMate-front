@@ -7,8 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from 'colors';
 import { RFValue } from 'react-native-responsive-fontsize';
 
-function TutorProfileItem(props) {
-
+function SearchTutorItem(props) {
   return (
     <Container>
       <TutorProfileBox>
@@ -46,15 +45,15 @@ const TutorProfileBox = styled.View`
 `;
 
 const ImageBox = styled.View`
-  width: 120px;
-  height: 120px;
-  border-radius: 70%;
+  width: ${RFValue(110)}px;
+  height: ${RFValue(110)}px;
+  border-radius: ${RFValue(60)}px;
   overflow: hidden;
 `;
 
 const ProfileImage = styled(Image)`
-  width: 100%;
-  height: 100%;
+  width: ${RFValue(110)}px;
+  height: ${RFValue(110)}px;
   object-fit: cover;
 `;
 const Name = styled.Text``;
@@ -82,4 +81,4 @@ const Item = styled.View`
   margin: ${hp(4)}px ${wp(10)}px;
 `;
 
-export default TutorProfileItem;
+export default SearchTutorItem;

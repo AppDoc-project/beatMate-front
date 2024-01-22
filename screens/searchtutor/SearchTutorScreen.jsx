@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import CommunityCategory from '@components/searchtutor/CommunityCategory';
-import TutorProfileItem from '@components/searchtutor/TutorProfileItem';
+import SearchTutorItem from '@components/searchtutor/SearchTutorItem';
 import { useNavigation } from '@react-navigation/native';
 
 function SearchTutorScreen(props) {
@@ -52,7 +52,7 @@ function SearchTutorScreen(props) {
           </CategoryBtn>
         </SelectSection>
         <TutorList onPress={TutorProfile}>
-          <TutorProfileItem />
+          <SearchTutorItem />
         </TutorList>
       </Container>
     </TouchableWithoutFeedback>
