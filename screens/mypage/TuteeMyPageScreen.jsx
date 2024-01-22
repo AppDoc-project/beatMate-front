@@ -18,7 +18,7 @@ function TuteeMyPageScreen() {
   const navigation = useNavigation();
 
   const TuteeMyPageSet = () => {
-    navigation.navigate('TuteeMyPageSetScreen');
+    navigation.navigate('MyPageSetScreen');
   };
 
   const [isMyPost, selectMyPost] = useState(true);

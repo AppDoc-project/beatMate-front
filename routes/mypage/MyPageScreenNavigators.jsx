@@ -5,13 +5,10 @@ import TutorMyPageScreen from '@screens/mypage/TutorMyPageScreen';
 import ChangeNicknameScreen from '@screens/mypageset/communityset/ChangeNicknameScreen';
 import DeleteAccountScreen from '@screens/mypageset/etc/DeleteAccountScreen';
 import PushAlarmSetScreen from '@screens/mypageset/etc/PushAlarmSetScreen';
-import ChangeFieldScreen from '@screens/mypageset/lessoninfo/ChangeFieldScreen';
-import ChangeLessonInfoScreen from '@screens/mypageset/lessoninfo/ChangeLessonInfoScreen';
 import ChangeIntroScreen from '@screens/mypageset/myinfoset/ChangeIntroScreen';
 import ChangePasswordScreen from '@screens/mypageset/myinfoset/ChangePasswordScreen';
 import ChangePhoneNumberScreen from '@screens/mypageset/myinfoset/ChangePhoneNumberScreen';
-import TuteeMyPageSetScreen from '@screens/mypageset/TuteeMyPageSetScreen';
-import TutorMyPageSetScreen from '@screens/mypageset/TutorMyPageSetScreen';
+import MyPageSetScreen from '@screens/mypageset/MyPageSetScreen';
 import { UserInfo } from 'context/UserInfoContext';
 import React, { useContext } from 'react';
 
@@ -56,17 +53,7 @@ function MyPageScreenNavigator(props) {
         />
       )}
 
-      <Stack.Screen // tutor 목록
-        name={'TutorMyPageSetScreen'}
-        component={TutorMyPageSetScreen}
-        options={{ title: '설정' }}
-      />
-
-      <Stack.Screen // tutee 목록
-        name={'TuteeMyPageSetScreen'}
-        component={TuteeMyPageSetScreen}
-        options={{ title: '설정' }}
-      />
+      <Stack.Screen name={'MyPageSetScreen'} component={MyPageSetScreen} options={{ title: '설정' }} />
 
       <Stack.Screen
         name={'ChangePasswordScreen'}
@@ -81,14 +68,6 @@ function MyPageScreenNavigator(props) {
       />
 
       <Stack.Screen name={'ChangeIntroScreen'} component={ChangeIntroScreen} options={{ title: '자기소개 변경' }} />
-
-      <Stack.Screen
-        name={'ChangeLessonInfoScreen'}
-        component={ChangeLessonInfoScreen}
-        options={{ title: '레슨 정보 변경' }}
-      />
-
-      <Stack.Screen name={'ChangeFieldScreen'} component={ChangeFieldScreen} options={{ title: '분야 변경' }} />
 
       <Stack.Screen name={'ChangeNicknameScreen'} component={ChangeNicknameScreen} options={{ title: '닉네임 변경' }} />
 

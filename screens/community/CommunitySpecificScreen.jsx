@@ -5,7 +5,7 @@ import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/nativ
 import { getFirstPost, getNextPost } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';

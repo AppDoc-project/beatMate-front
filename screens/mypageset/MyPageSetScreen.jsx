@@ -11,7 +11,7 @@ import { UserInfo } from 'context/UserInfoContext';
 import { logout } from 'api/auth';
 import { CommonActions } from '@react-navigation/native';
 
-function TuteeMyPageSetScreen(props) {
+function MyPageSetScreen(props) {
   const navigation = useNavigation();
 
   const {
@@ -175,4 +175,4 @@ const Txt = styled.Text`
   margin: ${RFValue(6.5)}px 0px;
 `;
 
-export default TuteeMyPageSetScreen;
+export default MyPageSetScreen;

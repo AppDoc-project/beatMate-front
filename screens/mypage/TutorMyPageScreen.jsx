@@ -17,7 +17,7 @@ function TutorMyPageScreen(props) {
   const navigation = useNavigation();
 
   const TutorMyPageSet = () => {
-    navigation.navigate('TutorMyPageSetScreen');
+    navigation.navigate('MyPageSetScreen');
   };
 
   const [isMyPost, selectMyPost] = useState(true);
