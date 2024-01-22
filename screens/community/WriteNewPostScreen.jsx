@@ -39,6 +39,7 @@ function WriteNewPostScreen() {
       .then((res) => {
         const { data } = res;
         console.log(format(data));
+        navigation.goBack();
       })
       .catch((error) => console.log(format(error)));
   };

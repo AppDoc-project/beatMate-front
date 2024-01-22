@@ -1,6 +1,7 @@
 import { WriteBtn } from '@assets/Icons/Buttons';
 import CommunityPostingItem from '@components/community/mainPage/CommunityPostingItem';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import SelectCategory from '@components/community/mainPage/SelectCategory';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { getFirstPost, getNextPost } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
@@ -10,7 +11,6 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components/native';
-import SelectCategory from '@components/community/mainPage/SelectCategory';
 
 function CommunitySpecificScreen() {
   const navigation = useNavigation();
@@ -26,10 +26,12 @@ function CommunitySpecificScreen() {
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    fetchData(false, 1);
-    return () => {};
-  }, [newCommunityId]);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData(false, 1);
+      return () => {};
+    }, [newCommunityId]),
+  );
 
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(true);
