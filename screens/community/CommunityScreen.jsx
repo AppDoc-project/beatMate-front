@@ -21,8 +21,8 @@ function CommunityScreen() {
     navigation.navigate('writeNewPostScreen');
   };
 
-  const moveSpecificScreen = (itemId) => {
-    navigation.navigate('communitySpecificScreen', { itemId });
+  const moveSpecificScreen = (communityId, name) => {
+    navigation.navigate('communitySpecificScreen', { communityId, name });
   };
 
   useFocusEffect(
@@ -66,7 +66,7 @@ function CommunityScreen() {
       {SectionData && SectionData.data && (
         <Grid>
           {SectionData.data.map((item) => (
-            <Item key={item.id} onPress={() => moveSpecificScreen(item.id)}>
+            <Item key={item.id} onPress={() => moveSpecificScreen(item.id, item.name)}>
               <ItemName>{item.name}</ItemName>
             </Item>
           ))}

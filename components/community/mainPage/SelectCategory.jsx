@@ -10,9 +10,10 @@ import styled from 'styled-components/native';
 
 SelectCategory.propTypes = {
   setCommunityId: PropTypes.func.isRequired,
+  communityName: PropTypes.string.isRequired,
 };
 
-function SelectCategory({ setCommunityId }) {
+function SelectCategory({ setCommunityId, communityName }) {
   const [isToggled, setToggle] = useState(false);
   const [SectionData, setSectionData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,8 +72,8 @@ function SelectCategory({ setCommunityId }) {
   return (
     <Section>
       <Button onPress={handleToggle}>
-        <SelectText>{selectedObject ? `${selectedObject.name}` : '카테고리 설정하기'}</SelectText>
-        <AntDesign name={'caretdown'} size={RFValue(13)} color={COLORS.black} />
+        <SelectText>{selectedObject ? `${selectedObject.name}` : communityName}</SelectText>
+        <AntDesign name={'caretdown'} size={RFValue(15)} color={COLORS.black} />
       </Button>
 
       <StyledModal transparent={true} visible={isToggled} onRequestClose={() => setToggle(false)}>
@@ -96,7 +97,6 @@ const Section = styled.View`
 
 const Button = styled.TouchableOpacity`
   flex-direction: row;
-
 `;
 
 const StyledModal = styled(Modal)`
@@ -119,7 +119,7 @@ const ModalContent = styled.View`
 `;
 
 const SelectText = styled.Text`
-  font-size: 16px;
+  font-size: ${RFValue(20)}px;
   margin-bottom: -10px;
   font-weight: bold;
 `;

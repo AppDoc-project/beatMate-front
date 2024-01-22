@@ -10,21 +10,26 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components/native';
+import SelectCategory from '@components/community/mainPage/SelectCategory';
 
 function CommunitySpecificScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { itemId } = route.params;
+  const { communityId, name } = route.params;
+
+  const [newCommunityId, setCommunityId] = useState(communityId);
+  const [communityName, setCommunityName] = useState(name);
+
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [posts, setPosts] = useState([]); // 커뮤니티 글들을 저장하는 배열
+  const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [page, setPage] = useState(1); // Track the page number
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     fetchData(false, 1);
     return () => {};
-  }, [itemId]);
+  }, [newCommunityId]);
 
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(true);
@@ -41,10 +46,10 @@ function CommunitySpecificScreen() {
       let response;
 
       if (scroll) {
-        response = await getNextPost(posts[posts.length - 1]?.id, itemId, 3);
+        response = await getNextPost(posts[posts.length - 1]?.id, newCommunityId, 10);
         console.log('첫번째요소', format(response.data));
       } else {
-        response = await getFirstPost(3, itemId);
+        response = await getFirstPost(10, newCommunityId);
         console.log('두번째요소', format(response.data));
       }
 
@@ -95,6 +100,9 @@ function CommunitySpecificScreen() {
         <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => navigation.goBack()} />
         <MainTxt>커뮤니티</MainTxt>
       </Top>
+      <SecondRow>
+        <SelectCategory setCommunityId={setCommunityId} communityName={communityName} />
+      </SecondRow>
       <SearchBox>
         <Input
           value={searchKeyword}
@@ -142,8 +150,16 @@ const MainTxt = styled.Text`
   flex: 1;
 `;
 
+const SecondRow = styled.View`
+  width: ${wp(100)}px;
+  align-items: center;
+  justify-content: center;
+  padding: ${hp(1)}px;
+  top: ${hp(5)}px;
+`;
+
 const SearchBox = styled.View`
-  top: ${hp(15)}px;
+  top: ${hp(10)}px;
   flex-direction: row;
   align-items: center;
   position: relative;
@@ -168,7 +184,8 @@ const SearchIcon = styled(AntDesign)`
 `;
 
 const PostWrapper = styled.View`
-  height: ${hp(50)}px;
+  height: ${hp(62)}px;
+  top: ${hp(18)}px;
 `;
 
 const Btn = styled.TouchableOpacity`
