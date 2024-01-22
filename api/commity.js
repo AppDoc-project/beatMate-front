@@ -6,7 +6,6 @@ import { client } from './client';
 const getCommunitySection = async () => {
   try {
     const token = await AsyncStorage.getItem('access_token');
-    console.log(token); // 토큰 확인 (디버깅용)
 
     const response = await client.get('/community/list', {
       headers: {
@@ -25,7 +24,6 @@ const getCommunitySection = async () => {
 const postNewPost = async (data) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
-    console.log(token); // 토큰 확인 (디버깅용)
 
     const response = await client.post('/community/post', data, {
       headers: {
@@ -44,9 +42,8 @@ const postNewPost = async (data) => {
 const postImages = async (data) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
-    console.log(token); // 토큰 확인 (디버깅용)
 
-    const response = await client.post('/community/images/192.168.45.150', data, {
+    const response = await client.post('/community/images/192.168.0.37', data, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: token, // 바로 토큰 값 넣기
@@ -63,4 +60,44 @@ const postImages = async (data) => {
   }
 };
 
-export { getCommunitySection, postNewPost, postImages };
+// 특정 게시판에 글 첫번째로 불러오기
+const getFirstPost = async (limit, communityId) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+
+    const response = await client.get(`/community/post?scroll=false&limit=${limit}&communityId=${communityId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+// 특정 게시판에 스크롤 시 글 불러오기
+const getNextPost = async (postId, communityId, limit) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+
+    const response = await client.get(
+      `/community/post?scroll=true&postId=${postId}&communityId=${communityId}&limit=${limit}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      },
+    );
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { getCommunitySection, postNewPost, postImages, getFirstPost, getNextPost };

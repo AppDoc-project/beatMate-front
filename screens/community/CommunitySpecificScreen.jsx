@@ -1,9 +1,11 @@
 import { WriteBtn } from '@assets/Icons/Buttons';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import CommunityPostingItem from '@components/community/mainPage/CommunityPostingItem';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { getFirstPost, getNextPost } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -11,59 +13,86 @@ import styled from 'styled-components/native';
 
 function CommunitySpecificScreen() {
   const navigation = useNavigation();
-  const [searchKeyword, setSearchKeyword] = useState(''); // 검색 키워드 저장
+  const route = useRoute();
+  const { itemId } = route.params;
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [posts, setPosts] = useState([]); // 커뮤니티 글들을 저장하는 배열
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [page, setPage] = useState(1); // Track the page number
 
-  //게시판 리스트 조회 API
-  //   const [SectionData, setSectionData] = useState(null);
-  //   const [isLoading, setIsLoading] = useState(false);
-  //   const [isError, setIsError] = useState(false);
+  useEffect(() => {
+    fetchData(false, 1);
+    return () => {};
+  }, [itemId]);
 
-  const writeNewPost = () => {
-    navigation.navigate('writeNewPostScreen');
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [hasMoreData, setHasMoreData] = useState(true);
+
+  const fetchData = async (scroll, pageNumber) => {
+    try {
+      if (isFetchingMore) {
+        return;
+      }
+
+      setIsFetchingMore(true);
+      setIsLoading(true);
+
+      let response;
+
+      if (scroll) {
+        response = await getNextPost(posts[posts.length - 1]?.id, itemId, 3);
+        console.log('첫번째요소', format(response.data));
+      } else {
+        response = await getFirstPost(3, itemId);
+        console.log('두번째요소', format(response.data));
+      }
+
+      const newPosts = response.data.data;
+
+      if (newPosts.length === 0) {
+        setHasMoreData(false);
+      } else {
+        setPosts((prevPosts) => (scroll ? [...prevPosts, ...newPosts] : newPosts));
+        setPage(pageNumber + 1);
+      }
+
+      setIsLoading(false);
+      setIsError(false);
+    } catch (error) {
+      console.error('데이터를 불러오는 중 에러 발생:', error);
+      setIsError(true);
+    } finally {
+      setIsFetchingMore(false);
+    }
   };
 
-  //   useFocusEffect(
-  //     React.useCallback(() => {
-  //       setIsLoading(true);
-  //       getCommunitySection()
-  //         .then((res) => {
-  //           console.log(format(res.data));
-  //           setSectionData(res.data);
-  //           setIsLoading(false);
-  //           setIsError(false);
-  //         })
-  //         .catch((err) => {
-  //           console.log(err);
-  //           setIsError(true);
-  //           setIsLoading(false);
-  //         });
-  //     }, [setIsLoading, setSectionData, setIsError]),
-  //   );
-
-  //   if (isLoading) {
-  //     return (
-  //       <View>
-  //         <Text>로딩중...</Text>
-  //       </View>
-  //     );
-  //   }
-
-  //   if (isError) {
-  //     return (
-  //       <View>
-  //         <Text>에러 발생</Text>
-  //       </View>
-  //     );
-  //   }
-
-  const onPressPreviousBtn = () => {
-    navigation.navigate('');
+  const onEndReached = () => {
+    if (!isLoading && hasMoreData) {
+      fetchData(true, page);
+    }
   };
+
+  if (isLoading && !posts.length) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
 
   return (
     <Container>
       <Top>
-        <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={onPressPreviousBtn} />
+        <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => navigation.goBack()} />
         <MainTxt>커뮤니티</MainTxt>
       </Top>
       <SearchBox>
@@ -76,7 +105,18 @@ function CommunitySpecificScreen() {
         <SearchIcon name="search1" size={30} color={COLORS.lightgray} />
       </SearchBox>
 
-      <Btn onPress={writeNewPost}>
+      <PostWrapper>
+        <FlatList
+          data={posts}
+          renderItem={({ item }) => <CommunityPostingItem post={item} />}
+          onEndReached={onEndReached}
+          keyExtractor={(item, index) => index.toString()}
+          onEndReachedThreshold={1}
+          ListFooterComponent={() => (isLoading ? <ActivityIndicator /> : null)}
+        />
+      </PostWrapper>
+
+      <Btn onPress={() => navigation.navigate('writeNewPostScreen')}>
         <WriteBtn />
       </Btn>
     </Container>
@@ -125,6 +165,10 @@ const Input = styled.TextInput`
 const SearchIcon = styled(AntDesign)`
   position: absolute;
   right: 20px;
+`;
+
+const PostWrapper = styled.View`
+  height: ${hp(50)}px;
 `;
 
 const Btn = styled.TouchableOpacity`

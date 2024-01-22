@@ -45,10 +45,10 @@ function MessageInput({ onFocus, onBlur, targetId, onSendMessage }) {
       .then((res) => {
         setIsLoading(false);
         setsendText('');
-        console.log(format(res.data));
+        console.log('채팅보내기 성공', format(res.data));
       })
       .catch((err) => {
-        console.log(err);
+        console.log('채팅보내기 실패', err);
         setIsError(true);
         setIsLoading(false);
       });

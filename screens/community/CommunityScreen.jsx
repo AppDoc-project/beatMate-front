@@ -7,12 +7,10 @@ import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components/native';
 
 function CommunityScreen() {
   const navigation = useNavigation();
-  const [searchKeyword, setSearchKeyword] = useState(''); // 검색 키워드 저장
 
   //게시판 리스트 조회 API
   const [SectionData, setSectionData] = useState(null);
@@ -23,8 +21,8 @@ function CommunityScreen() {
     navigation.navigate('writeNewPostScreen');
   };
 
-  const moveSpecificScreen = () => {
-    navigation.navigate('communitySpecificScreen');
+  const moveSpecificScreen = (itemId) => {
+    navigation.navigate('communitySpecificScreen', { itemId });
   };
 
   useFocusEffect(
@@ -64,20 +62,11 @@ function CommunityScreen() {
   return (
     <Container>
       <MainTxt>커뮤니티</MainTxt>
-      <SearchBox>
-        <Input
-          value={searchKeyword}
-          onChangeText={setSearchKeyword}
-          placeholder="검색어를 입력해주세요"
-          placeholderTextColor="lightgray"
-        />
-        <SearchIcon name="search1" size={30} color={COLORS.lightgray} />
-      </SearchBox>
 
       {SectionData && SectionData.data && (
         <Grid>
           {SectionData.data.map((item) => (
-            <Item key={item.id} onPress={moveSpecificScreen}>
+            <Item key={item.id} onPress={() => moveSpecificScreen(item.id)}>
               <ItemName>{item.name}</ItemName>
             </Item>
           ))}
@@ -101,31 +90,6 @@ const MainTxt = styled.Text`
   font-size: ${RFValue(22)}px;
   font-weight: bold;
   top: ${hp(9)};
-`;
-
-const SearchBox = styled.View`
-  top: ${hp(15)}px;
-  flex-direction: row;
-  align-items: center;
-  position: relative;
-`;
-
-const Input = styled.TextInput`
-  background-color: transparent;
-  width: ${wp(90)}px;
-  height: ${hp(5)}px;
-  border-radius: 10px;
-  border-color: lightgray;
-  border-width: 1px;
-  padding-left: ${RFValue(4)}px;
-  font-size: ${RFValue(13)}px;
-  font-weight: bold;
-  padding: ${RFValue(10)}px;
-`;
-
-const SearchIcon = styled(AntDesign)`
-  position: absolute;
-  right: 20px;
 `;
 
 const Grid = styled.View`

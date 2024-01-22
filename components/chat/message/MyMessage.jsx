@@ -9,16 +9,18 @@ MyMessage.propTypes = {
   item: PropTypes.shape({
     userId: PropTypes.number,
     content: PropTypes.string,
+    createdAt: PropTypes.string,
   }),
   isLast: PropTypes.bool,
 };
 
 function MyMessage({ item, isLast }) {
   const { content } = item;
+  console.log('item입니다', item);
   return (
     <Container>
       <ContentContainer>
-        {isLast && <Time>오후 3:24</Time>}
+        {isLast && <Time>{item.createdAt}</Time>}
         <TextContainer>
           <Content>{content}</Content>
         </TextContainer>

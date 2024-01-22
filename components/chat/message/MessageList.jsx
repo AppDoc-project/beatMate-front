@@ -1,16 +1,15 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { FlatList, RefreshControl, Text, View } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import socketio from 'socket.io-client';
-import PropTypes from 'prop-types';
-import { getMessage } from 'api/chat';
+import { useFocusEffect } from '@react-navigation/native';
+import { getMessage, readCertainChat } from 'api/chat';
 import { UserInfo } from 'context/UserInfoContext';
+import format from 'pretty-format';
+import PropTypes from 'prop-types';
+import React, { useContext, useRef, useState } from 'react';
+import { FlatList, RefreshControl } from 'react-native';
+import socketio from 'socket.io-client';
 
 import MyMessage from './MyMessage';
 import OthersMessage from './OthersMessage';
-import DateInfo from '../DateInfo';
-import format from 'pretty-format';
 
 function MessageList({ roomID }) {
   const {
@@ -53,7 +52,7 @@ function MessageList({ roomID }) {
     if (!isLoading && !isError) {
       try {
         setIsLoading(true);
-        const res = await getMessage(9, messages.length, roomID);
+        const res = await getMessage(7, messages.length, roomID);
 
         if (res.data.data) {
           const combinedMessages = [...messages, ...res.data.data];
@@ -90,7 +89,7 @@ function MessageList({ roomID }) {
       socketRef.current.disconnect();
     }
 
-    socketRef.current = socketio(`http://192.168.1.157/chat/socket?roomId=${roomID}`, {
+    socketRef.current = socketio(`http://192.168.45.240/chat/socket?roomId=${roomID}`, {
       transports: ['polling'],
       path: '/socket.io',
       extraHeaders: {
@@ -109,6 +108,21 @@ function MessageList({ roomID }) {
     socketRef.current.on('message', (newMessage) => {
       console.log('newMessage', newMessage);
       setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+      if (myUserId !== newMessage.sender.userId) {
+        // 특정 채팅 확인 관련 로직
+        const data = {
+          roomId: roomID,
+          chatId: newMessage.id,
+        };
+
+        readCertainChat(data)
+          .then((res) => {
+            const { data } = res;
+            console.log('특정 채팅 확인 완료', format(data));
+          })
+          .catch((error) => console.log('특정 채팅 확인 실패', format(error)));
+      }
     });
 
     return () => {
@@ -121,9 +135,20 @@ function MessageList({ roomID }) {
   useFocusEffect(
     React.useCallback(() => {
       initializeSocket();
-      loadMessages(7, 0);
+      loadMessages(7, messages.length);
     }, [roomID]),
   );
+
+  const cleanupSocket = React.useCallback(() => {
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+      console.log('소켓 없음');
+    }
+  }, []);
+
+  React.useEffect(() => {
+    return cleanupSocket; // 화면에서 focus가 빠져나갈 때 정리 함수 호출
+  }, [cleanupSocket]);
 
   return (
     <FlatList
@@ -131,7 +156,6 @@ function MessageList({ roomID }) {
       data={messages}
       showsVerticalScrollIndicator={false}
       keyExtractor={(message) => `message_${message.id}`}
-      ListHeaderComponent={() => <DateInfo />}
       onEndReached={() => {
         if (messages.length > 0 && messages[messages.length - 1].data) {
           loadMoreMessages();

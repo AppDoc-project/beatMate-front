@@ -81,4 +81,23 @@ const writeNewChat = async (data) => {
   }
 };
 
-export { getChatList, readAllMessage, getMessage, writeNewChat };
+// 특정 채팅 확인하기
+const readCertainChat = async (data) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+
+    const response = await client.post('/chat/read', data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { getChatList, readAllMessage, getMessage, writeNewChat, readCertainChat };

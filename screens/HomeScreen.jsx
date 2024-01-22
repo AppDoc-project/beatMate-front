@@ -6,10 +6,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import styled from 'styled-components/native';
 
 function HomeScreen(props) {
-  
   return (
     <Container>
-      <BellIcon name={'bell'} size={RFValue(25)} />
       <MainTxt>BeatMate</MainTxt>
       <Section>
         <ShowTime>
@@ -55,12 +53,6 @@ const Container = styled.View`
   background-color: ${COLORS.white};
   position: relative;
   align-items: center;
-`;
-
-const BellIcon = styled(MaterialCommunityIcons)`
-  position: absolute;
-  top: 50px;
-  right: 20px;
 `;
 
 const MainTxt = styled.Text`

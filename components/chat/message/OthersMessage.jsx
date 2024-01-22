@@ -9,6 +9,7 @@ OthersMessage.propTypes = {
   item: PropTypes.shape({
     userId: PropTypes.number,
     content: PropTypes.string,
+    createdAt: PropTypes.string,
   }),
   isLast: PropTypes.bool,
 };
@@ -23,7 +24,7 @@ function OthersMessage({ item, isLast }) {
         <TextContainer>
           <Content>{content}</Content>
         </TextContainer>
-        {isLast && <Time>오후 3:24</Time>}
+        {isLast && <Time>{item.createdAt}</Time>}
       </ContentContainer>
     </Container>
   );
