@@ -4,8 +4,8 @@ import TuteeMyPageScreen from '@screens/mypage/TuteeMyPageScreen';
 import TutorMyPageScreen from '@screens/mypage/TutorMyPageScreen';
 import MyPageSetScreen from '@screens/mypageset/MyPageSetScreen';
 import ChangeNicknameScreen from '@screens/mypageset/communityset/ChangeNicknameScreen';
+import ChangeProfileScreen from '@screens/mypageset/communityset/ChangeProfileScreen';
 import DeleteAccountScreen from '@screens/mypageset/etc/DeleteAccountScreen';
-import PushAlarmSetScreen from '@screens/mypageset/etc/PushAlarmSetScreen';
 import ChangeIntroScreen from '@screens/mypageset/myinfoset/ChangeIntroScreen';
 import ChangePasswordScreen from '@screens/mypageset/myinfoset/ChangePasswordScreen';
 import ChangePhoneNumberScreen from '@screens/mypageset/myinfoset/ChangePhoneNumberScreen';
@@ -53,12 +53,20 @@ function MyPageScreenNavigator(props) {
         />
       )}
 
-      <Stack.Screen name={'MyPageSetScreen'} component={MyPageSetScreen} options={{ title: '설정' }} />
+      <Stack.Screen
+        name={'MyPageSetScreen'}
+        component={MyPageSetScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
 
       <Stack.Screen
         name={'ChangePasswordScreen'}
         component={ChangePasswordScreen}
-        options={{ title: '비밀번호 변경' }}
+        options={{
+          headerShown: false,
+        }}
       />
 
       <Stack.Screen
@@ -67,14 +75,28 @@ function MyPageScreenNavigator(props) {
         options={{ title: '연락처 변경' }}
       />
 
-      <Stack.Screen name={'ChangeIntroScreen'} component={ChangeIntroScreen} options={{ title: '자기소개 변경' }} />
-
-      <Stack.Screen name={'ChangeNicknameScreen'} component={ChangeNicknameScreen} options={{ title: '닉네임 변경' }} />
+      <Stack.Screen
+        name={'ChangeIntroScreen'}
+        component={ChangeIntroScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
 
       <Stack.Screen
-        name={'PushAlarmSetScreen'}
-        component={PushAlarmSetScreen}
-        options={{ title: '푸쉬 알람 여부 설정' }}
+        name={'ChangeNicknameScreen'}
+        component={ChangeNicknameScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name={'ChangeProfileScreen'}
+        component={ChangeProfileScreen}
+        options={{
+          headerShown: false,
+        }}
       />
 
       <Stack.Screen
@@ -85,7 +107,13 @@ function MyPageScreenNavigator(props) {
         }}
       />
 
-      <Stack.Screen name={'DeleteAccountScreen'} component={DeleteAccountScreen} options={{ title: '회원탈퇴' }} />
+      <Stack.Screen
+        name={'DeleteAccountScreen'}
+        component={DeleteAccountScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }

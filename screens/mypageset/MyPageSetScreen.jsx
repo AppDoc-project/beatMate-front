@@ -1,15 +1,12 @@
-import React, { useState, useContext } from 'react';
-import styled from 'styled-components/native';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { COLORS } from 'colors';
-import { useNavigation } from '@react-navigation/native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { ActionSheetIOS } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserInfo } from 'context/UserInfoContext';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { logout } from 'api/auth';
-import { CommonActions } from '@react-navigation/native';
+import { COLORS } from 'colors';
+import { UserInfo } from 'context/UserInfoContext';
+import React, { useContext } from 'react';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import styled from 'styled-components/native';
 
 function MyPageSetScreen(props) {
   const navigation = useNavigation();
@@ -18,10 +15,14 @@ function MyPageSetScreen(props) {
     loginUserInfo: [loginUser, setLoginUser],
   } = useContext(UserInfo);
 
-  const [result, setResult] = useState('');
+  const isTutor = loginUser.isTutor;
 
   const PasswordSet = () => {
     navigation.navigate('ChangePasswordScreen');
+  };
+
+  const IntroductionSet = () => {
+    navigation.navigate('ChangeIntroScreen');
   };
 
   const PhoneNumberSet = () => {
@@ -32,27 +33,8 @@ function MyPageSetScreen(props) {
     navigation.navigate('ChangeNicknameScreen');
   };
 
-  const ProfileImageSet = () =>
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: ['Cancel', '프로필 이미지 변경', '프로필 이미지 삭제'],
-        destructiveButtonIndex: 2,
-        cancelButtonIndex: 0,
-        userInterfaceStyle: 'dark',
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 0) {
-          // 취소 버튼
-        } else if (buttonIndex === 1) {
-          setResult(String(Math.floor(Math.random() * 100) + 1));
-        } else if (buttonIndex === 2) {
-          setResult(<FontAwesome name={'user-circle'} size={RFValue(90)} color={'lightgray'} />);
-        }
-      },
-    );
-
-  const PushAlarmSet = () => {
-    navigation.navigate('PushAlarmSetScreen');
+  const ProfileImageSet = () => {
+    navigation.navigate('');
   };
 
   const Logout = () => {
@@ -88,6 +70,11 @@ function MyPageSetScreen(props) {
         <Btn onPress={PhoneNumberSet}>
           <Txt>연락처 변경</Txt>
         </Btn>
+        {isTutor && (
+          <Btn onPress={IntroductionSet}>
+            <Txt>자기소개 변경</Txt>
+          </Btn>
+        )}
       </FirstList>
       <SecondList>
         <Header>커뮤니티</Header>
@@ -100,9 +87,6 @@ function MyPageSetScreen(props) {
       </SecondList>
       <ThirdList>
         <Header>기타</Header>
-        <Btn onPress={PushAlarmSet}>
-          <Txt>푸쉬 알림 여부 설정</Txt>
-        </Btn>
         <Btn onPress={Logout}>
           <Txt>로그아웃</Txt>
         </Btn>
@@ -117,48 +101,38 @@ function MyPageSetScreen(props) {
 const Container = styled.View`
   flex: 1;
   background-color: white;
+  align-items: center;
+  justify-content: center;
 `;
 
 const FirstList = styled.View`
-  position: absolute;
-  top: ${hp(13)}px;
-  left: ${wp(5)}px;
-
-  padding: ${wp(0)}px ${hp(3)}px;
+  padding: ${wp(0)}px ${hp(5)}px;
 
   width: ${wp(90)}px;
-  height: ${hp(16)}px;
   border-width: 3px;
   border-radius: 15px;
   border-color: ${COLORS.main};
+  margin-bottom: ${hp(3)}px;
 `;
 
 const SecondList = styled.View`
-  position: absolute;
-  top: ${hp(31)}px;
-  left: ${wp(5)}px;
-
-  padding: ${wp(0)}px ${hp(3)}px;
+  padding: ${wp(0)}px ${hp(5)}px;
 
   width: ${wp(90)}px;
-  height: ${hp(16)}px;
   border-width: 3px;
   border-radius: 15px;
   border-color: ${COLORS.main};
+  margin-bottom: ${hp(3)}px;
 `;
 
 const ThirdList = styled.View`
-  position: absolute;
-  top: ${hp(49)}px;
-  left: ${wp(5)}px;
-
-  padding: ${wp(0)}px ${hp(3)}px;
+  padding: ${wp(0)}px ${hp(5)}px;
 
   width: ${wp(90)}px;
-  height: ${hp(20)}px;
   border-width: 3px;
   border-radius: 15px;
   border-color: ${COLORS.main};
+  margin-bottom: ${hp(3)}px;
 `;
 
 const Header = styled.Text`

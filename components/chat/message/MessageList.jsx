@@ -89,7 +89,7 @@ function MessageList({ roomID }) {
       socketRef.current.disconnect();
     }
 
-    socketRef.current = socketio(`http://192.168.45.240/chat/socket?roomId=${roomID}`, {
+    socketRef.current = socketio(`http://192.168.45.106/chat/socket?roomId=${roomID}`, {
       transports: ['polling'],
       path: '/socket.io',
       extraHeaders: {
