@@ -28,7 +28,9 @@ function ReviewPost(props) {
           <BookmarkIcon name={'bookmark'} size={RFValue(13)} color={'lightgray'} />
         </Postinfo>
       </Box>
+      <DotBtn>
       <DotIcon name={'dots-vertical'} size={RFValue(16)} color={'lightgray'} />
+      </DotBtn>
     </ReviewBox>
   );
 }
@@ -102,6 +104,8 @@ const LikeIcon = styled(MaterialCommunityIcons)``;
 const BookmarkIcon = styled(Feather)`
   margin: ${hp(0.5)}px ${wp(0)}px ${hp(0)}px ${wp(1)}px;
 `;
+
+const DotBtn = styled.TouchableOpacity``;
 
 const DotIcon = styled(MaterialCommunityIcons)`
   top: ${hp(1.6)}px;

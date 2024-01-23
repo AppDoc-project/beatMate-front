@@ -19,10 +19,15 @@ function SearchTutorScreen(props) {
 
   const [searchTutor, setSearchTutor] = useState(''); // 강사 검색 저장
 
-  const [isModalVisible, setModalVisible] = useState(false); //modal
-  
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
+  const [isCategoryModal, setCategoryModal] = useState(false); //modal
+  const [isSearchModal, setSearchModal] = useState(false);
+
+  const toggleCategoryModal = () => {
+    setCategoryModal(!isCategoryModal);
+  };
+
+  const toggleSearchModal = () => {
+    setSearchModal(!isSearchModal);
   };
 
   return (
@@ -40,18 +45,23 @@ function SearchTutorScreen(props) {
           </SearchIcon>
         </SearchBox>
         <SelectSection>
-          <CategoryBtn onPress={toggleModal}>
-            <Txt>보컬</Txt>
+          <CategoryBtn onPress={toggleCategoryModal}>
+            <CategoryTxt>보컬</CategoryTxt>
             <MaterialIcons
               name="keyboard-arrow-down"
               size={RFValue(26)}
               marginRight={RFValue(5)}
               marginTop={RFValue(-3)}
             />
-            {isModalVisible && <CommunityCategory />}
+            {isCategoryModal && <CommunityCategory />}
           </CategoryBtn>
+          <SearchOptionBtn onPress={toggleSearchModal}>
+            <OptionTxt>레슨 횟수 많은 순</OptionTxt>
+            <MaterialIcons name="keyboard-arrow-down" size={RFValue(20)} />
+          </SearchOptionBtn>
         </SelectSection>
         <TutorList onPress={TutorProfile}>
+          <SearchTutorItem />
           <SearchTutorItem />
         </TutorList>
       </Container>
@@ -92,18 +102,40 @@ const SearchIcon = styled.TouchableOpacity`
 
 const SelectSection = styled.View`
   flex: 0.05;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: ${hp(0)}px ${wp(5)}px;
 `;
 
 const CategoryBtn = styled.TouchableOpacity`
-  position: absolute;
-  padding: ${hp(0)}px ${wp(5)}px;
   flex-direction: row;
 `;
 
-const Txt = styled.Text`
+const CategoryTxt = styled.Text`
   font-size: ${RFValue(20)}px;
   font-weight: 900;
   color: ${COLORS.black};
+`;
+
+const SearchOptionBtn = styled.TouchableOpacity`
+  flex-direction: row;
+  width: ${wp(32)}px;
+  height: ${hp(3.6)}px;
+
+  border-radius: ${RFValue(5)}px;
+  border-color: lightgray;
+  border-width: 1px;
+
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const OptionTxt = styled.Text`
+  font-size: ${RFValue(11)}px;
+  font-weight: 600;
+  color: ${COLORS.black};
+  margin: 0 0 0 ${wp(2)}px;
 `;
 
 const TutorList = styled.TouchableOpacity`

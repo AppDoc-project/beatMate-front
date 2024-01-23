@@ -63,43 +63,57 @@ const Container = styled.View`
 `;
 
 const Infosection = styled.View`
-  flex: 0.6;
+  flex: 0.5;
   background-color: ${COLORS.white};
   justify-content: center;
   align-items: center;
 `;
 
 const ImageBox = styled.View`
-  width: ${RFValue(180)}px;
-  height: ${RFValue(180)}px;
-  border-radius: ${RFValue(90)}px;
+  width: ${RFValue(140)}px;
+  height: ${RFValue(140)}px;
+  border-radius: ${RFValue(70)}px;
   overflow: hidden;
+
+  top: ${hp(2)}px;
 `;
 
 const ProfileImage = styled(Image)`
-  width: ${RFValue(180)}px;
-  height: ${RFValue(180)}px;
+  width: ${RFValue(140)}px;
+  height: ${RFValue(140)}px;
   object-fit: cover;
 `;
 
 const Name = styled.Text`
   font-size: ${RFValue(24)}px;
   font-weight: 900;
-  top: ${hp(3)}px;
+  top: ${hp(4)}px;
 `;
 
 const Intor = styled.Text`
   font-size: ${RFValue(12)}px;
-  font-weight: 500;
+  font-weight: 400;
   top: ${hp(5)}px;
 `;
 
-const FieldBox = styled.View``;
+const FieldBox = styled.View`
+  width: ${wp(12)}px;
+  height: ${hp(3)}px;
+
+  border-width: ${wp(0.4)}px;
+  border-radius: ${RFValue(5)}px;
+  border-color: ${COLORS.main};
+
+  justify-content: center;
+  align-items: center;
+
+  top: ${hp(6)}px;
+`;
 
 const Field = styled.Text`
   font-size: ${RFValue(12)}px;
-  font-weight: 500;
-  top: ${hp(7)}px;
+  font-weight: 600;
+  color: ${COLORS.main};
 `;
 
 const SelectMenu = styled.View`
@@ -117,7 +131,7 @@ const LessonInfoBtn = styled.TouchableOpacity`
   align-items: center;
   background-color: ${({ isLessonInfo }) => (isLessonInfo ? COLORS.main : COLORS.white)};
 
-  border-width: 1px;
+  border-width: ${RFValue(1)}px;
   border-bottom-color: ${({ isLessonInfo }) => (isLessonInfo ? COLORS.main : COLORS.lightgray)};
   border-top-color: ${({ isLessonInfo }) => (isLessonInfo ? COLORS.main : COLORS.lightgray)};
   border-left-width: 0;
@@ -145,7 +159,7 @@ const ReviewBtn = styled.TouchableOpacity`
   align-items: center;
   background-color: ${({ isReview }) => (isReview ? COLORS.main : COLORS.white)};
 
-  border-width: 1px;
+  border-width: ${RFValue(1)}px;
   border-top-color: ${({ isReview }) => (isReview ? COLORS.main : COLORS.lightgray)};
   border-bottom-color: ${({ isReview }) => (isReview ? COLORS.main : COLORS.lightgray)};
   border-left-width: 0;
@@ -167,7 +181,7 @@ const ReviewTxt = styled.Text`
 `;
 
 const ShowMainInfo = styled.View`
-  flex: 0.4;
+  flex: 0.5;
 `;
 
 export default TutorProfileScreen;
