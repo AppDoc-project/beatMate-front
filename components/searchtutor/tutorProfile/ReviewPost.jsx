@@ -1,14 +1,35 @@
+import userimage from '@assets/userimage.png';
 import { COLORS } from 'colors';
-import React from 'react';
-import { Image } from 'react-native';
+import React, { useState } from 'react';
+import { Image, TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import styled from 'styled-components';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Feather from 'react-native-vector-icons/Feather';
-import userimage from '@assets/userimage.png';
+import styled from 'styled-components';
 
 function ReviewPost(props) {
+  const [isLike, setLike] = useState(false);
+  const [isBookmark, setBookmark] = useState(false);
+
+  const toggleLike = () => {
+    setLike(!isLike);
+    if (isLike) {
+      console.log('Remove Like');
+    } else {
+      console.log('Added Like');
+    }
+  };
+
+  const toggleBookmark = () => {
+    setBookmark(!isBookmark);
+    if (isBookmark) {
+      console.log('Remove Tutor');
+    } else {
+      console.log('Added Tutor');
+    }
+  };
+
   return (
     <ReviewBox>
       <ImageBox>
@@ -21,15 +42,26 @@ function ReviewPost(props) {
           <Date>2023.12.26</Date>
         </ContentBox>
         <Postinfo>
-          <LikeBox>
-            <LikeIcon name={'heart'} size={RFValue(11)} color={'lightgray'} />
-            12
-          </LikeBox>
-          <BookmarkIcon name={'bookmark'} size={RFValue(13)} color={'lightgray'} />
+          <TouchableOpacity onPress={toggleLike}>
+            <LikeIcon
+              name={isLike ? 'like1' : 'like2'}
+              size={RFValue(16)}
+              color={isLike ? COLORS.main : COLORS.lightgray}
+              marginTop={RFValue(0.6)}
+            />
+          </TouchableOpacity>
+          <LikeBox>12</LikeBox>
+          <TouchableOpacity onPress={toggleBookmark}>
+            <BookmarkIcon
+              name={isBookmark ? 'heart' : 'hearto'}
+              size={RFValue(15)}
+              color={isBookmark ? COLORS.main : COLORS.lightgray}
+            />
+          </TouchableOpacity>
         </Postinfo>
       </Box>
       <DotBtn>
-      <DotIcon name={'dots-vertical'} size={RFValue(16)} color={'lightgray'} />
+        <DotIcon name={'dots-vertical'} size={RFValue(16)} color={'lightgray'} />
       </DotBtn>
     </ReviewBox>
   );
@@ -37,10 +69,11 @@ function ReviewPost(props) {
 
 const ReviewBox = styled.View`
   width: 100%;
-  top: ${wp(10)}px;
   height: ${RFValue(90)}px;
+
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
+
   flex-direction: row;
 `;
 
@@ -67,7 +100,7 @@ const NickName = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 600;
   color: ${COLORS.lightgray};
-  margin: ${hp(2.6)}px ${wp(3)}px ${hp(0.5)}px ${wp(0)}px;
+  margin: ${hp(2.5)}px 0 ${hp(0.5)}px 0;
 `;
 
 const ContentBox = styled.View`
@@ -93,16 +126,16 @@ const Postinfo = styled.View`
 `;
 
 const LikeBox = styled.Text`
-  font-size: ${RFValue(10)}px;
-  font-weight: bold;
-  color: ${COLORS.lightgray};
-  margin: ${hp(0.5)}px ${wp(1)}px ${hp(0)}px ${wp(0)}px;
+  font-size: ${RFValue(12)}px;
+  font-weight: 500;
+  color: ${COLORS.black};
+  margin: ${hp(0.3)}px ${wp(2)}px 0 ${wp(0.5)}px;
 `;
 
-const LikeIcon = styled(MaterialCommunityIcons)``;
+const LikeIcon = styled(AntDesign)``;
 
-const BookmarkIcon = styled(Feather)`
-  margin: ${hp(0.5)}px ${wp(0)}px ${hp(0)}px ${wp(1)}px;
+const BookmarkIcon = styled(AntDesign)`
+  margin: ${hp(0.2)}px 0 0 ${wp(2)}px;
 `;
 
 const DotBtn = styled.TouchableOpacity``;

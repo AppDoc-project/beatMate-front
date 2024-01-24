@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Image } from 'react-native';
 import vocal from '@assets/vocal.jpg';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from 'colors';
+import React, { useState } from 'react';
+import { Image } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import styled from 'styled-components';
 
 function SearchTutorItem(props) {
   const [isLikeList, setLikeList] = useState(false);
@@ -49,8 +49,7 @@ function SearchTutorItem(props) {
     </Container>
   );
 }
-const Container = styled.View`
-`;
+const Container = styled.View``;
 
 const TutorProfileBox = styled.View`
   flex-direction: row;
@@ -128,7 +127,6 @@ const InfoTxt = styled.Text`
 
 const Bookmark = styled.TouchableOpacity`
   justify-content: center;
-
 `;
 
 export default SearchTutorItem;

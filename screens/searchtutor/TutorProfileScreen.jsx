@@ -1,15 +1,34 @@
-import LessonInfoPost from '@components/searchtutor/tutorProfile/LessonInfoPost';
-import ReviewPost from '@components/searchtutor/tutorProfile/ReviewPost';
-import { Image } from 'react-native';
 import vocal from '@assets/vocal.jpg';
+import LessonInfoPost from '@components/searchtutor/tutorProfile/LessonInfoPost';
+import ReviewItem from '@components/searchtutor/tutorProfile/ReviewItem';
+import ReviewPost from '@components/searchtutor/tutorProfile/ReviewPost';
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
+import { Image, SafeAreaView, TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components';
-import ReviewItem from '@components/searchtutor/tutorProfile/ReviewItem';
 
 function TutorProfileScreen(props) {
+  const navigation = useNavigation();
+
+  const onPressPreviousBtn = () => {
+    navigation.navigate('searchTutorScreen');
+  };
+
+  const [isBookmark, setBookmark] = useState(false);
+
+  const toggleBookmark = () => {
+    setBookmark(!isBookmark);
+    if (isBookmark) {
+      console.log('Remove Tutor');
+    } else {
+      console.log('Added Tutor');
+    }
+  };
+
   const [isLessonInfo, selectLessonInfo] = useState(true);
   const [isReview, selectReview] = useState(false);
 
@@ -24,37 +43,55 @@ function TutorProfileScreen(props) {
   };
 
   return (
-    <Container>
-      <Infosection>
-        <ImageBox>
-          <ProfileImage source={vocal} />
-        </ImageBox>
-        <Name>김철수</Name>
-        <Intor>안녕하세요~ 보컬 가르치고 있는 김철수 강사 입니다.</Intor>
-        <FieldBox>
-          <Field>보컬</Field>
-        </FieldBox>
-      </Infosection>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
+        <Header>
+          <TouchableOpacity onPress={onPressPreviousBtn}>
+            <AntDesign name="left" size={32} marginLeft={5} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={toggleBookmark}>
+            <AntDesign
+              name={isBookmark ? 'heart' : 'hearto'}
+              size={RFValue(24)}
+              color={isBookmark ? COLORS.main : COLORS.lightgray}
+              marginRight={14}
+            />
+          </TouchableOpacity>
+        </Header>
+        <Infosection>
+          <ImageBox>
+            <ProfileImage source={vocal} />
+          </ImageBox>
+          <Name>김철수</Name>
+          <Intor>안녕하세요~ 보컬 가르치고 있는 김철수 강사 입니다.</Intor>
+          <FieldBox>
+            <Field>보컬</Field>
+          </FieldBox>
+        </Infosection>
 
-      <SelectMenu>
-        <LessonInfoBtn isLessonInfo={isLessonInfo} onPress={onPressLessonInfoBtn}>
-          <LessonInfoTxt isLessonInfo={isLessonInfo}>정보</LessonInfoTxt>
-        </LessonInfoBtn>
-        <ReviewBtn isReview={isReview} onPress={onPressReview}>
-          <ReviewTxt isReview={isReview}>후기</ReviewTxt>
-        </ReviewBtn>
-      </SelectMenu>
+        <SelectMenu>
+          <LessonInfoBtn isLessonInfo={isLessonInfo} onPress={onPressLessonInfoBtn}>
+            <LessonInfoTxt isLessonInfo={isLessonInfo}>정보</LessonInfoTxt>
+          </LessonInfoBtn>
+          <ReviewBtn isReview={isReview} onPress={onPressReview}>
+            <ReviewTxt isReview={isReview}>후기</ReviewTxt>
+          </ReviewBtn>
+        </SelectMenu>
 
-      <ShowMainInfo>
-        {isLessonInfo && <LessonInfoPost />}
-        {isReview && (
-          <>
-            <ReviewItem />
-            <ReviewPost />
-          </>
-        )}
-      </ShowMainInfo>
-    </Container>
+        <ShowMainInfo>
+          {isLessonInfo && <LessonInfoPost />}
+          {isReview && (
+            <>
+              <ReviewItem />
+              <ReviewPost />
+            </>
+          )}
+        </ShowMainInfo>
+        <ChatBtn>
+          <ChatTxt>채팅하기</ChatTxt>
+        </ChatBtn>
+      </Container>
+    </SafeAreaView>
   );
 }
 const Container = styled.View`
@@ -62,10 +99,13 @@ const Container = styled.View`
   background-color: ${COLORS.white};
 `;
 
+const Header = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const Infosection = styled.View`
   flex: 0.5;
-  background-color: ${COLORS.white};
-  justify-content: center;
   align-items: center;
 `;
 
@@ -182,6 +222,20 @@ const ReviewTxt = styled.Text`
 
 const ShowMainInfo = styled.View`
   flex: 0.5;
+`;
+
+const ChatBtn = styled.TouchableOpacity`
+  height: ${hp(5)}px;
+  background-color: ${COLORS.main};
+
+  justify-content: center;
+  align-items: center;
+`;
+
+const ChatTxt = styled.Text`
+  font-size: ${RFValue(16)}px;
+  font-weight: 600;
+  color: ${COLORS.white};
 `;
 
 export default TutorProfileScreen;

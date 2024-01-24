@@ -12,7 +12,6 @@ function LessonInfoPost(props) {
 }
 
 const Container = styled.View`
-  position: absolute;
   margin: ${hp(1.6)}px ${wp(3)}px;
 `;
 

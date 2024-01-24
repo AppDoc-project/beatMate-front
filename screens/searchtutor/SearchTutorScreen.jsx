@@ -1,14 +1,14 @@
-import { COLORS } from 'colors';
-import React, { useState } from 'react';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import styled from 'styled-components';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import CommunityCategory from '@components/searchtutor/CommunityCategory';
 import SearchTutorItem from '@components/searchtutor/SearchTutorItem';
 import { useNavigation } from '@react-navigation/native';
+import { COLORS } from 'colors';
+import React, { useState } from 'react';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import styled from 'styled-components';
 
 function SearchTutorScreen(props) {
   const navigation = useNavigation();
@@ -26,13 +26,16 @@ function SearchTutorScreen(props) {
     setCategoryModal(!isCategoryModal);
   };
 
-  const toggleSearchModal = () => {
+  const toggleSearchOptionModal = () => {
     setSearchModal(!isSearchModal);
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container>
+        <Header>
+          <Txt>강사 찾기</Txt>
+        </Header>
         <SearchBox>
           <Input
             value={searchTutor}
@@ -55,13 +58,12 @@ function SearchTutorScreen(props) {
             />
             {isCategoryModal && <CommunityCategory />}
           </CategoryBtn>
-          <SearchOptionBtn onPress={toggleSearchModal}>
+          <SearchOptionBtn onPress={toggleSearchOptionModal}>
             <OptionTxt>레슨 횟수 많은 순</OptionTxt>
             <MaterialIcons name="keyboard-arrow-down" size={RFValue(20)} />
           </SearchOptionBtn>
         </SelectSection>
         <TutorList onPress={TutorProfile}>
-          <SearchTutorItem />
           <SearchTutorItem />
         </TutorList>
       </Container>
@@ -74,10 +76,22 @@ const Container = styled.View`
   background-color: ${COLORS.white};
 `;
 
-const SearchBox = styled.View`
-  flex: 0.2;
-  top: ${hp(11.5)}px;
+const Header = styled.View`
+  flex: 0.12;
   align-items: center;
+`;
+
+const Txt = styled.Text`
+  font-size: ${RFValue(18)}px;
+  font-weight: 900;
+  top: ${hp(6)}px;
+`;
+
+const SearchBox = styled.View`
+  flex: 0.08;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
 `;
 
 const Input = styled.TextInput`
@@ -95,8 +109,8 @@ const Input = styled.TextInput`
 `;
 
 const SearchIcon = styled.TouchableOpacity`
-  margin-top: ${hp(0.6)}px;
   position: absolute;
+  margin-top: ${hp(0.6)}px;
   right: ${wp(6)}px;
 `;
 

@@ -2,8 +2,8 @@ import { COLORS } from 'colors';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import styled from 'styled-components';
 
 function ReviewItem(props) {
   return (
@@ -19,7 +19,6 @@ function ReviewItem(props) {
   );
 }
 const Container = styled.View`
-  position: absolute;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

@@ -1,10 +1,10 @@
-import React, { useCallback, useMemo, useRef } from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
-import styled from 'styled-components';
 import { COLORS } from 'colors';
+import React, { useCallback, useMemo, useRef } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import styled from 'styled-components';
 
 function CommunityCategory() {
   const bottomSheetRef = useRef(null);
@@ -31,7 +31,6 @@ function CommunityCategory() {
             <Text>피아노</Text>
             <Text>기타</Text>
             <Text>보컬</Text>
-            <Text>드럼</Text>
             <Text>드럼</Text>
             <Text>베이스</Text>
             <Text>음악이론</Text>
