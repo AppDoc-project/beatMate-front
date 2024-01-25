@@ -1,4 +1,4 @@
-import BottomSheet from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { COLORS } from 'colors';
 import React, { useCallback, useMemo, useRef } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -6,60 +6,69 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
-function CommunityCategory() {
-  const bottomSheetRef = useRef(null);
+const ReviewModal = (props) => {
+  const bottomSheetModalRef = useRef(null);
 
-  const snapPoints = useMemo(() => ['48%', '80%'], []); //ok
+  const snapPoints = useMemo(() => ['50%'], []);
 
   const handleSheetChanges = useCallback((index) => {
     console.log('handleSheetChanges', index);
   }, []);
 
+  const renderBackdrop = useCallback(
+    (props) => <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />,
+    [],
+  );
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Container>
         <BottomSheet
-          ref={bottomSheetRef}
-          index={0} // snapPoints의 배열 0번째 인덱스
-          snapPoints={snapPoints} //ok
+          ref={bottomSheetModalRef}
+          index={0}
+          snapPoints={snapPoints}
           onChange={handleSheetChanges}
           handleComponent={null}
           enablePanDownToClose={true}
+          backdropComponent={renderBackdrop}
         >
           <CategoryItem>
-            <Text>자유게시판</Text>
-            <Text>피아노</Text>
-            <Text>기타</Text>
-            <Text>보컬</Text>
-            <Text>드럼</Text>
-            <Text>베이스</Text>
-            <Text>음악이론</Text>
-            <Text>작곡</Text>
-            <Text>관악기</Text>
-            <Text>건반악기</Text>
+            <Button>
+              <Text>수정</Text>
+            </Button>
+            <Button>
+              <Text>삭제</Text>
+            </Button>
+            <Button>
+              <Text>신고</Text>
+            </Button>
           </CategoryItem>
         </BottomSheet>
       </Container>
     </GestureHandlerRootView>
   );
-}
+};
 
 const Container = styled.View`
   flex: 1;
   padding: ${RFValue(171.5)}px;
-  background-color: ${COLORS.main};
+  background-color: ${COLORS.lightgray};
 `;
 
-const CategoryItem = styled.TouchableOpacity`
+const CategoryItem = styled.View`
   flex: 1;
   padding: ${hp(3)}px ${wp(10)}px ${hp(1)}px;
+`;
+
+const Button = styled.TouchableOpacity`
+  align-items: center;
 `;
 
 const Text = styled.Text`
   font-size: ${RFValue(14)}px;
   font-weight: 600;
   color: ${COLORS.black};
-  margin: ${hp(0.8)}px ${wp(1)}px;
+  margin: ${hp(0.5)}px 0;
 `;
 
-export default CommunityCategory;
+export default ReviewModal;

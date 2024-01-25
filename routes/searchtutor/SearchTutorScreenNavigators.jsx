@@ -1,4 +1,3 @@
-// import SelectLessonScreen from '@components/searchtutor/SelectLessonScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SearchTutorScreen from '@screens/searchtutor/SearchTutorScreen';
 import TutorProfileScreen from '@screens/searchtutor/TutorProfileScreen';

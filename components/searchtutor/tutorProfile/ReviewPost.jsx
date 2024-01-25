@@ -8,9 +8,16 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components';
 
+import ReviewModal from './ReviewModal';
+
 function ReviewPost(props) {
   const [isLike, setLike] = useState(false);
   const [isBookmark, setBookmark] = useState(false);
+  const [isReviewModal, setReviewModal] = useState(false);
+
+  const toggleReviewModal = () => {
+    setReviewModal(!isReviewModal);
+  };
 
   const toggleLike = () => {
     setLike(!isLike);
@@ -60,9 +67,10 @@ function ReviewPost(props) {
           </TouchableOpacity>
         </Postinfo>
       </Box>
-      <DotBtn>
+      <DotBtn onPress={toggleReviewModal}>
         <DotIcon name={'dots-vertical'} size={RFValue(16)} color={'lightgray'} />
       </DotBtn>
+      {isReviewModal && <ReviewModal onClose={toggleReviewModal} />}
     </ReviewBox>
   );
 }

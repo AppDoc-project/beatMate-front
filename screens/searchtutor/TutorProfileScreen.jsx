@@ -5,13 +5,13 @@ import ReviewPost from '@components/searchtutor/tutorProfile/ReviewPost';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
-import { Image, SafeAreaView, TouchableOpacity } from 'react-native';
+import { SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components';
 
-function TutorProfileScreen(props) {
+function TutorProfileScreen() {
   const navigation = useNavigation();
 
   const onPressPreviousBtn = () => {
@@ -22,11 +22,7 @@ function TutorProfileScreen(props) {
 
   const toggleBookmark = () => {
     setBookmark(!isBookmark);
-    if (isBookmark) {
-      console.log('Remove Tutor');
-    } else {
-      console.log('Added Tutor');
-    }
+    console.log(isBookmark ? 'Remove Tutor' : 'Added Tutor');
   };
 
   const [isLessonInfo, selectLessonInfo] = useState(true);
@@ -58,16 +54,16 @@ function TutorProfileScreen(props) {
             />
           </TouchableOpacity>
         </Header>
-        <Infosection>
+        <InfoSection>
           <ImageBox>
             <ProfileImage source={vocal} />
           </ImageBox>
           <Name>김철수</Name>
-          <Intor>안녕하세요~ 보컬 가르치고 있는 김철수 강사 입니다.</Intor>
+          <Intor>안녕하세요~ 보컬 가르치고 있는 김철수 강사입니다.</Intor>
           <FieldBox>
             <Field>보컬</Field>
           </FieldBox>
-        </Infosection>
+        </InfoSection>
 
         <SelectMenu>
           <LessonInfoBtn isLessonInfo={isLessonInfo} onPress={onPressLessonInfoBtn}>
@@ -94,6 +90,7 @@ function TutorProfileScreen(props) {
     </SafeAreaView>
   );
 }
+
 const Container = styled.View`
   flex: 1;
   background-color: ${COLORS.white};
@@ -104,7 +101,7 @@ const Header = styled.View`
   justify-content: space-between;
 `;
 
-const Infosection = styled.View`
+const InfoSection = styled.View`
   flex: 0.5;
   align-items: center;
 `;
@@ -114,7 +111,6 @@ const ImageBox = styled.View`
   height: ${RFValue(140)}px;
   border-radius: ${RFValue(70)}px;
   overflow: hidden;
-
   top: ${hp(2)}px;
 `;
 
@@ -139,14 +135,11 @@ const Intor = styled.Text`
 const FieldBox = styled.View`
   width: ${wp(12)}px;
   height: ${hp(3)}px;
-
   border-width: ${wp(0.4)}px;
   border-radius: ${RFValue(5)}px;
   border-color: ${COLORS.main};
-
   justify-content: center;
   align-items: center;
-
   top: ${hp(6)}px;
 `;
 
@@ -170,7 +163,6 @@ const LessonInfoBtn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   background-color: ${({ isLessonInfo }) => (isLessonInfo ? COLORS.main : COLORS.white)};
-
   border-width: ${RFValue(1)}px;
   border-bottom-color: ${({ isLessonInfo }) => (isLessonInfo ? COLORS.main : COLORS.lightgray)};
   border-top-color: ${({ isLessonInfo }) => (isLessonInfo ? COLORS.main : COLORS.lightgray)};
@@ -198,7 +190,6 @@ const ReviewBtn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   background-color: ${({ isReview }) => (isReview ? COLORS.main : COLORS.white)};
-
   border-width: ${RFValue(1)}px;
   border-top-color: ${({ isReview }) => (isReview ? COLORS.main : COLORS.lightgray)};
   border-bottom-color: ${({ isReview }) => (isReview ? COLORS.main : COLORS.lightgray)};
@@ -227,7 +218,6 @@ const ShowMainInfo = styled.View`
 const ChatBtn = styled.TouchableOpacity`
   height: ${hp(5)}px;
   background-color: ${COLORS.main};
-
   justify-content: center;
   align-items: center;
 `;
