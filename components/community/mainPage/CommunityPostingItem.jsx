@@ -1,10 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import styled from 'styled-components';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import styled from 'styled-components';
 
 CommunityPostingItem.propTypes = {
   post: PropTypes.shape({
@@ -22,16 +23,21 @@ CommunityPostingItem.propTypes = {
     threadCount: PropTypes.number, //댓글 수
     title: PropTypes.string, //제목
     userId: PropTypes.string, //작성자 아이디
-    view: PropTypes.number,
   }).isRequired,
 };
 
 function CommunityPostingItem({ post }) {
+  const navigation = useNavigation();
+
+  const onPressOnePostScreen = () => {
+    navigation.navigate('communityOnePostScreen', { postId: post.id, communityName: post.communityName });
+  };
+
   const formattedDate = post.createdAt.substring(0, 10).replace(/:/g, '.');
 
   return (
     <Container>
-      <SubContainer>
+      <SubContainer onPress={onPressOnePostScreen}>
         <Info>
           <FirstRow>
             <PostText>
@@ -68,8 +74,6 @@ function CommunityPostingItem({ post }) {
   );
 }
 
-const SubContainer = styled.View``;
-
 const Container = styled.View`
   padding-left: ${wp(6)}px;
   padding-right: ${wp(6)}px;
@@ -79,6 +83,8 @@ const Container = styled.View`
   border-bottom-width: 1px;
   width: 100%;
 `;
+
+const SubContainer = styled.TouchableOpacity``;
 
 const FirstRow = styled.View`
   flex-direction: row;

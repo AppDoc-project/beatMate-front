@@ -100,4 +100,22 @@ const getNextPost = async (postId, communityId, limit) => {
   }
 };
 
-export { getCommunitySection, postNewPost, postImages, getFirstPost, getNextPost };
+// 선택된 게시물 불러오기
+const getOnePost = async (postId) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+
+    const response = await client.get(`/community/post/${postId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { getCommunitySection, postNewPost, postImages, getFirstPost, getNextPost, getOnePost };

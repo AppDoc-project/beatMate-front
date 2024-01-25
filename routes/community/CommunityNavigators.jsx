@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import CommunityOnePostScreen from '@screens/community/CommunityOnePostScreen';
 import CommunityScreen from '@screens/community/CommunityScreen';
 import CommunitySpecificScreen from '@screens/community/CommunitySpecificScreen';
 import WriteNewPostScreen from '@screens/community/WriteNewPostScreen';
@@ -26,6 +27,13 @@ function CommunityScreenNavigator(props) {
       <Stack.Screen
         name={'communitySpecificScreen'}
         component={CommunitySpecificScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'communityOnePostScreen'}
+        component={CommunityOnePostScreen}
         options={{
           headerShown: false,
         }}
