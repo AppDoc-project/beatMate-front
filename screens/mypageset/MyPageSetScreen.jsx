@@ -34,7 +34,7 @@ function MyPageSetScreen(props) {
   };
 
   const ProfileImageSet = () => {
-    navigation.navigate('');
+    navigation.navigate('ChangeProfileScreen');
   };
 
   const Logout = () => {
