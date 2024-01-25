@@ -10,10 +10,10 @@ import styled from 'styled-components';
 CommunityPostingItem.propTypes = {
   post: PropTypes.shape({
     bookmarkCount: PropTypes.number, //북마크
-    communityId: PropTypes.string,
+    communityId: PropTypes.number,
     communityName: PropTypes.string,
     createdAt: PropTypes.string, //작성일
-    id: PropTypes.string, //게시글 아이디
+    id: PropTypes.number, //게시글 아이디
     isTutor: PropTypes.bool,
     likeCount: PropTypes.number, //좋아요 수
     mediaCount: PropTypes.number, //사진 수
@@ -22,7 +22,7 @@ CommunityPostingItem.propTypes = {
     text: PropTypes.string, //내용
     threadCount: PropTypes.number, //댓글 수
     title: PropTypes.string, //제목
-    userId: PropTypes.string, //작성자 아이디
+    userId: PropTypes.number, //작성자 아이디
   }).isRequired,
 };
 
