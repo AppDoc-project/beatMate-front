@@ -137,4 +137,26 @@ RegisterBtn.propTypes = {
   fontColor: PropTypes.string.isRequired,
 };
 
-export { LoginBtn, FinishBtn, GetReAuthCodeBtn, JoinBtn, WriteBtn, RegisterBtn };
+function ChangeBtn(props) {
+  const { backColor, fontColor } = props;
+  return (
+    <Svg width={362} height={87} viewBox="0 0 362 87" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <G filter="url(#filter0_d_90_106)">
+        <Rect x={20} y={13} width={322} height={47} rx={10} fill={backColor} />
+        <Rect x={20.5} y={13.5} width={321} height={46} rx={9.5} stroke="#144182" />
+      </G>
+      <Path
+        d="M162.916 34.452h3.304v1.47h-3.304v-1.47zm0 2.786h3.36v1.47h-3.36v-1.47zm2.632-4.942h1.862v9.562h-1.862v-9.562zm-6.72 11.242h8.862v1.484h-8.862v-1.484zm0-2.618h1.876v3.472h-1.876V40.92zm-1.722-7.784h1.848v1.974h2.464v-1.974h1.82v6.692h-6.132v-6.692zm1.848 3.388v1.834h2.464v-1.834h-2.464zm16.729-2.198h3.038v1.484h-3.038v-1.484zm-.098 2.688h3.038v1.484h-3.038v-1.484zm2.842-4.732h1.862v7.462h-1.862v-7.462zm-4.228.882h1.988c0 3.528-1.988 5.796-5.922 6.874l-.728-1.47c3.29-.854 4.662-2.478 4.662-4.508v-.896zm-3.948 0h5.25v1.484h-5.25v-1.484zm5.74 6.748c2.632 0 4.382 1.008 4.382 2.632s-1.75 2.646-4.382 2.646c-2.632 0-4.382-1.022-4.382-2.646 0-1.624 1.75-2.632 4.382-2.632zm0 1.428c-1.582 0-2.534.406-2.534 1.204 0 .798.952 1.19 2.534 1.19 1.596 0 2.548-.392 2.548-1.19 0-.798-.952-1.204-2.548-1.204zm14.643-9.058h1.848v12.964h-1.848V32.282zm1.428 5.054h2.296v1.554h-2.296v-1.554zm-9.8-3.136h7.546v1.484h-7.546V34.2zm3.794 2.212c1.89 0 3.29 1.288 3.29 3.094 0 1.806-1.4 3.094-3.29 3.094-1.89 0-3.29-1.288-3.29-3.094 0-1.806 1.4-3.094 3.29-3.094zm0 1.512c-.882 0-1.512.588-1.512 1.582 0 .994.63 1.582 1.512 1.582s1.512-.588 1.512-1.582c0-.994-.63-1.582-1.512-1.582zm-.938-5.432h1.862v2.268h-1.862v-2.268zm19.011-.21h1.876v12.964h-1.876V32.282zm-3.822 1.344h1.848c0 3.962-1.344 7.21-5.95 9.436l-.966-1.484c3.724-1.792 5.068-4.144 5.068-7.616v-.336zm-4.382 0h5.264v1.47h-5.264v-1.47z"
+        fill={fontColor}
+      />
+      <Defs></Defs>
+    </Svg>
+  );
+}
+
+ChangeBtn.propTypes = {
+  backColor: PropTypes.string.isRequired,
+  fontColor: PropTypes.string.isRequired,
+};
+
+export { LoginBtn, FinishBtn, GetReAuthCodeBtn, JoinBtn, WriteBtn, RegisterBtn, ChangeBtn };

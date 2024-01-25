@@ -1,59 +1,113 @@
+import { ChangeBtn } from '@assets/Icons/Buttons';
+import { useNavigation } from '@react-navigation/native';
+import { changePassword } from 'api/mypage';
 import { COLORS } from 'colors';
-import React, { useState, useContext } from 'react';
-import styled from 'styled-components';
+import format from 'pretty-format';
+import React, { useState } from 'react';
+import { Alert, SafeAreaView, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Octicons from 'react-native-vector-icons/Octicons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import styled from 'styled-components';
 
 function ChangePasswordScreen(props) {
-  const [currentPassword, setCurrentPassword] = useState('');
+  const navigation = useNavigation();
+
   const [changedPassword, setChangedPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [inputPassword, setInputPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
 
-  const ValidPassword = () => {
-    // 비밀번호가 최소 8자, 최대 18자, 영어 대소문자, 숫자, 특수문자 중 하나 이상을 포함하는지 검사
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,18}$/;
-    return passwordRegex.test(changedPassword);
+  const onChangeChangedPassword = (text) => setChangedPassword(text);
+  const onChangeConfirmPassword = (text) => setConfirmPassword(text);
+  const onChangeCurrentPassword = (text) => setCurrentPassword(text);
+
+  const onPressPreviousBtn = () => {
+    setChangedPassword('');
+    setConfirmPassword('');
+    setCurrentPassword('');
+    navigation.goBack();
   };
 
-  const ChangePasswordAlert = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const onPressChangeBtn = () => {
     // 비밀번호 경고창
-    if (!ValidPassword()) {
+    if (
+      !changedPassword ||
+      !confirmPassword ||
+      !currentPassword ||
+      changedPassword.length < 8 ||
+      changedPassword.length > 18 ||
+      !/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@~_])[a-zA-Z\d!@~_]+/.test(changedPassword)
+    ) {
       Alert.alert(
-        '경고',
-        '비밀번호는 최소 8자, 최대 18자, 영어 대소문자, 숫자, 특수문자 중 하나 이상을 포함해야 합니다.',
+        '알림',
+        '비밀번호는 최소 8자, 최대 18자, 1개 이상의 알파벳, 숫자, 특수문자를 반드시 포함해야 합니다.',
       );
-    } else if (inputPassword !== currentPassword) {
-      Alert.alert('경고', '현재 비밀번호가 틀렸습니다.');
+    } else {
+      //자기소개 변경 api
+      setIsLoading(true);
+      const data = {
+        currentPassword: currentPassword,
+        changedPassword: changedPassword,
+      };
+
+      changePassword(data)
+        .then((res) => {
+          console.log('비밀번호 변경', format(res.data));
+          setIsLoading(false);
+          navigation.goBack();
+        })
+        .catch((err) => {
+          console.log('비밀번호 변경', err);
+          setIsError(true);
+          setIsLoading(false);
+        });
     }
   };
 
-  const onPressChangeBtn = () => {};
+  if (isLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
+        <AntDesign name="left" size={32} marginLeft={5} top={40} onPress={onPressPreviousBtn} />
+
         <FirstSection>
-          <Txt>변경하실 비밀번호를 입력해주세요.</Txt>
+          <MainTxt>변경하실 비밀번호를 입력해주세요.</MainTxt>
           <SubTxt>최소 8자, 최대 18자 가능 / 영어 대소문자, 숫자, 특수문자 중 하나 이상 반드시 포함</SubTxt>
           <TextInput
             placeholder="새 비밀번호를 입력해주세요."
             secureTextEntry
             value={changedPassword}
-            onChangeText={setChangedPassword}
+            onChangeText={onChangeChangedPassword}
           />
         </FirstSection>
         <SecondSection>
-          <Txt>변경하실 비밀번호를 재입력해주세요.</Txt>
+          <MainTxt>변경하실 비밀번호를 재입력해주세요.</MainTxt>
           <InputSection>
             <TextInput
               placeholder="새 비밀번호 재입력해주세요."
               secureTextEntry
               value={confirmPassword}
-              onChangeText={setConfirmPassword}
+              onChangeText={onChangeConfirmPassword}
             />
             {changedPassword !== '' && confirmPassword !== '' && (
               <CheckAlert>
@@ -65,61 +119,54 @@ function ChangePasswordScreen(props) {
           </InputSection>
         </SecondSection>
         <ThirdSection>
-          <Text>※ 비밀번호를 변경하기 위해서는 현재 비밀번호를 입력해야 합니다.</Text>
-          <Txt>현재 비밀번호를 입력해주세요.</Txt>
+          <StyleText>※ 비밀번호를 변경하기 위해서는 현재 비밀번호를 입력해야 합니다.</StyleText>
+          <MainTxt>현재 비밀번호를 입력해주세요.</MainTxt>
           <TextInput
             placeholder="현재 비밀번호를 입력해주세요."
             secureTextEntry
             value={currentPassword}
-            onChangeText={setCurrentPassword}
+            onChangeText={onChangeCurrentPassword}
           />
         </ThirdSection>
-        <ChangeBtn
-          fontColor={ValidPassword() && inputPassword === currentPassword ? 'white' : COLORS.main}
-          backColor={ValidPassword() && inputPassword === currentPassword ? COLORS.main : 'white'}
-          width={wp(90.4)}
-          marginBottom={hp(6.15)}
-          marginTop={hp(8)}
-          justifyContent="center"
-          onPress={onPressChangeBtn}
-        >
-          <BtnText>변경하기</BtnText>
-        </ChangeBtn>
+        <BottomContainer>
+          <ChangeBtn
+            fontColor={changedPassword && confirmPassword && currentPassword ? COLORS.white : COLORS.main}
+            backColor={changedPassword && confirmPassword && currentPassword ? COLORS.main : COLORS.white}
+            width={wp(100)}
+            justifyContent="center"
+            onPress={onPressChangeBtn}
+          />
+        </BottomContainer>
       </Container>
-    </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
   background-color: white;
 `;
 
 const FirstSection = styled.View`
-  position: absolute;
-  top: ${hp(13)}px;
-
+  margin-top: ${hp(10)}px;
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
+
 `;
 
 const SecondSection = styled.View`
-  position: absolute;
-  top: ${hp(33)}px;
-
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
+  margin-top: ${hp(5)}px;
 `;
 
 const ThirdSection = styled.View`
-  position: absolute;
-  top: ${hp(48)}px;
-
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
+  margin-top: ${hp(5)}px;
 `;
 
-const Txt = styled.Text`
+const MainTxt = styled.Text`
   font-size: ${RFValue(16)}px;
   font-weight: bold;
 `;
@@ -130,7 +177,7 @@ const SubTxt = styled.Text`
   color: ${COLORS.lightgray};
 `;
 
-const Text = styled.Text`
+const StyleText = styled.Text`
   font-size: ${RFValue(11)}px;
   font-weight: 600;
   margin-bottom: ${hp(1)}px;
@@ -153,31 +200,15 @@ const TextInput = styled.TextInput`
 
 const CheckAlert = styled.View`
   margin-top: ${hp(1)}px;
-  position: absolute;
   top: ${hp(1)}px;
-  right: ${wp(3)}px;
+  right: ${wp(10)}px;
 `;
 
-const ChangeBtn = styled.TouchableOpacity`
-  width: ${wp(90.4)}px;
-  height: ${hp(5)}px;
-  border: 2px;
-  border-radius: ${wp(3)}px;
-  border-color: ${COLORS.main};
-  border-style: solid;
-
-  padding: ${hp(1)}px;
-  margin: ${hp(2)}px ${wp(4.8)}px;
-
-  position: absolute;
-  bottom: ${hp(3)}px;
-`;
-
-const BtnText = styled.Text`
-  color: ${COLORS.main};
-  font-size: ${RFValue(16)}px;
-  font-weight: bold;
-  text-align: center;
+const BottomContainer = styled.View`
+  width: 100%;
+  bottom: 0;
+  margin-top: ${hp(5)}px;
+  position: relative;
 `;
 
 export default ChangePasswordScreen;

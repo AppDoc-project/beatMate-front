@@ -178,7 +178,7 @@ const postImages = async (data) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
 
-    const response = await client.post('/auth/setting/image/192.168.45.106', data, {
+    const response = await client.post('/auth/setting/image/192.168.0.37', data, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: token, // 바로 토큰 값 넣기

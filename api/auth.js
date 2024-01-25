@@ -31,7 +31,7 @@ const checkSingleEmail = (data) => client.post(`/auth/join/duplication`, data, {
 
 // 이미지 첨부
 const postImages = (data) =>
-  client.post('/auth/images/192.168.45.106', data, {
+  client.post('/auth/images/192.168.0.37', data, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

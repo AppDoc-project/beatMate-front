@@ -4,8 +4,12 @@ import styled from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useNavigation } from '@react-navigation/native';
 
 function ChangePhoneNumberScreen(props) {
+  const navigation = useNavigation();
+
   const [currentPassword, setCurrentPassword] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   const [contact, setContact] = useState('');
@@ -28,6 +32,7 @@ function ChangePhoneNumberScreen(props) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container>
+        <AntDesign name="left" size={32} marginLeft={5} top={40} onPress={() => navigation.goBack()} />
         <FirstSection>
           <Txt>변경하실 연락처를 입력해주세요.</Txt>
           <TextInput placeholder="" keyboardType="numeric" value={contact} onChangeText={setContact} />
