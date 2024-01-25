@@ -30,11 +30,10 @@ function ChangePhoneNumberScreen(props) {
   const [isError, setIsError] = useState(false);
 
   const onPressChangeBtn = () => {
-    // 비밀번호 경고창
     if (contact.length !== 11) {
       Alert.alert('알림', '연락처는 11자여야 합니다.');
     } else {
-      //자기소개 변경 api
+      //연락처 변경 api
       setIsLoading(true);
       const data = {
         currentPassword: currentPassword,

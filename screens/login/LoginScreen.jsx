@@ -35,16 +35,23 @@ function LoginScreen(props) {
         const { id, email, name, tutor } = userData;
         setLoginUser({ id: id, email: email, name: name, isTutor: tutor });
 
+        setEmail('');
+        setPassword('');
+
         navigation.navigate('home-tab');
       })
       .catch((error) => console.log(format(error)));
   };
 
   const onPressSignUpBtn = () => {
+    setEmail('');
+    setPassword('');
     navigation.navigate('selectTypeScreen');
   };
 
   const onPressFindPasswordBtn = () => {
+    setEmail('');
+    setPassword('');
     navigation.navigate('getAuthEmail');
   };
 

@@ -201,7 +201,7 @@ const quitUser = async (data) => {
     const token = await AsyncStorage.getItem('access_token');
     console.log(token);
 
-    const response = await client.patch('/auth/setting/removal', data, {
+    const response = await client.post('/auth/setting/removal', data, {
       headers: {
         Authorization: token,
       },

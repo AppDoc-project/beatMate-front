@@ -34,7 +34,6 @@ function ChangePasswordScreen(props) {
   const [isError, setIsError] = useState(false);
 
   const onPressChangeBtn = () => {
-    // 비밀번호 경고창
     if (
       !changedPassword ||
       !confirmPassword ||
@@ -48,7 +47,7 @@ function ChangePasswordScreen(props) {
         '비밀번호는 최소 8자, 최대 18자, 1개 이상의 알파벳, 숫자, 특수문자를 반드시 포함해야 합니다.',
       );
     } else {
-      //자기소개 변경 api
+      //비밀번호 변경 api
       setIsLoading(true);
       const data = {
         currentPassword: currentPassword,
