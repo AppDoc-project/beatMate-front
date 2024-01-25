@@ -72,7 +72,9 @@ function MyPageScreenNavigator(props) {
       <Stack.Screen
         name={'ChangePhoneNumberScreen'}
         component={ChangePhoneNumberScreen}
-        options={{ title: '연락처 변경' }}
+        options={{
+          headerShown: false,
+        }}
       />
 
       <Stack.Screen

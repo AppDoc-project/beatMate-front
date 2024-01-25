@@ -93,7 +93,7 @@ function ChangePasswordScreen(props) {
         <FirstSection>
           <MainTxt>변경하실 비밀번호를 입력해주세요.</MainTxt>
           <SubTxt>최소 8자, 최대 18자 가능 / 영어 대소문자, 숫자, 특수문자 중 하나 이상 반드시 포함</SubTxt>
-          <TextInput
+          <StyledTextInput
             placeholder="새 비밀번호를 입력해주세요."
             secureTextEntry
             value={changedPassword}
@@ -103,7 +103,7 @@ function ChangePasswordScreen(props) {
         <SecondSection>
           <MainTxt>변경하실 비밀번호를 재입력해주세요.</MainTxt>
           <InputSection>
-            <TextInput
+            <StyledTextInput
               placeholder="새 비밀번호 재입력해주세요."
               secureTextEntry
               value={confirmPassword}
@@ -121,7 +121,7 @@ function ChangePasswordScreen(props) {
         <ThirdSection>
           <StyleText>※ 비밀번호를 변경하기 위해서는 현재 비밀번호를 입력해야 합니다.</StyleText>
           <MainTxt>현재 비밀번호를 입력해주세요.</MainTxt>
-          <TextInput
+          <StyledTextInput
             placeholder="현재 비밀번호를 입력해주세요."
             secureTextEntry
             value={currentPassword}
@@ -188,7 +188,7 @@ const InputSection = styled.View`
   flex-direction: row;
 `;
 
-const TextInput = styled.TextInput`
+const StyledTextInput = styled.TextInput`
   height: ${hp(5)}px;
   width: ${wp(90)}px;
   border-width: 1px;
