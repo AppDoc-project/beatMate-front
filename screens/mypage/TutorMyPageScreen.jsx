@@ -90,7 +90,7 @@ function TutorMyPageScreen(props) {
               source={{
                 uri: UserInfo.profile,
               }}
-              style={{ width: 100, height: 100, borderRadius: 50 }} // 크기 조절 예시
+              style={{ width: 100, height: 100, borderRadius: 50 }}
             />
           )}
           {UserInfo && !UserInfo.profile && <FontAwesome name={'user-circle'} size={RFValue(90)} color={'lightgray'} />}

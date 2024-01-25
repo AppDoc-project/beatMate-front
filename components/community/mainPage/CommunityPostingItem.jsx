@@ -4,6 +4,7 @@ import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 CommunityPostingItem.propTypes = {
   post: PropTypes.shape({
@@ -26,19 +27,42 @@ CommunityPostingItem.propTypes = {
 };
 
 function CommunityPostingItem({ post }) {
+  const formattedDate = post.createdAt.substring(0, 10).replace(/:/g, '.');
+
   return (
     <Container>
       <SubContainer>
         <Info>
-          <Profile source={post.profile ? { uri: post.profile } : require('@assets/chat/nullProfile.jpg')} />
+          <FirstRow>
+            <PostText>
+              <Title numberOfLines={1}>{post.title}</Title>
+              <Content numberOfLines={1}>{post.text}</Content>
+            </PostText>
+            <DateWrapper>
+              <Date>{formattedDate}</Date>
+            </DateWrapper>
+          </FirstRow>
           <Wrapper>
-            <Name numberOfLines={1}>{post.nickName}</Name>
+            <UserInfoWrapper>
+              <Profile source={post.profile ? { uri: post.profile } : require('@assets/chat/nullProfile.jpg')} />
+              <Name numberOfLines={1}>{post.nickName}</Name>
+            </UserInfoWrapper>
+            <IconWrapper>
+              <SingleIconWrapper>
+                <MaterialCommunityIcons name={'comment'} color={COLORS.lightgray01} size={RFValue(17)} />
+                <IconText>{post.threadCount}</IconText>
+              </SingleIconWrapper>
+              <SingleIconWrapper>
+                <MaterialCommunityIcons name={'cards-heart'} color={COLORS.lightgray01} size={RFValue(17)} />
+                <IconText>{post.likeCount}</IconText>
+              </SingleIconWrapper>
+              <SingleIconWrapper>
+                <MaterialCommunityIcons name={'bookmark'} color={COLORS.lightgray01} size={RFValue(17)} />
+                <IconText>{post.bookmarkCount}</IconText>
+              </SingleIconWrapper>
+            </IconWrapper>
           </Wrapper>
-          <SubWrapper>
-            <Date>{post.createdAt}</Date>
-          </SubWrapper>
         </Info>
-        <Content>{post.text}</Content>
       </SubContainer>
     </Container>
   );
@@ -50,49 +74,88 @@ const Container = styled.View`
   padding-left: ${wp(6)}px;
   padding-right: ${wp(6)}px;
   padding-top: ${hp(2)}px;
+  padding-bottom: ${hp(2)}px;
   border-bottom-color: ${COLORS.gray01};
   border-bottom-width: 1px;
-`;
-
-const Info = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
   width: 100%;
 `;
 
+const FirstRow = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+const PostText = styled.View`
+  flex: 1;
+`;
+
+const Title = styled.Text`
+  font-size: ${RFValue(15)}px;
+  font-weight: bold;
+`;
+
+const Info = styled.View`
+  flex-direction: column;
+  width: 100%;
+  justify-content: space-between;
+`;
+
 const Profile = styled.Image`
-  height: 55px;
-  width: 55px;
+  height: ${RFValue(23)}px;
+  width: ${RFValue(23)}px;
+  border-radius: 50%;
+  margin-right: ${RFValue(5)}px;
 `;
 
 const Wrapper = styled.View`
-  margin-left: ${wp(1)}px;
-  width: ${wp(50)}px;
-  height: 100%;
+  width: ${wp(100)}px;
+  flex-direction: row;
+  align-items: center;
 `;
 
-const SubWrapper = styled.View`
-  height: 100%;
-  width: ${wp(20)}px;
-`;
+const DateWrapper = styled.View``;
 
 const Name = styled.Text`
-  font-size: ${RFValue(14)}px;
-  font-weight: 700;
+  font-size: ${RFValue(11)}px;
+  font-weight: 500;
   width: ${wp(20)}px;
-  margin-bottom: ${hp(0.5)}px;
+  color: ${COLORS.gray};
+`;
+
+const UserInfoWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const IconWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-left: ${RFValue(115)}px;
 `;
 
 const Date = styled.Text`
   font-size: ${RFValue(10)}px;
   text-align: right;
+  color: ${COLORS.gray};
 `;
 
 const Content = styled.Text`
-  font-size: ${RFValue(13)}px;
+  font-size: ${RFValue(12)}px;
   padding: 13px 0px;
   line-height: 25px;
+`;
+
+const SingleIconWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-left: ${RFValue(5)}px;
+`;
+
+const IconText = styled.Text`
+  margin-left: ${RFValue(2)}px;
+  color: ${COLORS.gray};
+  font-size: ${RFValue(10)}px;
 `;
 
 export default CommunityPostingItem;
