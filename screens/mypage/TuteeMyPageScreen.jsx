@@ -7,7 +7,7 @@ import { getMyPageSection } from 'api/mypage';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -60,18 +60,21 @@ function TuteeMyPageScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
-      setIsLoading(true);
-      getMyPageSection()
-        .then((res) => {
+      const fetchData = async () => {
+        setIsLoading(true);
+        try {
+          const res = await getMyPageSection();
           console.log(format(res.data));
           setUserInfo(res.data.object);
-          setIsLoading(false);
-        })
-        .catch((err) => {
+        } catch (err) {
           console.log(err);
           setIsError(true);
+        } finally {
           setIsLoading(false);
-        });
+        }
+      };
+
+      fetchData();
     }, []),
   );
 
@@ -97,7 +100,17 @@ function TuteeMyPageScreen() {
         <Settingbtn onPress={TuteeMyPageSet}>
           <SettingIcon name={'settings-outline'} size={RFValue(25)} color={'white'} />
         </Settingbtn>
-        <Profileimage name={'user-circle'} size={RFValue(90)} color={'lightgray'} />
+        <ProfileImg>
+          {UserInfo && UserInfo.profile && (
+            <Image
+              source={{
+                uri: UserInfo.profile,
+              }}
+            />
+          )}
+          {UserInfo && !UserInfo.profile && <FontAwesome name={'user-circle'} size={RFValue(90)} color={'lightgray'} />}
+        </ProfileImg>
+
         <Userbox>
           <Usertypebox>
             <Usertype>수강생</Usertype>
@@ -171,7 +184,7 @@ const SettingIcon = styled(Ionicons)`
   right: 0;
 `;
 
-const Profileimage = styled(FontAwesome)`
+const ProfileImg = styled.View`
   position: absolute;
   top: 125px;
   left: 35px;

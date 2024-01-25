@@ -1,6 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { getUserCommentPost } from 'api/mypage';
-import format from 'pretty-format';
+// import format from 'pretty-format';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { styled } from 'styled-components/native';
@@ -18,7 +18,7 @@ function MyCommentList() {
       setIsLoading(true);
       getUserCommentPost()
         .then((res) => {
-          console.log(format(res.data));
+          // console.log(format(res.data));
           setmyCommentData(res.data);
           setIsLoading(false);
         })

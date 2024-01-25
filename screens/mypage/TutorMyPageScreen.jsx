@@ -6,7 +6,7 @@ import { getMyPageSection } from 'api/mypage';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -84,8 +84,16 @@ function TutorMyPageScreen(props) {
         <Settingbtn onPress={TutorMyPageSet}>
           <SettingIcon name={'settings-outline'} size={RFValue(25)} color={'white'} />
         </Settingbtn>
-        <Profileimage name={'user-circle'} size={RFValue(90)} color={'lightgray'} />
-        <Userbox>
+        <ProfileImg>
+          {UserInfo && UserInfo.profile && (
+            <Image
+              source={{
+                uri: UserInfo.profile,
+              }}
+            />
+          )}
+          {UserInfo && !UserInfo.profile && <FontAwesome name={'user-circle'} size={RFValue(90)} color={'lightgray'} />}
+        </ProfileImg>        <Userbox>
           <Usertypebox>
             <Usertype>강사</Usertype>
           </Usertypebox>
@@ -146,7 +154,7 @@ const SettingIcon = styled(Ionicons)`
   right: 0;
 `;
 
-const Profileimage = styled(FontAwesome)`
+const ProfileImg = styled.View`
   position: absolute;
   top: 125px;
   left: 35px;
