@@ -1,9 +1,10 @@
-import { RegisterBtn } from '@assets/Icons/Buttons';
+import { ChangeBtn, RegisterBtn } from '@assets/Icons/Buttons';
 import SelectCategory from '@components/community/newPost/SelectCategory';
 import UploadImages from '@components/community/newPost/UploadImages';
 import { useNavigation } from '@react-navigation/native';
-import { postNewPost } from 'api/commity';
+import { modifyPost, postNewPost } from 'api/commity';
 import format from 'pretty-format';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -12,13 +13,25 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
-function WriteNewPostScreen() {
+WriteNewPostScreen.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      postInfo: PropTypes.object,
+    }),
+  }).isRequired,
+};
+
+function WriteNewPostScreen({ route }) {
+  const { postInfo } = route.params;
+
   const navigation = useNavigation();
 
-  const [title, setTitle] = useState(''); //제목
-  const [content, setContent] = useState(''); //본문
+  console.log(postInfo);
+
+  const [title, setTitle] = useState(postInfo ? postInfo.title : ''); //제목
+  const [content, setContent] = useState(postInfo ? postInfo.text : ''); //본문
   const [communityId, setCommunityId] = useState(0); //communityId
-  const [addresses, setAddresses] = useState([]); //사진들
+  const [addresses, setAddresses] = useState(postInfo ? postInfo.pictures : []); //사진들
 
   const onChangeTitle = (text) => setTitle(text);
   const onChangeContent = (text) => setContent(text);
@@ -36,6 +49,28 @@ function WriteNewPostScreen() {
     console.log(data);
 
     postNewPost(data)
+      .then((res) => {
+        const { data } = res;
+        console.log(format(data));
+        navigation.goBack();
+      })
+      .catch((error) => console.log(format(error)));
+  };
+
+  // 게시글 수정하기
+  const onPressModifyBtn = () => {
+    console.log(title);
+
+    const data = {
+      title: title,
+      text: content,
+      postId: postInfo.id,
+      addresses: addresses,
+    };
+
+    console.log(data);
+
+    modifyPost(data)
       .then((res) => {
         const { data } = res;
         console.log(format(data));
@@ -81,13 +116,23 @@ function WriteNewPostScreen() {
         <PictureMainTxt>사진 (선택)</PictureMainTxt>
         <PictureContent>최소 1장 이상, 최대 5장까지 첨부가 가능합니다.</PictureContent>
         <StyledUploadImages addresses={addresses} setAddresses={setAddresses} />
-        <RegisterBtn
-          fontColor={title && content && communityId ? 'white' : 'navy'}
-          backColor={title && content && communityId ? 'navy' : 'white'}
-          width={wp(100)}
-          justifyContent="center"
-          onPress={onPressRegisterBtn}
-        />
+        {postInfo ? (
+          <ChangeBtn
+            fontColor={title && content && communityId ? 'white' : 'navy'}
+            backColor={title && content && communityId ? 'navy' : 'white'}
+            width={wp(100)}
+            justifyContent="center"
+            onPress={onPressModifyBtn}
+          />
+        ) : (
+          <RegisterBtn
+            fontColor={title && content && communityId ? 'white' : 'navy'}
+            backColor={title && content && communityId ? 'navy' : 'white'}
+            width={wp(100)}
+            justifyContent="center"
+            onPress={onPressRegisterBtn}
+          />
+        )}
       </Container>
     </SafeAreaView>
   );

@@ -2,12 +2,12 @@ import { WriteBtn } from '@assets/Icons/Buttons';
 import EnterIcon from '@assets/chat/EnterIcon';
 import CommentList from '@components/community/onePage/CommentList';
 import MainPostitem from '@components/community/onePage/MainPostItem';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getOnePost, writeComment } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Image, SafeAreaView, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -57,20 +57,22 @@ function CommunityOnePostScreen({ route }) {
   const [isPostLoading, setPostIsLoading] = useState(false);
   const [isPostError, setPostIsError] = useState(false);
 
-  useEffect(() => {
-    setPostIsLoading(true);
-    getOnePost(postId)
-      .then((res) => {
-        console.log('단일 게시물 불러오기', format(res.data.object));
-        setPostInfo(res.data.object);
-        setPostIsLoading(false);
-      })
-      .catch((err) => {
-        console.log('단일 게시물 불러오기', err);
-        setPostIsError(true);
-        setPostIsLoading(false);
-      });
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      setPostIsLoading(true);
+      getOnePost(postId)
+        .then((res) => {
+          console.log('단일 게시물 불러오기', format(res.data.object));
+          setPostInfo(res.data.object);
+          setPostIsLoading(false);
+        })
+        .catch((err) => {
+          console.log('단일 게시물 불러오기', err);
+          setPostIsError(true);
+          setPostIsLoading(false);
+        });
+    }, []),
+  );
 
   if (isLoading || isPostLoading) {
     return (

@@ -120,7 +120,7 @@ function MainPostitem({ postInfo }) {
                       <Box2
                         onPress={() => {
                           setBanModal(false);
-                          navigation.navigate('writeNewPostScreen');
+                          navigation.navigate('writeNewPostScreen', { postInfo });
                         }}
                       >
                         <BoxLabel color={COLORS.red}>게시글 수정하기</BoxLabel>

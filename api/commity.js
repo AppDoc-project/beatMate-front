@@ -226,6 +226,24 @@ const deleteComment = async (threadId) => {
   }
 };
 
+// 게시글 수정하기
+const modifyPost = async (data) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+
+    const response = await client.patch('/community/post', data, {
+      headers: {
+        Authorization: token, // 바로 토큰 값 넣기
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export {
   getCommunitySection,
   postNewPost,
@@ -239,4 +257,5 @@ export {
   pressBookmark,
   deletePost,
   deleteComment,
+  modifyPost,
 };
