@@ -1,7 +1,9 @@
+import { deleteComment } from 'api/commity';
 import { COLORS } from 'colors';
+import { UserInfo } from 'context/UserInfoContext';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { Image } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Image, Modal, TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -19,10 +21,36 @@ CommentListItem.propTypes = {
     profile: PropTypes.string.isRequired, // 프로필 주소 (null이면 기본 프로필 이미지 사용)
     childThreads: PropTypes.array.isRequired,
   }).isRequired,
+  CommentData: PropTypes.object.isRequired,
+  setCommentData: PropTypes.func.isRequired,
 };
 
-function CommentListItem({ comment }) {
+function CommentListItem({ comment, CommentData, setCommentData }) {
+  const {
+    loginUserInfo: [loginUser],
+  } = useContext(UserInfo);
+
+  const userId = loginUser.id;
+
   const formattedDate = comment && comment.createdAt.substring(0, 10).replace(/:/g, '.');
+
+  // 댓글 삭제 팝업창 띄우기
+  const [commentModal, setCommentModal] = useState(false);
+
+  // 댓글 삭제 기능
+  const onPressDeleteComment = () => {
+    deleteComment(comment.id)
+      .then((res) => {
+        console.log('삭제 성공');
+        setCommentModal(false);
+        const updatedComments = CommentData.data.filter((c) => c.id !== comment.id);
+        setCommentData({ ...CommentData, data: updatedComments });
+      })
+      .catch((err) => {
+        console.log('삭제 실패', err.response.data);
+      });
+  };
+
   return (
     <Container>
       <FirstRow>
@@ -36,13 +64,29 @@ function CommentListItem({ comment }) {
                 style={{ width: 40, height: 40, borderRadius: 50 }}
               />
             )}
-            {comment && !comment.profile && <FontAwesome name={'user-circle'} size={RFValue(30)} color={'lightgray'} />}
+            {!comment.profile && <FontAwesome name={'user-circle'} size={RFValue(30)} color={'lightgray'} />}
           </ProfileImg>
           <Name>{comment.nickName}</Name>
         </UserInfoWrapper>
         <RightWrapper>
           <Date>{formattedDate}</Date>
-          <MaterialCommunityIcons name={'dots-vertical'} color={COLORS.lightgray01} size={RFValue(17)} />
+
+          {userId === comment.userId && (
+            <TouchableOpacity onPress={() => setCommentModal(true)}>
+              <MaterialCommunityIcons name={'dots-vertical'} color={COLORS.lightgray01} size={RFValue(17)} />
+            </TouchableOpacity>
+          )}
+
+          <Modal animationType="none" transparent={true} visible={commentModal}>
+            <BanModal>
+              <Box1 onPress={() => onPressDeleteComment()}>
+                <BoxLabel color={COLORS.black}>댓글 삭제하기</BoxLabel>
+              </Box1>
+              <Box3 onPress={() => setCommentModal(false)}>
+                <BoxLabel color={COLORS.black}>취소</BoxLabel>
+              </Box3>
+            </BanModal>
+          </Modal>
         </RightWrapper>
       </FirstRow>
       <SecondRow>
@@ -101,6 +145,36 @@ const SecondRow = styled.View`
 
 const CommentTxt = styled.Text`
   flex-shrink: 1;
+`;
+
+const BanModal = styled.View`
+  margin-left: ${wp(5)}px;
+  margin-right: ${wp(5)}px;
+  height: 180px;
+  margin-top: ${hp(75)}px;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+`;
+
+const Box1 = styled.TouchableOpacity`
+  background-color: ${COLORS.white};
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  align-items: center;
+  height: ${hp(6)}px;
+  justify-content: center;
+  margin-bottom: 1px;
+`;
+
+const Box3 = styled.TouchableOpacity`
+  background-color: ${COLORS.subBrown};
+  border-radius: 10px;
+  align-items: center;
+  height: ${hp(7)}px;
+  justify-content: center;
+`;
+
+const BoxLabel = styled.Text`
+  font-size: ${RFValue(18)}px;
 `;
 
 export default CommentListItem;

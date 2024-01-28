@@ -208,6 +208,24 @@ const deletePost = async (postId) => {
   }
 };
 
+// 댓글 삭제
+const deleteComment = async (threadId) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+
+    const response = await client.delete(`/community/thread?threadId=${threadId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export {
   getCommunitySection,
   postNewPost,
@@ -219,5 +237,6 @@ export {
   writeComment,
   pressLike,
   pressBookmark,
-  deletePost
+  deletePost,
+  deleteComment,
 };

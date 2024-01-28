@@ -57,7 +57,15 @@ function CommentList({ postId }) {
     <Container>
       <Comment>댓글</Comment>
       <MyPostingListScrollView>
-        {CommentData && CommentData.data.map((Comment) => <CommentListItem key={Comment.id} comment={Comment} />)}
+        {CommentData &&
+          CommentData.data.map((comment) => (
+            <CommentListItem
+              key={comment.id}
+              comment={comment}
+              CommentData={CommentData}
+              setCommentData={setCommentData}
+            />
+          ))}
       </MyPostingListScrollView>
     </Container>
   );

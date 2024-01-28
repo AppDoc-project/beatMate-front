@@ -1,5 +1,7 @@
-import { pressLike, pressBookmark } from 'api/commity';
+import { useNavigation } from '@react-navigation/native';
+import { pressLike, pressBookmark, deletePost } from 'api/commity';
 import { COLORS } from 'colors';
+import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
@@ -9,9 +11,6 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
-import { deletePost } from 'api/commity';
-import { useNavigation } from '@react-navigation/native';
-import { UserInfo } from 'context/UserInfoContext';
 
 MainPostitem.propTypes = {
   postInfo: PropTypes.shape({
@@ -118,7 +117,12 @@ function MainPostitem({ postInfo }) {
                       <Box1 onPress={() => reportPost()}>
                         <BoxLabel color={COLORS.black}>게시물 삭제하기</BoxLabel>
                       </Box1>
-                      <Box2 onPress={() => navigation.navigate('writeNewPostScreen')}>
+                      <Box2
+                        onPress={() => {
+                          setBanModal(false);
+                          navigation.navigate('writeNewPostScreen');
+                        }}
+                      >
                         <BoxLabel color={COLORS.red}>게시글 수정하기</BoxLabel>
                       </Box2>
                       <Box3 onPress={() => setBanModal(false)}>
@@ -390,7 +394,6 @@ const Box3 = styled.TouchableOpacity`
 
 const BoxLabel = styled.Text`
   font-size: ${RFValue(18)}px;
-  color: ${(props) => props.color};
 `;
 
 export default MainPostitem;
