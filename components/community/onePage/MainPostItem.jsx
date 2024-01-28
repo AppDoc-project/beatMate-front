@@ -2,7 +2,7 @@ import { pressLike, pressBookmark } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Image, Alert, TouchableOpacity, Modal } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -11,6 +11,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import styled from 'styled-components/native';
 import { deletePost } from 'api/commity';
 import { useNavigation } from '@react-navigation/native';
+import { UserInfo } from 'context/UserInfoContext';
 
 MainPostitem.propTypes = {
   postInfo: PropTypes.shape({
@@ -36,6 +37,12 @@ MainPostitem.propTypes = {
 function MainPostitem({ postInfo }) {
   const formattedDate = postInfo && postInfo.createdAt.substring(0, 10).replace(/:/g, '.');
   const navigation = useNavigation();
+
+  const {
+    loginUserInfo: [loginUser],
+  } = useContext(UserInfo);
+
+  const userId = loginUser.id;
 
   // 좋아요 기능
   const addLike = () => {
@@ -100,17 +107,19 @@ function MainPostitem({ postInfo }) {
                   <Date>
                     {formattedDate} | 조회수 {postInfo.view}
                   </Date>
-                  <TouchableOpacity onPress={() => setBanModal(true)}>
-                    <MaterialCommunityIcons name={'dots-vertical'} color={COLORS.lightgray01} size={RFValue(17)} />
-                  </TouchableOpacity>
+                  {userId === postInfo.userId && (
+                    <TouchableOpacity onPress={() => setBanModal(true)}>
+                      <MaterialCommunityIcons name={'dots-vertical'} color={COLORS.lightgray01} size={RFValue(17)} />
+                    </TouchableOpacity>
+                  )}
 
                   <Modal animationType="none" transparent={true} visible={banModal}>
                     <BanModal>
                       <Box1 onPress={() => reportPost()}>
                         <BoxLabel color={COLORS.black}>게시물 삭제하기</BoxLabel>
                       </Box1>
-                      <Box2 onPress={() => navigation.navigate('selectTypeScreen')}>
-                        <BoxLabel color={COLORS.red}>사용자 차단하기</BoxLabel>
+                      <Box2 onPress={() => navigation.navigate('writeNewPostScreen')}>
+                        <BoxLabel color={COLORS.red}>게시글 수정하기</BoxLabel>
                       </Box2>
                       <Box3 onPress={() => setBanModal(false)}>
                         <BoxLabel color={COLORS.black}>취소</BoxLabel>
@@ -372,7 +381,7 @@ const Box2 = styled.TouchableOpacity`
 `;
 
 const Box3 = styled.TouchableOpacity`
-  background-color: ${COLORS.white};
+  background-color: ${COLORS.subBrown};
   border-radius: 10px;
   align-items: center;
   height: ${hp(7)}px;
