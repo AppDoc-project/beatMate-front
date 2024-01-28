@@ -1,12 +1,15 @@
 import { WriteBtn } from '@assets/Icons/Buttons';
+import EnterIcon from '@assets/chat/EnterIcon';
+import CommentList from '@components/community/onePage/CommentList';
 import MainPostitem from '@components/community/onePage/MainPostItem';
 import { useNavigation } from '@react-navigation/native';
-import { getOnePost } from 'api/commity';
+import { getOnePost, writeComment } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, SafeAreaView, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -18,29 +21,53 @@ function CommunityOnePostScreen({ route }) {
 
   const { postId, communityName } = route.params;
   const [comment, setComment] = useState('');
-  const onChangeTitle = (text) => setComment(text);
+  const onChangeComment = (text) => setComment(text);
 
   // 단일 게시물 불러오기 api
-  const [postInfo, setPostInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
+  const onPressSendBtn = () => {
+    const data = {
+      postId: postId,
+      text: comment,
+    };
+
     setIsLoading(true);
+    writeComment(data)
+      .then((res) => {
+        setIsLoading(false);
+        setComment('');
+        console.log('댓글 작성', format(res.data));
+      })
+      .catch((err) => {
+        console.log('댓글 작성', err);
+        setIsError(true);
+        setIsLoading(false);
+      });
+  };
+
+  // 단일 게시물 불러오기 api
+  const [postInfo, setPostInfo] = useState(null);
+  const [isPostLoading, setPostIsLoading] = useState(false);
+  const [isPostError, setPostIsError] = useState(false);
+
+  useEffect(() => {
+    setPostIsLoading(true);
     getOnePost(postId)
       .then((res) => {
         console.log('단일 게시물 불러오기', format(res.data.object));
         setPostInfo(res.data.object);
-        setIsLoading(false);
+        setPostIsLoading(false);
       })
       .catch((err) => {
         console.log('단일 게시물 불러오기', err);
-        setIsError(true);
-        setIsLoading(false);
+        setPostIsError(true);
+        setPostIsLoading(false);
       });
   }, []);
 
-  if (isLoading) {
+  if (isLoading || isPostLoading) {
     return (
       <View>
         <Text>로딩중...</Text>
@@ -48,7 +75,7 @@ function CommunityOnePostScreen({ route }) {
     );
   }
 
-  if (isError) {
+  if (isError || isPostError) {
     return (
       <View>
         <Text>에러 발생</Text>
@@ -66,49 +93,54 @@ function CommunityOnePostScreen({ route }) {
   };
 
   return (
-    <Container>
-      <Top>
-        <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => navigation.goBack()} />
-        <MainTxt>{communityName}</MainTxt>
-      </Top>
-      <MainWrapper>{postInfo && <MainPostitem postInfo={postInfo} />}</MainWrapper>
-      <Btn onPress={() => navigation.navigate('writeNewPostScreen')}>
-        <WriteBtn />
-      </Btn>
-      <WriteWrapper>
-        <ProfileImg>
-          {postInfo && postInfo.profile && (
-            <Image
-              source={{
-                uri: postInfo.profile,
-              }}
-              style={{ width: 40, height: 40, borderRadius: 50 }}
-            />
-          )}
-          {postInfo && !postInfo.profile && <FontAwesome name={'user-circle'} size={RFValue(90)} color={'lightgray'} />}
-        </ProfileImg>
-        <CommentInput
-          value={comment}
-          onChangeText={onChangeTitle}
-          placeholder="댓글을 입력해주세요"
-          placeholderTextColor={COLORS.lightgray01}
-        />
-      </WriteWrapper>
-    </Container>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
+        <WholeWrapper>
+          <Top>
+            <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => navigation.goBack()} />
+            <MainTxt>{communityName}</MainTxt>
+          </Top>
+          <MainWrapper>{postInfo && <MainPostitem postInfo={postInfo} />}</MainWrapper>
+        </WholeWrapper>
+        <CommentWrapper>{postInfo && <CommentList postId={postInfo.id} />}</CommentWrapper>
+        <Btn onPress={() => navigation.navigate('writeNewPostScreen')}>
+          <WriteBtn />
+        </Btn>
+        <WriteWrapper>
+          <ProfileImg>
+            {postInfo && postInfo.profile && (
+              <Image
+                source={{
+                  uri: postInfo.profile,
+                }}
+                style={{ width: 40, height: 40, borderRadius: 50 }}
+              />
+            )}
+            {postInfo && !postInfo.profile && (
+              <FontAwesome name={'user-circle'} size={RFValue(30)} color={'lightgray'} />
+            )}
+          </ProfileImg>
+          <Form>
+            <CommentInput value={comment} onChangeText={onChangeComment} placeholder={'댓글을 입력해주세요'} />
+            <EnterWrapper onPress={onPressSendBtn}>
+              <EnterIcon fillColor={comment ? COLORS.main : COLORS.lightgray01} />
+            </EnterWrapper>
+          </Form>
+        </WriteWrapper>
+      </Container>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
   background-color: ${COLORS.white};
-  align-items: center;
 `;
 
-const Top = styled.View`
-  top: ${hp(5)};
-  flex-direction: row;
-  justify-content: center;
+const WholeWrapper = styled.View`
   align-items: center;
+  flex: 1;
+  justify-content: space-between;
 `;
 
 const MainTxt = styled.Text`
@@ -117,10 +149,14 @@ const MainTxt = styled.Text`
   flex: 1;
 `;
 
+const Top = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
 const MainWrapper = styled.View`
-  flex: 1;
-  margin-top: ${hp(10)}px;
-  
+  margin-top: ${hp(3)}px;
 `;
 
 const Btn = styled.TouchableOpacity`
@@ -130,38 +166,48 @@ const Btn = styled.TouchableOpacity`
 `;
 
 const WriteWrapper = styled.View`
-  position: absolute;
-  bottom: 5px;
   width: ${wp(100)}px;
   padding: ${RFValue(10)}px;
-
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  bottom: 0;
+  align-items: center;
 `;
+
+const CommentWrapper = styled.View``;
 
 const ProfileImg = styled.View`
   height: 40px;
   width: 40px;
   border-radius: 50%;
-  margin-right: ${RFValue(5)}px;
+`;
+
+const Form = styled.View`
+  min-height: 10%;
+  padding: ${wp(4)}px;
+  margin-top: auto;
+
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: ${wp(-3)}px;
 `;
 
 const CommentInput = styled.TextInput`
-  background-color: transparent;
-  position: relative;
+  width: ${wp(75)}px;
 
-  width: ${wp(80)}px;
+  padding: ${RFValue(12)}px;
+  background-color: transparent;
 
   border-color: ${COLORS.lightgray01};
   border-width: 1px;
-  border-radius: ${RFValue(15)}px;
 
-  padding-left: ${RFValue(4)}px;
-  font-size: ${RFValue(13)}px;
-  font-weight: bold;
-  padding: ${RFValue(10)}px;
+  border-radius: ${RFValue(18)}px;
+  margin-right: ${wp(1)}px;
+`;
+
+const EnterWrapper = styled.TouchableOpacity`
+
 `;
 
 export default CommunityOnePostScreen;

@@ -78,6 +78,8 @@ function WriteNewPostScreen() {
             placeholderTextColor="lightgray"
           />
         </Component>
+        <PictureMainTxt>사진 (선택)</PictureMainTxt>
+        <PictureContent>최소 1장 이상, 최대 5장까지 첨부가 가능합니다.</PictureContent>
         <StyledUploadImages addresses={addresses} setAddresses={setAddresses} />
         <RegisterBtn
           fontColor={title && content && communityId ? 'white' : 'navy'}
@@ -107,6 +109,21 @@ const Component = styled.View`
   width: ${wp(100)}px;
   align-items: center;
   justify-content: center;
+`;
+
+const PictureMainTxt = styled.Text`
+  font-size: ${RFValue(15)}px;
+  font-weight: bold;
+  color: lightgray;
+  margin-left: ${wp(3)}px;
+  margin-bottom: ${hp(1)}px;
+`;
+
+const PictureContent = styled.Text`
+  font-size: ${RFValue(12)}px;
+  color: lightgray;
+  margin-left: ${wp(3)}px;
+  margin-bottom: ${hp(1)}px;
 `;
 
 const Header = styled.View`
@@ -144,7 +161,7 @@ const ContentInput = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(100)}px;
-  height: ${hp(25)}px;
+  height: ${hp(20)}px;
   border-bottom-color: lightgray;
   border-bottom-width: 1px;
 

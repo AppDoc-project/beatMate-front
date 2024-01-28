@@ -43,7 +43,7 @@ const postImages = async (data) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
 
-    const response = await client.post('/community/images/192.168.0.37', data, {
+    const response = await client.post('/community/images/211.253.26.21', data, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: token, // 바로 토큰 값 넣기
@@ -118,4 +118,87 @@ const getOnePost = async (postId) => {
   }
 };
 
-export { getCommunitySection, postNewPost, postImages, getFirstPost, getNextPost, getOnePost };
+// 특정 게시물 댓글 불러오기
+const getAllComments = async (postId) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+
+    const response = await client.get(`/community/thread/${postId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+// 댓글 작성하기
+const writeComment = async (data) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+
+    const response = await client.post(`/community/thread`, data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+// 게시글 좋아요 누르기
+const pressLike = async (data) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+
+    const response = await client.post(`/community/like`, data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+// 게시글 북마크 누르기
+const pressBookmark = async (data) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+
+    const response = await client.post(`/community/bookmark`, data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export {
+  getCommunitySection,
+  postNewPost,
+  postImages,
+  getFirstPost,
+  getNextPost,
+  getOnePost,
+  getAllComments,
+  writeComment,
+  pressLike,
+  pressBookmark,
+};

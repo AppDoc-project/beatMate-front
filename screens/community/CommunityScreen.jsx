@@ -4,7 +4,8 @@ import { getCommunitySection } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, SafeAreaView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import styled from 'styled-components/native';
@@ -60,29 +61,36 @@ function CommunityScreen() {
   }
 
   return (
-    <Container>
-      <MainTxt>커뮤니티</MainTxt>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
+        <Wrapper>
+          <MainTxt>커뮤니티</MainTxt>
 
-      {SectionData && SectionData.data && (
-        <Grid>
-          {SectionData.data.map((item) => (
-            <Item key={item.id} onPress={() => moveSpecificScreen(item.id, item.name)}>
-              <ItemName>{item.name}</ItemName>
-            </Item>
-          ))}
-        </Grid>
-      )}
+          {SectionData && SectionData.data && (
+            <Grid>
+              {SectionData.data.map((item) => (
+                <Item key={item.id} onPress={() => moveSpecificScreen(item.id, item.name)}>
+                  <ItemName>{item.name}</ItemName>
+                </Item>
+              ))}
+            </Grid>
+          )}
 
-      <Btn onPress={writeNewPost}>
-        <WriteBtn />
-      </Btn>
-    </Container>
+          <Btn onPress={writeNewPost}>
+            <WriteBtn />
+          </Btn>
+        </Wrapper>
+      </Container>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
-  background-color: ${COLORS.white};
+  background-color: white;
+`;
+
+const Wrapper = styled.View`
   align-items: center;
 `;
 

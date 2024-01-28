@@ -23,6 +23,7 @@ CommunityPostingItem.propTypes = {
     threadCount: PropTypes.number, //댓글 수
     title: PropTypes.string, //제목
     userId: PropTypes.number, //작성자 아이디
+    view: PropTypes.number, // 조회수
   }).isRequired,
 };
 
@@ -45,7 +46,8 @@ function CommunityPostingItem({ post }) {
               <Content numberOfLines={1}>{post.text}</Content>
             </PostText>
             <DateWrapper>
-              <Date>{formattedDate}</Date>
+              <Date>{formattedDate} | </Date>
+              <Viewer> 조회수 {post.view}</Viewer>
             </DateWrapper>
           </FirstRow>
           <Wrapper>
@@ -120,7 +122,9 @@ const Wrapper = styled.View`
   align-items: center;
 `;
 
-const DateWrapper = styled.View``;
+const DateWrapper = styled.View`
+  flex-direction: row;
+`;
 
 const Name = styled.Text`
   font-size: ${RFValue(11)}px;
@@ -143,7 +147,13 @@ const IconWrapper = styled.View`
 const Date = styled.Text`
   font-size: ${RFValue(10)}px;
   text-align: right;
-  color: ${COLORS.gray};
+  color: ${COLORS.lightgray};
+`;
+
+const Viewer = styled.Text`
+  font-size: ${RFValue(10)}px;
+  text-align: right;
+  color: ${COLORS.lightgray};
 `;
 
 const Content = styled.Text`
