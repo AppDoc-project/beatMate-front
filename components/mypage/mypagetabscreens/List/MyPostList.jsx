@@ -1,8 +1,8 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { getUserWritePost } from 'api/mypage';
-// import format from 'pretty-format';
 import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 
 import MyPostListItem from '../ListItem/MyPostListItem';
@@ -60,7 +60,9 @@ function MyPostList() {
   );
 }
 
-const Container = styled.View``;
+const Container = styled.View`
+  height: ${hp(55)}px;
+`;
 
 const MyPostingListScrollView = styled.ScrollView`
   flex-grow: 1;

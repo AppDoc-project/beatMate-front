@@ -3,7 +3,6 @@ import { COLORS } from 'colors';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
@@ -15,16 +14,22 @@ MyCommentListItem.propTypes = {
     createdAt: PropTypes.string.isRequired,
     threadCount: PropTypes.number.isRequired,
     likeCount: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
   }).isRequired,
 };
 
 function MyCommentListItem({ myCommentPost }) {
   const navigation = useNavigation();
 
+  const postId = myCommentPost.id;
+  const communityName = myCommentPost.communityName;
+
   //게시글 상세 페이지로 이동해야함.
   const onPressPostingItem = () => {
-    navigation.navigate('');
+    navigation.navigate('communityOnePostScreen', { postId, communityName });
   };
+
+  const formattedDate = myCommentPost && myCommentPost.createdAt.substring(0, 10).replace(/:/g, '.');
 
   return (
     <Mycomment onPress={onPressPostingItem}>
@@ -32,7 +37,7 @@ function MyCommentListItem({ myCommentPost }) {
       <Title>{myCommentPost.title}</Title>
       <Content>{myCommentPost.text}</Content>
       <Postinfo>
-        <Date>{myCommentPost.createdAt}</Date>
+        <Date>{formattedDate}</Date>
         <Commentbox>
           <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
           {myCommentPost.threadCount}
@@ -47,7 +52,7 @@ function MyCommentListItem({ myCommentPost }) {
 }
 
 const Mycomment = styled.TouchableOpacity`
-  height: ${hp(17)}px;
+  height: auto;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
   padding: ${RFValue(8)}px;

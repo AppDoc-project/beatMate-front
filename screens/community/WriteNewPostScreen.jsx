@@ -22,7 +22,7 @@ WriteNewPostScreen.propTypes = {
 };
 
 function WriteNewPostScreen({ route }) {
-  const { postInfo } = route.params;
+  const { postInfo } = route.params || {};
 
   const navigation = useNavigation();
 

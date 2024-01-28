@@ -3,7 +3,6 @@ import { COLORS } from 'colors';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
@@ -15,6 +14,7 @@ MyBookmarkListItem.propTypes = {
     createdAt: PropTypes.string.isRequired,
     threadCount: PropTypes.number.isRequired,
     likeCount: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
   }).isRequired,
 };
 
@@ -22,9 +22,16 @@ function MyBookmarkListItem({ myBookmark }) {
   const navigation = useNavigation();
 
   //게시글 상세 페이지로 이동해야함.
+  const postId = myBookmark.id;
+  const communityName = myBookmark.communityName;
+
+  //게시글 상세 페이지로 이동해야함.
   const onPressPostingItem = () => {
-    navigation.navigate('');
+    navigation.navigate('communityOnePostScreen', { postId, communityName });
   };
+
+
+  const formattedDate = myBookmark && myBookmark.createdAt.substring(0, 10).replace(/:/g, '.');
 
   return (
     <Mybookmark onPress={onPressPostingItem}>
@@ -32,7 +39,7 @@ function MyBookmarkListItem({ myBookmark }) {
       <Title>{myBookmark.title}</Title>
       <Content>{myBookmark.text}</Content>
       <Postinfo>
-        <Date>{myBookmark.createdAt}</Date>
+        <Date>{formattedDate}</Date>
         <Commentbox>
           <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
           {myBookmark.threadCount}
@@ -47,7 +54,7 @@ function MyBookmarkListItem({ myBookmark }) {
 }
 
 const Mybookmark = styled.TouchableOpacity`
-  height: ${hp(17)}px;
+  height: auto;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
   padding: ${RFValue(8)}px;

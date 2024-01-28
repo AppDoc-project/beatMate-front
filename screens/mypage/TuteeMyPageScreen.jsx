@@ -2,11 +2,11 @@ import MyBookmarkList from '@components/mypage/mypagetabscreens/List/MyBookmarkL
 import MyCommentList from '@components/mypage/mypagetabscreens/List/MyCommentList';
 import MyPostList from '@components/mypage/mypagetabscreens/List/MyPostList';
 import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { getMyPageSection } from 'api/mypage';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -16,6 +16,18 @@ import styled from 'styled-components/native';
 
 function TuteeMyPageScreen() {
   const navigation = useNavigation();
+
+  //화면에서 포커스가 사라질때
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    return () => {
+      selectMyPost(true);
+      selectMyComment(false);
+      selectMyBookmark(false);
+      selectMyTutor(false);
+    };
+  }, [isFocused]);
 
   const TuteeMyPageSet = () => {
     navigation.navigate('MyPageSetScreen');

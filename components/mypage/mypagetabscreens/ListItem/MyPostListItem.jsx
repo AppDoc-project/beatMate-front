@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
+import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
 
@@ -15,16 +15,24 @@ MyPostListItem.propTypes = {
     createdAt: PropTypes.string.isRequired,
     threadCount: PropTypes.number.isRequired,
     likeCount: PropTypes.number.isRequired,
+    id: PropTypes.number.isRequired,
   }).isRequired,
 };
 
 function MyPostListItem({ myPostData }) {
   const navigation = useNavigation();
 
+  console.log(format(myPostData));
+
+  const postId = myPostData.id;
+  const communityName = myPostData.communityName;
+
   //게시글 상세 페이지로 이동해야함.
   const onPressPostingItem = () => {
-    navigation.navigate('');
+    navigation.navigate('communityOnePostScreen', { postId, communityName });
   };
+
+  const formattedDate = myPostData && myPostData.createdAt.substring(0, 10).replace(/:/g, '.');
 
   return (
     <Mypost onPress={onPressPostingItem}>
@@ -32,7 +40,7 @@ function MyPostListItem({ myPostData }) {
       <Title>{myPostData.title}</Title>
       <Content>{myPostData.text}</Content>
       <Postinfo>
-        <Date>{myPostData.createdAt}</Date>
+        <Date>{formattedDate}</Date>
         <Commentbox>
           <Commenticon name={'comment'} size={RFValue(10)} color={'lightgray'} />
           {myPostData.threadCount}
@@ -47,7 +55,7 @@ function MyPostListItem({ myPostData }) {
 }
 
 const Mypost = styled.TouchableOpacity`
-  height: ${hp(17)}px;
+  height: auto;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
   padding: ${RFValue(8)}px;

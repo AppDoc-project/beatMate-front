@@ -1,8 +1,8 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { getUserCommentPost } from 'api/mypage';
-// import format from 'pretty-format';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 
 import MyCommentListItem from '../ListItem/MyCommentListItem';
@@ -58,7 +58,9 @@ function MyCommentList() {
   );
 }
 
-const Container = styled.View``;
+const Container = styled.View`
+  height: ${hp(55)}px;
+`;
 
 const MyPostingListScrollView = styled.ScrollView`
   flex-grow: 1;

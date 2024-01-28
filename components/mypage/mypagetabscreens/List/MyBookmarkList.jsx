@@ -3,6 +3,7 @@ import { getUserBookmarkPost } from 'api/mypage';
 // import format from 'pretty-format';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 
 import MyBookmarkListItem from '../ListItem/MyBookmarkListItem';
@@ -56,7 +57,9 @@ function MyBookmarkList() {
   );
 }
 
-const Container = styled.View``;
+const Container = styled.View`
+  height: ${hp(55)}px;
+`;
 
 const MyPostingListScrollView = styled.ScrollView`
   flex-grow: 1;
