@@ -2,13 +2,15 @@ import { pressLike, pressBookmark } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { Image, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { Image, Alert, TouchableOpacity, Modal } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
+import { deletePost } from 'api/commity';
+import { useNavigation } from '@react-navigation/native';
 
 MainPostitem.propTypes = {
   postInfo: PropTypes.shape({
@@ -33,9 +35,9 @@ MainPostitem.propTypes = {
 
 function MainPostitem({ postInfo }) {
   const formattedDate = postInfo && postInfo.createdAt.substring(0, 10).replace(/:/g, '.');
+  const navigation = useNavigation();
 
   // 좋아요 기능
-
   const addLike = () => {
     const data = {
       postId: postInfo.id,
@@ -70,6 +72,22 @@ function MainPostitem({ postInfo }) {
       });
   };
 
+  // 게시글 수정/삭제 팝업창 띄우기
+  const [banModal, setBanModal] = useState(false);
+
+  // 게시물 삭제 기능
+  const reportPost = () => {
+    deletePost(postInfo.id)
+      .then((res) => {
+        console.log('삭제 성공');
+        setBanModal(false);
+        navigation.goBack();
+      })
+      .catch((err) => {
+        console.log('삭제 실패', err.response.data);
+      });
+  };
+
   return (
     <Container>
       {postInfo && (
@@ -82,7 +100,23 @@ function MainPostitem({ postInfo }) {
                   <Date>
                     {formattedDate} | 조회수 {postInfo.view}
                   </Date>
-                  <MaterialCommunityIcons name={'dots-vertical'} color={COLORS.lightgray01} size={RFValue(17)} />
+                  <TouchableOpacity onPress={() => setBanModal(true)}>
+                    <MaterialCommunityIcons name={'dots-vertical'} color={COLORS.lightgray01} size={RFValue(17)} />
+                  </TouchableOpacity>
+
+                  <Modal animationType="none" transparent={true} visible={banModal}>
+                    <BanModal>
+                      <Box1 onPress={() => reportPost()}>
+                        <BoxLabel color={COLORS.black}>게시물 삭제하기</BoxLabel>
+                      </Box1>
+                      <Box2 onPress={() => navigation.navigate('selectTypeScreen')}>
+                        <BoxLabel color={COLORS.red}>사용자 차단하기</BoxLabel>
+                      </Box2>
+                      <Box3 onPress={() => setBanModal(false)}>
+                        <BoxLabel color={COLORS.black}>취소</BoxLabel>
+                      </Box3>
+                    </BanModal>
+                  </Modal>
                 </SecondWrapper>
               </FirstWrapper>
               <Content numberOfLines={1}>{postInfo.text}</Content>
@@ -307,6 +341,47 @@ const BookmarkBtn = styled.TouchableOpacity`
   border-radius: ${RFValue(10)}px;
   border-color: ${COLORS.subMiddleblue};
   border-width: 2px;
+`;
+
+const BanModal = styled.View`
+  margin-left: ${wp(5)}px;
+  margin-right: ${wp(5)}px;
+  height: 180px;
+  margin-top: ${hp(75)}px;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+`;
+
+const Box1 = styled.TouchableOpacity`
+  background-color: ${COLORS.white};
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  align-items: center;
+  height: ${hp(6)}px;
+  justify-content: center;
+  margin-bottom: 1px;
+`;
+
+const Box2 = styled.TouchableOpacity`
+  background-color: ${COLORS.white};
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  align-items: center;
+  height: ${hp(6)}px;
+  justify-content: center;
+  margin-bottom: 2px;
+`;
+
+const Box3 = styled.TouchableOpacity`
+  background-color: ${COLORS.white};
+  border-radius: 10px;
+  align-items: center;
+  height: ${hp(7)}px;
+  justify-content: center;
+`;
+
+const BoxLabel = styled.Text`
+  font-size: ${RFValue(18)}px;
+  color: ${(props) => props.color};
 `;
 
 export default MainPostitem;

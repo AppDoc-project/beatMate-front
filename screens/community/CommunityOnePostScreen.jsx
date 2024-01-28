@@ -19,6 +19,11 @@ import styled from 'styled-components/native';
 function CommunityOnePostScreen({ route }) {
   const navigation = useNavigation();
 
+  const onPressPreviousBtn = () => {
+    setComment('');
+    navigation.goBack();
+  };
+
   const { postId, communityName } = route.params;
   const [comment, setComment] = useState('');
   const onChangeComment = (text) => setComment(text);
@@ -97,7 +102,7 @@ function CommunityOnePostScreen({ route }) {
       <Container>
         <WholeWrapper>
           <Top>
-            <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => navigation.goBack()} />
+            <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => onPressPreviousBtn()} />
             <MainTxt>{communityName}</MainTxt>
           </Top>
           <MainWrapper>{postInfo && <MainPostitem postInfo={postInfo} />}</MainWrapper>
@@ -185,7 +190,6 @@ const ProfileImg = styled.View`
 const Form = styled.View`
   min-height: 10%;
   padding: ${wp(4)}px;
-  margin-top: auto;
 
   flex-direction: row;
   align-items: center;
@@ -206,8 +210,6 @@ const CommentInput = styled.TextInput`
   margin-right: ${wp(1)}px;
 `;
 
-const EnterWrapper = styled.TouchableOpacity`
-
-`;
+const EnterWrapper = styled.TouchableOpacity``;
 
 export default CommunityOnePostScreen;

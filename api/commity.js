@@ -190,6 +190,24 @@ const pressBookmark = async (data) => {
   }
 };
 
+// 게시글 삭제
+const deletePost = async (postId) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+
+    const response = await client.delete(`/community/post?postId=${postId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export {
   getCommunitySection,
   postNewPost,
@@ -201,4 +219,5 @@ export {
   writeComment,
   pressLike,
   pressBookmark,
+  deletePost
 };
