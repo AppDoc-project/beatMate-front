@@ -101,7 +101,7 @@ function MainPostitem({ postInfo }) {
           <FirstRow>
             <PostText>
               <FirstWrapper>
-                <Title numberOfLines={1}>{postInfo.title}</Title>
+                <Title>{postInfo.title}</Title>
                 <SecondWrapper>
                   <Date>
                     {formattedDate} | 조회수 {postInfo.view}
@@ -132,7 +132,7 @@ function MainPostitem({ postInfo }) {
                   </Modal>
                 </SecondWrapper>
               </FirstWrapper>
-              <Content numberOfLines={1}>{postInfo.text}</Content>
+              <Content>{postInfo.text}</Content>
             </PostText>
           </FirstRow>
 
@@ -250,6 +250,7 @@ const PostText = styled.View`
 const Title = styled.Text`
   font-size: ${RFValue(18)}px;
   font-weight: bold;
+  flex-shrink: 1;
 `;
 
 const Wrapper = styled.View`
@@ -266,6 +267,7 @@ const Name = styled.Text`
   font-weight: 500;
   width: ${wp(20)}px;
   color: ${COLORS.gray};
+  flex-shrink: 1;
 `;
 
 const UserInfoWrapper = styled.View`
@@ -290,6 +292,8 @@ const Content = styled.Text`
   font-size: ${RFValue(12)}px;
   padding: 13px 0px;
   line-height: 25px;
+  flex-shrink: 1;
+  margin-right: ${wp(8)}px;
 `;
 
 const SingleIconWrapper = styled.View`
