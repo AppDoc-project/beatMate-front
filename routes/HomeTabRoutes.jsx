@@ -1,12 +1,15 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { COLORS } from 'colors';
+import { Auth } from 'context/AuthContext';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
+import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Auth } from 'context/AuthContext';
+
 import CommunityScreenNavigator from './community/CommunityNavigators';
 import HomeScreenNavigator from './home/HomeScreenNavigator';
+import LessonScreenNavigator from './lesson/LessonScreenNavigator';
 import MyPageScreenNavigator from './mypage/MyPageScreenNavigators';
 import SearchTutorScreenNavigators from './searchtutor/SearchTutorScreenNavigators';
 
@@ -73,6 +76,22 @@ function HomeTabRoutes(props) {
                 <Ionicons name={'search-sharp'} size={RFValue(20)} color={COLORS.black} />
               ) : (
                 <Ionicons name={'search-sharp'} size={RFValue(20)} color={COLORS.lightgray} />
+              ),
+          }}
+        />
+        <Tab.Screen
+          name="lesson"
+          component={LessonScreenNavigator}
+          options={{
+            headerShown: false,
+            tabBarLabel: '레슨',
+            tabBarActiveTintColor: COLORS.black,
+            tabBarInactiveTintColor: COLORS.gray,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <Foundation name={'telephone'} size={RFValue(20)} color={COLORS.black} />
+              ) : (
+                <Foundation name={'telephone'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
         />
