@@ -67,11 +67,7 @@ function ChangeIntroScreen(props) {
 
       <Section>
         <Txt>변경된 자기소개를 입력해주세요.</Txt>
-        <ChangeInput
-          value={changedSelfDescription}
-          onChangeText={onChangeIntroduction}
-          placeholderTextColor={COLORS.gray01}
-        />
+        <TextInput placeholder={beforeSelfIntro} value={selfDescription} onChangeText={setSelfDescription} />
       </Section>
       <BottomContainer>
         <ChangeBtn

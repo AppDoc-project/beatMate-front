@@ -26,12 +26,12 @@ function MyPageScreenNavigator(props) {
     <Stack.Navigator
       initialRouteName="myPageScreen"
       screenOptions={{
-        headerTintColor: '#144182',
+        headerTintColor: 'black',
         headerTransparent: true,
         headerTitleStyle: {
           color: 'black',
         },
-        headerBackTitleVisible: false,
+        headerBackTitleVisible: false, 
       }}
     >
       {isTutor ? ( //isTutor가 True라면
