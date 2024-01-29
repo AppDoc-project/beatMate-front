@@ -1,72 +1,129 @@
+import { ChangeBtn } from '@assets/Icons/Buttons';
+import { useNavigation } from '@react-navigation/native';
+import { changeContact } from 'api/mypage';
 import { COLORS } from 'colors';
+import format from 'pretty-format';
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { Alert, SafeAreaView, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import styled from 'styled-components';
 
 function ChangePhoneNumberScreen(props) {
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [contact, setContact] = useState('');
+  const navigation = useNavigation();
 
-  const ValidContact = () => {
-    // 연락처 조건 검사
-    return contact.length === 11;
+  const [contact, setContact] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+
+  const onChangeContact = (text) => setContact(text);
+  const onChangeCurrentPassword = (text) => setCurrentPassword(text);
+
+  const onPressPreviousBtn = () => {
+    setContact('');
+    setCurrentPassword('');
+    navigation.goBack();
   };
 
-  const ChangePhoneNumberAlert = () => {
-    if (!ValidContact()) {
-      Alert.alert('경고', '올바른 연락처를 입력해주세요.');
-    } else if (currentPassword !== '현재비밀번호') {
-      Alert.alert('경고', '현재 비밀번호가 틀렸습니다.');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const onPressChangeBtn = () => {
+    if (contact.length !== 11) {
+      Alert.alert('알림', '연락처는 11자여야 합니다.');
+    } else {
+      //연락처 변경 api
+      setIsLoading(true);
+      const data = {
+        currentPassword: currentPassword,
+        contact: contact,
+      };
+
+      changeContact(data)
+        .then((res) => {
+          console.log('연락처 변경', format(res.data));
+          setIsLoading(false);
+          navigation.goBack();
+        })
+        .catch((err) => {
+          console.log('연락처 변경', err);
+          setIsError(true);
+          setIsLoading(false);
+        });
     }
   };
 
+  if (isLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
+
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
+        <AntDesign name="left" size={32} marginLeft={5} top={40} onPress={onPressPreviousBtn} />
         <FirstSection>
+          <StyledText>※ - 없이 총 11자로 작성해야 합니다.</StyledText>
           <Txt>변경하실 연락처를 입력해주세요.</Txt>
-          <TextInput placeholder="" keyboardType="numeric" value={contact} onChangeText={setContact} />
+          <StyledTextInput
+            placeholder="01012345678"
+            keyboardType="numeric"
+            value={contact}
+            onChangeText={onChangeContact}
+          />
         </FirstSection>
 
         <SecondSection>
-          <Text>※ 연락처를 변경하기 위해서는 현재 비밀번호를 입력해야 합니다.</Text>
+          <StyledText>※ 연락처를 변경하기 위해서는 현재 비밀번호를 입력해야 합니다.</StyledText>
           <Txt>현재 비밀번호를 입력해주세요.</Txt>
-          <TextInput
+          <StyledTextInput
             placeholder="현재 비밀번호를 입력해주세요."
             secureTextEntry
             value={currentPassword}
-            onChangeText={setCurrentPassword}
+            onChangeText={onChangeCurrentPassword}
           />
         </SecondSection>
-        <ChangeBtn onPress={ChangePhoneNumberAlert}>
-          <Btntext>변경하기</Btntext>
-        </ChangeBtn>
+        <BottomContainer>
+          <ChangeBtn
+            fontColor={contact && currentPassword ? COLORS.white : COLORS.main}
+            backColor={contact && currentPassword ? COLORS.main : COLORS.white}
+            width={wp(100)}
+            justifyContent="center"
+            onPress={onPressChangeBtn}
+          />
+        </BottomContainer>
       </Container>
-    </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
   background-color: white;
 `;
 
 const FirstSection = styled.View`
-  position: absolute;
-  top: ${hp(13)}px;
-
+  margin-top: ${hp(10)}px;
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
 `;
 
 const SecondSection = styled.View`
-  position: absolute;
-  top: ${hp(28)}px;
-
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
+  margin-top: ${hp(5)}px;
 `;
 
 const Txt = styled.Text`
@@ -74,14 +131,14 @@ const Txt = styled.Text`
   font-weight: bold;
 `;
 
-const Text = styled.Text`
+const StyledText = styled.Text`
   font-size: ${RFValue(11)}px;
   font-weight: 600;
   margin-bottom: ${hp(1)}px;
   color: ${COLORS.gray};
 `;
 
-const TextInput = styled.TextInput`
+const StyledTextInput = styled.TextInput`
   height: ${hp(5)}px;
   width: ${wp(90)}px;
   border-width: 1px;
@@ -91,22 +148,11 @@ const TextInput = styled.TextInput`
   padding: 0 ${wp(2)}px;
 `;
 
-const ChangeBtn = styled.TouchableOpacity`
-  background-color: ${COLORS.white};
-  padding: ${hp(1)}px;
-  margin: ${hp(2)}px ${wp(4.8)}px;
-  border-radius: ${wp(1)}px;
-  border-colors: ${COLORS.main};
-
-  position: absolute;
-  bottom: ${hp(5)}px;
-  right: ${wp(40)}px;
-`;
-
-const Btntext = styled.Text`
-  color: ${COLORS.main};
-  font-size: ${RFValue(16)}px;
-  font-weight: bold;
+const BottomContainer = styled.View`
+  width: 100%;
+  bottom: 0;
+  margin-top: ${hp(5)}px;
+  position: relative;
 `;
 
 export default ChangePhoneNumberScreen;

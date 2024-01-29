@@ -1,24 +1,36 @@
-import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
-import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
-import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
+import MyBookmarkList from '@components/mypage/mypagetabscreens/List/MyBookmarkList';
+import MyCommentList from '@components/mypage/mypagetabscreens/List/MyCommentList';
+import MyPostList from '@components/mypage/mypagetabscreens/List/MyPostList';
 import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { getMyPageSection } from 'api/mypage';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-function TuteeMyPageScreen(props) {
+function TuteeMyPageScreen() {
   const navigation = useNavigation();
 
+  //화면에서 포커스가 사라질때
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    return () => {
+      selectMyPost(true);
+      selectMyComment(false);
+      selectMyBookmark(false);
+      selectMyTutor(false);
+    };
+  }, [isFocused]);
+
   const TuteeMyPageSet = () => {
-    navigation.navigate('TuteeMyPageSetScreen');
+    navigation.navigate('MyPageSetScreen');
   };
 
   const [isMyPost, selectMyPost] = useState(true);
@@ -60,18 +72,21 @@ function TuteeMyPageScreen(props) {
 
   useFocusEffect(
     React.useCallback(() => {
-      setIsLoading(true);
-      getMyPageSection()
-        .then((res) => {
+      const fetchData = async () => {
+        setIsLoading(true);
+        try {
+          const res = await getMyPageSection();
           console.log(format(res.data));
           setUserInfo(res.data.object);
-          setIsLoading(false);
-        })
-        .catch((err) => {
+        } catch (err) {
           console.log(err);
           setIsError(true);
+        } finally {
           setIsLoading(false);
-        });
+        }
+      };
+
+      fetchData();
     }, []),
   );
 
@@ -97,7 +112,18 @@ function TuteeMyPageScreen(props) {
         <Settingbtn onPress={TuteeMyPageSet}>
           <SettingIcon name={'settings-outline'} size={RFValue(25)} color={'white'} />
         </Settingbtn>
-        <Profileimage name={'user-circle'} size={RFValue(90)} color={'lightgray'} />
+        <ProfileImg>
+          {UserInfo && UserInfo.profile && (
+            <Image
+              source={{
+                uri: UserInfo.profile,
+              }}
+              style={{ width: 100, height: 100, borderRadius: 50 }}
+            />
+          )}
+          {UserInfo && !UserInfo.profile && <FontAwesome name={'user-circle'} size={RFValue(90)} color={'lightgray'} />}
+        </ProfileImg>
+
         <Userbox>
           <Usertypebox>
             <Usertype>수강생</Usertype>
@@ -132,10 +158,14 @@ function TuteeMyPageScreen(props) {
       </SelectMenu>
 
       <ShowMainInfo>
-        {isMyPost && <MyPostScreen />}
-        {isMyComment && <MyCommentScreen />}
-        {isMyBookmark && <MyBookmarkScreen />}
-        {isMyTutor && <MyTutorScreen />}
+        {isMyPost && <MyPostList />}
+        {isMyComment && <MyCommentList />}
+        {isMyBookmark && <MyBookmarkList />}
+        {isMyTutor && (
+          <View>
+            <MyTutorScreen /> {/* 나중에 찜한 강사부분 api 끝나면 수정 필요 */}
+          </View>
+        )}
       </ShowMainInfo>
     </Container>
   );
@@ -147,19 +177,27 @@ const Container = styled.View`
 `;
 
 const Infosection = styled.View`
-  flex: 0.4;
   background-color: ${COLORS.main};
+  display: flex;
+  height: ${hp(30)}px;
+  width: 100%;
+  align-items: center;
+  position: relative;
 `;
 
-const Settingbtn = styled.TouchableOpacity``;
-
-const SettingIcon = styled(Ionicons)`
+const Settingbtn = styled.TouchableOpacity`
   position: absolute;
   top: 50px;
   right: 20px;
 `;
 
-const Profileimage = styled(FontAwesome)`
+const SettingIcon = styled(Ionicons)`
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
+
+const ProfileImg = styled.View`
   position: absolute;
   top: 125px;
   left: 35px;

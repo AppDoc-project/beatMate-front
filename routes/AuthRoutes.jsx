@@ -1,4 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import GetAuthCode from '@screens/login/ChangePassword/GetAuthCode';
+import GetAuthEmail from '@screens/login/ChangePassword/GetAuthEmail';
+import GetChangedPassword from '@screens/login/ChangePassword/GetChangedPassword';
 import LoginScreen from '@screens/login/LoginScreen';
 import GetAuthCodeScreen from '@screens/signup/GetAuthCodeScreen';
 import SelectTypeScreen from '@screens/signup/SelectTypeScreen';
@@ -76,6 +79,27 @@ function AuthRoutes() {
         <Stack.Screen
           name={'getAuthCodeScreen'}
           component={GetAuthCodeScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={'getAuthEmail'}
+          component={GetAuthEmail}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={'getAuthCode'}
+          component={GetAuthCode}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={'getChangedPassword'}
+          component={GetChangedPassword}
           options={{
             headerShown: false,
           }}

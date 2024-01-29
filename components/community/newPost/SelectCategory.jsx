@@ -1,10 +1,18 @@
 import { getCommunitySection } from 'api/commity';
+import { COLORS } from 'colors';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Text, View, TouchableOpacity, Modal, FlatList } from 'react-native';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { TouchableOpacity, Modal, FlatList } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components/native';
 
-function SelectCategory(setCommunityId) {
+SelectCategory.propTypes = {
+  setCommunityId: PropTypes.func.isRequired,
+};
+
+function SelectCategory({ setCommunityId }) {
   const [isToggled, setToggle] = useState(false);
   const [SectionData, setSectionData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,30 +41,30 @@ function SelectCategory(setCommunityId) {
   const handleOptionClick = (option) => {
     setSelectedObject(option);
     setToggle(false);
-    setCommunityId(selectedObject.id);
+    setCommunityId(option.id);
   };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleOptionClick(item)}>
       <ListItem>
-        <Text>{item.name}</Text>
+        <ListItemText>{item.name}</ListItemText>
       </ListItem>
     </TouchableOpacity>
   );
 
   if (isLoading) {
     return (
-      <View>
-        <Text>로딩중...</Text>
-      </View>
+      <LoadingContainer>
+        <LoadingText>로딩중...</LoadingText>
+      </LoadingContainer>
     );
   }
 
   if (isError) {
     return (
-      <View>
-        <Text>에러 발생</Text>
-      </View>
+      <ErrorContainer>
+        <ErrorText>에러 발생</ErrorText>
+      </ErrorContainer>
     );
   }
 
@@ -64,15 +72,19 @@ function SelectCategory(setCommunityId) {
     <Section>
       <Button onPress={handleToggle}>
         <SelectText>{selectedObject ? `${selectedObject.name}` : '카테고리 설정하기'}</SelectText>
+        <AntDesign name={'caretdown'} size={RFValue(13)} color={COLORS.black} />
       </Button>
 
-      <Modal transparent={true} visible={isToggled} onRequestClose={() => setToggle(false)}>
+      <StyledModal transparent={true} visible={isToggled} onRequestClose={() => setToggle(false)}>
         <ModalContent>
           {SectionData && SectionData.data && (
             <FlatList data={SectionData.data} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
           )}
+          <CloseButton onPress={handleToggle}>
+            <CloseButtonText>닫기</CloseButtonText>
+          </CloseButton>
         </ModalContent>
-      </Modal>
+      </StyledModal>
     </Section>
   );
 }
@@ -82,21 +94,71 @@ const Section = styled.View`
   align-items: center;
 `;
 
-const Button = styled.TouchableOpacity``;
+const Button = styled.TouchableOpacity`
+  flex-direction: row;
 
-const SelectText = styled.Text`
-  font-size: 15px;
+`;
+
+const StyledModal = styled(Modal)`
+  align-items: center;
+  justify-content: center;
 `;
 
 const ModalContent = styled.View`
-  background-color: rgba(0, 0, 0, 0.5);
-  width: ${wp(90)}px;
+  background-color: ${COLORS.white};
+  padding: 20px;
+  width: ${wp(100)}px;
+  height: ${hp(38)}px;
+  align-items: center;
+  border-radius: 10px;
+  border-color: ${COLORS.main};
+  justify-content: center;
+  align-items: center;
+  margin-top: ${hp(17)}px;
+  border-width: 2px;
+`;
+
+const SelectText = styled.Text`
+  font-size: 16px;
+  margin-bottom: -10px;
+  font-weight: bold;
+`;
+
+const ListItem = styled.View`
+  margin-top: 10px;
+`;
+
+const ListItemText = styled.Text`
+  font-size: 15px;
+`;
+
+const LoadingContainer = styled.View`
+  flex: 1;
+  justify-content: center;
   align-items: center;
 `;
 
-const ListItem = styled.Text`
-  margin-top: 10px;
-  font-size: 15px;
+const LoadingText = styled.Text`
+  font-size: 18px;
+`;
+
+const ErrorContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ErrorText = styled.Text`
+  font-size: 18px;
+`;
+
+const CloseButton = styled.TouchableOpacity`
+  margin-top: 20px;
+`;
+
+const CloseButtonText = styled.Text`
+  font-size: 16px;
+  color: #007bff;
 `;
 
 export default SelectCategory;

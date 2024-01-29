@@ -1,7 +1,10 @@
 import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import ImageUpload from '@components/signup/ImageUpload';
+import SelectSpecialityTab from '@components/signup/SelectSpecialityTab';
 import { useNavigation } from '@react-navigation/native';
+import { signupTutor } from 'api/auth';
 import { Auth } from 'context/AuthContext';
+import format from 'pretty-format';
 import React, { useContext } from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -9,7 +12,6 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
-import SelectSpecialityTab from '@components/signup/SelectSpecialityTab';
 
 function TutorGetInfoScreen2(props) {
   const {
@@ -31,7 +33,24 @@ function TutorGetInfoScreen2(props) {
     navigation.navigate('tutorGetInfoScreen1');
   };
 
-  const onPressContinueBtn = () => {};
+  const onPressContinueBtn = () => {
+    // authenticationAddress 배열을 string으로 변환하여 새로운 객체 생성
+    const newAuthenticationAddress = JSON.stringify(tutorSignUpRequest.authenticationAddress);
+    const newTutorSignUpRequest = {
+      ...tutorSignUpRequest, // 기존의 값 복사
+      authenticationAddress: newAuthenticationAddress, // string으로 변환된 배열 할당
+    };
+
+    console.log(newTutorSignUpRequest);
+
+    signupTutor(newTutorSignUpRequest)
+      .then((res) => {
+        const { data } = res;
+        console.log(format(data));
+        navigation.navigate('getAuthCodeScreen');
+      })
+      .catch((error) => console.log(format(error)));
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>

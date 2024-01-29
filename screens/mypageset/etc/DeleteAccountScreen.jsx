@@ -1,89 +1,122 @@
+import { DeleteBtn } from '@assets/Icons/Buttons';
+import { useNavigation } from '@react-navigation/native';
+import { quitUser } from 'api/mypage';
 import { COLORS } from 'colors';
+import format from 'pretty-format';
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { Alert, SafeAreaView, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import styled from 'styled-components';
 
 function DeleteAccountScreen(props) {
-  const [email, setEmail] = useState('');
+  const navigation = useNavigation();
+
   const [password, setPassword] = useState('');
+  const onChangePassword = (text) => setPassword(text);
 
-  ValidBooking = () => {
-    
+  // const DeleteAccountAlert = () => {
+  // 회원탈퇴 경고창
+  //   if (setBooking.length === 0) {
+  //     Alert.alert('경고', '현재 진행 중인 예약이 없어야 탈퇴할 수 있습니다.');
+  //   }
+  // };
+
+  const onPressPreviousBtn = () => {
+    setPassword('');
+    navigation.goBack();
   };
 
-  const DeleteAccountAlert = () => {
-    // 회원탈퇴 경고창
-    if (!ValidBooking()) {
-      Alert.alert('경고', '현재 진행 중인 예약이 없어야 탈퇴할 수 있습니다.');
-      return;
-    }
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const onPressChangeBtn = () => {
+    //회원탈퇴 api
+    setIsLoading(true);
+    const data = {
+      password: password,
+    };
+
+    quitUser(data)
+      .then((res) => {
+        console.log('회원 탈퇴', format(res.data));
+        setIsLoading(false);
+        navigation.navigate('loginScreen');
+      })
+      .catch((err) => {
+        console.log('회원 탈퇴', err);
+        Alert.alert('경고', '회원 탈퇴에 실패하였습니다.');
+        setIsError(true);
+        setIsLoading(false);
+      });
   };
+
+  if (isLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
-        <FirstSection>
-          <Txt>계정 이메일을 입력해주세요.</Txt>
-          <TextInput
-            placeholder="이메일을 입력해주세요."
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-        </FirstSection>
+        <AntDesign name="left" size={32} marginLeft={5} top={40} onPress={onPressPreviousBtn} />
 
         <SecondSection>
           <Txt>계정 비밀번호를 입력해주세요.</Txt>
-          <TextInput
+          <StyledTextInput
             placeholder="비밀번호를 입력해주세요."
             secureTextEntry
             value={password}
-            onChangeText={setPassword}
+            onChangeText={onChangePassword}
           />
         </SecondSection>
 
         <ThirdSection>
-          <Text>※ 회원 탈퇴 후 기존 이메일과 비밀번호로 로그인이 불가능합니다.</Text>
-          <Text>※ 현재 진행 중인 예약이 있는 경우 탈퇴가 불가능합니다. </Text>
+          <StyledText>※ 회원 탈퇴 후 기존 이메일과 비밀번호로 로그인이 불가능합니다.</StyledText>
+          <StyledText>※ 현재 진행 중인 예약이 있는 경우 탈퇴가 불가능합니다. </StyledText>
         </ThirdSection>
-        <DeleteBtn onPress={DeleteAccountAlert}>
-          <BtnText>회원탈퇴</BtnText>
-        </DeleteBtn>
+        <BottomContainer>
+          <DeleteBtn
+            fontColor={password ? COLORS.white : COLORS.main}
+            backColor={password ? COLORS.main : COLORS.white}
+            width={wp(100)}
+            justifyContent="center"
+            onPress={onPressChangeBtn}
+          />
+        </BottomContainer>
       </Container>
-    </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
   background-color: white;
 `;
 
-const FirstSection = styled.View`
-  position: absolute;
-  top: ${hp(13)}px;
-
-  margin-left: ${wp(4.8)}px;
-  margin-right: ${wp(4.8)}px;
-`;
-
 const SecondSection = styled.View`
-  position: absolute;
-  top: ${hp(30)}px;
-
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
+  margin-top: ${hp(10)}px;
 `;
 
 const ThirdSection = styled.View`
-  position: absolute;
-  top: ${hp(43)}px;
-
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
+  margin-top: ${hp(5)}px;
 `;
 
 const Txt = styled.Text`
@@ -91,14 +124,14 @@ const Txt = styled.Text`
   font-weight: bold;
 `;
 
-const Text = styled.Text`
+const StyledText = styled.Text`
   font-size: ${RFValue(11)}px;
   font-weight: 600;
   margin-bottom: ${hp(1)}px;
   color: ${COLORS.gray};
 `;
 
-const TextInput = styled.TextInput`
+const StyledTextInput = styled.TextInput`
   height: ${hp(5)}px;
   width: ${wp(90)}px;
   border-width: 1px;
@@ -108,22 +141,10 @@ const TextInput = styled.TextInput`
   padding: 0 ${wp(2)}px;
 `;
 
-const DeleteBtn = styled.TouchableOpacity`
-  background-color: ${COLORS.white};
-  padding: ${hp(1)}px;
-  margin: ${hp(2)}px ${wp(4.8)}px;
-  border-radius: ${wp(1)}px;
-  border-colors: ${COLORS.main};
-
-  position: absolute;
-  bottom: ${hp(5)}px;
-  right: ${wp(40)}px;
-`;
-
-const BtnText = styled.Text`
-  color: ${COLORS.main};
-  font-size: ${RFValue(16)}px;
-  font-weight: bold;
+const BottomContainer = styled.View`
+  width: 100%;
+  bottom: 0;
+  margin-top: ${hp(20)}px;
 `;
 
 export default DeleteAccountScreen;

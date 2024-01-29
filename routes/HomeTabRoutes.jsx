@@ -7,6 +7,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import ChatScreenNavigator from './chat/ChatScreenNavigators';
 import CommunityScreenNavigator from './community/CommunityNavigators';
 import HomeScreenNavigator from './home/HomeScreenNavigator';
 import LessonScreenNavigator from './lesson/LessonScreenNavigator';
@@ -35,6 +36,7 @@ function HomeTabRoutes(props) {
           name="home"
           component={HomeScreenNavigator}
           options={{
+            unmountOnBlur: true,
             headerShown: false,
             tabBarLabel: '홈',
             tabBarActiveTintColor: COLORS.black,
@@ -51,6 +53,7 @@ function HomeTabRoutes(props) {
           name="community"
           component={CommunityScreenNavigator}
           options={{
+            unmountOnBlur: true,
             headerShown: false,
             tabBarLabel: '커뮤니티',
             tabBarActiveTintColor: COLORS.black,
@@ -80,6 +83,23 @@ function HomeTabRoutes(props) {
           }}
         />
         <Tab.Screen
+          name="chat"
+          component={ChatScreenNavigator}
+          options={{
+            unmountOnBlur: true,
+            title: '채팅',
+            tabBarActiveTintColor: COLORS.black,
+            tabBarInactiveTintColor: COLORS.gray,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.black} />
+              ) : (
+                <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.lightgray} />
+              ),
+          }}
+        />
+
+        <Tab.Screen
           name="lesson"
           component={LessonScreenNavigator}
           options={{
@@ -99,6 +119,7 @@ function HomeTabRoutes(props) {
           name="mypage"
           component={MyPageScreenNavigator}
           options={{
+            unmountOnBlur: true,
             headerShown: false,
             tabBarLabel: '내 정보',
             tabBarActiveTintColor: COLORS.black,

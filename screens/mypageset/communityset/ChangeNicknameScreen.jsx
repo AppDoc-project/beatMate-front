@@ -1,62 +1,102 @@
+import { ChangeBtn } from '@assets/Icons/Buttons';
+import { useNavigation } from '@react-navigation/native';
+import { changeNickname } from 'api/mypage';
 import { COLORS } from 'colors';
+import format from 'pretty-format';
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { Alert, SafeAreaView, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import styled from 'styled-components';
 
 function ChangeNicknameScreen(props) {
-  const [nickName, setNickName] = useState('');
+  const navigation = useNavigation();
 
-  const ValidNickname = () => {
-    // 닉네임이 최대 10자, 한글, 영문자, 숫자만 포함하는지 검사
-    const nicknameRegex = /^[a-zA-Z0-9가-힣]{1,10}$/;
-    return nicknameRegex.test(nickName);
+  const [nickName, setNickName] = useState('');
+  const onChangeNickname = (text) => setNickName(text);
+
+  const onPressPreviousBtn = () => {
+    setNickName('');
+    navigation.goBack();
   };
 
-  const ChangeNicknameAlert = () => {
-    // 닉네임 경고창
-    if (!ValidNickname()) {
-      Alert.alert('경고', '닉네임은 최대 10자, 한글, 영문자, 숫자만 입력 가능합니다.');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const onPressChangeBtn = () => {
+    if (!nickName || nickName.length > 10 || !/^[a-zA-Z0-9가-힣]/.test(nickName)) {
+      Alert.alert('알림', '닉네임은 최대 10자, 한글, 영문자, 숫자만 가능합니다.');
+    } else {
+      //자기소개 변경 api
+      setIsLoading(true);
+      const data = {
+        nickName: nickName,
+      };
+
+      changeNickname(data)
+        .then((res) => {
+          console.log('닉네임 변경', format(res.data));
+          setIsLoading(false);
+          navigation.goBack();
+        })
+        .catch((err) => {
+          console.log('닉네임 변경', err);
+          setIsError(true);
+          setIsLoading(false);
+        });
     }
   };
 
+  if (isLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
+
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
+        <AntDesign name="left" size={32} marginLeft={5} top={40} onPress={onPressPreviousBtn} />
+
         <FirstSection>
           <Txt>변경하실 닉네임을 입력해주세요.</Txt>
-          <TextInput placeholder="익명" value={nickName} onChangeText={setNickName} />
+          <StyledTextInput value={nickName} onChangeText={onChangeNickname} />
+          <StyledText>※ 닉네임 변경후 30일 뒤에 재변경이 가능합니다.</StyledText>
         </FirstSection>
 
-        <SecondSection>
-          <Text>※ 닉네임 변경후 30일 뒤에 재변경이 가능합니다.</Text>
-        </SecondSection>
-        <ChangeBtn onPress={ChangeNicknameAlert}>
-          <BtnText>변경하기</BtnText>
-        </ChangeBtn>
+        <BottomContainer>
+          <ChangeBtn
+            fontColor={nickName ? COLORS.white : COLORS.main}
+            backColor={nickName ? COLORS.main : COLORS.white}
+            width={wp(100)}
+            justifyContent="center"
+            onPress={onPressChangeBtn}
+          />
+        </BottomContainer>
       </Container>
-    </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
   background-color: white;
 `;
 
 const FirstSection = styled.View`
-  position: absolute;
-  top: ${hp(13)}px;
-
-  margin-left: ${wp(4.8)}px;
-  margin-right: ${wp(4.8)}px;
-`;
-
-const SecondSection = styled.View`
-  position: absolute;
-  top: ${hp(24)}px;
-
+  top: ${hp(10)}px;
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
 `;
@@ -66,14 +106,14 @@ const Txt = styled.Text`
   font-weight: bold;
 `;
 
-const Text = styled.Text`
+const StyledText = styled.Text`
   font-size: ${RFValue(11)}px;
   font-weight: 600;
   margin-bottom: ${hp(1)}px;
   color: ${COLORS.gray};
 `;
 
-const TextInput = styled.TextInput`
+const StyledTextInput = styled.TextInput`
   height: ${hp(5)}px;
   width: ${wp(90)}px;
   border-width: 1px;
@@ -81,24 +121,13 @@ const TextInput = styled.TextInput`
   border-color: ${COLORS.lightgray};
   margin-top: ${hp(1)}px;
   padding: 0 ${wp(2)}px;
+  margin-bottom: ${hp(2)}px;
 `;
 
-const ChangeBtn = styled.TouchableOpacity`
-  background-color: ${COLORS.white};
-  padding: ${hp(1)}px;
-  margin: ${hp(2)}px ${wp(4.8)}px;
-  border-radius: ${wp(1)}px;
-  border-colors: ${COLORS.main};
-
-  position: absolute;
-  bottom: ${hp(5)}px;
-  right: ${wp(40)}px;
-`;
-
-const BtnText = styled.Text`
-  color: ${COLORS.main};
-  font-size: ${RFValue(16)}px;
-  font-weight: bold;
+const BottomContainer = styled.View`
+  width: 100%;
+  bottom: 0;
+  margin-top: ${hp(20)}px;
 `;
 
 export default ChangeNicknameScreen;

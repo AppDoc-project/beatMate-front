@@ -8,6 +8,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
+//계정 바뀌었나 확인용
 function SelectTypeScreen() {
   const navigation = useNavigation();
   const { userType, setUserType } = useContext(UserInfo);

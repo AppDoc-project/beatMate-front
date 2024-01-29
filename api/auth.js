@@ -14,7 +14,7 @@ const logout = () => client.post(`/auth/logout`);
 // 튜티 이메일 인증
 const validTuteeEmail = (data) => client.post('/auth/validate/tutee', data, {});
 
-// 튜티 이메일 인증
+// 튜터 이메일 인증
 const validTutorEmail = (data) => client.post('/auth/validate/tutor', data, {});
 
 // 로그인
@@ -34,7 +34,7 @@ const checkSingleEmail = (data) => client.post(`/auth/join/duplication`, data, {
 
 // 이미지 첨부
 const postImages = (data) =>
-  client.post('/auth/images', data, {
+  client.post('/auth/images/211.253.26.21', data, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -43,5 +43,25 @@ const postImages = (data) =>
     },
   });
 
+// 비밀번호 찾기: 메일 입력
+const getNewEmail = (email) => client.get('/auth/password/code?email=' + email);
 
-export { signupTutor, signupTutee, logout, validTuteeEmail, validTutorEmail, login, checkSingleEmail, postImages };
+// 비밀번호 찾기: 인증코드 입력
+const getNewAuthCode = (data) => client.post('/auth/password/code', data, {});
+
+// 비밀번호 찾기: 비밀번호 변경
+const changeNewPassword = (data) => client.patch('/auth/password', data, {});
+
+export {
+  signupTutor,
+  signupTutee,
+  logout,
+  validTuteeEmail,
+  validTutorEmail,
+  login,
+  checkSingleEmail,
+  postImages,
+  getNewEmail,
+  getNewAuthCode,
+  changeNewPassword,
+};

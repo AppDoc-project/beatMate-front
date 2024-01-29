@@ -1,15 +1,23 @@
 import AddImage from '@assets/PostItem/AddTmage';
 import { postImages } from 'api/auth';
 import { COLORS } from 'colors';
+import { Auth } from 'context/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Text, Image, TouchableOpacity, View } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 
-function ImageUpload({ authenticationAddress }) {
+function ImageUpload() {
+
+  const {
+    tutor: [tutorSignUpRequest, setTutorSignUpRequest],
+  } = useContext(Auth);
+
+  const { authenticationAddress } = tutorSignUpRequest;
+
   const [selectedImages, setSelectedImages] = useState([]);
 
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
@@ -50,8 +58,12 @@ function ImageUpload({ authenticationAddress }) {
 
     postImages(formData)
       .then((res) => {
-        const { data } = res;
-        console.log(format(data)); // 서버 응답 확인
+        console.log(res); // 서버 응답 확인
+
+        const updatedSignUpRequest = { ...tutorSignUpRequest }; // 이전 상태의 복사본 생성
+        updatedSignUpRequest.authenticationAddress = res.data.data; // 새로운 값으로 업데이트
+        setTutorSignUpRequest(updatedSignUpRequest); // 새로운 상태로 업데이트
+        console.log(updatedSignUpRequest);
       })
       .catch((error) => console.log(format(error))); // 에러 처리
   };
@@ -125,7 +137,7 @@ const styles = {
     color: 'black',
     borderWidth: 1.5,
     borderColor: COLORS.main,
-    borderRadius: 5,
+
     overflow: 'hidden',
     padding: 5,
   },

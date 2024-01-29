@@ -1,12 +1,12 @@
-import MyBookmarkScreen from '@components/mypage/mypagetabscreens/MyBookmarkScreen';
-import MyCommentScreen from '@components/mypage/mypagetabscreens/MyCommentScreen';
-import MyPostScreen from '@components/mypage/mypagetabscreens/MyPostScreen';
+import MyBookmarkList from '@components/mypage/mypagetabscreens/List/MyBookmarkList';
+import MyCommentList from '@components/mypage/mypagetabscreens/List/MyCommentList';
+import MyPostList from '@components/mypage/mypagetabscreens/List/MyPostList';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getMyPageSection } from 'api/mypage';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -17,7 +17,7 @@ function TutorMyPageScreen(props) {
   const navigation = useNavigation();
 
   const TutorMyPageSet = () => {
-    navigation.navigate('TutorMyPageSetScreen');
+    navigation.navigate('MyPageSetScreen');
   };
 
   const [isMyPost, selectMyPost] = useState(true);
@@ -84,15 +84,25 @@ function TutorMyPageScreen(props) {
         <Settingbtn onPress={TutorMyPageSet}>
           <SettingIcon name={'settings-outline'} size={RFValue(25)} color={'white'} />
         </Settingbtn>
-        <Profileimage name={'user-circle'} size={RFValue(90)} color={'lightgray'} />
+        <ProfileImg>
+          {UserInfo && UserInfo.profile && (
+            <Image
+              source={{
+                uri: UserInfo.profile,
+              }}
+              style={{ width: 100, height: 100, borderRadius: 50 }}
+            />
+          )}
+          {UserInfo && !UserInfo.profile && <FontAwesome name={'user-circle'} size={RFValue(90)} color={'lightgray'} />}
+        </ProfileImg>
         <Userbox>
           <Usertypebox>
             <Usertype>강사</Usertype>
           </Usertypebox>
-          <Username>{UserInfo.name}</Username>
-          <Userintro>안녕하세요.</Userintro>
+          <Username>{UserInfo && UserInfo.name}</Username>
           <Userinfocount>
-            게시글 {UserInfo.postCount} | 댓글 {UserInfo.threadCount} | 북마크 {UserInfo.bookmarkCount}
+            게시글 {UserInfo && UserInfo.postCount} | 댓글 {UserInfo && UserInfo.threadCount} | 북마크{' '}
+            {UserInfo && UserInfo.bookmarkCount}
           </Userinfocount>
         </Userbox>
       </Infosection>
@@ -112,9 +122,9 @@ function TutorMyPageScreen(props) {
       </SelectMenu>
 
       <ShowMainInfo>
-        {isMyPost && <MyPostScreen />}
-        {isMyComment && <MyCommentScreen />}
-        {isMyBookmark && <MyBookmarkScreen />}
+        {isMyPost && <MyPostList />}
+        {isMyComment && <MyCommentList />}
+        {isMyBookmark && <MyBookmarkList />}
       </ShowMainInfo>
     </Container>
   );
@@ -126,19 +136,27 @@ const Container = styled.View`
 `;
 
 const Infosection = styled.View`
-  flex: 0.4;
   background-color: ${COLORS.main};
+  display: flex;
+  height: ${hp(30)}px;
+  width: 100%;
+  align-items: center;
+  position: relative;
 `;
 
-const Settingbtn = styled.TouchableOpacity``;
-
-const SettingIcon = styled(Ionicons)`
+const Settingbtn = styled.TouchableOpacity`
   position: absolute;
   top: 50px;
   right: 20px;
 `;
 
-const Profileimage = styled(FontAwesome)`
+const SettingIcon = styled(Ionicons)`
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
+
+const ProfileImg = styled.View`
   position: absolute;
   top: 125px;
   left: 35px;
@@ -170,12 +188,6 @@ const Username = styled.Text`
   color: ${COLORS.white};
   font-size: ${RFValue(20)}px;
   font-weight: bold;
-  margin: 5px 0px;
-`;
-
-const Userintro = styled.Text`
-  color: ${COLORS.white};
-  font-size: ${RFValue(14)}px;
   margin: 5px 0px;
 `;
 
