@@ -11,20 +11,22 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 
 MessageInput.propTypes = {
+  setMessages: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   targetId: PropTypes.number,
+  messages: PropTypes.array,
 };
 
 // 메세지 입력 및 전송
-function MessageInput({ onFocus, onBlur, targetId, onSendMessage }) {
+function MessageInput({ onFocus, onBlur, targetId }) {
   const {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
 
-  const [sendText, setsendText] = useState('');
-
   const myUserId = loginUser.id; // 현재 내 id
+
+  const [sendText, setsendText] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -35,8 +37,6 @@ function MessageInput({ onFocus, onBlur, targetId, onSendMessage }) {
       receiverId: targetId,
       text: sendText,
     };
-
-    onSendMessage(data);
 
     console.log(data);
 

@@ -37,7 +37,7 @@ function ChatRoomListItem({ room }) {
     <Container onPress={() => navigation.navigate('chat-room', { room })}>
       <ProfileContainer>
         {room && room.target.profile ? (
-          <ImageBackground // Use ImageBackground here
+          <ImageBackground
             source={{
               uri: room.target.profile,
             }}
@@ -45,11 +45,9 @@ function ChatRoomListItem({ room }) {
               width: wp(14),
               height: wp(14),
               borderRadius: 50,
-              overflow: 'hidden', // Add overflow hidden to prevent child error
+              overflow: 'hidden',
             }}
-          >
-            {/* You can put any additional content here */}
-          </ImageBackground>
+          ></ImageBackground>
         ) : (
           <FontAwesome name={'user-circle'} size={RFValue(40)} color={'lightgray'} />
         )}
@@ -70,8 +68,6 @@ function ChatRoomListItem({ room }) {
   );
 }
 
-// Styled components
-
 const Container = styled.TouchableOpacity`
   min-height: ${hp(8)}px;
   flex-direction: row;
@@ -89,8 +85,7 @@ const ProfileContainer = styled.View`
 `;
 
 const ContentGroup = styled.View`
-  width: 65%;
-  height: 100%;
+  width: ${wp(60)}px;
   justify-content: center;
   flex-wrap: wrap;
   align-content: space-around;

@@ -17,9 +17,10 @@ function MessageList({ roomID }) {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
 
+  const [messages, setMessages] = useState([]);
+
   const myUserId = loginUser.id;
 
-  const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -90,7 +91,8 @@ function MessageList({ roomID }) {
 
     socketRef.current.on('message', (newMessage) => {
       console.log('newMessage', newMessage);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setMessages((prevMessages) => [newMessage, ...prevMessages]);
+      console.log('현재상황', messages);
 
       if (myUserId !== newMessage.sender.userId) {
         // 특정 채팅 확인 관련 로직
@@ -148,14 +150,16 @@ function MessageList({ roomID }) {
       inverted={true}
       renderItem={({ item: group }) => (
         <>
-          {group.messages.map((item, index) =>
-            item.sender.userId === myUserId ? (
-              <MyMessage key={`message_${item.id}`} item={item} />
-            ) : (
-              <OthersMessage key={`message_${item.id}`} item={item} />
-            ),
-          )}
-          <DateInfo date={group.date} />
+          {group.messages.map((item) => (
+            <React.Fragment key={`message_${item.id}`}>
+              {item.sender.userId === myUserId ? (
+                <MyMessage key={`my_message_${item.id}`} item={item} />
+              ) : (
+                <OthersMessage key={`others_message_${item.id}`} item={item} />
+              )}
+            </React.Fragment>
+          ))}
+          <DateInfo key={`date_${group.date}`} date={group.date} />
         </>
       )}
       onEndReached={() => {
