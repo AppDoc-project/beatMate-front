@@ -9,6 +9,7 @@ import format from 'pretty-format';
 import React, { useEffect, useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components/native';
