@@ -1,4 +1,3 @@
-import ChatSideInfo from '@components/chat/ChatSideInfo';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChatListScreen from '@screens/chat/ChatListScreen';
@@ -27,8 +26,10 @@ function ChatScreenNavigator() {
       <Stack.Screen
         name={'chat-room'}
         component={ChatRoomScreen}
-        options={{ headerShown: true, header: () => <ChatSideInfo /> }}
         initialParams={{ chatScreenHeaderHeight }}
+        options={{
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );

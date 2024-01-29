@@ -1,15 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { getMessage, readCertainChat } from 'api/chat';
 import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { FlatList, RefreshControl } from 'react-native';
+import { FlatList } from 'react-native';
 import socketio from 'socket.io-client';
 
 import MyMessage from './MyMessage';
 import OthersMessage from './OthersMessage';
+import DateInfo from '../DateInfo';
 
 function MessageList({ roomID }) {
   const {
@@ -21,49 +22,16 @@ function MessageList({ roomID }) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
 
   const socketRef = useRef(null);
-
-  const loadMessages = async (count, offset) => {
-    try {
-      setIsLoading(true);
-      const res = await getMessage(count, offset, roomID);
-      console.log('Messages:', format(res.data));
-
-      if (res.data.data) {
-        const sortedMessages = res.data.data.sort((a, b) => {
-          const timeA = new Date(a.createdAt).getTime();
-          const timeB = new Date(b.createdAt).getTime();
-          return timeA - timeB;
-        });
-
-        setMessages(sortedMessages);
-      }
-    } catch (error) {
-      console.error(error);
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const loadMoreMessages = async () => {
     if (!isLoading && !isError) {
       try {
         setIsLoading(true);
-        const res = await getMessage(7, messages.length, roomID);
-
-        if (res.data.data) {
-          const combinedMessages = [...messages, ...res.data.data];
-          const sortedMessages = combinedMessages.sort((a, b) => {
-            const timeA = new Date(a.createdAt).getTime();
-            const timeB = new Date(b.createdAt).getTime();
-            return timeA - timeB;
-          });
-
-          setMessages(sortedMessages);
-        }
+        const res = await getMessage(10, messages.length, roomID);
+        console.log('이후 메세지:', format(res.data));
+        setMessages((prevMessages) => [...prevMessages, ...res.data.data]);
       } catch (error) {
         console.error(error);
         setIsError(true);
@@ -73,11 +41,26 @@ function MessageList({ roomID }) {
     }
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await loadMessages(7, 0); // 새로고침 시 초기 데이터를 불러옴
-    setRefreshing(false);
+  const [groupedMessages, setGroupedMessages] = useState([]);
+
+  const groupMessagesByDate = (messageList) => {
+    const grouped = messageList.reduce((acc, message) => {
+      if (message.createdAt) {
+        const date = message.createdAt.substring(0, 10);
+        acc[date] = acc[date] || [];
+        acc[date].push(message);
+      }
+      return acc;
+    }, {});
+    return Object.entries(grouped).map(([date, messages]) => ({
+      date,
+      messages,
+    }));
   };
+
+  useEffect(() => {
+    setGroupedMessages(groupMessagesByDate(messages));
+  }, [messages]);
 
   const initializeSocket = async () => {
     const token = await AsyncStorage.getItem('access_token');
@@ -126,12 +109,23 @@ function MessageList({ roomID }) {
     });
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
+  useEffect(() => {
+    const fetchData = async () => {
       initializeSocket();
-      loadMessages(7, messages.length);
-    }, [roomID]),
-  );
+      try {
+        setIsLoading(true);
+        const res = await getMessage(10, messages.length, roomID);
+        console.log('처음 메세지:', format(res.data));
+        setMessages(res.data.data);
+      } catch (error) {
+        console.error(error);
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [roomID]);
 
   //화면에서 포커스가 사라질때
   const isFocused = useIsFocused();
@@ -148,32 +142,26 @@ function MessageList({ roomID }) {
   return (
     <FlatList
       ref={(ref) => (this.flatList = ref)}
-      data={messages}
+      data={groupedMessages}
       showsVerticalScrollIndicator={false}
-      keyExtractor={(message) => `message_${message.id}`}
+      keyExtractor={(group) => `group_${group.date}`}
+      inverted={true}
+      renderItem={({ item: group }) => (
+        <>
+          {group.messages.map((item, index) =>
+            item.sender.userId === myUserId ? (
+              <MyMessage key={`message_${item.id}`} item={item} />
+            ) : (
+              <OthersMessage key={`message_${item.id}`} item={item} />
+            ),
+          )}
+          <DateInfo date={group.date} />
+        </>
+      )}
       onEndReached={() => {
-        if (messages.length > 0 && messages[messages.length - 1].data) {
-          loadMoreMessages();
-        }
+        loadMoreMessages();
       }}
       onEndReachedThreshold={0.1}
-      inverted={true}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      renderItem={({ item, index }) => {
-        return item.sender.userId === myUserId ? (
-          <MyMessage
-            key={`message_${item.id}`}
-            item={item}
-            isLast={index !== messages.length - 1 ? item.sender.userId !== messages[index + 1].sender.userId : true}
-          />
-        ) : (
-          <OthersMessage
-            key={`message_${item.id}`}
-            item={item}
-            isLast={index !== messages.length - 1 ? item.sender.userId !== messages[index + 1].sender.userId : true}
-          />
-        );
-      }}
     />
   );
 }

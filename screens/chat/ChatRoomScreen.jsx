@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { styled } from 'styled-components/native';
+import ChatSideInfo from '@components/chat/ChatSideInfo';
 
 /**
  * 채팅 방 화면
@@ -86,6 +87,7 @@ function ChatRoomScreen({ route }) {
       behavior={Platform.OS === 'ios' ? 'padding' : null}
       keyboardVerticalOffset={chatScreenHeaderHeight + chatRoomHeaderHeight + tabBarHeight}
     >
+      <ChatSideInfo room={room} />
       <MessageList roomID={room.id} messages={messages} />
       <MessageInput
         onFocus={onFocusInput}

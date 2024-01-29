@@ -7,22 +7,31 @@ import { styled } from 'styled-components/native';
 
 MyMessage.propTypes = {
   item: PropTypes.shape({
-    userId: PropTypes.number,
     content: PropTypes.string,
     createdAt: PropTypes.string,
+    id: PropTypes.string,
+    sender: PropTypes.shape({
+      name: PropTypes.string,
+      profile: PropTypes.any,
+      userId: PropTypes.number,
+    }),
   }),
-  isLast: PropTypes.bool,
 };
 
-function MyMessage({ item, isLast }) {
-  const { content } = item;
-  console.log('item입니다', item);
+function MyMessage({ item }) {
+  const hour = parseInt(item.createdAt.substring(11, 13), 10);
+  const minute = item.createdAt.substring(14, 16);
+  const period = hour < 12 ? '오전' : '오후';
+
+  const formattedHour = hour % 12 || 12;
+  const hourMinute = `${period} ${formattedHour}:${minute}`;
+
   return (
     <Container>
       <ContentContainer>
-        {isLast && <Time>{item.createdAt}</Time>}
+        <Time>{hourMinute}</Time>
         <TextContainer>
-          <Content>{content}</Content>
+          <Content>{item.content}</Content>
         </TextContainer>
       </ContentContainer>
     </Container>
@@ -55,6 +64,7 @@ const Content = styled.Text`
   font-weight: 500;
   font-size: ${RFValue(12)}px;
   color: ${COLORS.white};
+  flex-grow: 1;
 `;
 
 const Time = styled.Text`

@@ -150,7 +150,6 @@ const FirstSection = styled.View`
   margin-top: ${hp(10)}px;
   margin-left: ${wp(4.8)}px;
   margin-right: ${wp(4.8)}px;
-
 `;
 
 const SecondSection = styled.View`

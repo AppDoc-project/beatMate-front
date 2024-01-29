@@ -1,36 +1,65 @@
 import { COLORS } from 'colors';
-import { Auth } from 'context/AuthContext';
+import { UserInfo } from 'context/UserInfoContext';
+import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
+import { Image } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { styled } from 'styled-components/native';
 
-/**
- * 채팅 상대방의 정보를 출력하는 컴포넌트 (위에 헤더 형식으로 나타냄)
- */
-function ChatSideInfo() {
+ChatSideInfo.propTypes = {
+  room: PropTypes.shape({
+    id: PropTypes.string.isRequired, // 채팅방 id
+    target: PropTypes.shape({
+      name: PropTypes.string.isRequired, // 채팅 상대방 이름
+      userId: PropTypes.number.isRequired, // 채팅 상대방 userId
+      profile: PropTypes.string, // 채팅 상대방 프로필 이미지 URL 또는 null
+    }).isRequired,
+    notReadYet: PropTypes.number.isRequired, // 내가 읽지 않은 메세지 수
+    lastMessage: PropTypes.string.isRequired, // 채팅방 마지막 메세지
+    lastTime: PropTypes.string.isRequired, // 마지막 채팅 시간
+  }).isRequired,
+};
+
+function ChatSideInfo({ room }) {
   const {
     loginUserInfo: [loginUser],
-  } = useContext(Auth);
+  } = useContext(UserInfo);
 
-  const isTutor = loginUser?.isTutor;
+  console.log(room);
 
-  // const { chatRoomId } = useRoute().params;
+  const isTutor = loginUser.isTutor;
+
+  console.log(isTutor);
 
   return (
     <Container>
-      <Profile source={require('@assets/profile.png')} />
+      <ProfileImg>
+        {room && room.target.profile && (
+          <Image
+            source={{
+              uri: room.target.profile,
+            }}
+            style={{ width: wp(14), height: wp(14), borderRadius: 50 }}
+          />
+        )}
+        {!room.target.profile && <FontAwesome name={'user-circle'} size={RFValue(40)} color={'lightgray'} />}
+      </ProfileImg>
       <InfoGroup>
         <Group isTutor={isTutor}>
-          <GroupLabel>{isTutor ? '강사' : '수강생'}</GroupLabel>
+          <GroupLabel>{isTutor ? '수강생' : '강사'}</GroupLabel>
         </Group>
-        <Name>김연주</Name>
+        <Name>{room.target.name}</Name>
       </InfoGroup>
     </Container>
   );
 }
 
-const Profile = styled.Image``;
+const ProfileImg = styled.View`
+  border-radius: 50%;
+  margin-right: ${RFValue(5)}px;
+`;
 
 const Container = styled.View`
   flex-direction: row;
@@ -59,14 +88,14 @@ const Group = styled.View`
   ${({ isTutor }) =>
     isTutor
       ? `
-    width: ${wp(10)}px;
-    border-radius: ${RFValue(4)}px;
-    background-color: ${COLORS.main};
-  `
-      : `
     width: ${wp(16)}px;
     border-radius: ${RFValue(6)}px;
     background-color: ${COLORS.gray};
+  `
+      : `
+    width: ${wp(10)}px;
+    border-radius: ${RFValue(4)}px;
+    background-color: ${COLORS.main};
   `}
   padding: ${RFValue(4)}px;
   justify-content: center;

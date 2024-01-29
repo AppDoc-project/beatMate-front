@@ -2,25 +2,27 @@ import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { ImageBackground } from 'react-native'; // Import ImageBackground
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 ChatRoomListItem.propTypes = {
   room: PropTypes.shape({
-    id: PropTypes.string.isRequired, // 채팅방 id
+    id: PropTypes.string.isRequired,
     target: PropTypes.shape({
-      name: PropTypes.string.isRequired, // 채팅 상대방 이름
-      userId: PropTypes.number.isRequired, // 채팅 상대방 userId
-      profile: PropTypes.string, // 채팅 상대방 프로필 이미지 URL 또는 null
+      name: PropTypes.string.isRequired,
+      userId: PropTypes.number.isRequired,
+      profile: PropTypes.string,
     }).isRequired,
-    notReadYet: PropTypes.number.isRequired, // 내가 읽지 않은 메세지 수
-    lastMessage: PropTypes.string.isRequired, // 채팅방 마지막 메세지
-    lastTime: PropTypes.string.isRequired, // 마지막 채팅 시간
+    notReadYet: PropTypes.number.isRequired,
+    lastMessage: PropTypes.string.isRequired,
+    lastTime: PropTypes.string.isRequired,
   }).isRequired,
 };
 
-// 날짜 변경하기 함수
+// Format the last time function
 function formatLastTime(lastTime) {
   const [date] = lastTime.split(' ');
   const formattedDate = date.split(':').join('.').substring(0, 10);
@@ -33,7 +35,25 @@ function ChatRoomListItem({ room }) {
 
   return (
     <Container onPress={() => navigation.navigate('chat-room', { room })}>
-      <Profile source={target.profile ? { uri: target.profile } : require('@assets/chat/nullProfile.jpg')} />
+      <ProfileContainer>
+        {room && room.target.profile ? (
+          <ImageBackground // Use ImageBackground here
+            source={{
+              uri: room.target.profile,
+            }}
+            style={{
+              width: wp(14),
+              height: wp(14),
+              borderRadius: 50,
+              overflow: 'hidden', // Add overflow hidden to prevent child error
+            }}
+          >
+            {/* You can put any additional content here */}
+          </ImageBackground>
+        ) : (
+          <FontAwesome name={'user-circle'} size={RFValue(40)} color={'lightgray'} />
+        )}
+      </ProfileContainer>
       <ContentGroup>
         <Name numberOfLines={1}>{target.name}</Name>
         <LastChat numberOfLines={1}>{lastMessage}</LastChat>
@@ -50,23 +70,22 @@ function ChatRoomListItem({ room }) {
   );
 }
 
+// Styled components
+
 const Container = styled.TouchableOpacity`
   min-height: ${hp(8)}px;
   flex-direction: row;
   flex-wrap: wrap;
-
   justify-content: space-between;
   align-items: center;
-
   padding: ${RFValue(8)}px;
-
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
 `;
 
-const Profile = styled.Image`
-  width: 55px;
-  height: 55px;
+const ProfileContainer = styled.View`
+  border-radius: 50%;
+  margin-right: ${RFValue(5)}px;
 `;
 
 const ContentGroup = styled.View`
@@ -76,7 +95,6 @@ const ContentGroup = styled.View`
   flex-wrap: wrap;
   align-content: space-around;
   flex-direction: column;
-
   margin-left: ${wp(2)}px;
 `;
 

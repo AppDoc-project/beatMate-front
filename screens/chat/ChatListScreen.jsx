@@ -4,7 +4,7 @@ import { getChatList } from 'api/chat';
 import format from 'pretty-format';
 import React, { useState } from 'react';
 import { View, Text } from 'react-native';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { styled } from 'styled-components/native';
 
@@ -64,7 +64,7 @@ function ChatListScreen() {
   return (
     <Container>
       <RedoWrapper onPress={reGetChatList}>
-        <MaterialIcons name="refresh" size={25} marginLeft={5} marginRight={5} />
+        <MaterialIcons name="refresh" size={35} marginTop={hp(2)} marginBottom={hp(2)} marginRight={wp(2)} />
       </RedoWrapper>
       {chatListInfo !== null && <ChatRoomList rooms={chatListInfo} />}
     </Container>
