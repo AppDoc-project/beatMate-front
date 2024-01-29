@@ -12,7 +12,6 @@ import CommunityScreenNavigator from './community/CommunityNavigators';
 import HomeScreenNavigator from './home/HomeScreenNavigator';
 import LessonScreenNavigator from './lesson/LessonScreenNavigator';
 import MyPageScreenNavigator from './mypage/MyPageScreenNavigators';
-import SearchTutorScreenNavigators from './searchtutor/SearchTutorScreenNavigators';
 
 const Tab = createBottomTabNavigator();
 
@@ -66,22 +65,7 @@ function HomeTabRoutes(props) {
               ),
           }}
         />
-        <Tab.Screen
-          name="searchtutor"
-          component={SearchTutorScreenNavigators}
-          options={{
-            headerShown: false,
-            tabBarLabel: '강사 찾기',
-            tabBarActiveTintColor: COLORS.black,
-            tabBarInactiveTintColor: COLORS.gray,
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <Ionicons name={'search-sharp'} size={RFValue(20)} color={COLORS.black} />
-              ) : (
-                <Ionicons name={'search-sharp'} size={RFValue(20)} color={COLORS.lightgray} />
-              ),
-          }}
-        />
+
         <Tab.Screen
           name="chat"
           component={ChatScreenNavigator}
