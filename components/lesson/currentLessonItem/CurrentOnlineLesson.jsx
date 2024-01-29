@@ -79,7 +79,7 @@ const OnlineBtn = styled.TouchableOpacity`
 const OnlineBtnText = styled.Text`
   font-size: ${RFValue(14)}px;
   font-weight: 600;
-  color: ${COLORS.subMiddleblue};
+  color: ${COLORS.main};
 
   text-decoration-line: underline;
 `;

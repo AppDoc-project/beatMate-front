@@ -34,8 +34,8 @@ const Box = styled.View`
 
 const Txt = styled.Text`
   font-size: ${RFValue(14)}px;
-  font-weight: 500;
-  color: ${COLORS.subMiddleblue};
+  font-weight: 600;
+  color: ${COLORS.main};
 
   text-decoration-line: underline;
 `;

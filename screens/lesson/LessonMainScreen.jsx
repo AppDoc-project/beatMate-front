@@ -22,10 +22,10 @@ function LessonMainScreen(props) {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
         <FirstSection>
-          <MainTxt>현재 진행 중인 레슨</MainTxt>
+          <MainTxt marginTop={RFValue(50)}>현재 진행 중인 레슨</MainTxt>
           {/* <CurrentNoLesson /> */}
-          <CurrentOnlineLesson />
-          {/* <CurrentOffLineLesson /> */}
+          {/* <CurrentOnlineLesson /> */}
+          <CurrentOffLineLesson />
         </FirstSection>
         <SecondSection>
           <MainTxt>레슨 피드백지/평가지를 작성해 주세요!</MainTxt>
