@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { getMessage, readCertainChat } from 'api/chat';
 import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import socketio from 'socket.io-client';
 
@@ -124,12 +124,6 @@ function MessageList({ roomID }) {
           .catch((error) => console.log('특정 채팅 확인 실패', format(error)));
       }
     });
-
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-    };
   };
 
   useFocusEffect(
@@ -139,16 +133,17 @@ function MessageList({ roomID }) {
     }, [roomID]),
   );
 
-  const cleanupSocket = React.useCallback(() => {
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-      console.log('소켓 없음');
-    }
-  }, []);
+  //화면에서 포커스가 사라질때
+  const isFocused = useIsFocused();
 
-  React.useEffect(() => {
-    return cleanupSocket; // 화면에서 focus가 빠져나갈 때 정리 함수 호출
-  }, [cleanupSocket]);
+  useEffect(() => {
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        console.log('소켓 없음');
+      }
+    };
+  }, [isFocused]);
 
   return (
     <FlatList
