@@ -2,11 +2,11 @@ import { WriteBtn } from '@assets/Icons/Buttons';
 import CommunityPostingItem from '@components/community/mainPage/CommunityPostingItem';
 import SelectCategory from '@components/community/mainPage/SelectCategory';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
-import { getFirstPost, getNextPost } from 'api/commity';
+import { getFirstPost, getNextPost, getFirstSearchPost, getNextSearchPost } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, FlatList, ActivityIndicator, TouchableOpacity, Modal } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -19,12 +19,28 @@ function CommunitySpecificScreen() {
 
   const [newCommunityId, setCommunityId] = useState(communityId);
   const [communityName, setCommunityName] = useState(name);
+  const [searchType, setSearchType] = useState('');
+
+  const [typeModal, setTypeModal] = useState(false); // 검색 조건 모달 띄우기
 
   const [searchKeyword, setSearchKeyword] = useState('');
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
+
+  const onPressPreviousBtn = () => {
+    setCommunityId('');
+    setCommunityName('');
+    setSearchType('');
+    navigation.goBack();
+  };
+
+  const onPressSearchBtn = () => {
+    setPage(1);
+    fetchData(false, 1);
+    console.log(searchType);
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -48,22 +64,29 @@ function CommunitySpecificScreen() {
       let response;
 
       if (scroll) {
-        response = await getNextPost(posts[posts.length - 1]?.id, newCommunityId, 10);
+        response = searchKeyword
+          ? await getNextSearchPost(newCommunityId, 10, searchKeyword, searchType, posts[posts.length - 1]?.id)
+          : await getNextPost(posts[posts.length - 1]?.id, newCommunityId, 10);
         console.log('첫번째요소', format(response.data));
       } else {
-        response = await getFirstPost(10, newCommunityId);
+        response = searchKeyword
+          ? await getFirstSearchPost(newCommunityId, 10, searchKeyword, searchType)
+          : await getFirstPost(10, newCommunityId);
+
         console.log('두번째요소', format(response.data));
       }
 
       const newPosts = response.data.data;
 
-      if (newPosts.length === 0) {
-        setHasMoreData(false);
-      } else {
-        setPosts((prevPosts) => (scroll ? [...prevPosts, ...newPosts] : newPosts));
+      if (scroll) {
+        setPosts((prevPosts) => (newPosts.length > 0 ? [...prevPosts, ...newPosts] : prevPosts));
         setPage(pageNumber + 1);
+      } else {
+        setPosts(newPosts);
+        setPage(2);
       }
 
+      setHasMoreData(newPosts.length > 0);
       setIsLoading(false);
       setIsError(false);
     } catch (error) {
@@ -75,11 +98,10 @@ function CommunitySpecificScreen() {
   };
 
   const onEndReached = () => {
-    if (!isLoading && hasMoreData) {
+    if (!isLoading && hasMoreData && !isFetchingMore) {
       fetchData(true, page);
     }
   };
-
   if (isLoading && !posts.length) {
     return (
       <View>
@@ -99,7 +121,7 @@ function CommunitySpecificScreen() {
   return (
     <Container>
       <Top>
-        <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => navigation.goBack()} />
+        <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => onPressPreviousBtn()} />
         <MainTxt>커뮤니티</MainTxt>
       </Top>
       <SecondRow>
@@ -112,8 +134,48 @@ function CommunitySpecificScreen() {
           placeholder="검색어를 입력해주세요"
           placeholderTextColor="lightgray"
         />
-        <SearchIcon name="search1" size={30} color={COLORS.lightgray} />
+        <TouchableOpacity onPress={onPressSearchBtn}>
+          <SearchIcon name="search1" size={30} color={COLORS.lightgray} />
+        </TouchableOpacity>
       </SearchBox>
+
+      <TypeChooseWrapper onPress={() => setTypeModal(true)}>
+        <TypeWrapper>
+          <TypeTxt>
+            {searchType === 'CONTENT' ? '내용' : searchType === 'TITLE' ? '제목' : '검색 조건 설정하기'}
+          </TypeTxt>
+          <AntDesign name={'caretdown'} size={RFValue(12)} color={COLORS.black} />
+        </TypeWrapper>
+      </TypeChooseWrapper>
+
+      <Modal animationType="none" transparent={true} visible={typeModal}>
+        <BanModal>
+          <Box1
+            onPress={() => {
+              setSearchType('TITLE');
+              setTypeModal(false);
+            }}
+          >
+            <BoxLabel color={COLORS.black}>제목</BoxLabel>
+          </Box1>
+          <Box2
+            onPress={() => {
+              setSearchType('CONTENT');
+              setTypeModal(false);
+            }}
+          >
+            <BoxLabel color={COLORS.black}>내용</BoxLabel>
+          </Box2>
+          <Box3
+            onPress={() => {
+              setSearchType('');
+              setTypeModal(false);
+            }}
+          >
+            <BoxLabel color={COLORS.black}>취소</BoxLabel>
+          </Box3>
+        </BanModal>
+      </Modal>
 
       <PostWrapper>
         <FlatList
@@ -121,7 +183,7 @@ function CommunitySpecificScreen() {
           renderItem={({ item }) => <CommunityPostingItem post={item} />}
           onEndReached={onEndReached}
           keyExtractor={(item, index) => index.toString()}
-          onEndReachedThreshold={1}
+          onEndReachedThreshold={0.1}
           ListFooterComponent={() => (isLoading ? <ActivityIndicator /> : null)}
         />
       </PostWrapper>
@@ -164,15 +226,15 @@ const SearchBox = styled.View`
   top: ${hp(10)}px;
   flex-direction: row;
   align-items: center;
-  position: relative;
+  width: ${wp(90)}px;
 `;
 
 const Input = styled.TextInput`
   background-color: transparent;
-  width: ${wp(90)}px;
+  flex: 1;
   height: ${hp(5)}px;
   border-radius: 10px;
-  border-color: lightgray;
+  border-color: ${COLORS.lightgray01};
   border-width: 1px;
   padding-left: ${RFValue(4)}px;
   font-size: ${RFValue(13)}px;
@@ -182,7 +244,8 @@ const Input = styled.TextInput`
 
 const SearchIcon = styled(AntDesign)`
   position: absolute;
-  right: 20px;
+  right: ${wp(4)}px;
+  bottom: ${hp(-1.5)}px;
 `;
 
 const PostWrapper = styled.View`
@@ -194,6 +257,71 @@ const Btn = styled.TouchableOpacity`
   position: absolute;
   right: 20px;
   bottom: 20px;
+`;
+
+const TypeChooseWrapper = styled.TouchableOpacity`
+  width: ${wp(100)}px;
+  align-items: center;
+  top: ${hp(12)}px;
+`;
+
+const TypeWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  border-color: ${COLORS.black};
+  border-width: 1px;
+  padding: ${RFValue(5)}px;
+  position: absolute;
+  right: 0;
+  margin-right: ${wp(5)}px;
+`;
+
+const TypeTxt = styled.Text`
+  margin-right: ${wp(2)}px;
+  font-size: ${RFValue(11)}px;
+  font-weight: bold;
+`;
+
+const BanModal = styled.View`
+  margin-left: ${wp(5)}px;
+  margin-right: ${wp(5)}px;
+  height: 180px;
+  margin-top: ${hp(75)}px;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+`;
+
+const Box1 = styled.TouchableOpacity`
+  background-color: ${COLORS.white};
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  align-items: center;
+  height: ${hp(6)}px;
+  justify-content: center;
+  margin-bottom: 1px;
+`;
+
+const Box2 = styled.TouchableOpacity`
+  background-color: ${COLORS.white};
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  align-items: center;
+  height: ${hp(6)}px;
+  justify-content: center;
+  margin-bottom: 2px;
+`;
+
+const Box3 = styled.TouchableOpacity`
+  background-color: ${COLORS.subBrown};
+  border-radius: 10px;
+  align-items: center;
+  height: ${hp(7)}px;
+  justify-content: center;
+`;
+
+const BoxLabel = styled.Text`
+  font-size: ${RFValue(18)}px;
 `;
 
 export default CommunitySpecificScreen;

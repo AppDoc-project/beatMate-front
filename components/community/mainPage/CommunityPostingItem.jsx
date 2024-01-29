@@ -81,7 +81,8 @@ const Container = styled.View`
   padding-right: ${wp(6)}px;
   padding-top: ${hp(2)}px;
   padding-bottom: ${hp(2)}px;
-  border-bottom-color: ${COLORS.gray01};
+  border-color: ${COLORS.white};
+  border-bottom-color: ${COLORS.lightgray};
   border-bottom-width: 1px;
   width: 100%;
 `;

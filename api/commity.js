@@ -244,6 +244,50 @@ const modifyPost = async (data) => {
   }
 };
 
+// 게시판 별 검색창에서 처음 검색하기
+const getFirstSearchPost = async (communityId, limit, keyword, postSearchType) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+
+    const response = await client.get(
+      `/community/search/${communityId}?scroll=false&limit=${limit}&keyword=${keyword}&postSearchType=${postSearchType}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      },
+    );
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+// 게시판 별 검색창에서 무한스크롤 다음 검색하기
+const getNextSearchPost = async (communityId, limit, keyword, postSearchType, postId) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+
+    const response = await client.get(
+      `/community/search/${communityId}?scroll=true&limit=${limit}&postId=${postId}&keyword=${keyword}&postSearchType=${postSearchType}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      },
+    );
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export {
   getCommunitySection,
   postNewPost,
@@ -258,4 +302,6 @@ export {
   deletePost,
   deleteComment,
   modifyPost,
+  getFirstSearchPost,
+  getNextSearchPost,
 };
