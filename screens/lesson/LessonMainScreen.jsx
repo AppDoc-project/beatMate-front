@@ -1,5 +1,6 @@
-import CurrentOffLineLesson from '@components/lesson/CurrentOfflineLesson';
-import CurrentOnlineLesson from '@components/lesson/CurrentOnlineLesson';
+import CurrentNoLesson from '@components/lesson/currentLessonItem/CurrentNoLesson';
+import CurrentOffLineLesson from '@components/lesson/currentLessonItem/CurrentOfflineLesson';
+import CurrentOnlineLesson from '@components/lesson/currentLessonItem/CurrentOnlineLesson';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import React from 'react';
@@ -22,11 +23,9 @@ function LessonMainScreen(props) {
       <Container>
         <FirstSection>
           <MainTxt>현재 진행 중인 레슨</MainTxt>
-          <Box>
-            <NoLessonTxt>현재 진행 중인 레슨이 없습니다.</NoLessonTxt>
-          </Box>
-          {/* <CurrentOnlineLesson />
-          <CurrentOffLineLesson /> */}
+          {/* <CurrentNoLesson /> */}
+          <CurrentOnlineLesson />
+          {/* <CurrentOffLineLesson /> */}
         </FirstSection>
         <SecondSection>
           <MainTxt>레슨 피드백지/평가지를 작성해 주세요!</MainTxt>
@@ -53,12 +52,20 @@ const Container = styled.View`
 `;
 
 const MainTxt = styled.Text`
-  font-size: ${RFValue(14)}px;
+  font-size: ${RFValue(16)}px;
   font-weight: 900;
+  align-self: flex-start;
+  margin: 0 0 ${RFValue(10)}px ${RFValue(34)}px;
 `;
 
 const FirstSection = styled.View`
   flex: 0.3;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SecondSection = styled.View`
+  flex: 0.4;
   justify-content: center;
   align-items: center;
 `;
@@ -74,21 +81,6 @@ const Box = styled.View`
   align-items: center;
 `;
 
-const NoLessonTxt = styled.Text`
-  font-size: ${RFValue(14)}px;
-  font-weight: 600;
-  color: ${COLORS.subMiddleblue};
-
-  text-decoration: underline;
-  text-decoration-color: ${COLORS.subMiddleblue};
-`;
-
-const SecondSection = styled.View`
-  flex: 0.4;
-  justify-content: center;
-  align-items: center;
-`;
-
 const FeedbackBtn = styled.TouchableOpacity``;
 
 const FeedBackTxt = styled.Text`
@@ -98,7 +90,6 @@ const FeedBackTxt = styled.Text`
 const ThirdSection = styled.View`
   flex: 0.3;
   flex-direction: row;
-  justify-content: center;
 `;
 
 const ScheduleBtn = styled.TouchableOpacity`
