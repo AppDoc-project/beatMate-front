@@ -1,31 +1,38 @@
-import { useFocusEffect } from '@react-navigation/native';
+import { WriteBtn } from '@assets/Icons/Buttons';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getCommunitySection } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
-import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, SafeAreaView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components/native';
 
-function CommunityScreen(props) {
-  const [searchKeyword, setSearchKeyword] = useState(''); // 검색 키워드 저장
+function CommunityScreen() {
+  const navigation = useNavigation();
 
   //게시판 리스트 조회 API
   const [SectionData, setSectionData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
+  const writeNewPost = () => {
+    navigation.navigate('writeNewPostScreen');
+  };
+
+  const moveSpecificScreen = (communityId, name) => {
+    navigation.navigate('communitySpecificScreen', { communityId, name });
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true);
       getCommunitySection()
         .then((res) => {
-          console.log('Request Headers:', res.headers); // 이 부분에서 요청(request)로 보낸 header를 확인할 수 있습니다.
           console.log(format(res.data));
           setSectionData(res.data);
-          console.log(SectionData);
           setIsLoading(false);
           setIsError(false);
         })
@@ -34,7 +41,7 @@ function CommunityScreen(props) {
           setIsError(true);
           setIsLoading(false);
         });
-    }, []),
+    }, [setIsLoading, setSectionData, setIsError]),
   );
 
   if (isLoading) {
@@ -53,54 +60,76 @@ function CommunityScreen(props) {
     );
   }
 
-
-
   return (
-    <Container>
-      <MainTxt>커뮤니티</MainTxt>
-      <SearchBox>
-        <Input
-          value={searchKeyword}
-          onChangeText={setSearchKeyword}
-          placeholder="검색어를 입력해주세요"
-          placeholderTextColor="lightgray"
-        />
-        <AntDesign name="search1" size={32} marginLeft={5} />
-      </SearchBox>
-    </Container>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
+        <Wrapper>
+          <MainTxt>커뮤니티</MainTxt>
+
+          {SectionData && SectionData.data && (
+            <Grid>
+              {SectionData.data.map((item) => (
+                <Item key={item.id} onPress={() => moveSpecificScreen(item.id, item.name)}>
+                  <ItemName>{item.name}</ItemName>
+                </Item>
+              ))}
+            </Grid>
+          )}
+
+          <Btn onPress={writeNewPost}>
+            <WriteBtn />
+          </Btn>
+        </Wrapper>
+      </Container>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
-  background-color: ${COLORS.white};
+  background-color: white;
+`;
+
+const Wrapper = styled.View`
   align-items: center;
 `;
 
 const MainTxt = styled.Text`
   font-size: ${RFValue(22)}px;
   font-weight: bold;
-  position: absolute;
   top: ${hp(9)};
 `;
 
-const SearchBox = styled.View`
-  top: ${hp(15)}px;
+const Grid = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: ${hp(20)}px;
+  margin-right: ${wp(5)}px;
+  margin-left: ${wp(5)}px;
 `;
 
-const Input = styled.TextInput`
-  background-color: transparent;
-
-  width: ${wp(90.4)}px;
-  height: ${hp(5)}px;
+const Item = styled.TouchableOpacity`
+  width: ${wp(25)}px;
+  height: ${wp(25)}px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: ${hp(2)}px;
+  background-color: ${COLORS.white};
+  border-color: ${COLORS.main};
   border-radius: 10px;
-  border-color: lightgray;
-  border-width: 1px;
+  border-width: 3px;
+`;
 
-  padding-left: ${RFValue(4)}px;
-  font-size: ${RFValue(13)}px;
+const ItemName = styled.Text`
+  font-size: ${RFValue(15)}px;
   font-weight: bold;
-  padding: ${RFValue(10)}px;
+`;
+
+const Btn = styled.TouchableOpacity`
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 `;
 
 export default CommunityScreen;

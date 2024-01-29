@@ -148,7 +148,7 @@ function GetAuthCodeScreen(props) {
         .then((res) => {
           const { data } = res;
           console.log(format(data));
-          navigation.navigate('home-tab');
+          navigation.navigate('loginScreen');
         })
         .catch((error) => console.log(format(error)));
     } else if (userType === 'tutee') {
@@ -156,7 +156,7 @@ function GetAuthCodeScreen(props) {
         .then((res) => {
           const { data } = res;
           console.log(format(data));
-          navigation.navigate('home-tab');
+          navigation.navigate('loginScreen');
         })
         .catch((error) => console.log(format(error)));
     }
