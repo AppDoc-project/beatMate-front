@@ -2,8 +2,10 @@ import ChatRoomList from '@components/chat/list/ChatRoomList';
 import { useFocusEffect } from '@react-navigation/native';
 import { getChatList } from 'api/chat';
 import format from 'pretty-format';
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { View, Text } from 'react-native';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { styled } from 'styled-components/native';
 
 function ChatListScreen() {
@@ -11,7 +13,7 @@ function ChatListScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const loadChatList = useCallback(() => {
+  const reGetChatList = () => {
     setIsLoading(true);
     getChatList()
       .then((res) => {
@@ -24,9 +26,24 @@ function ChatListScreen() {
         setIsError(true);
         setIsLoading(false);
       });
-  }, []);
+  };
 
-  useFocusEffect(loadChatList);
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true);
+      getChatList()
+        .then((res) => {
+          console.log(format(res.data));
+          setChatListInfo(res.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsError(true);
+          setIsLoading(false);
+        });
+    }, []),
+  );
 
   if (isLoading) {
     return (
@@ -44,12 +61,24 @@ function ChatListScreen() {
     );
   }
 
-  return <Container>{chatListInfo !== null && <ChatRoomList rooms={chatListInfo} />}</Container>;
+  return (
+    <Container>
+      <RedoWrapper onPress={reGetChatList}>
+        <MaterialIcons name="refresh" size={25} marginLeft={5} marginRight={5} />
+      </RedoWrapper>
+      {chatListInfo !== null && <ChatRoomList rooms={chatListInfo} />}
+    </Container>
+  );
 }
 
 const Container = styled.View`
   flex: 1;
   background-color: #fff;
+`;
+
+const RedoWrapper = styled.TouchableOpacity`
+  flex-direction: row-reverse;
+  margin-left: ${wp(5)}px;
 `;
 
 export default ChatListScreen;
