@@ -1,18 +1,25 @@
 import { COLORS } from 'colors';
-import React from 'react';
+import { UserInfo } from 'context/UserInfoContext';
+import React, { useContext } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
 // eslint-disable-next-line react/prop-types
 function CurrentOffLineLesson({ toggleModal }) {
+  const {
+    loginUserInfo: [loginUser],
+  } = useContext(UserInfo);
+
+  const isTutor = loginUser.isTutor;
+
   return (
     <Container>
       <Box>
         <Info>
           <InfoItems>
             <InfoSub>
-              <LabelText>수강생 이름 : </LabelText>
+              <LabelText>{isTutor ? '수강생' : '강사'} 이름 : </LabelText>
               <ValueText>김철수</ValueText>
             </InfoSub>
             <InfoSub>
@@ -25,7 +32,7 @@ function CurrentOffLineLesson({ toggleModal }) {
           </LessonInfoBtn>
         </Info>
         <Guide>
-          <Txt>수강생에게 공지한 레슨 장소로 가주세요.</Txt>
+          <Txt>레슨 장소로 가주세요.</Txt>
         </Guide>
       </Box>
     </Container>
@@ -40,13 +47,13 @@ const Container = styled.View`
 `;
 
 const Box = styled.View`
-  width: ${wp(80)}px;
-  height: ${hp(14)}px;
+  width: ${wp(90)}px;
+  height: ${hp(16)}px;
   border-width: ${RFValue(3)}px;
   border-radius: ${RFValue(10)}px;
   border-color: ${COLORS.main};
 
-  padding: ${RFValue(12)}px;
+  padding: ${RFValue(16)}px;
 `;
 const Info = styled.View`
   flex-direction: row;
@@ -71,19 +78,19 @@ const ValueText = styled.Text`
 `;
 
 const LessonInfoBtn = styled.TouchableOpacity`
-  width: ${wp(25)}px;
-  height: ${hp(3)}px;
-  border-radius: ${RFValue(5)}px;
+  width: ${wp(30)}px;
+  height: ${hp(4)}px;
+  border-radius: ${RFValue(10)}px;
   background-color: ${COLORS.subMiddleblue};
 
   justify-content: center;
   align-items: center;
 
-  margin: ${RFValue(10)}px 0 0 ${RFValue(50)}px;
+  margin: ${RFValue(5)}px 0 0 ${RFValue(60)}px;
 `;
 
 const LessonInfoBtnText = styled.Text`
-  font-size: ${RFValue(10)}px;
+  font-size: ${RFValue(12)}px;
   color: ${COLORS.white};
 `;
 
@@ -91,7 +98,7 @@ const Guide = styled.View`
   justify-content: center;
   align-items: center;
 
-  margin-top: ${RFValue(10)}px;
+  margin-top: ${RFValue(16)}px;
 `;
 
 const Txt = styled.Text`

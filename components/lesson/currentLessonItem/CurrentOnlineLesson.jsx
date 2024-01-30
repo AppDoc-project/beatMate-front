@@ -5,7 +5,8 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
-function CurrentOnlineLesson(props) {
+// eslint-disable-next-line react/prop-types
+function CurrentOnlineLesson({ toggleModal }) {
   const navigation = useNavigation();
   const videoNavi = () => {
     navigation.navigate('videoScreen');
@@ -14,19 +15,26 @@ function CurrentOnlineLesson(props) {
     <Container>
       <Box>
         <Info>
-          <LabelText>수강생 이름 : </LabelText>
-          <ValueText>김철수</ValueText>
+          <InfoItems>
+            <InfoSub>
+              <LabelText>수강생 이름 : </LabelText>
+              <ValueText>김철수</ValueText>
+            </InfoSub>
+            <InfoSub>
+              <LabelText>레슨 방식 : </LabelText>
+              <ValueText>화상 레슨</ValueText>
+            </InfoSub>
+          </InfoItems>
+          <LessonInfoBtn onPress={toggleModal}>
+            <LessonInfoBtnText>레슨 정보 확인하기</LessonInfoBtnText>
+          </LessonInfoBtn>
         </Info>
-        <Info>
-          <LabelText>레슨 방식 : </LabelText>
-          <ValueText>화상 레슨</ValueText>
-        </Info>
-        <Lesson>
+        <Guide>
           <OnlineBtn onPress={videoNavi}>
             <OnlineBtnText>방 입장하기</OnlineBtnText>
           </OnlineBtn>
           <GuideText>(클릭 시 화상 채팅 방으로 입장됩니다.)</GuideText>
-        </Lesson>
+        </Guide>
       </Box>
     </Container>
   );
@@ -40,18 +48,24 @@ const Container = styled.View`
 `;
 
 const Box = styled.View`
-  width: ${wp(80)}px;
-  height: ${hp(14)}px;
+  width: ${wp(90)}px;
+  height: ${hp(16)}px;
   border-width: ${RFValue(3)}px;
   border-radius: ${RFValue(10)}px;
   border-color: ${COLORS.main};
 
-  padding: ${RFValue(12)}px;
+  padding: ${RFValue(16)}px;
 `;
 
 const Info = styled.View`
   flex-direction: row;
-  margin: 0 0 ${RFValue(5)}px 0;
+`;
+
+const InfoItems = styled.View``;
+
+const InfoSub = styled.View`
+  flex-direction: row;
+  margin-bottom: ${RFValue(5)}px;
 `;
 
 const LabelText = styled.Text`
@@ -65,7 +79,24 @@ const ValueText = styled.Text`
   margin-top: ${RFValue(2.5)}px;
 `;
 
-const Lesson = styled.View`
+const LessonInfoBtn = styled.TouchableOpacity`
+  width: ${wp(30)}px;
+  height: ${hp(4)}px;
+  border-radius: ${RFValue(10)}px;
+  background-color: ${COLORS.subMiddleblue};
+
+  justify-content: center;
+  align-items: center;
+
+  margin: ${RFValue(5)}px 0 0 ${RFValue(60)}px;
+`;
+
+const LessonInfoBtnText = styled.Text`
+  font-size: ${RFValue(12)}px;
+  color: ${COLORS.white};
+`;
+
+const Guide = styled.View`
   justify-content: center;
   align-items: center;
 `;
@@ -73,7 +104,7 @@ const Lesson = styled.View`
 const OnlineBtn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
-  margin: ${RFValue(4)}px 0 ${RFValue(2)}px 0;
+  margin: ${RFValue(8)}px 0 ${RFValue(2)}px 0;
 `;
 
 const OnlineBtnText = styled.Text`

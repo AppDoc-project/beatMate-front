@@ -39,15 +39,15 @@ function LessonScreenNavigator(props) {
           headerShown: false,
         }}
       />
-      {/* {isTutor ? ( */}
-      <Stack.Screen
-        name={'tutorFeedbackScreen'}
-        component={TutorFeedbackScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      {/* ) : (
+      {isTutor ? (
+        <Stack.Screen
+          name={'tutorFeedbackScreen'}
+          component={TutorFeedbackScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      ) : (
         <Stack.Screen
           name={'tuteeFeedbackScreen'}
           component={TuteeFeedbackScreen}
@@ -55,7 +55,7 @@ function LessonScreenNavigator(props) {
             headerShown: false,
           }}
         />
-      )} */}
+      )}
     </Stack.Navigator>
   );
 }

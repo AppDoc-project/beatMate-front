@@ -22,8 +22,8 @@ const Container = styled.View`
 `;
 
 const Box = styled.View`
-  width: ${wp(80)}px;
-  height: ${hp(14)}px;
+  width: ${wp(90)}px;
+  height: ${hp(16)}px;
   border-width: ${RFValue(3)}px;
   border-radius: ${RFValue(10)}px;
   border-color: ${COLORS.main};
