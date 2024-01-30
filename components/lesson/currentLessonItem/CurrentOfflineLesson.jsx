@@ -4,12 +4,13 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
-function CurrentOffLineLesson(props) {
+// eslint-disable-next-line react/prop-types
+function CurrentOffLineLesson({ toggleModal }) {
   return (
     <Container>
       <Box>
-        <Lesson>
-          <Info>
+        <Info>
+          <InfoItems>
             <InfoSub>
               <LabelText>수강생 이름 : </LabelText>
               <ValueText>김철수</ValueText>
@@ -18,11 +19,11 @@ function CurrentOffLineLesson(props) {
               <LabelText>레슨 방식 : </LabelText>
               <ValueText>화상 레슨</ValueText>
             </InfoSub>
-          </Info>
-          <LessonInfoBtn>
+          </InfoItems>
+          <LessonInfoBtn onPress={toggleModal}>
             <LessonInfoBtnText>레슨 정보 확인하기</LessonInfoBtnText>
           </LessonInfoBtn>
-        </Lesson>
+        </Info>
         <Guide>
           <Txt>수강생에게 공지한 레슨 장소로 가주세요.</Txt>
         </Guide>
@@ -47,15 +48,15 @@ const Box = styled.View`
 
   padding: ${RFValue(12)}px;
 `;
-const Lesson = styled.View`
+const Info = styled.View`
   flex-direction: row;
 `;
 
-const Info = styled.View``;
+const InfoItems = styled.View``;
 
 const InfoSub = styled.View`
   flex-direction: row;
-  margin: 0 0 ${RFValue(5)}px 0;
+  margin-bottom: ${RFValue(5)}px;
 `;
 
 const LabelText = styled.Text`

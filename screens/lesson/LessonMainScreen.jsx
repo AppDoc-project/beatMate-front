@@ -1,9 +1,10 @@
 import CurrentNoLesson from '@components/lesson/currentLessonItem/CurrentNoLesson';
 import CurrentOffLineLesson from '@components/lesson/currentLessonItem/CurrentOfflineLesson';
 import CurrentOnlineLesson from '@components/lesson/currentLessonItem/CurrentOnlineLesson';
+import LessonInfoModal from '@components/lesson/currentLessonItem/LessonInfoModal';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
-import React from 'react';
+import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,6 +19,12 @@ function LessonMainScreen(props) {
     navigation.navigate('tutorFeedbackScreen');
   };
 
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
@@ -25,7 +32,7 @@ function LessonMainScreen(props) {
           <MainTxt marginTop={RFValue(50)}>현재 진행 중인 레슨</MainTxt>
           {/* <CurrentNoLesson /> */}
           {/* <CurrentOnlineLesson /> */}
-          <CurrentOffLineLesson />
+          <CurrentOffLineLesson toggleModal={toggleModal} />
         </FirstSection>
         <SecondSection>
           <MainTxt>레슨 피드백지/평가지를 작성해 주세요!</MainTxt>
@@ -42,13 +49,14 @@ function LessonMainScreen(props) {
           </ScheduleBtn>
         </ThirdSection>
       </Container>
+      {isModalVisible && <LessonInfoModal closeModal={toggleModal} />}
     </SafeAreaView>
   );
 }
 
 const Container = styled.View`
   flex: 1;
-  bakcground-color: ${COLORS.white};
+  background-color: ${COLORS.white};
 `;
 
 const MainTxt = styled.Text`
