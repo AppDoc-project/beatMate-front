@@ -30,7 +30,6 @@ function MyBookmarkListItem({ myBookmark }) {
     navigation.navigate('communityOnePostScreen', { postId, communityName });
   };
 
-
   const formattedDate = myBookmark && myBookmark.createdAt.substring(0, 10).replace(/:/g, '.');
 
   return (

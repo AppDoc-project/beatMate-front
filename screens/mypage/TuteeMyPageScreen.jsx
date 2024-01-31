@@ -1,7 +1,7 @@
 import MyBookmarkList from '@components/mypage/mypagetabscreens/List/MyBookmarkList';
 import MyCommentList from '@components/mypage/mypagetabscreens/List/MyCommentList';
 import MyPostList from '@components/mypage/mypagetabscreens/List/MyPostList';
-import MyTutorScreen from '@components/mypage/mypagetabscreens/MyTutorScreen';
+import MyTutorList from '@components/mypage/mypagetabscreens/List/MyTutorList';
 import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { getMyPageSection } from 'api/mypage';
 import { COLORS } from 'colors';
@@ -161,11 +161,7 @@ function TuteeMyPageScreen() {
         {isMyPost && <MyPostList />}
         {isMyComment && <MyCommentList />}
         {isMyBookmark && <MyBookmarkList />}
-        {isMyTutor && (
-          <View>
-            <MyTutorScreen /> {/* 나중에 찜한 강사부분 api 끝나면 수정 필요 */}
-          </View>
-        )}
+        {isMyTutor && <MyTutorList />}
       </ShowMainInfo>
     </Container>
   );

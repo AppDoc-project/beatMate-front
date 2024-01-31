@@ -1,7 +1,5 @@
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { COLORS } from 'colors';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
@@ -36,38 +34,38 @@ function SearchOptionModal({ onSelectSearchOption, onClose }) {
     console.log('handleSheetChanges', index);
   }, []);
 
-  const renderBackdrop = useCallback(
-    (props) => <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />,
-    [],
-  );
+  // const renderBackdrop = useCallback(
+  //   (props) => <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />,
+  //   [],
+  // );
 
-  return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Container>
-        <BottomSheet
-          ref={bottomSheetModalRef}
-          index={0}
-          snapPoints={snapPoints}
-          onChange={handleSheetChanges}
-          handleComponent={null}
-          enablePanDownToClose={true}
-          backdropComponent={renderBackdrop}
-        >
-          <CategoryItem>
-            <Btn onPress={() => handleOptionSelection(0)}>
-              <Txt>찜 많은 순</Txt>
-            </Btn>
-            <Btn onPress={() => handleOptionSelection(1)}>
-              <Txt>레슨 횟수 많은 순</Txt>
-            </Btn>
-            <Btn onPress={() => handleOptionSelection(2)}>
-              <Txt>평점 높은 순</Txt>
-            </Btn>
-          </CategoryItem>
-        </BottomSheet>
-      </Container>
-    </GestureHandlerRootView>
-  );
+  // return (
+  //   <GestureHandlerRootView style={{ flex: 1 }}>
+  //     <Container>
+  //       <BottomSheet
+  //         ref={bottomSheetModalRef}
+  //         index={0}
+  //         snapPoints={snapPoints}
+  //         onChange={handleSheetChanges}
+  //         handleComponent={null}
+  //         enablePanDownToClose={true}
+  //         backdropComponent={renderBackdrop}
+  //       >
+  //         <CategoryItem>
+  //           <Btn onPress={() => handleOptionSelection(0)}>
+  //             <Txt>찜 많은 순</Txt>
+  //           </Btn>
+  //           <Btn onPress={() => handleOptionSelection(1)}>
+  //             <Txt>레슨 횟수 많은 순</Txt>
+  //           </Btn>
+  //           <Btn onPress={() => handleOptionSelection(2)}>
+  //             <Txt>평점 높은 순</Txt>
+  //           </Btn>
+  //         </CategoryItem>
+  //       </BottomSheet>
+  //     </Container>
+  //   </GestureHandlerRootView>
+  // );
 }
 
 const Container = styled.View`

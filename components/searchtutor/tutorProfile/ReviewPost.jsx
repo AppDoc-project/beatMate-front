@@ -1,4 +1,3 @@
-import userimage from '@assets/userimage.png';
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
 import { Image, TouchableOpacity } from 'react-native';
@@ -40,7 +39,7 @@ function ReviewPost(props) {
   return (
     <ReviewBox>
       <ImageBox>
-        <ProfileImage source={userimage} />
+        <ProfileImage />
       </ImageBox>
       <Box>
         <NickName>익명</NickName>

@@ -214,6 +214,25 @@ const quitUser = async (data) => {
   }
 };
 
+// 본인이 찜한 강사 조회
+const getLikedTutor = async () => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+
+    const response = await client.get('/community/profile/pick', {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export {
   getMyPageSection,
   getUserWritePost,
@@ -226,4 +245,5 @@ export {
   changeProfile,
   postImages,
   quitUser,
+  getLikedTutor,
 };

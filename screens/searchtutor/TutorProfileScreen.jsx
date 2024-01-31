@@ -1,4 +1,3 @@
-import vocal from '@assets/vocal.jpg';
 import LessonInfoPost from '@components/searchtutor/tutorProfile/LessonInfoPost';
 import ReviewItem from '@components/searchtutor/tutorProfile/ReviewItem';
 import ReviewPost from '@components/searchtutor/tutorProfile/ReviewPost';
@@ -56,7 +55,7 @@ function TutorProfileScreen() {
         </Header>
         <InfoSection>
           <ImageBox>
-            <ProfileImage source={vocal} />
+            <ProfileImage />
           </ImageBox>
           <Name>김철수</Name>
           <Intor>안녕하세요~ 보컬 가르치고 있는 김철수 강사입니다.</Intor>

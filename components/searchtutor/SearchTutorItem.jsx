@@ -1,4 +1,3 @@
-import vocal from '@assets/vocal.jpg';
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
 import { Image } from 'react-native';
@@ -23,7 +22,7 @@ function SearchTutorItem(props) {
     <Container>
       <TutorProfileBox>
         <ImageBox>
-          <ProfileImage source={vocal} />
+          <ProfileImage />
         </ImageBox>
         <Item>
           <TutorItem>
