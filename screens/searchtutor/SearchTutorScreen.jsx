@@ -1,171 +1,242 @@
-import CommunityCategoryModal from '@components/searchtutor/CommunityCategoryModal';
-import SearchOptionModal from '@components/searchtutor/SearchOptionModal';
 import SearchTutorItem from '@components/searchtutor/SearchTutorItem';
-import { useNavigation } from '@react-navigation/native';
+import SelectCategoryTutor from '@components/searchtutor/SelectCategoryTutor';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { searchWithTutorName, searchWithSortOption } from 'api/tutorpage';
 import { COLORS } from 'colors';
-import React, { useState } from 'react';
-import { SafeAreaView, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import format from 'pretty-format';
+import React, { useEffect, useState } from 'react';
+import { Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import styled from 'styled-components';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import styled from 'styled-components/native';
 
 function SearchTutorScreen() {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { speciality, english, searchTutorName, searchType } = route.params;
 
-  const TutorProfile = () => {
-    navigation.navigate('tutorProfileScreen');
+  const [page, setPage] = useState(0);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [hasMoreData, setHasMoreData] = useState(true);
+
+  const [tutorPosts, setTutorPosts] = useState([]);
+
+  const onPressPreviousBtn = () => {
+    navigation.goBack();
   };
 
-  const [searchTutor, setSearchTutor] = useState('');
-  const [isCategoryModal, setCategoryModal] = useState(false);
-  const [isSearchModal, setSearchModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('보컬');
-  const [selectedSearchOption, setSelectedSearchOption] = useState('찜 많은 순');
+  const [newKoSpeciality, setnewKoSpeciality] = useState('');
+  const [newEnSpeciality, setnewEnSpeciality] = useState('');
 
-  const toggleCategoryModal = () => {
-    setCategoryModal(!isCategoryModal);
+  useEffect(() => {
+    setnewKoSpeciality(speciality);
+    setnewEnSpeciality(english);
+  }, [speciality, english]);
+
+  // 이름으로 강사찾기
+  const [searchedNameTutors, setSearchedNameTutor] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (searchTutorName && newKoSpeciality) {
+        setIsLoading(true);
+        searchWithTutorName(searchTutorName, newEnSpeciality)
+          .then((res) => {
+            console.log('이름으로 강사찾기', format(res.data));
+            setSearchedNameTutor(res.data);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.log('이름으로 강사찾기', err);
+            setIsError(true);
+            setIsLoading(false);
+          });
+      }
+    }, [searchTutorName, newEnSpeciality]),
+  );
+
+  // 검색 조건으로 강사찾기
+  const [optionedTutor, setOptionedTutor] = useState(null);
+  const [isOptionedLoading, setOptionedIsLoading] = useState(false);
+  const [isOptionedError, setOptionedIsError] = useState(false);
+
+  useEffect(() => {
+    if (searchType && newKoSpeciality) {
+      setOptionedIsLoading(true);
+      setnewEnSpeciality(english);
+      setnewKoSpeciality(speciality);
+      searchWithSortOption(searchType, newEnSpeciality, page, 10)
+        .then((res) => {
+          console.log('검색 조건으로 강사찾기', format(res.data));
+          setOptionedTutor(res.data);
+          setTutorPosts(res.data);
+          setOptionedIsLoading(false);
+        })
+        .catch((err) => {
+          console.log('검색 조건으로 강사찾기', err);
+          setOptionedIsError(true);
+          setOptionedIsLoading(false);
+        });
+    }
+  }, [searchType, newEnSpeciality]);
+
+  const fetchData = async (page) => {
+    try {
+      if (isFetchingMore) {
+        return;
+      }
+
+      setIsFetchingMore(true);
+      setIsLoading(true);
+
+      setPage(page + 1);
+
+      const response = await searchWithSortOption(searchType, newEnSpeciality, page, 10);
+
+      const newDatas = response.data;
+
+      setTutorPosts((prevPosts) => (newDatas.length > 0 ? [...prevPosts, ...newDatas] : prevPosts));
+      setHasMoreData(optionedTutor.length > 0);
+      setIsLoading(false);
+      setIsError(false);
+    } catch (error) {
+      console.error('데이터를 불러오는 중 에러 발생:', error);
+      setIsError(true);
+    } finally {
+      setIsFetchingMore(false);
+    }
   };
 
-  const toggleSearchOptionModal = () => {
-    setSearchModal(!isSearchModal);
+  const onEndReached = () => {
+    if (!isLoading && hasMoreData && !isFetchingMore) {
+      fetchData(page);
+    }
   };
+
+  if (isLoading || isOptionedLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError || isOptionedError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Container>
-          <Header>
-            <Txt>강사 찾기</Txt>
-          </Header>
-          <SearchBox>
-            <Input
-              value={searchTutor}
-              onChangeText={setSearchTutor}
-              placeholder="검색어를 입력해주세요."
-              placeholderTextColor="lightgray"
-            />
-            <SearchIcon>
-              <Ionicons name="search" size={32} color={COLORS.lightgray} />
-            </SearchIcon>
-          </SearchBox>
-          <SelectSection>
-            <CategoryBtn onPress={toggleCategoryModal}>
-              <CategoryTxt>{selectedCategory}</CategoryTxt>
-              <MaterialIcons
-                name="keyboard-arrow-down"
-                size={RFValue(26)}
-                marginRight={RFValue(5)}
-                marginTop={RFValue(-3)}
-              />
-            </CategoryBtn>
-            <SearchOptionBtn onPress={toggleSearchOptionModal}>
-              <OptionTxt>{selectedSearchOption}</OptionTxt>
-              <MaterialIcons name="keyboard-arrow-down" size={RFValue(20)} />
-            </SearchOptionBtn>
-          </SelectSection>
-          <TutorList onPress={TutorProfile}>
-            <SearchTutorItem />
-          </TutorList>
-          {isCategoryModal && (
-            <CommunityCategoryModal
-              onClose={() => setCategoryModal(false)}
-              onSelectCategory={(category) => setSelectedCategory(category)}
-              selectedCategory={selectedCategory}
-            />
-          )}
-          {isSearchModal && (
-            <SearchOptionModal
-              onClose={() => setSearchModal(false)}
-              onSelectSearchOption={(option) => setSelectedSearchOption(option)}
-            />
-          )}
-        </Container>
-      </TouchableWithoutFeedback>
-    </SafeAreaView>
+    <Container>
+      <Top>
+        <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => onPressPreviousBtn()} />
+        <MainTxt>강사찾기</MainTxt>
+      </Top>
+      <SecondRow>
+        <SelectCategoryTutor
+          setnewEnSpeciality={setnewEnSpeciality}
+          setnewKoSpeciality={setnewKoSpeciality}
+          newKoSpeciality={newKoSpeciality}
+        />
+      </SecondRow>
+
+      <TypeChooseWrapper
+        onPress={() => navigation.navigate('getSearchOptionScreen', { newKoSpeciality, newEnSpeciality })}
+      >
+        <TypeWrapper>
+          <TypeTxt>검색 및 정렬 조건 설정하기</TypeTxt>
+          <AntDesign name={'caretdown'} size={RFValue(12)} color={COLORS.black} />
+        </TypeWrapper>
+      </TypeChooseWrapper>
+
+      <PostWrapper>
+        {searchedNameTutors && searchedNameTutors.data && (
+          <ListScrollView>
+            {searchedNameTutors.data.map((searchedNameTutor) => (
+              <SearchTutorItem key={searchedNameTutor.id} searchedNameTutor={searchedNameTutor} />
+            ))}
+          </ListScrollView>
+        )}
+        {tutorPosts && tutorPosts.data && (
+          <FlatList
+            data={tutorPosts}
+            renderItem={({ item }) => <SearchTutorItem post={item} />}
+            onEndReached={onEndReached}
+            keyExtractor={(item, index) => index.toString()}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={() => (isLoading ? <ActivityIndicator /> : null)}
+          />
+        )}
+      </PostWrapper>
+    </Container>
   );
 }
 
 const Container = styled.View`
   flex: 1;
   background-color: ${COLORS.white};
-`;
-
-const Header = styled.View`
-  flex: 0.05;
-  justify-content: center;
   align-items: center;
 `;
 
-const Txt = styled.Text`
-  font-size: ${RFValue(18)}px;
-  font-weight: 900;
-`;
-
-const SearchBox = styled.View`
-  flex: 0.08;
-  justify-content: center;
-  align-items: center;
+const Top = styled.View`
+  top: ${hp(5)};
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
-const Input = styled.TextInput`
-  background-color: transparent;
-  width: ${wp(90.4)}px;
-  height: ${hp(5)}px;
-  border-radius: 10px;
-  border-color: lightgray;
+const MainTxt = styled.Text`
+  font-size: ${RFValue(15)}px;
+  font-weight: bold;
+  flex: 1;
+`;
+
+const SecondRow = styled.View`
+  width: ${wp(100)}px;
+  align-items: center;
+  justify-content: center;
+  padding: ${hp(1)}px;
+  top: ${hp(5)}px;
+`;
+
+const PostWrapper = styled.View`
+  height: ${hp(62)}px;
+  top: ${hp(18)}px;
+`;
+
+const TypeChooseWrapper = styled.TouchableOpacity`
+  width: ${wp(100)}px;
+  align-items: center;
+  top: ${hp(12)}px;
+`;
+
+const TypeWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  border-color: ${COLORS.black};
   border-width: 1px;
-  padding-left: ${RFValue(4)}px;
-  font-size: ${RFValue(13)}px;
-  padding: ${RFValue(10)}px;
-`;
-
-const SearchIcon = styled.TouchableOpacity`
+  padding: ${RFValue(5)}px;
   position: absolute;
-  margin-top: ${hp(0.6)}px;
-  right: ${wp(6)}px;
+  right: 0;
+  margin-right: ${wp(5)}px;
 `;
 
-const SelectSection = styled.View`
-  flex: 0.05;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin: ${hp(0)}px ${wp(5)}px;
-`;
-
-const CategoryBtn = styled.TouchableOpacity`
-  flex-direction: row;
-`;
-
-const CategoryTxt = styled.Text`
-  font-size: ${RFValue(20)}px;
-  font-weight: 900;
-  color: ${COLORS.black};
-`;
-
-const SearchOptionBtn = styled.TouchableOpacity`
-  flex-direction: row;
-  width: ${wp(32)}px;
-  height: ${hp(3.6)}px;
-  border-radius: ${RFValue(5)}px;
-  border-color: lightgray;
-  border-width: 1px;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const OptionTxt = styled.Text`
+const TypeTxt = styled.Text`
+  margin-right: ${wp(2)}px;
   font-size: ${RFValue(11)}px;
-  font-weight: 600;
-  color: ${COLORS.black};
-  margin: 0 0 0 ${wp(2)}px;
+  font-weight: bold;
 `;
 
-const TutorList = styled.TouchableOpacity`
-  flex: 0.82;
+const ListScrollView = styled.ScrollView`
+  flex-grow: 1;
 `;
 
 export default SearchTutorScreen;

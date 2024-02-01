@@ -1,49 +1,64 @@
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Image } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components';
 
-function SearchTutorItem(props) {
-  const [isLikeList, setLikeList] = useState(false);
+SearchTutorItem.propTypes = {
+  searchedNameTutor: PropTypes.shape({
+    id: PropTypes.number.isRequired, // 해당 강사 id
+    lessonCount: PropTypes.number.isRequired, // 레슨 진행 횟수
+    name: PropTypes.string.isRequired, // 해당 강사 이름
+    pickYn: PropTypes.bool.isRequired, // 내가 찜 했는 지 여부
+    profile: PropTypes.string, // 해당 강사 프로필 주소
+    reviewCount: PropTypes.number.isRequired, // 리뷰 수
+    score: PropTypes.number.isRequired, // 해당 강사 평점
+    specialities: PropTypes.array.isRequired, // 해당 강사 분야
+  }).isRequired,
+};
 
-  const toggleLikeList = () => {
-    setLikeList(!isLikeList);
-    if (isLikeList) {
-      console.log('Remove Tutor');
-    } else {
-      console.log('Added Tutor');
-    }
-  };
+function SearchTutorItem({ searchedNameTutor }) {
+  // const navigation = useNavigation();
+
   return (
     <Container>
       <TutorProfileBox>
-        <ImageBox>
-          <ProfileImage />
-        </ImageBox>
+        <ProfileImg>
+          {searchedNameTutor.profile && (
+            <Image
+              source={{
+                uri: searchedNameTutor.profile,
+              }}
+              style={{ width: wp(20), height: wp(20), borderRadius: 50 }}
+            />
+          )}
+          {!searchedNameTutor.profile && <FontAwesome name={'user-circle'} size={RFValue(50)} color={'lightgray'} />}
+        </ProfileImg>
         <Item>
           <TutorItem>
-            <Name>김철수</Name>
+            <Name>{searchedNameTutor.name}</Name>
             <FieldBox>
-              <Field>보컬</Field>
+              {searchedNameTutor.specialities &&
+                searchedNameTutor.specialities.map((speciality, index) => (
+                  <Field key={index}>
+                    {speciality}
+                    {index < searchedNameTutor.specialities.length - 1 && <Gap />}
+                  </Field>
+                ))}
             </FieldBox>
           </TutorItem>
-          <LessonName>보컬 취미</LessonName>
           <LessonInfo>
             <Ionicons name="star" size={RFValue(12)} color={COLORS.main} marginRight={RFValue(3)} />
-            <InfoTxt>4.38 | 총 139회 레슨</InfoTxt>
+            <InfoTxt>
+              {searchedNameTutor.score} | 총 {searchedNameTutor.lessonCount} 레슨
+            </InfoTxt>
           </LessonInfo>
         </Item>
-        <Bookmark onPress={toggleLikeList}>
-          <AntDesign
-            name={isLikeList ? 'heart' : 'hearto'}
-            size={RFValue(20)}
-            color={isLikeList ? COLORS.main : COLORS.lightgray}
-          />
-        </Bookmark>
       </TutorProfileBox>
     </Container>
   );
@@ -52,31 +67,23 @@ const Container = styled.View``;
 
 const TutorProfileBox = styled.View`
   flex-direction: row;
-
-  height: ${hp(18)}px;
-  padding: ${hp(2)}px ${wp(5)}px;
+  width: ${wp(100)}px;
+  height: ${hp(15)}px;
+  padding: ${hp(2)}px;
 
   border-bottom-width: ${RFValue(1)}px;
   border-bottom-color: ${COLORS.lightgray};
+  align-items: center;
 `;
 
-const ImageBox = styled.View`
-  width: ${RFValue(100)}px;
-  height: ${RFValue(100)}px;
-  border-radius: ${RFValue(50)}px;
-  overflow: hidden;
-`;
-
-const ProfileImage = styled(Image)`
-  width: ${RFValue(100)}px;
-  height: ${RFValue(100)}px;
-  object-fit: cover;
+const ProfileImg = styled.View`
+  border-radius: 50%;
+  margin-right: ${wp(5)}px;
 `;
 
 const Item = styled.View`
   flex-direction: column;
   justify-content: center;
-  margin: ${hp(4)}px ${wp(10)}px;
 `;
 
 const TutorItem = styled.View`
@@ -98,21 +105,14 @@ const FieldBox = styled.View`
 
   justify-content: center;
   align-items: center;
-
-  margin: ${hp(0)}px ${wp(2)}px;
+  margin-left: ${wp(3)}px;
+  margin-bottom: ${hp(1)}px;
 `;
 
 const Field = styled.Text`
   font-size: ${RFValue(11)}px;
   font-weight: 600;
   color: ${COLORS.main};
-`;
-
-const LessonName = styled.Text`
-  font-size: ${RFValue(11)}px;
-  font-weight: 600;
-
-  margin: ${hp(1)}px ${wp(0)}px;
 `;
 
 const LessonInfo = styled.View`
@@ -124,8 +124,8 @@ const InfoTxt = styled.Text`
   font-weight: 600;
 `;
 
-const Bookmark = styled.TouchableOpacity`
-  justify-content: center;
+const Gap = styled.View`
+  width: ${wp(1)}px;
 `;
 
 export default SearchTutorItem;

@@ -21,12 +21,12 @@ const postPickTutor = async (data) => {
 };
 
 // 이름으로 강사 검색하기
-const searchWithTutorName = async (name) => {
+const searchWithTutorName = async (name, speciality) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
     console.log(token);
 
-    const response = await client.get(`/tutor/name?name=${name}`, {
+    const response = await client.get(`/tutor/name?name=${name}&speciality=${speciality}`, {
       headers: {
         Authorization: token,
       },
@@ -45,14 +45,11 @@ const searchWithSortOption = async (type, speciality, page, limit) => {
     const token = await AsyncStorage.getItem('access_token');
     console.log(token);
 
-    const response = await client.get(
-      `/community/search?type=${type}&speciality=${speciality}&page=${page}&limit=${limit}`,
-      {
-        headers: {
-          Authorization: token,
-        },
+    const response = await client.get(`/tutor/sort?type=${type}&speciality=${speciality}&page=${page}&limit=${limit}`, {
+      headers: {
+        Authorization: token,
       },
-    );
+    });
 
     return response;
   } catch (error) {

@@ -1,9 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import { getCommunitySection } from 'api/commity';
 import { COLORS } from 'colors';
-import format from 'pretty-format';
-import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView } from 'react-native';
+import React from 'react';
+import { SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -12,49 +10,22 @@ import styled from 'styled-components/native';
 function TutorCommunityListScreen() {
   const navigation = useNavigation();
 
-  //게시판 리스트 조회 API
-  const [SectionData, setSectionData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const SectionData = [
+    { speciality: '피아노', english: 'PIANO' },
+    { speciality: '기타', english: 'GUITAR' },
+    { speciality: '보컬', english: 'VOCAL' },
+    { speciality: '드럼', english: 'DRUM' },
+    { speciality: '베이스', english: 'BASS' },
+    { speciality: '음악이론', english: 'MUSIC_THEORY' },
+    { speciality: '작곡', english: 'COMPOSITION' },
+    { speciality: '관악기', english: 'WIND_INSTRUMENT' },
+    { speciality: '현악기', english: 'STRING_INSTRUMENT' },
+    { speciality: '건반악기', english: 'KEYBOARD_INSTRUMENT' },
+  ];
 
-  const moveSpecificScreen = (communityId, name) => {
-    navigation.navigate('getSearchOptionScreen', { communityId, name });
+  const moveSpecificScreen = (speciality, english) => {
+    navigation.navigate('getSearchOptionScreen', { speciality, english });
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await getCommunitySection();
-        console.log(format(res.data));
-        setSectionData(res.data);
-        setIsError(false);
-      } catch (err) {
-        console.log(err);
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <View>
-        <Text>로딩중...</Text>
-      </View>
-    );
-  }
-
-  if (isError) {
-    return (
-      <View>
-        <Text>에러 발생</Text>
-      </View>
-    );
-  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -62,11 +33,11 @@ function TutorCommunityListScreen() {
         <Wrapper>
           <MainTxt>카테고리를 먼저 선택해주세요.</MainTxt>
 
-          {SectionData && SectionData.data && (
+          {SectionData && (
             <Grid>
-              {SectionData.data.map((item) => (
-                <Item key={item.id} onPress={() => moveSpecificScreen(item.id, item.name)}>
-                  <ItemName>{item.name}</ItemName>
+              {SectionData.map((item) => (
+                <Item key={item.english} onPress={() => moveSpecificScreen(item.speciality, item.english)}>
+                  <ItemName>{item.speciality}</ItemName>
                 </Item>
               ))}
             </Grid>

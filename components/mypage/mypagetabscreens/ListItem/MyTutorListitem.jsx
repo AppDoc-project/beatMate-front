@@ -51,7 +51,7 @@ function MyTutorListItem({ myTutorData }) {
                 myTutorData.specialities.map((speciality, index) => (
                   <Teachcate key={index}>
                     {speciality}
-                    {index < myTutorData.specialities.length - 1 && <Gap /> /* Add this line */}
+                    {index < myTutorData.specialities.length - 1 && <Gap />}
                   </Teachcate>
                 ))}
             </Wrapper>

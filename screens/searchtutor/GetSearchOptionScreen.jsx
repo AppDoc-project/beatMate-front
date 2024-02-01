@@ -13,7 +13,7 @@ function GetSearchOptionScreen(props) {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const { communityId, name } = route.params; //선택한 커뮤니티와 커뮤니티 이름
+  const { speciality, english } = route.params; //선택한 커뮤니티와 커뮤니티 이름
 
   const [isName, setIsName] = useState(false); // 이름 선택 옵션 버튼 클릭
   const [isSearchOption, setIsSearchOption] = useState(false); // 검색 옵션 버튼 클릭
@@ -33,11 +33,7 @@ function GetSearchOptionScreen(props) {
 
   const onPressContinueBtn = () => {
     if (searchType || searchTutorName) {
-      setSearchTutorName('');
-      setIsName(false);
-      setIsSearchOption(false);
-      setSearchType('');
-      navigation.navigate('searchTutorScreen', { communityId, name, searchTutorName, searchType });
+      navigation.navigate('searchTutorScreen', { speciality, english, searchTutorName, searchType });
     }
   };
 
