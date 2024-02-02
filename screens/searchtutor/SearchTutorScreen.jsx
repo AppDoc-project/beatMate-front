@@ -110,6 +110,11 @@ function SearchTutorScreen() {
     }
   };
 
+  useEffect(() => {
+    console.log('newKoSpeciality in SearchTutorScreen:', newKoSpeciality);
+    // ... (이하 코드)
+  }, [newKoSpeciality]);
+
   const onEndReached = () => {
     if (!isLoading && hasMoreData && !isFetchingMore) {
       fetchData(page);
@@ -159,14 +164,14 @@ function SearchTutorScreen() {
         {searchedNameTutors && searchedNameTutors.data && (
           <ListScrollView>
             {searchedNameTutors.data.map((searchedNameTutor) => (
-              <SearchTutorItem key={searchedNameTutor.id} searchedNameTutor={searchedNameTutor} />
+              <SearchTutorItem key={searchedNameTutor.id} searchedTutor={searchedNameTutor} />
             ))}
           </ListScrollView>
         )}
         {tutorPosts && tutorPosts.data && (
           <FlatList
-            data={tutorPosts}
-            renderItem={({ item }) => <SearchTutorItem post={item} />}
+            data={tutorPosts.data}
+            renderItem={({ item }) => <SearchTutorItem searchedTutor={item} />}
             onEndReached={onEndReached}
             keyExtractor={(item, index) => index.toString()}
             onEndReachedThreshold={0.1}

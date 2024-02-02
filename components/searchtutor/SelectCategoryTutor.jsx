@@ -35,11 +35,18 @@ function SelectCategoryTutor({ setnewEnSpeciality, setnewKoSpeciality, newKoSpec
   };
 
   const handleOptionClick = (option) => {
+    console.log('Selected Option:', option);
     setSelectedObject(option);
     setnewEnSpeciality(option.english);
     setnewKoSpeciality(option.speciality);
     setToggle(false);
   };
+
+  useEffect(() => {
+    if (selectedObject) {
+      console.log('newKoSpeciality:', newKoSpeciality);
+    }
+  }, [selectedObject, newKoSpeciality]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleOptionClick(item)}>
@@ -48,12 +55,6 @@ function SelectCategoryTutor({ setnewEnSpeciality, setnewKoSpeciality, newKoSpec
       </ListItem>
     </TouchableOpacity>
   );
-
-  useEffect(() => {
-    if (selectedObject) {
-      console.log('newKoSpeciality:', newKoSpeciality);
-    }
-  }, [selectedObject, newKoSpeciality]);
 
   return (
     <Section>

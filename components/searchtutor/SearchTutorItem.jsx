@@ -10,7 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components';
 
 SearchTutorItem.propTypes = {
-  searchedNameTutor: PropTypes.shape({
+  searchedTutor: PropTypes.shape({
     id: PropTypes.number.isRequired, // 해당 강사 id
     lessonCount: PropTypes.number.isRequired, // 레슨 진행 횟수
     name: PropTypes.string.isRequired, // 해당 강사 이름
@@ -22,43 +22,43 @@ SearchTutorItem.propTypes = {
   }).isRequired,
 };
 
-function SearchTutorItem({ searchedNameTutor }) {
+function SearchTutorItem({ searchedTutor }) {
   // const navigation = useNavigation();
 
   return (
     <Container>
       <TutorProfileBox>
         <ProfileImg>
-          {searchedNameTutor.profile && (
+          {searchedTutor.profile && (
             <Image
               source={{
-                uri: searchedNameTutor.profile,
+                uri: searchedTutor.profile,
               }}
               style={{ width: wp(20), height: wp(20), borderRadius: 50 }}
             />
           )}
-          {!searchedNameTutor.profile && <FontAwesome name={'user-circle'} size={RFValue(50)} color={'lightgray'} />}
+          {!searchedTutor.profile && <FontAwesome name={'user-circle'} size={RFValue(50)} color={'lightgray'} />}
         </ProfileImg>
         <Item>
           <TutorItem>
-            <Name>{searchedNameTutor.name}</Name>
-            <FieldBox>
-              {searchedNameTutor.specialities &&
-                searchedNameTutor.specialities.map((speciality, index) => (
-                  <Field key={index}>
-                    {speciality}
-                    {index < searchedNameTutor.specialities.length - 1 && <Gap />}
-                  </Field>
-                ))}
-            </FieldBox>
+            <Name>{searchedTutor.name}</Name>
           </TutorItem>
           <LessonInfo>
             <Ionicons name="star" size={RFValue(12)} color={COLORS.main} marginRight={RFValue(3)} />
             <InfoTxt>
-              {searchedNameTutor.score} | 총 {searchedNameTutor.lessonCount} 레슨
+              {searchedTutor.score} | 총 {searchedTutor.lessonCount} 레슨
             </InfoTxt>
           </LessonInfo>
         </Item>
+        <FieldBox>
+          {searchedTutor.specialities &&
+            searchedTutor.specialities.map((speciality, index) => (
+              <Field key={index}>
+                {speciality}
+                {index < searchedTutor.specialities.length - 1 && <Gap />}
+              </Field>
+            ))}
+        </FieldBox>
       </TutorProfileBox>
     </Container>
   );
@@ -96,8 +96,8 @@ const Name = styled.Text`
 `;
 
 const FieldBox = styled.View`
-  width: ${wp(10)}px;
-  height: ${hp(2.5)}px;
+  width: auto;
+  height: auto;
 
   border-width: ${wp(0.4)}px;
   border-radius: ${RFValue(5)}px;
@@ -107,6 +107,7 @@ const FieldBox = styled.View`
   align-items: center;
   margin-left: ${wp(3)}px;
   margin-bottom: ${hp(1)}px;
+  padding: ${wp(1)}px;
 `;
 
 const Field = styled.Text`
