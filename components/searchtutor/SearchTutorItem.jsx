@@ -23,11 +23,15 @@ SearchTutorItem.propTypes = {
 };
 
 function SearchTutorItem({ searchedTutor }) {
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
+
+  const onPressNavigate = () => {
+    navigation.navigate('tutorProfileScreen', { tutorId: searchedTutor.id });
+  };
 
   return (
     <Container>
-      <TutorProfileBox>
+      <TutorProfileBox onPress={onPressNavigate}>
         <ProfileImg>
           {searchedTutor.profile && (
             <Image
@@ -65,7 +69,7 @@ function SearchTutorItem({ searchedTutor }) {
 }
 const Container = styled.View``;
 
-const TutorProfileBox = styled.View`
+const TutorProfileBox = styled.TouchableOpacity`
   flex-direction: row;
   width: ${wp(100)}px;
   height: ${hp(15)}px;

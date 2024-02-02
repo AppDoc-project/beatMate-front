@@ -1,27 +1,33 @@
 import LessonInfoPost from '@components/searchtutor/tutorProfile/LessonInfoPost';
 import ReviewItem from '@components/searchtutor/tutorProfile/ReviewItem';
 import ReviewPost from '@components/searchtutor/tutorProfile/ReviewPost';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { getDatailTutorInfo, postPickTutor } from 'api/tutorpage';
 import { COLORS } from 'colors';
-import React, { useState } from 'react';
-import { SafeAreaView, TouchableOpacity, Image } from 'react-native';
+import { TutorFindCategory } from 'context/TutorFindCategoryContext';
+import format from 'pretty-format';
+import React, { useContext, useEffect, useState } from 'react';
+import { SafeAreaView, TouchableOpacity, Image, View, Text } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components';
 
 function TutorProfileScreen() {
+  const {
+    category: [findTutorCategory, setFindTutorCategory],
+  } = useContext(TutorFindCategory);
+
+  const { koCategoryName } = findTutorCategory;
+
   const navigation = useNavigation();
 
+  const route = useRoute();
+  const { tutorId } = route.params;
+
   const onPressPreviousBtn = () => {
-    navigation.navigate('searchTutorScreen');
-  };
-
-  const [isBookmark, setBookmark] = useState(false);
-
-  const toggleBookmark = () => {
-    setBookmark(!isBookmark);
-    console.log(isBookmark ? 'Remove Tutor' : 'Added Tutor');
+    navigation.goBack();
   };
 
   const [isLessonInfo, selectLessonInfo] = useState(true);
@@ -37,55 +43,136 @@ function TutorProfileScreen() {
     selectReview(true);
   };
 
+  // 강사 상세정보 가져오기
+  const [specificTutorData, setSpecificTutorData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getDatailTutorInfo(tutorId)
+      .then((res) => {
+        console.log('강사 상세정보 가져오기', format(res.data));
+        setSpecificTutorData(res.data.object);
+        setIsLoading(false);
+        setIsLike(specificTutorData?.pickYn || false);
+      })
+      .catch((err) => {
+        console.log('강사 상세정보 가져오기', err);
+        setIsError(true);
+        setIsLoading(false);
+      });
+  }, [tutorId]);
+
+  // 강사 찜 관련 부분
+  const [isLike, setIsLike] = useState(false);
+  const [isLikeLoading, setIsLikeLoading] = useState(false);
+  const [isLikeError, setIsLikeError] = useState(false);
+
+  const toggleBookmark = () => {
+    setIsLikeLoading(true);
+
+    const data = {
+      tutorId: tutorId,
+    };
+
+    postPickTutor(data)
+      .then((res) => {
+        console.log('강사 찜하기', format(res.data));
+        setIsLikeLoading(false);
+        setIsLike(!isLike);
+      })
+      .catch((err) => {
+        console.log('강사 찜하기', err);
+        setIsLikeError(true);
+        setIsLikeLoading(false);
+      });
+  };
+
+  if (isLoading || isLikeLoading) {
+    return (
+      <View>
+        <Text>로딩중...</Text>
+      </View>
+    );
+  }
+
+  if (isError || isLikeError) {
+    return (
+      <View>
+        <Text>에러 발생</Text>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <Container>
-        <Header>
-          <TouchableOpacity onPress={onPressPreviousBtn}>
-            <AntDesign name="left" size={32} marginLeft={5} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={toggleBookmark}>
-            <AntDesign
-              name={isBookmark ? 'heart' : 'hearto'}
-              size={RFValue(24)}
-              color={isBookmark ? COLORS.main : COLORS.lightgray}
-              marginRight={14}
-            />
-          </TouchableOpacity>
-        </Header>
-        <InfoSection>
-          <ImageBox>
-            <ProfileImage />
-          </ImageBox>
-          <Name>김철수</Name>
-          <Intor>안녕하세요~ 보컬 가르치고 있는 김철수 강사입니다.</Intor>
-          <FieldBox>
-            <Field>보컬</Field>
-          </FieldBox>
-        </InfoSection>
+      {specificTutorData && (
+        <Container>
+          <Header>
+            <TouchableOpacity onPress={onPressPreviousBtn}>
+              <AntDesign name="left" size={32} marginLeft={5} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={toggleBookmark}>
+              <AntDesign
+                name={isLike ? 'heart' : 'hearto'}
+                size={RFValue(24)}
+                color={isLike ? COLORS.main : COLORS.lightgray}
+                marginRight={14}
+              />
+            </TouchableOpacity>
+          </Header>
+          <InfoSection>
+            <ProfileImg>
+              {specificTutorData.profile && (
+                <Image
+                  source={{
+                    uri: specificTutorData.profile,
+                  }}
+                  style={{ width: 80, height: 80, borderRadius: 50 }}
+                />
+              )}
+              {!specificTutorData.profile && (
+                <FontAwesome name={'user-circle'} size={RFValue(100)} color={'lightgray'} />
+              )}
+            </ProfileImg>
 
-        <SelectMenu>
-          <LessonInfoBtn isLessonInfo={isLessonInfo} onPress={onPressLessonInfoBtn}>
-            <LessonInfoTxt isLessonInfo={isLessonInfo}>정보</LessonInfoTxt>
-          </LessonInfoBtn>
-          <ReviewBtn isReview={isReview} onPress={onPressReview}>
-            <ReviewTxt isReview={isReview}>후기</ReviewTxt>
-          </ReviewBtn>
-        </SelectMenu>
+            <Name>{specificTutorData.name}</Name>
+            <Intor>{specificTutorData.selfDescription}</Intor>
+            <FieldBox>
+              {specificTutorData.specialities &&
+                specificTutorData.specialities.map((speciality, index) => (
+                  <Field key={index}>
+                    {speciality}
+                    {index < specificTutorData.specialities.length - 1 && <Gap />}
+                  </Field>
+                ))}
+            </FieldBox>
+          </InfoSection>
 
-        <ShowMainInfo>
-          {isLessonInfo && <LessonInfoPost />}
-          {isReview && (
-            <>
-              <ReviewItem />
-              <ReviewPost />
-            </>
-          )}
-        </ShowMainInfo>
-        <ChatBtn>
-          <ChatTxt>채팅하기</ChatTxt>
-        </ChatBtn>
-      </Container>
+          <SelectMenu>
+            <LessonInfoBtn isLessonInfo={isLessonInfo} onPress={onPressLessonInfoBtn}>
+              <LessonInfoTxt isLessonInfo={isLessonInfo}>정보</LessonInfoTxt>
+            </LessonInfoBtn>
+            <ReviewBtn isReview={isReview} onPress={onPressReview}>
+              <ReviewTxt isReview={isReview}>후기</ReviewTxt>
+            </ReviewBtn>
+          </SelectMenu>
+
+          <ShowMainInfo>
+            {isLessonInfo && <LessonInfoPost />}
+            {isReview && (
+              <>
+                <ReviewItem />
+                <ReviewPost />
+              </>
+            )}
+          </ShowMainInfo>
+          <ChatBtn>
+            <ChatTxt>채팅하기</ChatTxt>
+          </ChatBtn>
+        </Container>
+      )}
     </SafeAreaView>
   );
 }
@@ -105,19 +192,7 @@ const InfoSection = styled.View`
   align-items: center;
 `;
 
-const ImageBox = styled.View`
-  width: ${RFValue(140)}px;
-  height: ${RFValue(140)}px;
-  border-radius: ${RFValue(70)}px;
-  overflow: hidden;
-  top: ${hp(2)}px;
-`;
-
-const ProfileImage = styled(Image)`
-  width: ${RFValue(140)}px;
-  height: ${RFValue(140)}px;
-  object-fit: cover;
-`;
+const ProfileImg = styled.View``;
 
 const Name = styled.Text`
   font-size: ${RFValue(24)}px;
@@ -150,7 +225,7 @@ const Field = styled.Text`
 
 const SelectMenu = styled.View`
   flex-direction: row;
-  width: 100%;
+  width: ${wp(100)}px;
   height: ${hp(5)}px;
   justify-content: center;
   align-items: center;
@@ -225,6 +300,10 @@ const ChatTxt = styled.Text`
   font-size: ${RFValue(16)}px;
   font-weight: 600;
   color: ${COLORS.white};
+`;
+
+const Gap = styled.View`
+  width: ${wp(1)}px;
 `;
 
 export default TutorProfileScreen;
