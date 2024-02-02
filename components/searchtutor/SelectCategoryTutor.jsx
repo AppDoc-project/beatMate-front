@@ -1,7 +1,6 @@
 import { COLORS } from 'colors';
 import { TutorFindCategory } from 'context/TutorFindCategoryContext';
-import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { TouchableOpacity, Modal, FlatList } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';

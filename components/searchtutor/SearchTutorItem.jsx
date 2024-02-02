@@ -1,12 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { Image } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 SearchTutorItem.propTypes = {
