@@ -1,5 +1,5 @@
 import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native';
@@ -11,9 +11,6 @@ import { styled } from 'styled-components/native';
 
 function GetSearchOptionScreen(props) {
   const navigation = useNavigation();
-  const route = useRoute();
-
-  const { speciality, english } = route.params; //선택한 커뮤니티와 커뮤니티 이름
 
   const [isName, setIsName] = useState(false); // 이름 선택 옵션 버튼 클릭
   const [isSearchOption, setIsSearchOption] = useState(false); // 검색 옵션 버튼 클릭
@@ -33,7 +30,7 @@ function GetSearchOptionScreen(props) {
 
   const onPressContinueBtn = () => {
     if (searchType || searchTutorName) {
-      navigation.navigate('searchTutorScreen', { speciality, english, searchTutorName, searchType });
+      navigation.navigate('searchTutorScreen', { searchTutorName, searchType });
     }
   };
 

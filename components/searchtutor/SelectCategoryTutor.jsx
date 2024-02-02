@@ -1,19 +1,20 @@
 import { COLORS } from 'colors';
+import { TutorFindCategory } from 'context/TutorFindCategoryContext';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { TouchableOpacity, Modal, FlatList } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components/native';
 
-SelectCategoryTutor.propTypes = {
-  setnewEnSpeciality: PropTypes.func.isRequired,
-  setnewKoSpeciality: PropTypes.func.isRequired,
-  newKoSpeciality: PropTypes.string.isRequired,
-};
+function SelectCategoryTutor() {
+  const {
+    category: [findTutorCategory, setFindTutorCategory],
+  } = useContext(TutorFindCategory);
 
-function SelectCategoryTutor({ setnewEnSpeciality, setnewKoSpeciality, newKoSpeciality }) {
+  const { koCategoryName } = findTutorCategory;
+
   const [isToggled, setToggle] = useState(false);
   const [selectedObject, setSelectedObject] = useState(null);
 
@@ -37,16 +38,10 @@ function SelectCategoryTutor({ setnewEnSpeciality, setnewKoSpeciality, newKoSpec
   const handleOptionClick = (option) => {
     console.log('Selected Option:', option);
     setSelectedObject(option);
-    setnewEnSpeciality(option.english);
-    setnewKoSpeciality(option.speciality);
+    setFindTutorCategory((prev) => ({ ...prev, koCategoryName: option.speciality }));
+    setFindTutorCategory((prev) => ({ ...prev, enCategoryName: option.english }));
     setToggle(false);
   };
-
-  useEffect(() => {
-    if (selectedObject) {
-      console.log('newKoSpeciality:', newKoSpeciality);
-    }
-  }, [selectedObject, newKoSpeciality]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleOptionClick(item)}>
@@ -59,7 +54,7 @@ function SelectCategoryTutor({ setnewEnSpeciality, setnewKoSpeciality, newKoSpec
   return (
     <Section>
       <Button onPress={handleToggle}>
-        <SelectText>{selectedObject ? `${selectedObject.speciality}` : newKoSpeciality}</SelectText>
+        <SelectText>{selectedObject ? `${selectedObject.speciality}` : koCategoryName}</SelectText>
         <AntDesign name={'caretdown'} size={RFValue(15)} color={COLORS.black} />
       </Button>
 

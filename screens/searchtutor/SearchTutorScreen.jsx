@@ -3,8 +3,9 @@ import SelectCategoryTutor from '@components/searchtutor/SelectCategoryTutor';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { searchWithTutorName, searchWithSortOption } from 'api/tutorpage';
 import { COLORS } from 'colors';
+import { TutorFindCategory } from 'context/TutorFindCategoryContext';
 import format from 'pretty-format';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Text, View, FlatList, ActivityIndicator } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -12,9 +13,15 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components/native';
 
 function SearchTutorScreen() {
+  const {
+    category: [findTutorCategory, setFindTutorCategory],
+  } = useContext(TutorFindCategory);
+
+  const { koCategoryName, enCategoryName } = findTutorCategory;
+
   const navigation = useNavigation();
   const route = useRoute();
-  const { speciality, english, searchTutorName, searchType } = route.params;
+  const { searchTutorName, searchType } = route.params;
 
   const [page, setPage] = useState(0);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
@@ -26,14 +33,6 @@ function SearchTutorScreen() {
     navigation.goBack();
   };
 
-  const [newKoSpeciality, setnewKoSpeciality] = useState('');
-  const [newEnSpeciality, setnewEnSpeciality] = useState('');
-
-  useEffect(() => {
-    setnewKoSpeciality(speciality);
-    setnewEnSpeciality(english);
-  }, [speciality, english]);
-
   // 이름으로 강사찾기
   const [searchedNameTutors, setSearchedNameTutor] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,9 +40,9 @@ function SearchTutorScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
-      if (searchTutorName && newKoSpeciality) {
+      if (searchTutorName && koCategoryName) {
         setIsLoading(true);
-        searchWithTutorName(searchTutorName, newEnSpeciality)
+        searchWithTutorName(searchTutorName, enCategoryName)
           .then((res) => {
             console.log('이름으로 강사찾기', format(res.data));
             setSearchedNameTutor(res.data);
@@ -55,7 +54,7 @@ function SearchTutorScreen() {
             setIsLoading(false);
           });
       }
-    }, [searchTutorName, newEnSpeciality]),
+    }, [searchTutorName, enCategoryName]),
   );
 
   // 검색 조건으로 강사찾기
@@ -64,11 +63,9 @@ function SearchTutorScreen() {
   const [isOptionedError, setOptionedIsError] = useState(false);
 
   useEffect(() => {
-    if (searchType && newKoSpeciality) {
+    if (searchType && koCategoryName) {
       setOptionedIsLoading(true);
-      setnewEnSpeciality(english);
-      setnewKoSpeciality(speciality);
-      searchWithSortOption(searchType, newEnSpeciality, page, 10)
+      searchWithSortOption(searchType, enCategoryName, page, 10)
         .then((res) => {
           console.log('검색 조건으로 강사찾기', format(res.data));
           setOptionedTutor(res.data);
@@ -81,7 +78,7 @@ function SearchTutorScreen() {
           setOptionedIsLoading(false);
         });
     }
-  }, [searchType, newEnSpeciality]);
+  }, [searchType, enCategoryName]);
 
   const fetchData = async (page) => {
     try {
@@ -94,7 +91,7 @@ function SearchTutorScreen() {
 
       setPage(page + 1);
 
-      const response = await searchWithSortOption(searchType, newEnSpeciality, page, 10);
+      const response = await searchWithSortOption(searchType, enCategoryName, page, 10);
 
       const newDatas = response.data;
 
@@ -109,11 +106,6 @@ function SearchTutorScreen() {
       setIsFetchingMore(false);
     }
   };
-
-  useEffect(() => {
-    console.log('newKoSpeciality in SearchTutorScreen:', newKoSpeciality);
-    // ... (이하 코드)
-  }, [newKoSpeciality]);
 
   const onEndReached = () => {
     if (!isLoading && hasMoreData && !isFetchingMore) {
@@ -144,16 +136,10 @@ function SearchTutorScreen() {
         <MainTxt>강사찾기</MainTxt>
       </Top>
       <SecondRow>
-        <SelectCategoryTutor
-          setnewEnSpeciality={setnewEnSpeciality}
-          setnewKoSpeciality={setnewKoSpeciality}
-          newKoSpeciality={newKoSpeciality}
-        />
+        <SelectCategoryTutor />
       </SecondRow>
 
-      <TypeChooseWrapper
-        onPress={() => navigation.navigate('getSearchOptionScreen', { newKoSpeciality, newEnSpeciality })}
-      >
+      <TypeChooseWrapper onPress={() => navigation.navigate('getSearchOptionScreen')}>
         <TypeWrapper>
           <TypeTxt>검색 및 정렬 조건 설정하기</TypeTxt>
           <AntDesign name={'caretdown'} size={RFValue(12)} color={COLORS.black} />

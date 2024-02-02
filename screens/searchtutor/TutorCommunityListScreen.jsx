@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
-import React from 'react';
+import { TutorFindCategory } from 'context/TutorFindCategoryContext';
+import React, { useContext } from 'react';
 import { SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -8,6 +9,10 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import styled from 'styled-components/native';
 
 function TutorCommunityListScreen() {
+  const {
+    category: [findTutorCategory, setFindTutorCategory],
+  } = useContext(TutorFindCategory);
+
   const navigation = useNavigation();
 
   const SectionData = [
@@ -24,7 +29,9 @@ function TutorCommunityListScreen() {
   ];
 
   const moveSpecificScreen = (speciality, english) => {
-    navigation.navigate('getSearchOptionScreen', { speciality, english });
+    setFindTutorCategory((prev) => ({ ...prev, koCategoryName: speciality }));
+    setFindTutorCategory((prev) => ({ ...prev, enCategoryName: english }));
+    navigation.navigate('getSearchOptionScreen');
   };
 
   return (
