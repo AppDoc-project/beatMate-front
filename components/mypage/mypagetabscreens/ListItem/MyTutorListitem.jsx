@@ -8,6 +8,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
+import { mapEnglishToKorean } from 'hook/TutorSpecialityKo';
 
 MyTutorListItem.propTypes = {
   myTutorData: PropTypes.shape({
@@ -52,7 +53,7 @@ function MyTutorListItem({ myTutorData }) {
               {myTutorData.specialities &&
                 myTutorData.specialities.map((speciality, index) => (
                   <Teachcate key={index}>
-                    {speciality}
+                    {mapEnglishToKorean(speciality)}
                     {index < myTutorData.specialities.length - 1 && <Gap />}
                   </Teachcate>
                 ))}
@@ -122,6 +123,8 @@ const Teacher = styled.Text`
   color: ${COLORS.black};
 `;
 
-const TutorInfo = styled.View``;
+const TutorInfo = styled.View`
+  align-items: center;
+`;
 
 export default MyTutorListItem;
