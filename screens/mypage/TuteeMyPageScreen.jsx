@@ -76,7 +76,7 @@ function TuteeMyPageScreen() {
         setIsLoading(true);
         try {
           const res = await getMyPageSection();
-          console.log(format(res.data));
+          console.log('유저 정보', format(res.data));
           setUserInfo(res.data.object);
         } catch (err) {
           console.log(err);

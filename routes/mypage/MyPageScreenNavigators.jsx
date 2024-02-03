@@ -103,24 +103,8 @@ function MyPageScreenNavigator(props) {
       />
 
       <Stack.Screen
-        name={'LoginScreen'}
-        component={LoginScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-
-      <Stack.Screen
         name={'DeleteAccountScreen'}
         component={DeleteAccountScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-
-      <Stack.Screen
-        name={'communityOnePostScreen'}
-        component={CommunityOnePostScreen}
         options={{
           headerShown: false,
         }}

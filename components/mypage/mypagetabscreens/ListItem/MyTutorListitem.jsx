@@ -25,9 +25,11 @@ MyTutorListItem.propTypes = {
 function MyTutorListItem({ myTutorData }) {
   const navigation = useNavigation();
 
-  //해당 강사 프로필로 이동해야함.
   const onPressTutorProfile = () => {
-    // navigation.navigate('communityOnePostScreen', { postId, communityName });
+    navigation.navigate('searchtutor', {
+      screen: 'tutorProfileScreen',
+      params: { tutorId: myTutorData.id },
+    });
   };
 
   return (
