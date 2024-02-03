@@ -29,7 +29,10 @@ function MyPostListItem({ myPostData }) {
 
   //게시글 상세 페이지로 이동해야함.
   const onPressPostingItem = () => {
-    navigation.navigate('communityOnePostScreen', { postId, communityName });
+    navigation.navigate('community', {
+      screen: 'communityOnePostScreen',
+      params: { postId, communityName },
+    });
   };
 
   const formattedDate = myPostData && myPostData.createdAt.substring(0, 10).replace(/:/g, '.');

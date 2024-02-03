@@ -108,7 +108,7 @@ const ModalContent = styled.View`
   background-color: ${COLORS.white};
   padding: 20px;
   width: ${wp(100)}px;
-  height: ${hp(38)}px;
+  height: ${hp(45)}px;
   align-items: center;
   border-radius: 10px;
   border-color: ${COLORS.main};

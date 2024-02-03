@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import CommunityOnePostScreen from '@screens/community/CommunityOnePostScreen';
 import LoginScreen from '@screens/login/LoginScreen';
 import TuteeMyPageScreen from '@screens/mypage/TuteeMyPageScreen';
 import TutorMyPageScreen from '@screens/mypage/TutorMyPageScreen';
@@ -31,7 +32,7 @@ function MyPageScreenNavigator(props) {
         headerTitleStyle: {
           color: 'black',
         },
-        headerBackTitleVisible: false, 
+        headerBackTitleVisible: false,
       }}
     >
       {isTutor ? ( //isTutor가 True라면
@@ -96,14 +97,6 @@ function MyPageScreenNavigator(props) {
       <Stack.Screen
         name={'ChangeProfileScreen'}
         component={ChangeProfileScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-
-      <Stack.Screen
-        name={'LoginScreen'}
-        component={LoginScreen}
         options={{
           headerShown: false,
         }}
