@@ -23,6 +23,7 @@ const Container = styled.View`
 const Txt = styled.Text`
   font-size: ${RFValue(13)}px;
   flex-grow: 1;
+  line-height: ${RFValue(20)}px;
 `;
 
 export default LessonInfoPost;
