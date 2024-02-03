@@ -100,4 +100,23 @@ const readCertainChat = async (data) => {
   }
 };
 
-export { getChatList, readAllMessage, getMessage, writeNewChat, readCertainChat };
+// 채팅방 만들기
+const makeChatRoom = async (data) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+
+    const response = await client.post('/chat/room', data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { getChatList, readAllMessage, getMessage, writeNewChat, readCertainChat, makeChatRoom };

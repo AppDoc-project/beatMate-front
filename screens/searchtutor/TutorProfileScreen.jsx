@@ -2,9 +2,9 @@ import LessonInfoPost from '@components/searchtutor/tutorProfile/LessonInfoPost'
 import ReviewItem from '@components/searchtutor/tutorProfile/ReviewItem';
 import ReviewPostList from '@components/searchtutor/tutorProfile/ReviewPostList';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { makeChatRoom } from 'api/chat';
 import { getDatailTutorInfo, postPickTutor } from 'api/tutorpage';
 import { COLORS } from 'colors';
-import { TutorFindCategory } from 'context/TutorFindCategoryContext';
 import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import React, { useContext, useEffect, useState } from 'react';
@@ -17,16 +17,11 @@ import styled from 'styled-components';
 
 function TutorProfileScreen() {
   const {
-    category: [findTutorCategory, setFindTutorCategory],
-  } = useContext(TutorFindCategory);
-
-  const {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
 
+  const loginUserId = loginUser.id;
   const isTutor = loginUser.isTutor;
-
-  const { koCategoryName } = findTutorCategory;
 
   const navigation = useNavigation();
 
@@ -96,7 +91,41 @@ function TutorProfileScreen() {
       });
   };
 
-  if (isLoading || isLikeLoading) {
+  // 채팅방 만들기 api
+  const [isChatLoading, setIsChatLoading] = useState(false);
+  const [isChatError, setIsChatError] = useState(false);
+
+  const makeChat = () => {
+    setIsChatLoading(true);
+
+    let chatData;
+
+    if (isTutor) {
+      chatData = {
+        tutorId: loginUserId,
+        tuteeId: specificTutorData.id,
+      };
+    } else {
+      chatData = {
+        tutorId: specificTutorData.id,
+        tuteeId: loginUserId,
+      };
+    }
+
+    makeChatRoom(chatData)
+      .then((res) => {
+        console.log('채팅방 만들기', format(res.data));
+        setIsChatLoading(false);
+        navigation.navigate('chat');
+      })
+      .catch((err) => {
+        console.error('채팅방 만들기', err);
+        setIsChatError(true);
+        setIsChatLoading(false);
+      });
+  };
+
+  if (isLoading || isLikeLoading || isChatLoading) {
     return (
       <View>
         <Text>로딩중...</Text>
@@ -104,7 +133,7 @@ function TutorProfileScreen() {
     );
   }
 
-  if (isError || isLikeError) {
+  if (isError || isLikeError || isChatError) {
     return (
       <View>
         <Text>에러 발생</Text>
@@ -190,7 +219,7 @@ function TutorProfileScreen() {
             )}
           </ShowMainInfo>
           {!isTutor && (
-            <ChatBtn>
+            <ChatBtn onPress={makeChat}>
               <ChatTxt>채팅하기</ChatTxt>
             </ChatBtn>
           )}
@@ -315,7 +344,7 @@ const ReviewTxt = styled.Text`
 `;
 
 const ShowMainInfo = styled.View`
-  height: ${hp(33)}px;
+  height: ${hp(30)}px;
   width: ${wp(100)}px;
 `;
 

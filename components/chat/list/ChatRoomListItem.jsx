@@ -54,10 +54,10 @@ function ChatRoomListItem({ room }) {
       </ProfileContainer>
       <ContentGroup>
         <Name numberOfLines={1}>{target.name}</Name>
-        <LastChat numberOfLines={1}>{lastMessage}</LastChat>
+        {lastMessage && <LastChat numberOfLines={1}>{lastMessage}</LastChat>}
       </ContentGroup>
       <SubInfoGroup>
-        <LastUpdated>{formatLastTime(lastTime)}</LastUpdated>
+        {lastTime && <LastUpdated>{formatLastTime(lastTime)}</LastUpdated>}
         {notReadYet !== null && (
           <NotReadContainer>
             <NotRead>{notReadYet}</NotRead>

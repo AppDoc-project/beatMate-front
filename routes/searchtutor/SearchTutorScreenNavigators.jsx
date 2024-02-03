@@ -1,3 +1,4 @@
+import { useHeaderHeight } from '@react-navigation/elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import GetSearchOptionScreen from '@screens/searchtutor/GetSearchOptionScreen';
 import SearchTutorScreen from '@screens/searchtutor/SearchTutorScreen';
@@ -5,6 +6,7 @@ import TutorCommunityListScreen from '@screens/searchtutor/TutorCommunityListScr
 import TutorProfileScreen from '@screens/searchtutor/TutorProfileScreen';
 import { TutorFindCategory } from 'context/TutorFindCategoryContext';
 import React, { useState } from 'react';
+import ChatScreenNavigator from 'routes/chat/ChatScreenNavigators';
 
 const Stack = createNativeStackNavigator();
 

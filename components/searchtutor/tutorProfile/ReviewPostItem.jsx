@@ -21,90 +21,85 @@ ReviewPostItem.propTypes = {
 };
 
 function ReviewPostItem({ post }) {
+  const formattedDate = post.createdAt.substring(0, 10).replace(/:/g, '.');
+
   return (
     <ReviewBox>
-      <ImageBox>
-        {post.profile && (
-          <Image
-            source={{
-              uri: post.profile,
-            }}
-            style={{ width: 30, height: 30, borderRadius: 50 }}
-          />
-        )}
-        {!post.profile && <FontAwesome name={'user-circle'} size={RFValue(23)} color={'lightgray'} />}
-      </ImageBox>
-      <Box>
+      <FirstRow>
+        <ImageBox>
+          {post.profile && (
+            <Image
+              source={{
+                uri: post.profile,
+              }}
+              style={{ width: 30, height: 30, borderRadius: 50 }}
+            />
+          )}
+          {!post.profile && <FontAwesome name={'user-circle'} size={RFValue(23)} color={'lightgray'} />}
+        </ImageBox>
         <NickName>{post.nickName}</NickName>
-        <ContentBox>
-          <Content>{post.review}</Content>
-          <Date>{post.createdAt}</Date>
-        </ContentBox>
-        <Postinfo>
-          <Ionicons name="star" size={RFValue(15)} color={COLORS.main} marginRight={RFValue(3)} />
-          <ScoreTxt>{post.score}</ScoreTxt>
-        </Postinfo>
-      </Box>
+        <Date>{formattedDate}</Date>
+      </FirstRow>
+      <ContentBox>
+        <Content>{post.review}</Content>
+      </ContentBox>
+      <Postinfo>
+        <Ionicons name="star" size={RFValue(15)} color={COLORS.main} marginRight={RFValue(3)} />
+        <ScoreTxt>{post.score}</ScoreTxt>
+      </Postinfo>
     </ReviewBox>
   );
 }
 
 const ReviewBox = styled.View`
-  width: 100%;
-  height: ${RFValue(90)}px;
+  width: auto;
+  height: auto;
 
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
 
-  flex-direction: row;
+  padding: ${wp(3)}px;
 `;
 
 const ImageBox = styled.View`
-  width: ${RFValue(24)}px;
-  height: ${RFValue(24)}px;
-  border-radius: ${RFValue(12)}px;
-  overflow: hidden;
-
-  margin: ${hp(1.6)}px ${wp(3)}px;
-`;
-
-const ProfileImage = styled(Image)`
-  width: ${RFValue(24)}px;
-  height: ${RFValue(24)}px;
-  object-fit: cover;
-`;
-
-const Box = styled.View`
-  flex-direction: column;
+  margin-right: ${wp(2)};
 `;
 
 const NickName = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 600;
   color: ${COLORS.lightgray};
-  margin: ${hp(2.5)}px 0 ${hp(0.5)}px 0;
+  margin-right: ${wp(2)}px;
+`;
+
+const FirstRow = styled.View`
+  flex-direction: row;
+  align-items: center;
 `;
 
 const ContentBox = styled.View`
   flex-direction: row;
+  align-items: center;
+  margin-top: ${hp(1)};
 `;
 
 const Content = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 500;
   color: ${COLORS.black};
-  margin: ${hp(0.5)}px ${wp(1)}px ${hp(0.5)}px ${wp(0)}px;
+  flex-grow: 1;
 `;
 
 const Date = styled.Text`
   font-size: ${RFValue(10)}px;
   font-weight: 500;
   color: ${COLORS.lightgray};
-  margin: ${hp(0.9)}px ${wp(0)}px ${hp(0)}px ${wp(0.4)}px;
 `;
 
 const Postinfo = styled.View`
   flex-direction: row;
+  align-items: center;
+  margin-top: ${hp(1)};
 `;
 
 const ScoreTxt = styled.Text``;
