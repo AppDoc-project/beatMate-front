@@ -6,6 +6,7 @@ import { makeChatRoom } from 'api/chat';
 import { getDatailTutorInfo, postPickTutor } from 'api/tutorpage';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
+import { mapEnglishToKorean } from 'hook/TutorSpecialityKo';
 import format from 'pretty-format';
 import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, TouchableOpacity, Image, View, Text } from 'react-native';
@@ -189,7 +190,7 @@ function TutorProfileScreen() {
               {specificTutorData.specialities &&
                 specificTutorData.specialities.map((speciality, index) => (
                   <Field key={index}>
-                    {speciality}
+                    {mapEnglishToKorean(speciality)}
                     {index < specificTutorData.specialities.length - 1 && <Gap />}
                   </Field>
                 ))}
@@ -268,17 +269,19 @@ const FieldBox = styled.View`
   border-width: ${wp(0.4)}px;
   border-radius: ${RFValue(5)}px;
   border-color: ${COLORS.main};
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   margin-top: ${hp(2)}px;
   margin-bottom: ${hp(2)}px;
-  padding: ${wp(2)}px;
+  padding: ${wp(1)}px;
 `;
 
 const Field = styled.Text`
   font-size: ${RFValue(10)}px;
-  font-weight: 600;
+  font-weight: 700;
   color: ${COLORS.main};
+  line-height: ${RFValue(15)}px;
 `;
 
 const SelectMenu = styled.View`
@@ -365,7 +368,7 @@ const ChatTxt = styled.Text`
 `;
 
 const Gap = styled.View`
-  width: ${wp(1)}px;
+  width: ${wp(3)}px;
 `;
 
 export default TutorProfileScreen;

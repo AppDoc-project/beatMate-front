@@ -1,12 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
+import { mapEnglishToKorean } from 'hook/TutorSpecialityKo';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Image } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import PropTypes from 'prop-types';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components';
 
 SearchTutorItem.propTypes = {
@@ -46,6 +47,15 @@ function SearchTutorItem({ searchedTutor }) {
         <Item>
           <TutorItem>
             <Name>{searchedTutor.name}</Name>
+            <FieldBox>
+              {searchedTutor.specialities &&
+                searchedTutor.specialities.map((speciality, index) => (
+                  <Field key={index}>
+                    {mapEnglishToKorean(speciality)}
+                    {index < searchedTutor.specialities.length - 1 && <Gap />}
+                  </Field>
+                ))}
+            </FieldBox>
           </TutorItem>
           <LessonInfo>
             <Ionicons name="star" size={RFValue(12)} color={COLORS.main} marginRight={RFValue(3)} />
@@ -54,15 +64,6 @@ function SearchTutorItem({ searchedTutor }) {
             </InfoTxt>
           </LessonInfo>
         </Item>
-        <FieldBox>
-          {searchedTutor.specialities &&
-            searchedTutor.specialities.map((speciality, index) => (
-              <Field key={index}>
-                {speciality}
-                {index < searchedTutor.specialities.length - 1 && <Gap />}
-              </Field>
-            ))}
-        </FieldBox>
       </TutorProfileBox>
     </Container>
   );
@@ -92,6 +93,8 @@ const Item = styled.View`
 
 const TutorItem = styled.View`
   flex-direction: row;
+  margin-bottom: ${hp(1)};
+  align-items: center;
 `;
 
 const Name = styled.Text`
@@ -108,6 +111,7 @@ const FieldBox = styled.View`
   border-radius: ${RFValue(5)}px;
   border-color: ${COLORS.main};
 
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   margin-left: ${wp(2)}px;
