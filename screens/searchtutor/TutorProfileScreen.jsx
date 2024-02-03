@@ -1,6 +1,6 @@
 import LessonInfoPost from '@components/searchtutor/tutorProfile/LessonInfoPost';
 import ReviewItem from '@components/searchtutor/tutorProfile/ReviewItem';
-import ReviewPost from '@components/searchtutor/tutorProfile/ReviewPost';
+import ReviewPostList from '@components/searchtutor/tutorProfile/ReviewPostList';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { getDatailTutorInfo, postPickTutor } from 'api/tutorpage';
 import { COLORS } from 'colors';
@@ -43,7 +43,7 @@ function TutorProfileScreen() {
     selectReview(true);
   };
 
-  // 강사 상세정보 가져오기
+  // 강사 상세정보 가져오기 api
   const [specificTutorData, setSpecificTutorData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -64,7 +64,7 @@ function TutorProfileScreen() {
       });
   }, [tutorId]);
 
-  // 강사 찜 관련 부분
+  // 강사 찜 api
   const [isLike, setIsLike] = useState(false);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
   const [isLikeError, setIsLikeError] = useState(false);
@@ -113,6 +113,7 @@ function TutorProfileScreen() {
             <TouchableOpacity onPress={onPressPreviousBtn}>
               <AntDesign name="left" size={32} marginLeft={5} />
             </TouchableOpacity>
+            <MainTxt>{koCategoryName}</MainTxt>
             <TouchableOpacity onPress={toggleBookmark}>
               <AntDesign
                 name={isLike ? 'heart' : 'hearto'}
@@ -138,7 +139,6 @@ function TutorProfileScreen() {
             </ProfileImg>
 
             <Name>{specificTutorData.name}</Name>
-            <Intor>{specificTutorData.selfDescription}</Intor>
             <FieldBox>
               {specificTutorData.specialities &&
                 specificTutorData.specialities.map((speciality, index) => (
@@ -160,11 +160,15 @@ function TutorProfileScreen() {
           </SelectMenu>
 
           <ShowMainInfo>
-            {isLessonInfo && <LessonInfoPost />}
+            {isLessonInfo && <LessonInfoPost description={specificTutorData.selfDescription} />}
             {isReview && (
               <>
-                <ReviewItem />
-                <ReviewPost />
+                <ReviewItem
+                  lessonCount={specificTutorData.lessonCount}
+                  reviewCount={specificTutorData.reviewCount}
+                  score={specificTutorData.score}
+                />
+                <ReviewPostList tutorId={tutorId} />
               </>
             )}
           </ShowMainInfo>
@@ -187,6 +191,12 @@ const Header = styled.View`
   justify-content: space-between;
 `;
 
+const MainTxt = styled.Text`
+  font-size: ${RFValue(22)}px;
+  font-weight: bold;
+  top: ${hp(9)};
+`;
+
 const InfoSection = styled.View`
   flex: 0.5;
   align-items: center;
@@ -198,12 +208,6 @@ const Name = styled.Text`
   font-size: ${RFValue(24)}px;
   font-weight: 900;
   top: ${hp(4)}px;
-`;
-
-const Intor = styled.Text`
-  font-size: ${RFValue(12)}px;
-  font-weight: 400;
-  top: ${hp(5)}px;
 `;
 
 const FieldBox = styled.View`

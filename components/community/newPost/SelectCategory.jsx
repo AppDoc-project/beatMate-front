@@ -96,7 +96,6 @@ const Section = styled.View`
 
 const Button = styled.TouchableOpacity`
   flex-direction: row;
-
 `;
 
 const StyledModal = styled(Modal)`

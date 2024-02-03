@@ -1,19 +1,28 @@
 import { COLORS } from 'colors';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components';
 
-function ReviewItem(props) {
+ReviewItem.propTypes = {
+  lessonCount: PropTypes.number.isRequired,
+  reviewCount: PropTypes.number.isRequired,
+  score: PropTypes.number.isRequired,
+};
+
+function ReviewItem({ lessonCount, reviewCount, score }) {
   return (
     <Container>
       <ReviewBox>
         <Ionicons name="star" size={RFValue(15)} color={COLORS.main} marginRight={RFValue(3)} />
-        <ReviewTxt>4.38 (15)</ReviewTxt>
+        <ReviewTxt>
+          {score} ({reviewCount})
+        </ReviewTxt>
       </ReviewBox>
       <LessonCountBox>
-        <LessonCount>총 레슨 횟수 (134)</LessonCount>
+        <LessonCount>총 레슨 횟수 ({lessonCount})</LessonCount>
       </LessonCountBox>
     </Container>
   );

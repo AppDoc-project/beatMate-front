@@ -1,12 +1,17 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
-function LessonInfoPost(props) {
+LessonInfoPost.propTypes = {
+  description: PropTypes.string.isRequired,
+};
+
+function LessonInfoPost({ description }) {
   return (
     <Container>
-      <Txt>안녕하세요~~ 어쩌구 저쩌꾸</Txt>
+      <Txt>{description}</Txt>
     </Container>
   );
 }
