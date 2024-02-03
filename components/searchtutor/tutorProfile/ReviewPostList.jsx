@@ -38,18 +38,18 @@ function ReviewPostList({ tutorId }) {
       let response;
 
       if (scroll) {
-        response = await getNextTutorReview(tutorId, 10, reviews[reviews.length - 1]?.id);
-        console.log('첫번째요소', format(response.data));
+        response = await getNextTutorReview(tutorId, 10, reviews[reviews.length - 1]?.reviewId);
+        console.log('다음번째요소', format(response.data));
       } else {
         response = await getFirstTutorReview(tutorId, 10);
 
-        console.log('두번째요소', format(response.data));
+        console.log('첫번째요소', format(response.data));
       }
 
       const newReviews = response.data.data;
 
       if (scroll) {
-        setReviews((prevPosts) => (newReviews.length > 0 ? [...prevPosts, ...newPosts] : prevPosts));
+        setReviews((prevPosts) => (newReviews.length > 0 ? [...prevPosts, ...newReviews] : prevPosts));
         setPage(pageNumber + 1);
       } else {
         setReviews(newReviews);
@@ -72,6 +72,11 @@ function ReviewPostList({ tutorId }) {
       fetchData(true, page);
     }
   };
+
+  useEffect(() => {
+    fetchData(false, 0);
+  }, [tutorId]);
+
   if (isLoading && !reviews.length) {
     return (
       <View>

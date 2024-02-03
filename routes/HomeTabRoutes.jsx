@@ -84,6 +84,7 @@ function HomeTabRoutes(props) {
           name="searchtutor"
           component={SearchTutorScreenNavigators}
           options={{
+            unmountOnBlur: true,
             headerShown: false,
             tabBarLabel: '강사 찾기',
             tabBarActiveTintColor: COLORS.black,

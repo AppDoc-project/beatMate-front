@@ -157,9 +157,9 @@ const WholeWrapper = styled.View`
 `;
 
 const SelectCategoryWrapper = styled.View`
+  width: ${wp(90)}px;
   flex-direction: row;
   justify-content: space-between;
-  width: ${wp(80)}px;
   margin-bottom: ${hp(10)}px;
 `;
 
@@ -169,7 +169,7 @@ const CategoryBtn = styled.TouchableOpacity`
   height: auto;
   border-radius: ${RFValue(8)}px;
   border-color: ${(props) => (props.selected ? COLORS.main : COLORS.lightgray)};
-  border-width: 1px;
+  border-width: ${(props) => (props.selected ? '3px' : '1px')};
   justify-content: center;
   align-items: center;
   padding: ${RFValue(10)}px;
@@ -177,6 +177,7 @@ const CategoryBtn = styled.TouchableOpacity`
 
 const CategoryTxt = styled.Text`
   color: ${(props) => (props.selected ? COLORS.main : COLORS.lightgray)};
+  font-weight: ${(props) => (props.selected ? 'bold' : 'normal')};
 `;
 
 const SubTxt = styled.Text`
@@ -205,7 +206,7 @@ const Input = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(90.4)}px;
-  height: ${hp(5)}px;
+  height: ${hp(8)}px;
   border-radius: 8px;
   border-color: lightgray;
   border-width: 1px;

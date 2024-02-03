@@ -204,7 +204,7 @@ const PostWrapper = styled.View`
 const TypeChooseWrapper = styled.TouchableOpacity`
   width: ${wp(100)}px;
   align-items: center;
-  top: ${hp(12)}px;
+  top: ${hp(8)}px;
 `;
 
 const TypeWrapper = styled.View`

@@ -73,7 +73,7 @@ const TutorProfileBox = styled.TouchableOpacity`
   flex-direction: row;
   width: ${wp(100)}px;
   height: ${hp(15)}px;
-  padding: ${hp(2)}px;
+  padding: ${wp(1)}px;
 
   border-bottom-width: ${RFValue(1)}px;
   border-bottom-color: ${COLORS.lightgray};
@@ -82,7 +82,7 @@ const TutorProfileBox = styled.TouchableOpacity`
 
 const ProfileImg = styled.View`
   border-radius: 50%;
-  margin-right: ${wp(5)}px;
+  margin-right: ${wp(2)}px;
 `;
 
 const Item = styled.View`
@@ -97,6 +97,7 @@ const TutorItem = styled.View`
 const Name = styled.Text`
   font-size: ${RFValue(18)}px;
   font-weight: 900;
+  margin-bottom: ${wp(1)}px;
 `;
 
 const FieldBox = styled.View`
@@ -109,13 +110,12 @@ const FieldBox = styled.View`
 
   justify-content: center;
   align-items: center;
-  margin-left: ${wp(3)}px;
-  margin-bottom: ${hp(1)}px;
+  margin-left: ${wp(2)}px;
   padding: ${wp(1)}px;
 `;
 
 const Field = styled.Text`
-  font-size: ${RFValue(11)}px;
+  font-size: ${RFValue(10)}px;
   font-weight: 600;
   color: ${COLORS.main};
 `;

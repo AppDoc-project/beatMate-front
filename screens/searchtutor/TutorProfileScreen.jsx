@@ -5,6 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { getDatailTutorInfo, postPickTutor } from 'api/tutorpage';
 import { COLORS } from 'colors';
 import { TutorFindCategory } from 'context/TutorFindCategoryContext';
+import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, TouchableOpacity, Image, View, Text } from 'react-native';
@@ -18,6 +19,12 @@ function TutorProfileScreen() {
   const {
     category: [findTutorCategory, setFindTutorCategory],
   } = useContext(TutorFindCategory);
+
+  const {
+    loginUserInfo: [loginUser],
+  } = useContext(UserInfo);
+
+  const isTutor = loginUser.isTutor;
 
   const { koCategoryName } = findTutorCategory;
 
@@ -54,8 +61,8 @@ function TutorProfileScreen() {
       .then((res) => {
         console.log('강사 상세정보 가져오기', format(res.data));
         setSpecificTutorData(res.data.object);
+        setIsLike(res.data.object?.pickYn || false);
         setIsLoading(false);
-        setIsLike(specificTutorData?.pickYn || false);
       })
       .catch((err) => {
         console.log('강사 상세정보 가져오기', err);
@@ -113,28 +120,38 @@ function TutorProfileScreen() {
             <TouchableOpacity onPress={onPressPreviousBtn}>
               <AntDesign name="left" size={32} marginLeft={5} />
             </TouchableOpacity>
-            <MainTxt>{koCategoryName}</MainTxt>
-            <TouchableOpacity onPress={toggleBookmark}>
-              <AntDesign
-                name={isLike ? 'heart' : 'hearto'}
-                size={RFValue(24)}
-                color={isLike ? COLORS.main : COLORS.lightgray}
-                marginRight={14}
-              />
-            </TouchableOpacity>
+            {!isTutor && (
+              <TouchableOpacity onPress={toggleBookmark}>
+                <AntDesign
+                  name={isLike ? 'heart' : 'hearto'}
+                  size={RFValue(24)}
+                  color={isLike || specificTutorData.pickYn ? COLORS.main : COLORS.lightgray}
+                  marginRight={14}
+                />
+              </TouchableOpacity>
+            )}
           </Header>
           <InfoSection>
+            <NoticeTxt>
+              ※ 해당 강사와{' '}
+              <Text style={{ color: COLORS.black, fontSize: RFValue(10), fontWeight: 'bold' }}>
+                레슨 상담 또는 예약
+              </Text>
+              을 원하면,{' '}
+              <Text style={{ color: COLORS.black, fontSize: RFValue(10), fontWeight: 'bold' }}>채팅하기</Text>를
+              눌러주세요.
+            </NoticeTxt>
             <ProfileImg>
               {specificTutorData.profile && (
                 <Image
                   source={{
                     uri: specificTutorData.profile,
                   }}
-                  style={{ width: 80, height: 80, borderRadius: 50 }}
+                  style={{ width: 50, height: 50, borderRadius: 50 }}
                 />
               )}
               {!specificTutorData.profile && (
-                <FontAwesome name={'user-circle'} size={RFValue(100)} color={'lightgray'} />
+                <FontAwesome name={'user-circle'} size={RFValue(80)} color={'lightgray'} />
               )}
             </ProfileImg>
 
@@ -172,9 +189,11 @@ function TutorProfileScreen() {
               </>
             )}
           </ShowMainInfo>
-          <ChatBtn>
-            <ChatTxt>채팅하기</ChatTxt>
-          </ChatBtn>
+          {!isTutor && (
+            <ChatBtn>
+              <ChatTxt>채팅하기</ChatTxt>
+            </ChatBtn>
+          )}
         </Container>
       )}
     </SafeAreaView>
@@ -189,40 +208,46 @@ const Container = styled.View`
 const Header = styled.View`
   flex-direction: row;
   justify-content: space-between;
-`;
-
-const MainTxt = styled.Text`
-  font-size: ${RFValue(22)}px;
-  font-weight: bold;
-  top: ${hp(9)};
-`;
-
-const InfoSection = styled.View`
-  flex: 0.5;
   align-items: center;
 `;
 
-const ProfileImg = styled.View``;
+const InfoSection = styled.View`
+  width: ${wp(100)};
+  height: auto;
+  align-items: center;
+  margin-top: ${hp(3)}px;
+`;
+
+const NoticeTxt = styled.Text`
+  font-size: ${RFValue(10)}px;
+  color: ${COLORS.gray};
+`;
+
+const ProfileImg = styled.View`
+  margin-top: ${hp(3)}px;
+`;
 
 const Name = styled.Text`
-  font-size: ${RFValue(24)}px;
+  font-size: ${RFValue(17)}px;
   font-weight: 900;
-  top: ${hp(4)}px;
+  margin-top: ${hp(2)}px;
 `;
 
 const FieldBox = styled.View`
-  width: ${wp(12)}px;
-  height: ${hp(3)}px;
+  width: auto;
+  height: auto;
   border-width: ${wp(0.4)}px;
   border-radius: ${RFValue(5)}px;
   border-color: ${COLORS.main};
   justify-content: center;
   align-items: center;
-  top: ${hp(6)}px;
+  margin-top: ${hp(2)}px;
+  margin-bottom: ${hp(2)}px;
+  padding: ${wp(2)}px;
 `;
 
 const Field = styled.Text`
-  font-size: ${RFValue(12)}px;
+  font-size: ${RFValue(10)}px;
   font-weight: 600;
   color: ${COLORS.main};
 `;
@@ -290,14 +315,18 @@ const ReviewTxt = styled.Text`
 `;
 
 const ShowMainInfo = styled.View`
-  flex: 0.5;
+  height: ${hp(33)}px;
+  width: ${wp(100)}px;
 `;
 
 const ChatBtn = styled.TouchableOpacity`
   height: ${hp(5)}px;
+  width: ${wp(100)}px;
   background-color: ${COLORS.main};
   justify-content: center;
   align-items: center;
+  position: absolute;
+  bottom: 0;
 `;
 
 const ChatTxt = styled.Text`

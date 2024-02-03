@@ -4,23 +4,45 @@ import { Image } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-function ReviewPostItem() {
+ReviewPostItem.propTypes = {
+  post: PropTypes.shape({
+    reviewId: PropTypes.number, // 리뷰 아이디
+    userId: PropTypes.number, // 리뷰 작성자 아이디(튜티)
+    nickName: PropTypes.string, // 리뷰 작성자 닉네임
+    review: PropTypes.string, // 리뷰 내용
+    profile: PropTypes.string, // 프로필 경로
+    createdAt: PropTypes.string, // 리뷰 작성 시간
+    score: PropTypes.number, // 리뷰 평점 0-5까지 정수
+  }).isRequired,
+};
+
+function ReviewPostItem({ post }) {
   return (
     <ReviewBox>
       <ImageBox>
-        <ProfileImage />
+        {post.profile && (
+          <Image
+            source={{
+              uri: post.profile,
+            }}
+            style={{ width: 30, height: 30, borderRadius: 50 }}
+          />
+        )}
+        {!post.profile && <FontAwesome name={'user-circle'} size={RFValue(23)} color={'lightgray'} />}
       </ImageBox>
       <Box>
-        <NickName>익명</NickName>
+        <NickName>{post.nickName}</NickName>
         <ContentBox>
-          <Content>나는 내용이다아아아아아</Content>
-          <Date>2023.12.26</Date>
+          <Content>{post.review}</Content>
+          <Date>{post.createdAt}</Date>
         </ContentBox>
         <Postinfo>
           <Ionicons name="star" size={RFValue(15)} color={COLORS.main} marginRight={RFValue(3)} />
-          <ScoreTxt></ScoreTxt>
+          <ScoreTxt>{post.score}</ScoreTxt>
         </Postinfo>
       </Box>
     </ReviewBox>

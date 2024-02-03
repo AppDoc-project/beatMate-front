@@ -33,8 +33,8 @@ const Container = styled.View`
   align-items: center;
 
   width: 100%;
-  padding: 0 ${wp(1)}px;
-  height: ${hp(5)}px;
+  padding: ${hp(1)}px ${wp(1)}px;
+  height: auto;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
 `;
@@ -43,14 +43,14 @@ const ReviewBox = styled.View`
 `;
 
 const ReviewTxt = styled.Text`
-  font-size: ${RFValue(14)}px;
+  font-size: ${RFValue(12)}px;
   font-weight: 500;
 `;
 
 const LessonCountBox = styled.View``;
 
 const LessonCount = styled.Text`
-  font-size: ${RFValue(14)}px;
+  font-size: ${RFValue(12)}px;
   font-weight: 500;
   color: ${COLORS.lightgray};
 `;
