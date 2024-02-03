@@ -21,7 +21,8 @@ const Container = styled.View`
 `;
 
 const Txt = styled.Text`
-  font-size: ${RFValue(14)}px;
+  font-size: ${RFValue(13)}px;
+  flex-grow: 1;
 `;
 
 export default LessonInfoPost;
