@@ -142,7 +142,7 @@ const UserInfoWrapper = styled.View`
 const IconWrapper = styled.View`
   flex-direction: row;
   align-items: center;
-  margin-left: ${RFValue(115)}px;
+  margin-left: ${wp(30)}px;
 `;
 
 const Date = styled.Text`

@@ -5,8 +5,8 @@ import React from 'react';
 import { ImageBackground } from 'react-native'; // Import ImageBackground
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { styled } from 'styled-components/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { styled } from 'styled-components/native';
 
 ChatRoomListItem.propTypes = {
   room: PropTypes.shape({
@@ -22,7 +22,6 @@ ChatRoomListItem.propTypes = {
   }).isRequired,
 };
 
-// Format the last time function
 function formatLastTime(lastTime) {
   const [date] = lastTime.split(' ');
   const formattedDate = date.split(':').join('.').substring(0, 10);
