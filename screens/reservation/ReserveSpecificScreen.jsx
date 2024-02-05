@@ -33,11 +33,13 @@ function ReserveSpecificScreen(props) {
     deleteReserve(reservationId)
       .then((res) => {
         const { data } = res;
-        console.log(format(data));
+        console.log('예약 삭제 성공', format(data));
         navigation.navigate('reserveMainScreen');
       })
       .catch((error) => console.log(format(error)));
   };
+
+  console.log(myReserveData);
 
   return (
     <Container>
@@ -45,21 +47,20 @@ function ReserveSpecificScreen(props) {
         <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => onPressPreviousBtn()} />
         <MainTxt>예약 관리</MainTxt>
       </Top>
-      <TutorProfileBox>
-        <ProfileImg>
-          {myReserveData.tutorProfile && (
-            <Image
-              source={{
-                uri: myReserveData.tutorProfile,
-              }}
-              style={{ width: wp(20), height: wp(20), borderRadius: 50 }}
-            />
-          )}
-          {!myReserveData.tutorProfile && <FontAwesome name={'user-circle'} size={RFValue(50)} color={'lightgray'} />}
-        </ProfileImg>
-        <Item>
+      <AllWrapper>
+        <TutorProfileBox>
+          <ProfileImg>
+            {myReserveData.tutorProfile && (
+              <Image
+                source={{
+                  uri: myReserveData.tutorProfile,
+                }}
+                style={{ width: wp(30), height: wp(30), borderRadius: 50 }}
+              />
+            )}
+            {!myReserveData.tutorProfile && <FontAwesome name={'user-circle'} size={wp(30)} color={'lightgray'} />}
+          </ProfileImg>
           <TutorItem>
-            <Name>{myReserveData.tutorName} 강사</Name>
             <FieldBox>
               {myReserveData.tutorSpecialities &&
                 myReserveData.tutorSpecialities.map((speciality, index) => (
@@ -69,32 +70,32 @@ function ReserveSpecificScreen(props) {
                   </Field>
                 ))}
             </FieldBox>
+            <Name>{myReserveData.tutorName} 강사</Name>
           </TutorItem>
-        </Item>
-      </TutorProfileBox>
-      <BottomWrapper>
-        <Row>
-          <NoticeTxt>수강생 이름</NoticeTxt>
-          <ContentTxt>{myReserveData.tuteeName}</ContentTxt>
-        </Row>
-        <Row>
-          <NoticeTxt>예약 날짜</NoticeTxt>
-          <ContentTxt>{formattedLessonDate}</ContentTxt>
-        </Row>
-        <Row>
-          <NoticeTxt>예약 시간</NoticeTxt>
-          <ContentTxt>
-            {formattedStartTime} - {formattedEndTime}
-          </ContentTxt>
-        </Row>
-      </BottomWrapper>
+        </TutorProfileBox>
+        <BottomWrapper>
+          <Row>
+            <NoticeTxt>튜티 이름</NoticeTxt>
+            <ContentTxt>{myReserveData.tuteeName}</ContentTxt>
+          </Row>
+          <Row>
+            <NoticeTxt>예약 날짜</NoticeTxt>
+            <ContentTxt>{formattedLessonDate}</ContentTxt>
+          </Row>
+          <Row>
+            <NoticeTxt>예약 시간</NoticeTxt>
+            <ContentTxt>
+              {formattedStartTime} - {formattedEndTime}
+            </ContentTxt>
+          </Row>
+        </BottomWrapper>
+      </AllWrapper>
       {isTutor && (
-        <>
+        <DeleteInfoTxtAllWrapper>
           <DeleteReserveBtn
             fontColor={'white'}
             backColor={'navy'}
             width={wp(100)}
-            marginBottom={hp(6.15)}
             justifyContent="center"
             onPress={() => {
               onPressDeleteBtn();
@@ -102,9 +103,9 @@ function ReserveSpecificScreen(props) {
           />
           <TxtWrapper>
             <DeleteInfoTxt>※ 예약 취소는 레슨 시작 10분 전까지 가능합니다.</DeleteInfoTxt>
-            <DeleteInfoTxt>※ 10분 전부터는 레슨 상태로 전환됩니다.</DeleteInfoTxt>
+            <DeleteInfoTxt>※ 예약 시간 10분 전부터는 레슨 상태로 전환됩니다.</DeleteInfoTxt>
           </TxtWrapper>
-        </>
+        </DeleteInfoTxtAllWrapper>
       )}
     </Container>
   );
@@ -113,20 +114,24 @@ function ReserveSpecificScreen(props) {
 const Container = styled.View`
   flex: 1;
   background-color: ${COLORS.white};
-  align-items: center;
+`;
+
+const AllWrapper = styled.View`
+  margin-right: ${wp(5)}px;
+  margin-left: ${wp(5)}px;
+  margin-top: ${hp(10)}px;
+  margin-bottom: ${hp(5)}px;
 `;
 
 const Top = styled.View`
   top: ${hp(5)};
   flex-direction: row;
-  justify-content: center;
   align-items: center;
 `;
 
 const MainTxt = styled.Text`
   font-size: ${RFValue(15)}px;
   font-weight: bold;
-  flex: 1;
 `;
 
 const TutorProfileBox = styled.View`
@@ -135,26 +140,15 @@ const TutorProfileBox = styled.View`
   height: ${hp(15)}px;
   padding: ${wp(1)}px;
 
-  border-bottom-width: ${RFValue(1)}px;
-  border-bottom-color: ${COLORS.lightgray};
-  align-items: center;
+  margin-bottom: ${hp(3)}px;
 `;
 
 const ProfileImg = styled.View`
   border-radius: 50%;
-  margin-right: ${wp(2)}px;
+  margin-right: ${wp(8)}px;
 `;
 
-const Item = styled.View`
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const TutorItem = styled.View`
-  flex-direction: row;
-  margin-bottom: ${hp(1)};
-  align-items: center;
-`;
+const TutorItem = styled.View``;
 
 const Name = styled.Text`
   font-size: ${RFValue(18)}px;
@@ -163,9 +157,6 @@ const Name = styled.Text`
 `;
 
 const FieldBox = styled.View`
-  width: auto;
-  height: auto;
-
   border-width: ${wp(0.4)}px;
   border-radius: ${RFValue(5)}px;
   border-color: ${COLORS.main};
@@ -173,8 +164,9 @@ const FieldBox = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-left: ${wp(2)}px;
   padding: ${wp(1)}px;
+  margin-bottom: ${hp(1)}px;
+  margin-top: ${hp(2)}px;
 `;
 
 const Field = styled.Text`
@@ -187,20 +179,39 @@ const Gap = styled.View`
   width: ${wp(1)}px;
 `;
 
-const BottomWrapper = styled.View``;
+const BottomWrapper = styled.View`
+  margin-left: ${wp(5)}px;
+`;
 
 const Row = styled.View`
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  margin-bottom: ${wp(2)}px;
 `;
 
-const NoticeTxt = styled.Text``;
+const NoticeTxt = styled.Text`
+  font-size: ${RFValue(13)}px;
+  font-weight: bold;
+`;
 
-const ContentTxt = styled.Text``;
+const ContentTxt = styled.Text`
+  margin-left: ${wp(15)}px;
+  font-size: ${RFValue(13)}px;
+  font-weight: bold;
+  color: ${COLORS.main};
+`;
 
-const TxtWrapper = styled.View``;
+const DeleteInfoTxtAllWrapper = styled.View``;
 
-const DeleteInfoTxt = styled.Text``;
+const TxtWrapper = styled.View`
+  align-items: center;
+  justify-content: center;
+`;
+
+const DeleteInfoTxt = styled.Text`
+  color: ${COLORS.gray};
+  line-height: ${hp(3)}px;
+  font-size: ${RFValue(10)}px;
+`;
 
 export default ReserveSpecificScreen;

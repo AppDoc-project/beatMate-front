@@ -66,7 +66,7 @@ const Container = styled.View`
 `;
 
 const MainWrapper = styled.View`
-  height: ${hp(75)}px;
+  height: ${hp(78)}px;
 `;
 
 const MyPostingListScrollView = styled.ScrollView`

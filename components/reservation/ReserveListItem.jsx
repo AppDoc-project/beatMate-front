@@ -36,13 +36,12 @@ function ReserveListItem({ myReserveData }) {
 
   //예약 상세 페이지로 이동
   const onPressReserveItem = () => {
-    navigation.navigate(
-      'reserveSpecificScreen',
+    navigation.navigate('reserveSpecificScreen', {
       myReserveData,
       formattedLessonDate,
       formattedStartTime,
       formattedEndTime,
-    );
+    });
   };
 
   return (
