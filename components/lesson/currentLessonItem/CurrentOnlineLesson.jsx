@@ -116,7 +116,7 @@ const OnlineBtnText = styled.Text`
 `;
 
 const GuideText = styled.Text`
-  font-size: ${RFValue(8)}px;
+  font-size: ${RFValue(10)}px;
   font-weight: 600;
   color: ${COLORS.lightgray};
 `;

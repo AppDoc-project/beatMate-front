@@ -36,8 +36,8 @@ function LessonMainScreen(props) {
         <FirstSection>
           <CurrentLessonText>현재 진행 중인 레슨</CurrentLessonText>
           {/* <CurrentNoLesson /> */}
-          {/* <CurrentOnlineLesson toggleModal={toggleModal} /> */}
-          <CurrentOffLineLesson toggleModal={toggleModal} />
+          <CurrentOnlineLesson toggleModal={toggleModal} />
+          {/* <CurrentOffLineLesson toggleModal={toggleModal} /> */}
         </FirstSection>
         <SecondSection>
           <MainTxt>레슨 {isTutor ? '피드백지' : '평가지'}를 작성해 주세요!</MainTxt>

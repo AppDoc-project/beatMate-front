@@ -1,21 +1,15 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LessonFeedbackScreen from '@screens/lesson/LessonFeedbackScreen';
 import LessonMainScreen from '@screens/lesson/LessonMainScreen';
 import LessonScheduleScreen from '@screens/lesson/LessonScheduleScreen';
-import TuteeFeedbackScreen from '@screens/lesson/TuteeFeedbackScreen';
+import TuteeEvaluationScreen from '@screens/lesson/TuteeEvaluationScreen';
 import TutorFeedbackScreen from '@screens/lesson/TutorFeedbackScreen';
 import VideoScreen from '@screens/lesson/VideoScreen';
-import { UserInfo } from 'context/UserInfoContext';
-import React, { useContext } from 'react';
+import React from 'react';
 
 const Stack = createNativeStackNavigator();
 
 function LessonScreenNavigator(props) {
-  const {
-    loginUserInfo: [loginUser],
-  } = useContext(UserInfo);
-
-  const isTutor = loginUser.isTutor;
-
   return (
     <Stack.Navigator initialRouteName="lessonMainScreen">
       <Stack.Screen
@@ -39,23 +33,27 @@ function LessonScreenNavigator(props) {
           headerShown: false,
         }}
       />
-      {isTutor ? (
-        <Stack.Screen
-          name={'tutorFeedbackScreen'}
-          component={TutorFeedbackScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      ) : (
-        <Stack.Screen
-          name={'tuteeFeedbackScreen'}
-          component={TuteeFeedbackScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      )}
+      <Stack.Screen
+        name={'tutorFeedbackScreen'}
+        component={TutorFeedbackScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'tuteeEvaluationScreen'}
+        component={TuteeEvaluationScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'lessonFeedbackScreen'}
+        component={LessonFeedbackScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }

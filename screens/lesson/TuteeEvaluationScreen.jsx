@@ -1,14 +1,14 @@
 import { RegisterBtn } from '@assets/Icons/Buttons';
-import LessonInfoContent from '@components/lesson/currentLessonItem/LessonInfoContent';
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components';
 
-function TutorFeedbackScreen(props) {
+function TuteeEvaluationScreen(props) {
   const [content, setContent] = useState('');
 
   const MAX_LENGTH = 1000;
@@ -27,31 +27,33 @@ function TutorFeedbackScreen(props) {
       <Container>
         <Main>
           <FirstRow>
-            <MainText>강사님,</MainText>
+            <MainText>수강생님,</MainText>
           </FirstRow>
           <SecondRow>
-            <MainText color={COLORS.main}>레슨 피드백지</MainText>
+            <MainText color={COLORS.main}>레슨 평가지</MainText>
             <MainText>를 입력해 주세요!</MainText>
           </SecondRow>
         </Main>
-        <TuteeInfo>
-          <SubText>수강생 정보</SubText>
-          <TuteeInfoBox>
-            <LessonInfoContent />
-          </TuteeInfoBox>
-        </TuteeInfo>
-        <LessonFeedback>
-          <SubText>레슨 피드백을 입력해주세요.</SubText>
+        <Rate>
+          <RateTextSection>
+            <SubText>레슨은 어떠셨나요?</SubText>
+            <RateGuideText>별점을 매겨주세요</RateGuideText>
+          </RateTextSection>
+          <Ionicons name="star-outline" size={40} />
+        </Rate>
+        <Review>
+          <SubText>레슨 후기를 작성해 주세요.</SubText>
+          <ReviewGuideText>(작성해주신 후기는 강사님의 프로필 상에 보여지게 됩니다.)</ReviewGuideText>
           <ContentInput
             onChangeText={onChangeContent}
-            placeholder="레슨 피드백을 입력하세요. (최대 1000자)"
+            placeholder="레슨 후기를 입력하세요. (최대 1000자)"
             placeholderTextColor="lightgray"
             multiline
           />
           <TextCount>
             {content.length}/{MAX_LENGTH} 자
           </TextCount>
-        </LessonFeedback>
+        </Review>
         <RegisterBtn
           fontColor={content.length > 0 ? 'white' : 'navy'}
           backColor={content.length > 0 ? 'navy' : 'white'}
@@ -69,6 +71,7 @@ const Container = styled(KeyboardAwareScrollView)`
 `;
 
 const Main = styled.View`
+  flex: 0.1;
   margin: ${RFValue(10)}px ${RFValue(18)}px;
 `;
 
@@ -84,35 +87,48 @@ const MainText = styled.Text`
   color: ${(props) => props.color || COLORS.black};
 `;
 
-const TuteeInfo = styled.View`
+const Rate = styled.View`
+  flex: 0.15;
   margin: ${RFValue(10)}px ${RFValue(18)}px;
+`;
+
+const RateTextSection = styled.View`
+  flex-direction: row;
+  margin-bottom: ${RFValue(10)}px;
 `;
 
 const SubText = styled.Text`
   font-size: ${RFValue(18)}px;
   font-weight: 900;
-  margin-bottom: ${RFValue(5)}px;
+  margin: ${RFValue(5)}px 0;
 `;
 
-const TuteeInfoBox = styled.View`
-  height: ${hp(18)}px;
-  width: ${wp(90)}px;
-  border-width: ${RFValue(1)}px;
-  border-radius: ${RFValue(10)}px;
-  border-color: ${COLORS.lightgray};
-
-  padding: ${RFValue(10)}px;
-`;
-
-const LessonFeedback = styled.View`
+const Review = styled.View`
+  flex: 0.75;
   margin: ${RFValue(10)}px ${RFValue(18)}px ${RFValue(30)}px ${RFValue(18)}px;
+`;
+
+const RateGuideText = styled.Text`
+  font-size: ${RFValue(10)}px;
+  font-weight: 600;
+  color: ${COLORS.lightgray};
+
+  align-self: center;
+  margin-left: ${RFValue(10)}px;
+`;
+
+const ReviewGuideText = styled.Text`
+  font-size: ${RFValue(10)}px;
+  font-weight: 600;
+  color: ${COLORS.lightgray};
+  margin-bottom: ${RFValue(10)}px;
 `;
 
 const ContentInput = styled.TextInput`
   background-color: transparent;
 
   width: ${wp(90)}px;
-  height: ${hp(30)}px;
+  height: ${hp(40)}px;
   border-width: ${RFValue(1)}px;
   border-radius: ${RFValue(5)}px;
   border-color: ${COLORS.lightgray};
@@ -131,4 +147,4 @@ const TextCount = styled.Text`
   color: ${COLORS.lightgray};
 `;
 
-export default TutorFeedbackScreen;
+export default TuteeEvaluationScreen;

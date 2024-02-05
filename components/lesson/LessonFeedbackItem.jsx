@@ -15,15 +15,15 @@ function LessonFeedbackItem(props) {
 
   const isTutor = loginUser.isTutor;
 
-  const tuteeFeedbackNavi = () => {
-    navigation.navigate('tuteeFeedbackScreen');
+  const tuteeEvaluationNavi = () => {
+    navigation.navigate('tuteeEvaluationScreen');
   };
   const tutorFeedbackNavi = () => {
     navigation.navigate('tutorFeedbackScreen');
   };
   return (
     <Container>
-      <FeedbackBtn onPress={isTutor ? tutorFeedbackNavi : tuteeFeedbackNavi}>
+      <FeedbackBtn onPress={isTutor ? tutorFeedbackNavi : tuteeEvaluationNavi}>
         <Feedback>
           <LessonType>화상 레슨</LessonType>
           <Name>이가나 {isTutor ? '수강생' : '강사'}</Name>

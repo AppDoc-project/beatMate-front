@@ -4,37 +4,15 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
+import LessonInfoContent from './LessonInfoContent';
+
 // eslint-disable-next-line react/prop-types
 function LessonInfoModal({ closeModal }) {
   return (
     <Container>
       <BackgroundClose onPress={closeModal} />
       <InfoModal>
-        <Info>
-          <InfoItem>
-            <LabelText>수강생 이름 : </LabelText>
-            <ValueText>김철수</ValueText>
-          </InfoItem>
-          <InfoItem>
-            <LabelText>생년월일 : </LabelText>
-            <ValueText>20001112</ValueText>
-          </InfoItem>
-          <InfoItem>
-            <LabelText>레슨 방식 : </LabelText>
-            <ValueText>화상 레슨</ValueText>
-          </InfoItem>
-          <InfoItem>
-            <LabelText>숙련도 : </LabelText>
-            <ValueText>하</ValueText>
-          </InfoItem>
-          <InfoItem>
-            <LabelText>상담 내용 : </LabelText>
-            <ValueText>아직 많이 부족한 상태라서 기초부터 다지고 싶어요!</ValueText>
-          </InfoItem>
-        </Info>
-        {/* <Photo>
-          <PhotoEx></PhotoEx>
-        </Photo> */}
+        <LessonInfoContent />
       </InfoModal>
     </Container>
   );
@@ -79,35 +57,4 @@ const InfoModal = styled.View`
   padding: ${RFValue(10)}px;
 `;
 
-const Info = styled.View``;
-
-const InfoItem = styled.View`
-  flex-direction: row;
-  margin-bottom: ${RFValue(5)}px;
-`;
-
-const LabelText = styled.Text`
-  font-size: ${RFValue(14)}px;
-  font-weight: 700;
-`;
-
-const ValueText = styled.Text`
-  flex: 1;
-  font-size: ${RFValue(12)}px;
-  font-weight: 600;
-  margin-top: ${RFValue(2.5)}px;
-`;
-
-// const Photo = styled.View`
-//   justify-content: center;
-//   align-items: center;
-//   margin: ${RFValue(5)}px;
-// `;
-
-// const PhotoEx = styled.View`
-//   border-width: 2px;
-//   border-color: ${COLORS.main};
-//   height: 80px;
-//   width: 200px;
-// `;
 export default LessonInfoModal;

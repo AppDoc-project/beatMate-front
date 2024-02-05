@@ -15,7 +15,7 @@ export default function App() {
     id: 0,
     email: '',
     name: '',
-    isTutor: false,
+    isTutor: true,
   });
 
   return (
