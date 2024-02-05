@@ -2,6 +2,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChatListScreen from '@screens/chat/ChatListScreen';
 import ChatRoomScreen from '@screens/chat/ChatRoomScreen';
+import ReservationFormScreen from '@screens/reservation/ReservationFormScreen';
 import React from 'react';
 
 const Stack = createNativeStackNavigator();
@@ -20,13 +21,22 @@ function ChatScreenNavigator() {
         name={'chat-list'}
         component={ChatListScreen}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: '채팅방 리스트',
         }}
       />
       <Stack.Screen
         name={'chat-room'}
         component={ChatRoomScreen}
         initialParams={{ chatScreenHeaderHeight }}
+        options={{
+          headerShown: true,
+          headerTitle: '채팅',
+        }}
+      />
+      <Stack.Screen
+        name={'reservationFormScreen'}
+        component={ReservationFormScreen}
         options={{
           headerShown: false,
         }}

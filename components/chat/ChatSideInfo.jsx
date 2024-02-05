@@ -37,7 +37,9 @@ function ChatSideInfo({ room }) {
   console.log(isTutor);
 
   const onPressReserveForm = () => {
-    navigation.navigate('reservationFormScreen');
+    const tuteeId = room.target.userId;
+
+    navigation.navigate('reservationFormScreen', { tuteeId });
   };
 
   return (

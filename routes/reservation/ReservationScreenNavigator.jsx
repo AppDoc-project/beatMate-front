@@ -1,15 +1,23 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ReservationFormScreen from '@screens/reservation/ReservationFormScreen';
+import ReserveMainScreen from '@screens/reservation/ReserveMainScreen';
+import ReserveSpecificScreen from '@screens/reservation/ReserveSpecificScreen';
 import React from 'react';
 
 const Stack = createNativeStackNavigator();
 
 function ReservationScreenNavigator(props) {
   return (
-    <Stack.Navigator initialRouteName="reservationFormScreen">
+    <Stack.Navigator initialRouteName="reserveMainScreen">
       <Stack.Screen
-        name={'reservationFormScreen'}
-        component={ReservationFormScreen}
+        name={'reserveMainScreen'}
+        component={ReserveMainScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'reserveSpecificScreen'}
+        component={ReserveSpecificScreen}
         options={{
           headerShown: false,
         }}

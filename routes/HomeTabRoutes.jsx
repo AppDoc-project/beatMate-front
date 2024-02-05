@@ -71,6 +71,7 @@ function HomeTabRoutes(props) {
           component={ChatScreenNavigator}
           options={{
             unmountOnBlur: true,
+            headerShown: false,
             title: '채팅',
             tabBarActiveTintColor: COLORS.black,
             tabBarInactiveTintColor: COLORS.gray,
@@ -110,9 +111,9 @@ function HomeTabRoutes(props) {
             tabBarInactiveTintColor: COLORS.gray,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <Ionicons name={'person'} size={RFValue(20)} color={COLORS.black} />
+                <AntDesign name={'form'} size={RFValue(20)} color={COLORS.black} />
               ) : (
-                <Ionicons name={'person'} size={RFValue(20)} color={COLORS.lightgray} />
+                <AntDesign name={'form'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
         />
@@ -127,9 +128,9 @@ function HomeTabRoutes(props) {
             tabBarInactiveTintColor: COLORS.gray,
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <AntDesign name={'form'} size={RFValue(20)} color={COLORS.black} />
+                <Ionicons name={'person'} size={RFValue(20)} color={COLORS.black} />
               ) : (
-                <AntDesign name={'form'} size={RFValue(20)} color={COLORS.lightgray} />
+                <Ionicons name={'person'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
         />

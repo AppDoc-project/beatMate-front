@@ -1,7 +1,254 @@
-import React from 'react';
+import { ReserveBtn } from '@assets/Icons/Buttons';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { makeReserve } from 'api/reservation';
+import { COLORS } from 'colors';
+import format from 'pretty-format';
+import React, { useState } from 'react';
+import { Alert, SafeAreaView, Text } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import styled from 'styled-components';
 
 function ReservationFormScreen(props) {
-  return <></>;
+  const route = useRoute();
+  const { tuteeId } = route.params;
+
+  const navigation = useNavigation();
+
+  const [date, setDate] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [lessonType, setLessonType] = useState('');
+  const [memo, setMemo] = useState('');
+
+  const onChangeDate = (text) => setDate(text);
+  const onChangeStartTime = (text) => setStartTime(text);
+  const onChangeEndTime = (text) => setEndTime(text);
+  const onChangeMemo = (text) => setMemo(text);
+
+  const [isOnline, setIsOnline] = useState(false);
+  const [isOffline, setisOffline] = useState(false);
+
+  const onPressAlertBtn = () => {
+    if (!startTime.includes(':00' || ':30') || !endTime.includes(':00' || ':30')) {
+      Alert.alert('알림', '30분 단위로 예시와 같이 시간을 작성해주세요.');
+    } else if (!date.includes(':')) {
+      Alert.alert('알림', '예시와 같은 형식으로 레슨 날짜를 작성해주세요.');
+    }
+  };
+
+  // 예약 생성하기 api
+  const onPressReserveBtn = () => {
+    const data = {
+      tuteeId: tuteeId,
+      lessonType: lessonType,
+      date: date,
+      startTime: startTime,
+      endTime: endTime,
+      memo: memo,
+    };
+
+    makeReserve(data)
+      .then((res) => {
+        const { data } = res;
+        console.log('예약 생성하기', format(data));
+        navigation.navigate('reservation');
+      })
+      .catch((error) => console.log('예약 생성하기', format(error)));
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
+        <MainTxt>레슨 예약하기</MainTxt>
+
+        <MainInfoTxt1>강사님,</MainInfoTxt1>
+        <MainInfoTxt2>
+          <Text style={{ color: 'navy' }}>예약 정보</Text>를 입력해주세요!
+        </MainInfoTxt2>
+        <TxtWrapper>
+          <SubTitleTxt>※ 아래 항목을 입력해주세요. (필수)</SubTitleTxt>
+          <SubTitleTxt>※ 반드시 모든 문항은 예시와 같은 형식으로 작성해주세요.</SubTitleTxt>
+          <SubTitleTxt>※ 예시와 다르게 작성하신 경우, 예약 신청이 거절될 수 있습니다.</SubTitleTxt>
+          <SubTitleTxt>※ 레슨 시작 / 종료시간은 반드시 30분 단위로 작성해주세요.</SubTitleTxt>
+          <SubTitleTxt>※ 예약 신청 결과는 추후 예약 일정 페이지에서 확인 가능합니다.</SubTitleTxt>
+          <SubTitleTxt>※ 특이사항 작성은 선택입니다. (선택)</SubTitleTxt>
+        </TxtWrapper>
+
+        <Info>
+          <Component>
+            <Txt>레슨을 진행하실 날짜를 알려주세요.</Txt>
+            <SubTxt>예시와 같은 형식으로 작성해주세요. (필수)</SubTxt>
+            <Input
+              value={date}
+              onChangeText={onChangeDate}
+              placeholder="( 예시. 2023:11:12 )"
+              placeholderTextColor="lightgray"
+            />
+          </Component>
+          <Component>
+            <Txt>레슨 시작 시간을 알려주세요.</Txt>
+            <SubTxt>예시와 같은 형식으로 작성해주세요. (필수)</SubTxt>
+            <Input
+              value={startTime}
+              onChangeText={onChangeStartTime}
+              placeholder="( 예시. 17:30 )"
+              placeholderTextColor="lightgray"
+            />
+          </Component>
+          <Component>
+            <Txt>레슨 종료 시간을 알려주세요.</Txt>
+            <SubTxt>예시와 같은 형식으로 작성해주세요. (필수)</SubTxt>
+            <Input
+              value={endTime}
+              onChangeText={onChangeEndTime}
+              placeholder="( 예시. 01012345678 )"
+              placeholderTextColor="lightgray"
+            />
+          </Component>
+          <Component>
+            <Txt>원하는 레슨 방식을 선택해 주세요.</Txt>
+            <SelectOptionWrapper>
+              <CategoryBtn
+                onPress={() => {
+                  setIsOnline(true);
+                  setisOffline(false);
+                  setLessonType('REMOTE');
+                }}
+                selected={isOnline}
+              >
+                <CategoryTxt selected={isOnline}>화상</CategoryTxt>
+              </CategoryBtn>
+
+              <CategoryBtn
+                onPress={() => {
+                  setIsOnline(false);
+                  setisOffline(true);
+                  setLessonType('FACETOFACE');
+                }}
+                selected={isOffline}
+              >
+                <CategoryTxt selected={isOffline}>대면</CategoryTxt>
+              </CategoryBtn>
+            </SelectOptionWrapper>
+          </Component>
+          <Component>
+            <Txt>특이 사항을 입력해주세요.</Txt>
+            <SubTxt>작성하신 특이 사항은 예약 페이지 상에서 함께 확인 가능합니다. (선택)</SubTxt>
+            <Input value={memo} onChangeText={onChangeMemo} />
+          </Component>
+        </Info>
+        <ReserveBtn
+          fontColor={date && startTime && endTime && lessonType ? 'white' : 'navy'}
+          backColor={date && startTime && endTime && lessonType ? 'navy' : 'white'}
+          width={wp(100)}
+          marginBottom={hp(6.15)}
+          justifyContent="center"
+          onPress={() => {
+            onPressAlertBtn();
+            onPressReserveBtn();
+          }}
+        />
+      </Container>
+    </SafeAreaView>
+  );
 }
+
+const Container = styled(KeyboardAwareScrollView)`
+  flex: 1;
+  background-color: white;
+`;
+
+const MainTxt = styled.Text`
+  font-size: ${RFValue(22)}px;
+  font-weight: bold;
+  top: ${hp(9)};
+`;
+
+const MainInfoTxt1 = styled.Text`
+  font-size: ${RFValue(22)}px;
+  font-weight: bold;
+  margin-left: ${wp(4.8)}px;
+  margin-top: ${hp(2)}px;
+`;
+
+const MainInfoTxt2 = styled.Text`
+  font-size: ${RFValue(22)}px;
+  font-weight: bold;
+  margin-left: ${wp(4.8)}px;
+  margin-top: ${RFValue(5)}px;
+`;
+
+const SubTitleTxt = styled.Text`
+  color: lightgray;
+  margin-left: ${wp(4.8)}px;
+  margin-top: ${hp(1.23)}px;
+  margin-bottom: ${hp(3)}px;
+  font-size: ${RFValue(9)}px;
+`;
+
+const SubTxt = styled.Text`
+  color: lightgray;
+  font-size: ${RFValue(12)}px;
+  margin-top: ${hp(1)}px;
+`;
+
+const Info = styled.View`
+  flex: 1;
+`;
+
+const TxtWrapper = styled.View``;
+
+const Component = styled.View`
+  margin-left: ${wp(4.8)}px;
+  margin-bottom: ${hp(4)}px;
+`;
+
+const Txt = styled.Text`
+  font-weight: bold;
+  font-size: ${RFValue(14)}px;
+`;
+
+const Input = styled.TextInput`
+  background-color: transparent;
+  position: relative;
+
+  top: ${hp(1.5)}px;
+  width: ${wp(90.4)}px;
+  height: ${hp(7)}px;
+  border-radius: 8px;
+  border-color: lightgray;
+  border-width: 1px;
+
+  padding-left: ${RFValue(4)}px;
+  font-size: ${RFValue(16)}px;
+  font-weight: bold;
+  padding: ${RFValue(10)}px;
+`;
+
+const SelectOptionWrapper = styled.View`
+  width: ${wp(90)}px;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: ${hp(10)}px;
+`;
+
+const CategoryBtn = styled.TouchableOpacity`
+  top: ${hp(1.5)}px;
+  width: ${wp(20)}px;
+  height: ${hp(4)}px;
+  border-radius: ${RFValue(8)}px;
+  border-color: ${(props) => (props.selected ? COLORS.main : COLORS.lightgray)};
+  border-width: ${(props) => (props.selected ? '3px' : '1px')};
+  justify-content: center;
+  align-items: center;
+  padding: ${RFValue(10)}px;
+`;
+
+const CategoryTxt = styled.Text`
+  color: ${(props) => (props.selected ? COLORS.main : COLORS.lightgray)};
+  font-weight: ${(props) => (props.selected ? 'bold' : 'normal')};
+`;
 
 export default ReservationFormScreen;
