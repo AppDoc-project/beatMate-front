@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
 import PropTypes from 'prop-types';
@@ -27,11 +28,17 @@ function ChatSideInfo({ room }) {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
 
+  const navigation = useNavigation();
+
   console.log(room);
 
   const isTutor = loginUser.isTutor;
 
   console.log(isTutor);
+
+  const onPressReserveForm = () => {
+    navigation.navigate('reservationFormScreen');
+  };
 
   return (
     <Container isTutor={isTutor}>
@@ -57,7 +64,7 @@ function ChatSideInfo({ room }) {
         </LeftWrapper>
         {isTutor && (
           <RightWrapper>
-            <ReserveBtn>
+            <ReserveBtn onPress={onPressReserveForm}>
               <ReserveTxt>레슨 예약하기</ReserveTxt>
             </ReserveBtn>
           </RightWrapper>
