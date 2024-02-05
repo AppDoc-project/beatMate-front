@@ -10,7 +10,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
-function ReservationFormScreen(props) {
+function ReservationFormScreen() {
   const route = useRoute();
   const { tuteeId } = route.params;
 
@@ -31,9 +31,7 @@ function ReservationFormScreen(props) {
   const [isOffline, setisOffline] = useState(false);
 
   const onPressAlertBtn = () => {
-    if (!startTime.includes(':00' || ':30') || !endTime.includes(':00' || ':30')) {
-      Alert.alert('알림', '30분 단위로 예시와 같이 시간을 작성해주세요.');
-    } else if (!date.includes(':')) {
+    if (!date.includes(':')) {
       Alert.alert('알림', '예시와 같은 형식으로 레슨 날짜를 작성해주세요.');
     }
   };
@@ -49,6 +47,8 @@ function ReservationFormScreen(props) {
       memo: memo,
     };
 
+    console.log(data);
+
     makeReserve(data)
       .then((res) => {
         const { data } = res;
@@ -61,19 +61,33 @@ function ReservationFormScreen(props) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
-        <MainTxt>레슨 예약하기</MainTxt>
-
         <MainInfoTxt1>강사님,</MainInfoTxt1>
         <MainInfoTxt2>
           <Text style={{ color: 'navy' }}>예약 정보</Text>를 입력해주세요!
         </MainInfoTxt2>
         <TxtWrapper>
-          <SubTitleTxt>※ 아래 항목을 입력해주세요. (필수)</SubTitleTxt>
-          <SubTitleTxt>※ 반드시 모든 문항은 예시와 같은 형식으로 작성해주세요.</SubTitleTxt>
-          <SubTitleTxt>※ 예시와 다르게 작성하신 경우, 예약 신청이 거절될 수 있습니다.</SubTitleTxt>
-          <SubTitleTxt>※ 레슨 시작 / 종료시간은 반드시 30분 단위로 작성해주세요.</SubTitleTxt>
-          <SubTitleTxt>※ 예약 신청 결과는 추후 예약 일정 페이지에서 확인 가능합니다.</SubTitleTxt>
-          <SubTitleTxt>※ 특이사항 작성은 선택입니다. (선택)</SubTitleTxt>
+          <SubTitleTxt>
+            ※ <Text style={{ color: COLORS.black, fontWeight: 'bold' }}>필수 항목들</Text>은 모두 입력해주세요.
+          </SubTitleTxt>
+          <SubTitleTxt>
+            ※ 반드시 모든 문항은 <Text style={{ color: COLORS.black, fontWeight: 'bold' }}>예시와 같은 형식</Text>으로
+            작성해주세요.
+          </SubTitleTxt>
+          <SubTitleTxt>
+            ※ 예시와 다르게 작성하신 경우, 예약 신청이{' '}
+            <Text style={{ color: COLORS.black, fontWeight: 'bold' }}>거절</Text>될 수 있습니다.
+          </SubTitleTxt>
+          <SubTitleTxt>
+            ※ 레슨 진행 날짜는 <Text style={{ color: COLORS.black, fontWeight: 'bold' }}>현재 날짜 또는 이후만</Text>
+            설정 가능합니다.
+          </SubTitleTxt>
+          <SubTitleTxt>
+            ※ 레슨 시작 / 종료시간은 반드시 <Text style={{ color: COLORS.black, fontWeight: 'bold' }}>30분 단위</Text>로
+            작성해주세요.
+          </SubTitleTxt>
+          <SubTitleTxt>
+            ※ 특이사항 작성은 <Text style={{ color: COLORS.black, fontWeight: 'bold' }}>선택</Text>입니다. (선택)
+          </SubTitleTxt>
         </TxtWrapper>
 
         <Info>
@@ -103,7 +117,7 @@ function ReservationFormScreen(props) {
             <Input
               value={endTime}
               onChangeText={onChangeEndTime}
-              placeholder="( 예시. 01012345678 )"
+              placeholder="( 예시. 20:00 )"
               placeholderTextColor="lightgray"
             />
           </Component>
@@ -135,7 +149,7 @@ function ReservationFormScreen(props) {
           </Component>
           <Component>
             <Txt>특이 사항을 입력해주세요.</Txt>
-            <SubTxt>작성하신 특이 사항은 예약 페이지 상에서 함께 확인 가능합니다. (선택)</SubTxt>
+            <SubTxt>작성 내용은 예약 페이지 상에 나타납니다. (선택)</SubTxt>
             <Input value={memo} onChangeText={onChangeMemo} />
           </Component>
         </Info>
@@ -160,12 +174,6 @@ const Container = styled(KeyboardAwareScrollView)`
   background-color: white;
 `;
 
-const MainTxt = styled.Text`
-  font-size: ${RFValue(22)}px;
-  font-weight: bold;
-  top: ${hp(9)};
-`;
-
 const MainInfoTxt1 = styled.Text`
   font-size: ${RFValue(22)}px;
   font-weight: bold;
@@ -181,11 +189,10 @@ const MainInfoTxt2 = styled.Text`
 `;
 
 const SubTitleTxt = styled.Text`
-  color: lightgray;
+  color: ${COLORS.gray};
   margin-left: ${wp(4.8)}px;
-  margin-top: ${hp(1.23)}px;
-  margin-bottom: ${hp(3)}px;
   font-size: ${RFValue(9)}px;
+  line-height: ${hp(2)}px;
 `;
 
 const SubTxt = styled.Text`
@@ -198,7 +205,10 @@ const Info = styled.View`
   flex: 1;
 `;
 
-const TxtWrapper = styled.View``;
+const TxtWrapper = styled.View`
+  margin-bottom: ${hp(3)}px;
+  margin-top: ${hp(1.23)}px;
+`;
 
 const Component = styled.View`
   margin-left: ${wp(4.8)}px;
@@ -216,13 +226,13 @@ const Input = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(90.4)}px;
-  height: ${hp(7)}px;
+  height: auto;
   border-radius: 8px;
   border-color: lightgray;
   border-width: 1px;
 
   padding-left: ${RFValue(4)}px;
-  font-size: ${RFValue(16)}px;
+  font-size: ${RFValue(12)}px;
   font-weight: bold;
   padding: ${RFValue(10)}px;
 `;
@@ -231,13 +241,12 @@ const SelectOptionWrapper = styled.View`
   width: ${wp(90)}px;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: ${hp(10)}px;
 `;
 
 const CategoryBtn = styled.TouchableOpacity`
   top: ${hp(1.5)}px;
-  width: ${wp(20)}px;
-  height: ${hp(4)}px;
+  width: ${wp(40)}px;
+  height: auto;
   border-radius: ${RFValue(8)}px;
   border-color: ${(props) => (props.selected ? COLORS.main : COLORS.lightgray)};
   border-width: ${(props) => (props.selected ? '3px' : '1px')};

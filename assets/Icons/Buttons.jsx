@@ -203,4 +203,38 @@ ReserveBtn.propTypes = {
   fontColor: PropTypes.string.isRequired,
 };
 
-export { LoginBtn, FinishBtn, GetReAuthCodeBtn, JoinBtn, WriteBtn, RegisterBtn, ChangeBtn, DeleteBtn, ReserveBtn };
+function DeleteReserveBtn(props) {
+  const { backColor, fontColor } = props;
+
+  return (
+    <Svg width={362} height={87} viewBox="0 0 362 87" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <G filter="url(#filter0_d_1001_214)">
+        <Rect x={20} y={13} width={322} height={47} rx={10} fill={backColor} />
+        <Rect x={20.5} y={13.5} width={321} height={46} rx={9.5} stroke="#144182" />
+      </G>
+      <Path
+        d="M161.368 35.138h2.156v1.498h-2.156v-1.498zm0 4.004h2.156v1.512h-2.156v-1.512zm4.214-6.86h1.778v12.964h-1.778V32.282zm-2.59.196h1.736v12.18h-1.736v-12.18zm-3.864.714c1.722 0 2.828 1.778 2.828 4.704 0 2.94-1.106 4.718-2.828 4.718-1.708 0-2.8-1.778-2.8-4.718 0-2.926 1.092-4.704 2.8-4.704zm0 1.75c-.714 0-1.134.98-1.134 2.954 0 1.988.42 2.954 1.134 2.954.728 0 1.148-.966 1.148-2.954 0-1.974-.42-2.954-1.148-2.954zm19.599-.98h2.24v1.526h-2.24v-1.526zm0 2.814h2.24v1.526h-2.24v-1.526zm-1.288-4.494h1.862v7.644h-1.862v-7.644zm-6.79 8.176h8.652v4.788h-1.862v-3.304h-6.79v-1.484zm2.058-7.476c2.002 0 3.528 1.33 3.528 3.178 0 1.848-1.526 3.164-3.528 3.164s-3.528-1.316-3.528-3.164 1.526-3.178 3.528-3.178zm0 1.582c-.98 0-1.708.574-1.708 1.596 0 1.022.728 1.61 1.708 1.61s1.708-.588 1.708-1.61c0-1.022-.728-1.596-1.708-1.596zm15.785.182h1.498v.154c0 1.918-1.148 3.486-3.64 3.99l-.742-1.442c2.002-.364 2.884-1.428 2.884-2.548v-.154zm.378 0h1.498v.154c0 1.05.868 2.016 2.828 2.366l-.728 1.428c-2.45-.462-3.598-1.96-3.598-3.794v-.154zm-2.912-1.176h6.93v1.428h-6.93V33.57zm2.534-1.26h1.876v2.282h-1.876V32.31zm-.014 7.336h1.862v5.208h-1.862v-5.208zm5.67-7.364h1.848v12.964h-1.848V32.282zm-8.736 8.666l-.224-1.512c2.352 0 5.502-.014 8.218-.378l.126 1.344c-2.8.504-5.81.546-8.12.546zm12.627 1.26h11.732v1.526h-11.732v-1.526zm4.872-2.884h1.848v3.29h-1.848v-3.29zm-.07-6.328h1.624v.938c0 2.758-2.002 5.194-5.39 5.81l-.77-1.554c2.954-.476 4.536-2.464 4.536-4.256v-.938zm.364 0h1.624v.938c0 1.834 1.582 3.78 4.55 4.256l-.77 1.554c-3.402-.63-5.404-3.01-5.404-5.81v-.938z"
+        fill={fontColor}
+      />
+      <Defs></Defs>
+    </Svg>
+  );
+}
+
+DeleteReserveBtn.propTypes = {
+  backColor: PropTypes.string.isRequired,
+  fontColor: PropTypes.string.isRequired,
+};
+
+export {
+  LoginBtn,
+  FinishBtn,
+  GetReAuthCodeBtn,
+  JoinBtn,
+  WriteBtn,
+  RegisterBtn,
+  ChangeBtn,
+  DeleteBtn,
+  ReserveBtn,
+  DeleteReserveBtn,
+};

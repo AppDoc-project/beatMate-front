@@ -12,7 +12,8 @@ function ReservationScreenNavigator(props) {
         name={'reserveMainScreen'}
         component={ReserveMainScreen}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: '레슨 예약 현황',
         }}
       />
       <Stack.Screen
