@@ -91,6 +91,7 @@ const LessonInfoBtn = styled.TouchableOpacity`
 
 const LessonInfoBtnText = styled.Text`
   font-size: ${RFValue(12)}px;
+  font-weight: 500;
   color: ${COLORS.white};
 `;
 

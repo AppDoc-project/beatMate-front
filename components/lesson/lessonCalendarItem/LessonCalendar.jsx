@@ -4,7 +4,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styled from 'styled-components';
 
-import RenderCalendar from './RenderCalendar';
+import RenderCalendarDate from './RenderCalendarDate';
 
 function LessonCalendar(props) {
   const [thisCalendar, setThisCalendar] = useState(null);
@@ -16,7 +16,7 @@ function LessonCalendar(props) {
   const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
   useEffect(() => {
-    const calendarData = RenderCalendar({ thisYear, thisMonth });
+    const calendarData = RenderCalendarDate({ thisYear, thisMonth });
     setThisCalendar(calendarData);
   }, [date, thisMonth, thisYear]);
 

@@ -1,6 +1,8 @@
 import { RegisterBtn } from '@assets/Icons/Buttons';
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -9,6 +11,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components';
 
 function TuteeEvaluationScreen(props) {
+  const navigation = useNavigation();
+
   const [content, setContent] = useState('');
 
   const MAX_LENGTH = 1000;
@@ -20,7 +24,13 @@ function TuteeEvaluationScreen(props) {
   };
 
   //게시글 등록하기
-  const onPressRegisterBtn = () => {};
+  const onPressRegisterBtn = () => {
+    if (content.length === 0) {
+      Alert.alert('알림', '내용을 입력해주세요.');
+    } else {
+      navigation.navigate('home');
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -105,7 +115,7 @@ const SubText = styled.Text`
 
 const Review = styled.View`
   flex: 0.75;
-  margin: ${RFValue(10)}px ${RFValue(18)}px ${RFValue(30)}px ${RFValue(18)}px;
+  margin: ${RFValue(10)}px ${RFValue(18)}px ${RFValue(20)}px ${RFValue(18)}px;
 `;
 
 const RateGuideText = styled.Text`
@@ -139,12 +149,10 @@ const ContentInput = styled.TextInput`
 `;
 
 const TextCount = styled.Text`
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
   font-size: ${RFValue(10)}px;
   font-weight: 600;
   color: ${COLORS.lightgray};
+  margin: ${RFValue(3)}px;
 `;
 
 export default TuteeEvaluationScreen;

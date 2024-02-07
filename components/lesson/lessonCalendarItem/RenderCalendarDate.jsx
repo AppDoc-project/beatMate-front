@@ -1,5 +1,5 @@
 // eslint-disable-next-line react/prop-types
-function RenderCalendar({ thisYear, thisMonth }) {
+function RenderCalendarDate({ thisYear, thisMonth }) {
   const prevLast = new Date(thisYear, thisMonth, 0); //지난 달의 마지막 date
   const thisLast = new Date(thisYear, thisMonth + 1, 0); //이번 달의 마지막 date
 
@@ -28,4 +28,4 @@ function RenderCalendar({ thisYear, thisMonth }) {
   return { prev: prevDates, thisDate: thisDates, next: nextDates };
 }
 
-export default RenderCalendar;
+export default RenderCalendarDate;

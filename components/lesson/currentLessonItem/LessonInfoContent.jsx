@@ -26,7 +26,8 @@ function LessonInfoContent(props) {
         <InfoItem>
           <LabelText>상담 내용 : </LabelText>
           <ValueText>
-            아직 많이 부족한 상태라서 기초부터 다지고 싶어요! 어라아ㅓㄹ니ㅏㅇ아러니ㅏ더ㅣ아ㅓㄹ니ㅏㅓ러니ㅏ어린아ㅓ린
+            아직 많이 부족한 상태라서 기초부터 다지고 싶어요!
+            어라아ㅓㄹ니ㅏㅇ아러니ㅏ더ㅣ아ㅓㄹ니ㅏㅓ러니ㅏ어린아ㅓ린dlkjfs;lkjfa;lskdjfl; dklfjskdfjda;kgk;lk
           </ValueText>
         </InfoItem>
       </Info>

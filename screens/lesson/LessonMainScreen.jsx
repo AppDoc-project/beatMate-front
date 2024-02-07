@@ -15,7 +15,7 @@ import styled from 'styled-components';
 
 function LessonMainScreen(props) {
   const navigation = useNavigation();
-  const lessonScheduleNavi = () => {
+  const onPressLessonSchedule = () => {
     navigation.navigate('lessonScheduleScreen');
   };
 
@@ -51,7 +51,7 @@ function LessonMainScreen(props) {
         </SecondSection>
         <ThirdSection>
           <MainTxt>레슨 내역을 확인하세요!</MainTxt>
-          <ScheduleBtn onPress={lessonScheduleNavi}>
+          <ScheduleBtn onPress={onPressLessonSchedule}>
             <Txt>레슨 내역 확인하기</Txt>
           </ScheduleBtn>
         </ThirdSection>
@@ -124,6 +124,7 @@ const ScheduleBtn = styled.TouchableOpacity`
 
 const Txt = styled.Text`
   font-size: ${RFValue(12)}px;
+  font-weight: 500;
   color: ${COLORS.white};
 `;
 

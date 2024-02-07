@@ -44,7 +44,7 @@ const BackgroundClose = styled.TouchableOpacity`
 const InfoModal = styled.View`
   border-width: 2px;
   border-color: ${COLORS.main};
-  height: ${hp(20)}px;
+  height: ${hp(30)}px;
   width: ${wp(80)}px;
   background-color: ${COLORS.white};
 

@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LessonEvaluationScreen from '@screens/lesson/LessonEvaluationScreen';
 import LessonFeedbackScreen from '@screens/lesson/LessonFeedbackScreen';
 import LessonMainScreen from '@screens/lesson/LessonMainScreen';
 import LessonScheduleScreen from '@screens/lesson/LessonScheduleScreen';
@@ -50,6 +51,13 @@ function LessonScreenNavigator(props) {
       <Stack.Screen
         name={'lessonFeedbackScreen'}
         component={LessonFeedbackScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'lessonEvaluationScreen'}
+        component={LessonEvaluationScreen}
         options={{
           headerShown: false,
         }}

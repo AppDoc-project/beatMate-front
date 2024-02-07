@@ -1,7 +1,8 @@
 import LessonInfoContent from '@components/lesson/currentLessonItem/LessonInfoContent';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
-import React from 'react';
+import { UserInfo } from 'context/UserInfoContext';
+import React, { useContext } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,10 +10,19 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components';
 
 function LessonFeedbackScreen(props) {
+  const {
+    loginUserInfo: [loginUser],
+  } = useContext(UserInfo);
+  const isTutor = loginUser.isTutor;
+
   const navigation = useNavigation();
 
   const onPressPreviousBtn = () => {
     navigation.navigate('lessonScheduleScreen');
+  };
+
+  const onPressFeedbackModify = () => {
+    navigation.navigate('tutorFeedbackScreen');
   };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -52,6 +62,13 @@ function LessonFeedbackScreen(props) {
             </LessonInfoItem>
           </LessonInfoBox>
         </LessonInfo>
+        {isTutor && (
+          <Btn>
+            <ModifyBtn onPress={onPressFeedbackModify}>
+              <ModifyText>수정하기</ModifyText>
+            </ModifyBtn>
+          </Btn>
+        )}
       </Container>
     </SafeAreaView>
   );
@@ -87,7 +104,7 @@ const SubText = styled.Text`
 `;
 
 const TuteeInfoBox = styled.View`
-  height: ${hp(30)}px;
+  height: ${hp(25)}px;
   width: ${wp(90)}px;
   border-width: ${RFValue(1)}px;
   border-radius: ${RFValue(10)}px;
@@ -101,7 +118,7 @@ const Feedback = styled.View`
 `;
 
 const FeedbackBox = styled.View`
-  height: ${hp(18)}px;
+  height: ${hp(25)}px;
   width: ${wp(90)}px;
   border-width: ${RFValue(1)}px;
   border-radius: ${RFValue(10)}px;
@@ -142,6 +159,27 @@ const ValueText = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 600;
   align-self: center;
+`;
+
+const Btn = styled.View`
+  flex: 0.07;
+`;
+
+const ModifyBtn = styled.TouchableOpacity`
+  width: ${wp(22)}px;
+  height: ${hp(4)}px;
+  border-radius: ${RFValue(5)}px;
+  background-color: ${COLORS.subMiddleblue};
+  margin-left: ${RFValue(250)}px;
+
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModifyText = styled.Text`
+  font-size: ${RFValue(12)}px;
+  font-weight: 500;
+  color: ${COLORS.white};
 `;
 
 export default LessonFeedbackScreen;

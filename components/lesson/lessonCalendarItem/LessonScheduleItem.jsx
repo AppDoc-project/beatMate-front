@@ -15,14 +15,12 @@ function LessonScheduleItem(props) {
 
   const navigation = useNavigation();
 
-  const lessonFeedbackNavi = () => {
+  const onPressFeedback = () => {
     navigation.navigate('lessonFeedbackScreen');
   };
-  const tutorFeedbackNavi = () => {
-    navigation.navigate('tutorFeedbackScreen');
-  };
-  const lessonEvaluationNavi = () => {
-    navigation.navigate('tuteeEvaluationScreen');
+
+  const onPressEvaluation = () => {
+    navigation.navigate('lessonEvaluationScreen');
   };
 
   return (
@@ -42,14 +40,12 @@ function LessonScheduleItem(props) {
             <Name>나나나 {isTutor ? '수강생' : '강사'}</Name>
           </Profile>
           <BtnS>
-            <LessonBtn onPress={isTutor ? tutorFeedbackNavi : lessonFeedbackNavi}>
+            <LessonBtn onPress={onPressFeedback}>
               <LessonText>피드백지</LessonText>
             </LessonBtn>
-            {!isTutor && (
-              <LessonBtn onPress={lessonEvaluationNavi}>
-                <LessonText>평가지</LessonText>
-              </LessonBtn>
-            )}
+            <LessonBtn onPress={onPressEvaluation}>
+              <LessonText>평가지</LessonText>
+            </LessonBtn>
             <LessonBtn>
               <LessonText>녹화 영상</LessonText>
             </LessonBtn>

@@ -8,7 +8,7 @@ import styled from 'styled-components';
 // eslint-disable-next-line react/prop-types
 function CurrentOnlineLesson({ toggleModal }) {
   const navigation = useNavigation();
-  const videoNavi = () => {
+  const onPressOnlineLesson = () => {
     navigation.navigate('videoScreen');
   };
   return (
@@ -30,7 +30,7 @@ function CurrentOnlineLesson({ toggleModal }) {
           </LessonInfoBtn>
         </Info>
         <Guide>
-          <OnlineBtn onPress={videoNavi}>
+          <OnlineBtn onPress={onPressOnlineLesson}>
             <OnlineBtnText>방 입장하기</OnlineBtnText>
           </OnlineBtn>
           <GuideText>(클릭 시 화상 채팅 방으로 입장됩니다.)</GuideText>
@@ -93,6 +93,7 @@ const LessonInfoBtn = styled.TouchableOpacity`
 
 const LessonInfoBtnText = styled.Text`
   font-size: ${RFValue(12)}px;
+  font-weight: 500;
   color: ${COLORS.white};
 `;
 

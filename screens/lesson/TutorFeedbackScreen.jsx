@@ -1,14 +1,17 @@
 import { RegisterBtn } from '@assets/Icons/Buttons';
 import LessonInfoContent from '@components/lesson/currentLessonItem/LessonInfoContent';
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components';
 
 function TutorFeedbackScreen(props) {
+  const navigation = useNavigation();
+
   const [content, setContent] = useState('');
 
   const MAX_LENGTH = 1000;
@@ -20,7 +23,13 @@ function TutorFeedbackScreen(props) {
   };
 
   //게시글 등록하기
-  const onPressRegisterBtn = () => {};
+  const onPressRegisterBtn = () => {
+    if (content.length === 0) {
+      Alert.alert('알림', '내용을 입력해주세요.');
+    } else {
+      navigation.navigate('home');
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -63,7 +72,7 @@ function TutorFeedbackScreen(props) {
     </SafeAreaView>
   );
 }
-const Container = styled(KeyboardAwareScrollView)`
+const Container = styled.ScrollView`
   flex: 1;
   background-color: ${COLORS.white};
 `;
@@ -95,7 +104,7 @@ const SubText = styled.Text`
 `;
 
 const TuteeInfoBox = styled.View`
-  height: ${hp(18)}px;
+  height: ${hp(20)}px;
   width: ${wp(90)}px;
   border-width: ${RFValue(1)}px;
   border-radius: ${RFValue(10)}px;
