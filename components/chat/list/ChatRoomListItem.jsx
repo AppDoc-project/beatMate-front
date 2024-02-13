@@ -5,8 +5,8 @@ import React from 'react';
 import { ImageBackground } from 'react-native'; // Import ImageBackground
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { styled } from 'styled-components/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { styled } from 'styled-components/native';
 
 ChatRoomListItem.propTypes = {
   room: PropTypes.shape({
@@ -22,7 +22,6 @@ ChatRoomListItem.propTypes = {
   }).isRequired,
 };
 
-// Format the last time function
 function formatLastTime(lastTime) {
   const [date] = lastTime.split(' ');
   const formattedDate = date.split(':').join('.').substring(0, 10);
@@ -54,10 +53,10 @@ function ChatRoomListItem({ room }) {
       </ProfileContainer>
       <ContentGroup>
         <Name numberOfLines={1}>{target.name}</Name>
-        <LastChat numberOfLines={1}>{lastMessage}</LastChat>
+        {lastMessage && <LastChat numberOfLines={1}>{lastMessage}</LastChat>}
       </ContentGroup>
       <SubInfoGroup>
-        <LastUpdated>{formatLastTime(lastTime)}</LastUpdated>
+        {lastTime && <LastUpdated>{formatLastTime(lastTime)}</LastUpdated>}
         {notReadYet !== null && (
           <NotReadContainer>
             <NotRead>{notReadYet}</NotRead>
@@ -72,11 +71,11 @@ const Container = styled.TouchableOpacity`
   min-height: ${hp(8)}px;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
   padding: ${RFValue(8)}px;
   border-bottom-width: 1px;
   border-bottom-color: ${COLORS.lightgray};
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const ProfileContainer = styled.View`
@@ -86,15 +85,12 @@ const ProfileContainer = styled.View`
 
 const ContentGroup = styled.View`
   width: ${wp(60)}px;
-  justify-content: center;
   flex-wrap: wrap;
-  align-content: space-around;
   flex-direction: column;
   margin-left: ${wp(2)}px;
 `;
 
 const Name = styled.Text`
-  max-width: 70%;
   font-weight: 700;
   font-size: ${RFValue(14)}px;
   margin-right: ${wp(1)}px;
@@ -108,10 +104,10 @@ const LastChat = styled.Text`
 const NotReadContainer = styled.View`
   background-color: red;
   border-radius: 50px;
-  width: ${RFValue(18)}px;
-  height: ${RFValue(18)}px;
-  padding: ${RFValue(4)}px;
-  margin-top: ${RFValue(18)}px;
+  width: ${wp(6)}px;
+  height: ${wp(6)}px;
+  padding: ${wp(1)}px;
+  margin-top: ${wp(5)}px;
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -126,12 +122,12 @@ const NotRead = styled.Text`
 
 const SubInfoGroup = styled.View`
   height: 100%;
-  max-width: 20%;
+  width: ${wp(17)}px;
 `;
 
 const LastUpdated = styled.Text`
   color: ${COLORS.gray};
-  font-size: ${RFValue(10)}px;
+  font-size: ${RFValue(9)}px;
   font-weight: 700;
 `;
 

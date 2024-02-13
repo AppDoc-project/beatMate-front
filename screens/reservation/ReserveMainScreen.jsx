@@ -1,25 +1,25 @@
+import ReserveListItem from '@components/reservation/ReserveListItem';
 import { useFocusEffect } from '@react-navigation/native';
-import { getUserWritePost } from 'api/mypage';
+import { getReserveList } from 'api/reservation';
+import format from 'pretty-format';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { styled } from 'styled-components/native';
+import styled from 'styled-components';
 
-import MyPostListItem from '../ListItem/MyPostListItem';
-
-function MyPostList() {
-  //나의 게시물 API
-  const [myPostDatas, setmyPostData] = useState(null);
+function ReserveMainScreen(props) {
+  //예약 리스트 가져오기 API
+  const [myReserveDatas, setmyReserveData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true);
-      getUserWritePost()
+      getReserveList()
         .then((res) => {
-          // console.log(format(res.data));
-          setmyPostData(res.data);
+          console.log(format(res.data));
+          setmyReserveData(res.data);
           setIsLoading(false);
         })
         .catch((err) => {
@@ -48,20 +48,29 @@ function MyPostList() {
 
   return (
     <Container>
-      <MyPostingListScrollView>
-        {myPostDatas &&
-          myPostDatas.data.map((myPostData) => <MyPostListItem key={myPostData.id} myPostData={myPostData} />)}
-      </MyPostingListScrollView>
+      <MainWrapper>
+        <MyPostingListScrollView>
+          {myReserveDatas &&
+            myReserveDatas.data.map((myReserveData) => (
+              <ReserveListItem key={myReserveData.id} myReserveData={myReserveData} />
+            ))}
+        </MyPostingListScrollView>
+      </MainWrapper>
     </Container>
   );
 }
 
 const Container = styled.View`
-  height: ${hp(55)}px;
+  flex: 1;
+  background-color: white;
+`;
+
+const MainWrapper = styled.View`
+  height: ${hp(78)}px;
 `;
 
 const MyPostingListScrollView = styled.ScrollView`
   flex-grow: 1;
 `;
 
-export default MyPostList;
+export default ReserveMainScreen;

@@ -1,7 +1,9 @@
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChatListScreen from '@screens/chat/ChatListScreen';
 import ChatRoomScreen from '@screens/chat/ChatRoomScreen';
+import ReservationFormScreen from '@screens/reservation/ReservationFormScreen';
 import React from 'react';
 
 const Stack = createNativeStackNavigator();
@@ -13,6 +15,7 @@ const Stack = createNativeStackNavigator();
  */
 function ChatScreenNavigator() {
   const chatScreenHeaderHeight = useHeaderHeight();
+  const _tabBartHeight = useBottomTabBarHeight();
 
   return (
     <Stack.Navigator initialRouteName={'chat-list'}>
@@ -20,13 +23,22 @@ function ChatScreenNavigator() {
         name={'chat-list'}
         component={ChatListScreen}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: '채팅방 리스트',
         }}
       />
       <Stack.Screen
         name={'chat-room'}
         component={ChatRoomScreen}
-        initialParams={{ chatScreenHeaderHeight }}
+        initialParams={{ headerHeight: chatScreenHeaderHeight + _tabBartHeight }}
+        options={{
+          headerShown: true,
+          headerTitle: '채팅',
+        }}
+      />
+      <Stack.Screen
+        name={'reservationFormScreen'}
+        component={ReservationFormScreen}
         options={{
           headerShown: false,
         }}

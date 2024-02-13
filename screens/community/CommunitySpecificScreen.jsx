@@ -27,7 +27,7 @@ function CommunitySpecificScreen() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
 
   const onPressPreviousBtn = () => {
     setCommunityId('');
@@ -37,14 +37,14 @@ function CommunitySpecificScreen() {
   };
 
   const onPressSearchBtn = () => {
-    setPage(1);
-    fetchData(false, 1);
+    setPage(0);
+    fetchData(false, 0);
     console.log(searchType);
   };
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchData(false, 1);
+      fetchData(false, 0);
       return () => {};
     }, [newCommunityId]),
   );
@@ -83,7 +83,7 @@ function CommunitySpecificScreen() {
         setPage(pageNumber + 1);
       } else {
         setPosts(newPosts);
-        setPage(2);
+        setPage(1);
       }
 
       setHasMoreData(newPosts.length > 0);

@@ -26,7 +26,10 @@ function MyCommentListItem({ myCommentPost }) {
 
   //게시글 상세 페이지로 이동해야함.
   const onPressPostingItem = () => {
-    navigation.navigate('communityOnePostScreen', { postId, communityName });
+    navigation.navigate('community', {
+      screen: 'communityOnePostScreen',
+      params: { postId, communityName },
+    });
   };
 
   const formattedDate = myCommentPost && myCommentPost.createdAt.substring(0, 10).replace(/:/g, '.');

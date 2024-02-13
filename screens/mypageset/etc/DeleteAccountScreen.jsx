@@ -1,9 +1,10 @@
 import { DeleteBtn } from '@assets/Icons/Buttons';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { quitUser } from 'api/mypage';
 import { COLORS } from 'colors';
+import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Alert, SafeAreaView, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -29,6 +30,10 @@ function DeleteAccountScreen(props) {
     navigation.goBack();
   };
 
+  const {
+    loginUserInfo: [loginUser, setLoginUser],
+  } = useContext(UserInfo);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -43,7 +48,14 @@ function DeleteAccountScreen(props) {
       .then((res) => {
         console.log('회원 탈퇴', format(res.data));
         setIsLoading(false);
-        navigation.navigate('loginScreen');
+        setLoginUser(null);
+
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'loginScreen' }],
+          }),
+        );
       })
       .catch((err) => {
         console.log('회원 탈퇴', err);

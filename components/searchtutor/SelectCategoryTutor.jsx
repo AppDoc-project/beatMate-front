@@ -1,84 +1,66 @@
-import { getCommunitySection } from 'api/commity';
 import { COLORS } from 'colors';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import { TutorFindCategory } from 'context/TutorFindCategoryContext';
+import React, { useContext, useState } from 'react';
 import { TouchableOpacity, Modal, FlatList } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components/native';
 
-SelectCategory.propTypes = {
-  setCommunityId: PropTypes.func.isRequired,
-};
+function SelectCategoryTutor() {
+  const {
+    category: [findTutorCategory, setFindTutorCategory],
+  } = useContext(TutorFindCategory);
 
-function SelectCategory({ setCommunityId }) {
+  const { koCategoryName } = findTutorCategory;
+
   const [isToggled, setToggle] = useState(false);
-  const [SectionData, setSectionData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
   const [selectedObject, setSelectedObject] = useState(null);
 
-  useEffect(() => {
-    setIsLoading(true);
-    getCommunitySection()
-      .then((res) => {
-        setSectionData(res.data);
-        setIsLoading(false);
-        setIsError(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsError(true);
-        setIsLoading(false);
-      });
-  }, []);
+  const SectionData = [
+    { speciality: '피아노', english: 'PIANO' },
+    { speciality: '기타', english: 'GUITAR' },
+    { speciality: '보컬', english: 'VOCAL' },
+    { speciality: '드럼', english: 'DRUM' },
+    { speciality: '베이스', english: 'BASS' },
+    { speciality: '음악이론', english: 'MUSIC_THEORY' },
+    { speciality: '작곡', english: 'COMPOSITION' },
+    { speciality: '관악기', english: 'WIND_INSTRUMENT' },
+    { speciality: '현악기', english: 'STRING_INSTRUMENT' },
+    { speciality: '건반악기', english: 'KEYBOARD_INSTRUMENT' },
+  ];
 
   const handleToggle = () => {
     setToggle(!isToggled);
   };
 
   const handleOptionClick = (option) => {
+    console.log('Selected Option:', option);
     setSelectedObject(option);
+    setFindTutorCategory((prev) => ({ ...prev, koCategoryName: option.speciality }));
+    setFindTutorCategory((prev) => ({ ...prev, enCategoryName: option.english }));
     setToggle(false);
-    setCommunityId(option.id);
   };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleOptionClick(item)}>
       <ListItem>
-        <ListItemText>{item.name}</ListItemText>
+        <ListItemText>{item.speciality}</ListItemText>
       </ListItem>
     </TouchableOpacity>
   );
 
-  if (isLoading) {
-    return (
-      <LoadingContainer>
-        <LoadingText>로딩중...</LoadingText>
-      </LoadingContainer>
-    );
-  }
-
-  if (isError) {
-    return (
-      <ErrorContainer>
-        <ErrorText>에러 발생</ErrorText>
-      </ErrorContainer>
-    );
-  }
-
   return (
     <Section>
       <Button onPress={handleToggle}>
-        <SelectText>{selectedObject ? `${selectedObject.name}` : '카테고리 설정하기'}</SelectText>
-        <AntDesign name={'caretdown'} size={RFValue(13)} color={COLORS.black} />
+        <SelectText>{selectedObject ? `${selectedObject.speciality}` : koCategoryName}</SelectText>
+        <AntDesign name={'caretdown'} size={RFValue(15)} color={COLORS.black} />
       </Button>
 
       <StyledModal transparent={true} visible={isToggled} onRequestClose={() => setToggle(false)}>
         <ModalContent>
-          {SectionData && SectionData.data && (
-            <FlatList data={SectionData.data} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
+          {SectionData && (
+            <FlatList data={SectionData} renderItem={renderItem} keyExtractor={(item) => item.speciality} />
           )}
           <CloseButton onPress={handleToggle}>
             <CloseButtonText>닫기</CloseButtonText>
@@ -118,7 +100,7 @@ const ModalContent = styled.View`
 `;
 
 const SelectText = styled.Text`
-  font-size: 16px;
+  font-size: ${RFValue(20)}px;
   margin-bottom: -10px;
   font-weight: bold;
 `;
@@ -131,26 +113,6 @@ const ListItemText = styled.Text`
   font-size: 15px;
 `;
 
-const LoadingContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
-
-const LoadingText = styled.Text`
-  font-size: 18px;
-`;
-
-const ErrorContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ErrorText = styled.Text`
-  font-size: 18px;
-`;
-
 const CloseButton = styled.TouchableOpacity`
   margin-top: 20px;
 `;
@@ -160,4 +122,4 @@ const CloseButtonText = styled.Text`
   color: #007bff;
 `;
 
-export default SelectCategory;
+export default SelectCategoryTutor;

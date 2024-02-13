@@ -1,3 +1,4 @@
+import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
@@ -77,9 +78,8 @@ function SelectSpecialityTab(props) {
     <Container>
       <Component>
         <Txt>
-          음악 분야를 선택해주세요.{' '}
-          <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}>
-            {' '}
+          음악 분야를 선택해주세요.{'\n'}
+          <Text style={{ color: COLORS.lightgray, fontSize: RFValue(12), fontWeight: 'normal' }}>
             (택1 필수. 다중 선택 가능)
           </Text>
         </Txt>

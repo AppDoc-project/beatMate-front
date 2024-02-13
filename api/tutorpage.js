@@ -2,13 +2,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { client } from './client';
 
-// 채팅방 목록 가져오기
-const getChatList = async () => {
+// 튜터 찜 토클
+const postPickTutor = async (data) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
-    console.log(token);
 
-    const response = await client.get('/chat/room', {
+    const response = await client.post('/tutor/pick', data, {
       headers: {
         Authorization: token,
       },
@@ -21,16 +20,13 @@ const getChatList = async () => {
   }
 };
 
-//채팅방 들어갈때 모든 메세지를 확인하기
-const readAllMessage = async (chatRoomId) => {
+// 이름으로 강사 검색하기
+const searchWithTutorName = async (name, speciality) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
     console.log(token);
 
-    const response = await client.get('/chat/check', {
-      params: {
-        id: chatRoomId,
-      },
+    const response = await client.get(`/tutor/name?name=${name}&speciality=${speciality}`, {
       headers: {
         Authorization: token,
       },
@@ -43,13 +39,13 @@ const readAllMessage = async (chatRoomId) => {
   }
 };
 
-//채팅방 내용 가져오기 (무한스크롤)
-const getMessage = async (limit, count, chatRoomId) => {
+// 정렬 기준으로 강사 검색하기
+const searchWithSortOption = async (type, speciality, page, limit) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
     console.log(token);
 
-    const response = await client.get(`/chat?limit=${limit}&count=${count}&id=${chatRoomId}`, {
+    const response = await client.get(`/tutor/sort?type=${type}&speciality=${speciality}&page=${page}&limit=${limit}`, {
       headers: {
         Authorization: token,
       },
@@ -62,13 +58,13 @@ const getMessage = async (limit, count, chatRoomId) => {
   }
 };
 
-//채팅 작성하기
-const writeNewChat = async (data) => {
+// 특정 강사의 상세 정보 가져오기
+const getDatailTutorInfo = async (tutorId) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
     console.log(token);
 
-    const response = await client.post('/chat', data, {
+    const response = await client.get(`/tutor/detail?tutorId=${tutorId}`, {
       headers: {
         Authorization: token,
       },
@@ -81,13 +77,13 @@ const writeNewChat = async (data) => {
   }
 };
 
-// 특정 채팅 확인하기
-const readCertainChat = async (data) => {
+// 특정 강사의 리뷰 내용 처음 가져오기
+const getFirstTutorReview = async (tutorId, limit) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
     console.log(token);
 
-    const response = await client.post('/chat/read', data, {
+    const response = await client.get(`/tutor/review?scroll=false&tutorId=${tutorId}&limit=${limit}`, {
       headers: {
         Authorization: token,
       },
@@ -100,17 +96,20 @@ const readCertainChat = async (data) => {
   }
 };
 
-// 채팅방 만들기
-const makeChatRoom = async (data) => {
+// 특정 강사의 리뷰 내용 다음으로 가져오기
+const getNextTutorReview = async (tutorId, limit, reviewId) => {
   try {
     const token = await AsyncStorage.getItem('access_token');
     console.log(token);
 
-    const response = await client.post('/chat/room', data, {
-      headers: {
-        Authorization: token,
+    const response = await client.get(
+      `/tutor/review?scroll=true&tutorId=${tutorId}&limit=${limit}&reviewId=${reviewId}`,
+      {
+        headers: {
+          Authorization: token,
+        },
       },
-    });
+    );
 
     return response;
   } catch (error) {
@@ -119,4 +118,11 @@ const makeChatRoom = async (data) => {
   }
 };
 
-export { getChatList, readAllMessage, getMessage, writeNewChat, readCertainChat, makeChatRoom };
+export {
+  postPickTutor,
+  searchWithTutorName,
+  searchWithSortOption,
+  getDatailTutorInfo,
+  getFirstTutorReview,
+  getNextTutorReview,
+};

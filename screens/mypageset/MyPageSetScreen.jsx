@@ -47,7 +47,7 @@ function MyPageSetScreen(props) {
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{ name: 'LoginScreen' }],
+            routes: [{ name: 'loginScreen' }],
           }),
         );
       })

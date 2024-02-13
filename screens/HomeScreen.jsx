@@ -4,6 +4,7 @@ import { Text } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 function HomeScreen(props) {
   return (
@@ -59,13 +60,14 @@ const MainTxt = styled.Text`
   font-size: ${RFValue(35)}px;
   font-weight: bold;
   position: absolute;
-  top: 110px;
+  top: ${hp(10)}px;
 `;
 
 const Section = styled.View`
   justify-content: center;
   flex: 1;
-  margin-top: 150px;
+  margin-top: ${hp(18)}px;
+  align-items: center;
 `;
 
 const ShowTime = styled.TouchableOpacity`
@@ -74,8 +76,8 @@ const ShowTime = styled.TouchableOpacity`
   border-width: 3px;
   border-radius: 10px;
 
-  width: ${RFValue(326)}px;
-  height: ${RFValue(102)}px;
+  width: ${wp(95)}px;
+  height: ${hp(13)}px;
 
   flex-direction: row;
   justify-content: space-around;
@@ -97,7 +99,8 @@ const SecondRow = styled.View`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  margin-top: ${RFValue(40)}px;
+  margin-top: ${hp(5)}px;
+  width: ${wp(90)}px;
 `;
 
 const ManageConsult = styled.TouchableOpacity`
@@ -107,8 +110,8 @@ const ManageConsult = styled.TouchableOpacity`
   border-radius: 10px;
   background-color: ${COLORS.subLightblue};
 
-  width: ${RFValue(160)}px;
-  height: ${RFValue(160)}px;
+  width: ${wp(42)}px;
+  height: ${wp(42)}px;
 
   flex-direction: row;
   justify-content: space-around;
@@ -130,8 +133,8 @@ const MidBox = styled.TouchableOpacity`
   border-radius: 10px;
   background-color: ${COLORS.subMiddleblue};
 
-  width: ${RFValue(160)}px;
-  height: ${RFValue(75)}px;
+  width: ${wp(42)}px;
+  height: ${wp(18)}px;
 
   flex-direction: row;
   justify-content: space-around;
@@ -142,6 +145,7 @@ const ThirdRow = styled.View`
   margin-top: ${RFValue(40)}px;
   flex-direction: row;
   justify-content: space-between;
+  width: ${wp(90)}px;
 `;
 
 const SmallBox = styled.TouchableOpacity`
@@ -151,8 +155,8 @@ const SmallBox = styled.TouchableOpacity`
   border-radius: 10px;
   background-color: ${COLORS.main};
 
-  width: ${RFValue(105)}px;
-  height: ${RFValue(105)}px;
+  width: ${wp(27)}px;
+  height: ${wp(27)}px;
 
   justify-content: space-around;
   align-items: center;

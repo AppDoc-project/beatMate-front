@@ -3,6 +3,7 @@ import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
 import React, { useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,6 +13,8 @@ import CommunityScreenNavigator from './community/CommunityNavigators';
 import HomeScreenNavigator from './home/HomeScreenNavigator';
 import LessonScreenNavigator from './lesson/LessonScreenNavigator';
 import MyPageScreenNavigator from './mypage/MyPageScreenNavigators';
+import ReservationScreenNavigator from './reservation/ReservationScreenNavigator';
+import SearchTutorScreenNavigators from './searchtutor/SearchTutorScreenNavigators';
 
 const Tab = createBottomTabNavigator();
 
@@ -71,6 +74,7 @@ function HomeTabRoutes(props) {
           component={ChatScreenNavigator}
           options={{
             unmountOnBlur: true,
+            headerShown: false,
             title: '채팅',
             tabBarActiveTintColor: COLORS.black,
             tabBarInactiveTintColor: COLORS.gray,
@@ -79,6 +83,40 @@ function HomeTabRoutes(props) {
                 <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.black} />
               ) : (
                 <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.lightgray} />
+              ),
+          }}
+        />
+        <Tab.Screen
+          name="searchtutor"
+          component={SearchTutorScreenNavigators}
+          options={{
+            unmountOnBlur: true,
+            headerShown: false,
+            tabBarLabel: '강사 찾기',
+            tabBarActiveTintColor: COLORS.black,
+            tabBarInactiveTintColor: COLORS.gray,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <Ionicons name={'search-sharp'} size={RFValue(20)} color={COLORS.black} />
+              ) : (
+                <Ionicons name={'search-sharp'} size={RFValue(20)} color={COLORS.lightgray} />
+              ),
+          }}
+        />
+        <Tab.Screen
+          name="reservation"
+          component={ReservationScreenNavigator}
+          options={{
+            unmountOnBlur: true,
+            headerShown: false,
+            tabBarLabel: '예약',
+            tabBarActiveTintColor: COLORS.black,
+            tabBarInactiveTintColor: COLORS.gray,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <AntDesign name={'form'} size={RFValue(20)} color={COLORS.black} />
+              ) : (
+                <AntDesign name={'form'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
         />
