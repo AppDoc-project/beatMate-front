@@ -1,8 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
-import { Image } from 'react-native';
+import { Image, Text } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -33,51 +34,94 @@ function ChatSideInfo({ room }) {
 
   console.log(isTutor);
 
+  const navigation = useNavigation();
+
+  const onPressReserve = () => {
+    const tuteeId = room.target.userId;
+    navigation.navigate('reservationFormScreen', { tuteeId });
+  };
+
   return (
-    <Container>
-      <ProfileImg>
-        {room && room.target.profile && (
-          <Image
-            source={{
-              uri: room.target.profile,
-            }}
-            style={{ width: wp(14), height: wp(14), borderRadius: 50 }}
-          />
+    <Container isTutor={isTutor}>
+      <TopWrapper>
+        <LeftWrapper>
+          <ProfileImg>
+            {room && room.target.profile && (
+              <Image
+                source={{
+                  uri: room.target.profile,
+                }}
+                style={{ width: wp(14), height: wp(14), borderRadius: 50 }}
+              />
+            )}
+            {!room.target.profile && <FontAwesome name={'user-circle'} size={RFValue(40)} color={'lightgray'} />}
+          </ProfileImg>
+          <InfoGroup>
+            <Group isTutor={isTutor}>
+              <GroupLabel>{isTutor ? '수강생' : '강사'}</GroupLabel>
+            </Group>
+            <Name>{room.target.name}</Name>
+          </InfoGroup>
+        </LeftWrapper>
+        {isTutor && (
+          <RightWrapper>
+            <ReserveBtn onPress={onPressReserve}>
+              <ReserveTxt>레슨 예약하기</ReserveTxt>
+            </ReserveBtn>
+          </RightWrapper>
         )}
-        {!room.target.profile && <FontAwesome name={'user-circle'} size={RFValue(40)} color={'lightgray'} />}
-      </ProfileImg>
-      <InfoGroup>
-        <Group isTutor={isTutor}>
-          <GroupLabel>{isTutor ? '수강생' : '강사'}</GroupLabel>
-        </Group>
-        <Name>{room.target.name}</Name>
-      </InfoGroup>
+      </TopWrapper>
+      {isTutor && (
+        <BottomWrapper>
+          <InfoTxt>
+            {' '}
+            ※ 현재 수강생과의 레슨 예약을 원하면,{' '}
+            <Text style={{ fontWeight: 'bold', color: COLORS.black }}>레슨 예약하기</Text> 버튼을 통해 진행해주세요.
+          </InfoTxt>
+        </BottomWrapper>
+      )}
     </Container>
   );
 }
 
-const ProfileImg = styled.View`
-  border-radius: 50%;
-  margin-right: ${RFValue(5)}px;
-`;
-
 const Container = styled.View`
-  flex-direction: row;
-
-  align-items: center;
-  justify-content: space-around;
-
-  height: ${hp(10)}px;
+  ${({ isTutor }) =>
+    isTutor
+      ? `
+      height: ${hp(14)}px;
+  `
+      : `
+      height: ${hp(12)}px;
+  `}
 
   border-top-width: 1px;
   border-bottom-width: 1px;
   border-top-color: ${COLORS.gray};
   border-bottom-color: ${COLORS.gray};
   background-color: ${COLORS.white};
+
+  justify-content: center;
+`;
+
+const TopWrapper = styled.View`
+  flex-direction: row;
+
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const ProfileImg = styled.View`
+  border-radius: 50%;
+  margin-right: ${wp(5)}px;
+`;
+
+const LeftWrapper = styled.View`
+  flex-direction: row;
+  margin-left: ${wp(5)}px;
+  align-items: center;
 `;
 
 const InfoGroup = styled.View`
-  width: 75%;
   min-height: 70%;
   max-height: 80%;
 
@@ -111,6 +155,36 @@ const GroupLabel = styled.Text`
 const Name = styled.Text`
   font-size: ${RFValue(14)}px;
   font-weight: 700;
+`;
+
+const RightWrapper = styled.View`
+  align-items: center;
+  justify-content: center;
+  margin-right: ${wp(5)}px;
+`;
+
+const ReserveBtn = styled.TouchableOpacity`
+  width: auto;
+  height: auto;
+  padding: ${RFValue(7)}px;
+  background-color: ${COLORS.subBrown};
+  border-radius: ${RFValue(4)}px;
+`;
+
+const ReserveTxt = styled.Text`
+  color: ${COLORS.white};
+  font-weight: bold;
+  font-size: ${RFValue(10)};
+`;
+
+const BottomWrapper = styled.View`
+  margin-left: ${wp(5)}px;
+  margin-bottom: ${hp(1)}px;
+`;
+
+const InfoTxt = styled.Text`
+  font-size: ${RFValue(9)};
+  color: ${COLORS.gray};
 `;
 
 export default ChatSideInfo;

@@ -15,12 +15,12 @@ import { styled } from 'styled-components/native';
 /**
  * 채팅 방 화면
  * 채팅 내역을 보여주고 상대방과 채팅이 가능합니다.
- * @param chatScreenHeaderHeight : 현재 디자인 상 IOS에서 keyboardVerticalOffset을 구하기 위해서는 ChatScreen의 헤더 높이와 ChatRoomScreen의 헤더
+ * @param headerHeight : 현재 디자인 상 IOS에서 keyboardVerticalOffset을 구하기 위해서는 ChatScreen의 헤더 높이와 ChatRoomScreen의 헤더
  *                                 높이가 필요하다. 따라서 ChatScreen의 헤더 높이를 initialParams를 통해 받아옴
  */
 function ChatRoomScreen({ route }) {
   /** 채팅탭을 눌렀을때 최상단에 위치하는 헤더의 높이를 의미 */
-  const { chatScreenHeaderHeight } = useRoute().params;
+  const { headerHeight } = useRoute().params;
   /** 채팅방을 들어갔을 때 상대방의 정보를 나타내는 헤더 높이 */
   const chatRoomHeaderHeight = useHeaderHeight();
   /** 탭의 높이 */
@@ -75,7 +75,7 @@ function ChatRoomScreen({ route }) {
   }
 
   return (
-    <Container behavior={Platform.OS === 'ios' ? 'padding' : null} keyboardVerticalOffset={chatScreenHeaderHeight}>
+    <Container behavior={Platform.OS === 'ios' ? 'padding' : null} keyboardVerticalOffset={headerHeight}>
       <ChatSideInfo room={room} />
       <MessageList roomID={room.id} />
       <MessageInput onFocus={onFocusInput} onBlur={onOutFocusInput} targetId={room.target.userId} />
@@ -97,7 +97,7 @@ ChatRoomScreen.propTypes = {
         lastMessage: PropTypes.string,
         lastTime: PropTypes.string,
       }),
-      chatScreenHeaderHeight: PropTypes.number,
+      headerHeight: PropTypes.number,
     }),
   }),
 };
