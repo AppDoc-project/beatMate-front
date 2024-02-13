@@ -3,6 +3,7 @@ import ImageUpload from '@components/signup/ImageUpload';
 import SelectSpecialityTab from '@components/signup/SelectSpecialityTab';
 import { useNavigation } from '@react-navigation/native';
 import { signupTutor } from 'api/auth';
+import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
 import format from 'pretty-format';
 import React, { useContext } from 'react';
@@ -70,7 +71,7 @@ function TutorGetInfoScreen2(props) {
           <Component>
             <Txt>
               강사 자격을 인증할 수 있는 이미지를 첨부해주세요.{'\n'}
-              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}>
+              <Text style={{ color: COLORS.lightgray, fontSize: RFValue(12), fontWeight: 'normal' }}>
                 최소 1장 이상, 최대 5장까지 첨부가 가능합니다. (필수){'\n'}해당 이미지들로 강사 자격 심사가 진행될
                 예정입니다.{'\n'}
               </Text>
@@ -81,7 +82,7 @@ function TutorGetInfoScreen2(props) {
           <Component>
             <Txt>
               자기소개를 입력해주세요.{' '}
-              <Text style={{ color: 'lightgray', fontSize: RFValue(13), fontWeight: 'normal' }}> (선택)</Text>
+              <Text style={{ color: COLORS.lightgray, fontSize: RFValue(13), fontWeight: 'normal' }}> (선택)</Text>
             </Txt>
             <Input
               value={selfDescription}
@@ -137,7 +138,7 @@ const Component = styled.View`
 
 const Txt = styled.Text`
   font-weight: bold;
-  font-size: ${RFValue(16)}px;
+  font-size: ${RFValue(14)}px;
 `;
 
 const Input = styled.TextInput`

@@ -28,17 +28,16 @@ function ChatSideInfo({ room }) {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
 
-  const navigation = useNavigation();
-
   console.log(room);
 
   const isTutor = loginUser.isTutor;
 
   console.log(isTutor);
 
-  const onPressReserveForm = () => {
-    const tuteeId = room.target.userId;
+  const navigation = useNavigation();
 
+  const onPressReserve = () => {
+    const tuteeId = room.target.userId;
     navigation.navigate('reservationFormScreen', { tuteeId });
   };
 
@@ -66,7 +65,7 @@ function ChatSideInfo({ room }) {
         </LeftWrapper>
         {isTutor && (
           <RightWrapper>
-            <ReserveBtn onPress={onPressReserveForm}>
+            <ReserveBtn onPress={onPressReserve}>
               <ReserveTxt>레슨 예약하기</ReserveTxt>
             </ReserveBtn>
           </RightWrapper>
@@ -113,7 +112,7 @@ const TopWrapper = styled.View`
 
 const ProfileImg = styled.View`
   border-radius: 50%;
-  margin-right: ${wp(4)}px;
+  margin-right: ${wp(5)}px;
 `;
 
 const LeftWrapper = styled.View`
