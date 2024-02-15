@@ -68,7 +68,6 @@ function HomeTabRoutes(props) {
               ),
           }}
         />
-
         <Tab.Screen
           name="chat"
           component={ChatScreenNavigator}
@@ -137,6 +136,7 @@ function HomeTabRoutes(props) {
               ),
           }}
         />
+
         <Tab.Screen
           name="mypage"
           component={MyPageScreenNavigator}
