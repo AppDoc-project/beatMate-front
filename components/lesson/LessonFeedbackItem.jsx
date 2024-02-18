@@ -4,7 +4,7 @@ import { UserInfo } from 'context/UserInfoContext';
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
 LessonFeedbackItem.propTypes = {
@@ -28,11 +28,11 @@ function LessonFeedbackItem({ notWriteData }) {
   const isTutor = loginUser.isTutor;
 
   const onPressTuteeEvaluation = () => {
-    navigation.navigate('tuteeEvaluationScreen');
+    navigation.navigate('tuteeEvaluationScreen', { notWriteData });
   };
 
   const onPressTutorFeedback = () => {
-    navigation.navigate('tutorFeedbackScreen');
+    navigation.navigate('tutorFeedbackScreen', { notWriteData });
   };
 
   return (
@@ -45,7 +45,6 @@ function LessonFeedbackItem({ notWriteData }) {
         )}
         {isTutor ? <Name>{notWriteData.tuteeName} 수강생 </Name> : <Name>{notWriteData.tutorName} 강사 </Name>}
         <Date>{formattedDate}</Date>
-        <AlertText>{isTutor ? '피드백지' : '평가지'} 미작성</AlertText>
       </Feedback>
     </Container>
   );
@@ -53,7 +52,7 @@ function LessonFeedbackItem({ notWriteData }) {
 
 const Container = styled.TouchableOpacity`
   flex: 1;
-  width: ${wp(86)}px;
+  width: ${wp(88)}px;
 `;
 
 const Feedback = styled.View`
@@ -83,12 +82,6 @@ const Date = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 500;
   color: ${COLORS.gray};
-`;
-
-const AlertText = styled.Text`
-  font-size: ${RFValue(12)}px;
-  font-weight: bold;
-  color: red;
 `;
 
 export default LessonFeedbackItem;

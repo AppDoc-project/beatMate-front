@@ -112,7 +112,9 @@ function LessonMainScreen(props) {
           )}
         </FirstSection>
 
-        <MainTxt>레슨 {isTutor ? '피드백지' : '평가지'}를 작성해 주세요!</MainTxt>
+        <MainTxt>
+          <SubText>미작성</SubText>된 레슨 {isTutor ? '피드백지' : '평가지'}를 작성해 주세요!
+        </MainTxt>
         <SecondSection>
           {notWriteDatas ? (
             <NotYetListScrollView>
@@ -168,6 +170,10 @@ const MainTxt = styled.Text`
   margin-top: ${hp(13)}px;
 `;
 
+const SubText = styled.Text`
+  color: red;
+`;
+
 const SecondSection = styled.View`
   justify-content: center;
   align-items: center;
@@ -186,7 +192,6 @@ const SecondSection = styled.View`
 
 const NotYetListScrollView = styled.ScrollView`
   flex-grow: 1;
-  flex-direction: row;
 `;
 
 const NotYetListView = styled.View`

@@ -35,57 +35,6 @@ function HomeTabRoutes(props) {
     >
       <Tab.Navigator initialRouteName="home">
         <Tab.Screen
-          name="home"
-          component={HomeScreenNavigator}
-          options={{
-            unmountOnBlur: true,
-            headerShown: false,
-            tabBarLabel: '홈',
-            tabBarActiveTintColor: COLORS.black,
-            tabBarInactiveTintColor: COLORS.gray,
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <Ionicons name={'home-sharp'} size={RFValue(20)} color={COLORS.black} />
-              ) : (
-                <Ionicons name={'home-outline'} size={RFValue(20)} color={COLORS.lightgray} />
-              ),
-          }}
-        />
-        <Tab.Screen
-          name="community"
-          component={CommunityScreenNavigator}
-          options={{
-            unmountOnBlur: true,
-            headerShown: false,
-            tabBarLabel: '커뮤니티',
-            tabBarActiveTintColor: COLORS.black,
-            tabBarInactiveTintColor: COLORS.gray,
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <MaterialCommunityIcons name={'comment-text-multiple'} size={RFValue(20)} color={COLORS.black} />
-              ) : (
-                <MaterialCommunityIcons name={'comment-text-multiple'} size={RFValue(20)} color={COLORS.lightgray} />
-              ),
-          }}
-        />
-        <Tab.Screen
-          name="chat"
-          component={ChatScreenNavigator}
-          options={{
-            unmountOnBlur: true,
-            headerShown: false,
-            title: '채팅',
-            tabBarActiveTintColor: COLORS.black,
-            tabBarInactiveTintColor: COLORS.gray,
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.black} />
-              ) : (
-                <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.lightgray} />
-              ),
-          }}
-        />
-        <Tab.Screen
           name="searchtutor"
           component={SearchTutorScreenNavigators}
           options={{
@@ -137,6 +86,57 @@ function HomeTabRoutes(props) {
           }}
         />
 
+        <Tab.Screen
+          name="home"
+          component={HomeScreenNavigator}
+          options={{
+            unmountOnBlur: true,
+            headerShown: false,
+            tabBarLabel: '홈',
+            tabBarActiveTintColor: COLORS.black,
+            tabBarInactiveTintColor: COLORS.gray,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <Ionicons name={'home-sharp'} size={RFValue(20)} color={COLORS.black} />
+              ) : (
+                <Ionicons name={'home-outline'} size={RFValue(20)} color={COLORS.lightgray} />
+              ),
+          }}
+        />
+        <Tab.Screen
+          name="community"
+          component={CommunityScreenNavigator}
+          options={{
+            unmountOnBlur: true,
+            headerShown: false,
+            tabBarLabel: '커뮤니티',
+            tabBarActiveTintColor: COLORS.black,
+            tabBarInactiveTintColor: COLORS.gray,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <MaterialCommunityIcons name={'comment-text-multiple'} size={RFValue(20)} color={COLORS.black} />
+              ) : (
+                <MaterialCommunityIcons name={'comment-text-multiple'} size={RFValue(20)} color={COLORS.lightgray} />
+              ),
+          }}
+        />
+        <Tab.Screen
+          name="chat"
+          component={ChatScreenNavigator}
+          options={{
+            unmountOnBlur: true,
+            headerShown: false,
+            title: '채팅',
+            tabBarActiveTintColor: COLORS.black,
+            tabBarInactiveTintColor: COLORS.gray,
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.black} />
+              ) : (
+                <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.lightgray} />
+              ),
+          }}
+        />
         <Tab.Screen
           name="mypage"
           component={MyPageScreenNavigator}

@@ -11,9 +11,7 @@ function LessonInfoModal({ closeModal, onGoingLessonInfo }) {
   return (
     <Container>
       <BackgroundClose onPress={closeModal} />
-      <InfoModal>
-        <LessonInfoContent onGoingLessonInfo={onGoingLessonInfo} />
-      </InfoModal>
+      <InfoModal>{onGoingLessonInfo && <LessonInfoContent onGoingLessonInfo={onGoingLessonInfo} />}</InfoModal>
     </Container>
   );
 }

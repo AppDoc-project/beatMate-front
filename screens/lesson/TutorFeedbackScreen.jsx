@@ -1,15 +1,20 @@
 import { RegisterBtn } from '@assets/Icons/Buttons';
-import LessonInfoContent from '@components/lesson/currentLessonItem/LessonInfoContent';
-import { useNavigation } from '@react-navigation/native';
+import LessonInfoContent from '@components/lesson/notYetWroteItem/LessonInfoContent';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { COLORS } from 'colors';
+import format from 'pretty-format';
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components';
+import { writeFeedBack } from 'api/lesson';
 
 function TutorFeedbackScreen(props) {
+  const route = useRoute();
+  const { notWriteData } = route.params;
+
   const navigation = useNavigation();
 
   const [content, setContent] = useState('');
@@ -24,10 +29,23 @@ function TutorFeedbackScreen(props) {
 
   //게시글 등록하기
   const onPressRegisterBtn = () => {
-    if (content.length === 0) {
+    if (content.length === 0 || content === ' ') {
       Alert.alert('알림', '내용을 입력해주세요.');
     } else {
-      navigation.navigate('home');
+      const data = {
+        lessonId: notWriteData.id,
+        feedback: content,
+      };
+
+      console.log(data);
+
+      writeFeedBack(data)
+        .then((res) => {
+          const { data } = res;
+          console.log(format(data));
+          navigation.navigate('lessonMainScreen');
+        })
+        .catch((error) => console.log(format(error)));
     }
   };
 
@@ -46,7 +64,7 @@ function TutorFeedbackScreen(props) {
         <TuteeInfo>
           <SubText>수강생 정보</SubText>
           <TuteeInfoBox>
-            <LessonInfoContent />
+            <LessonInfoContent notWriteData={notWriteData} />
           </TuteeInfoBox>
         </TuteeInfo>
         <LessonFeedback>
@@ -98,7 +116,7 @@ const TuteeInfo = styled.View`
 `;
 
 const SubText = styled.Text`
-  font-size: ${RFValue(18)}px;
+  font-size: ${RFValue(17)}px;
   font-weight: 900;
   margin-bottom: ${RFValue(5)}px;
 `;
