@@ -7,12 +7,12 @@ import styled from 'styled-components';
 import LessonInfoContent from './LessonInfoContent';
 
 // eslint-disable-next-line react/prop-types
-function LessonInfoModal({ closeModal }) {
+function LessonInfoModal({ closeModal, onGoingLessonInfo }) {
   return (
     <Container>
       <BackgroundClose onPress={closeModal} />
       <InfoModal>
-        <LessonInfoContent />
+        <LessonInfoContent onGoingLessonInfo={onGoingLessonInfo} />
       </InfoModal>
     </Container>
   );

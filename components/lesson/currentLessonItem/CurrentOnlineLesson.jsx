@@ -1,25 +1,50 @@
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
-import React from 'react';
+import { UserInfo } from 'context/UserInfoContext';
+import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
-// eslint-disable-next-line react/prop-types
-function CurrentOnlineLesson({ toggleModal }) {
+CurrentOnlineLesson.propTypes = {
+  toggleModal: PropTypes.func.isRequired,
+  onGoingLessonInfo: PropTypes.shape({
+    tuteeName: PropTypes.string.isRequired,
+    tutorName: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+function CurrentOnlineLesson({ toggleModal, onGoingLessonInfo }) {
   const navigation = useNavigation();
   const onPressOnlineLesson = () => {
     navigation.navigate('videoScreen');
   };
+
+  const {
+    loginUserInfo: [loginUser],
+  } = useContext(UserInfo);
+
+  const isTutor = loginUser.isTutor;
+
+  console.log(onGoingLessonInfo);
+
   return (
     <Container>
       <Box>
         <Info>
           <InfoItems>
-            <InfoSub>
-              <LabelText>수강생 이름 : </LabelText>
-              <ValueText>김철수</ValueText>
-            </InfoSub>
+            {isTutor ? (
+              <InfoSub>
+                <LabelText>수강생 이름 : </LabelText>
+                <ValueText>{onGoingLessonInfo.tuteeName}</ValueText>
+              </InfoSub>
+            ) : (
+              <InfoSub>
+                <LabelText>강사 이름 : </LabelText>
+                <ValueText>{onGoingLessonInfo.tutorName}</ValueText>
+              </InfoSub>
+            )}
             <InfoSub>
               <LabelText>레슨 방식 : </LabelText>
               <ValueText>화상 레슨</ValueText>

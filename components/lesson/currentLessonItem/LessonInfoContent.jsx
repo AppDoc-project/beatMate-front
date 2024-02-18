@@ -1,39 +1,56 @@
 import { COLORS } from 'colors';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
-function LessonInfoContent(props) {
+LessonInfoContent.propTypes = {
+  onGoingLessonInfo: PropTypes.shape({
+    tuteeName: PropTypes.string.isRequired,
+    tutorName: PropTypes.string.isRequired,
+    lessonType: PropTypes.string.isRequired,
+    memo: PropTypes.string.isRequired,
+    startTime: PropTypes.string.isRequired,
+    endTime: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+function LessonInfoContent({ onGoingLessonInfo }) {
+  const formattedStartTime = onGoingLessonInfo.startTime.substring(11, 16);
+  const formattedEndTime = onGoingLessonInfo.endTime.substring(11, 16);
   return (
     <Container>
       <Info>
         <InfoItem>
-          <LabelText>수강생 이름 : </LabelText>
-          <ValueText>김철수</ValueText>
+          <LabelText>강사 이름 : </LabelText>
+          <ValueText>{onGoingLessonInfo.tutorName}</ValueText>
         </InfoItem>
         <InfoItem>
-          <LabelText>생년월일 : </LabelText>
-          <ValueText>20001112</ValueText>
+          <LabelText>수강생 이름 : </LabelText>
+          <ValueText>{onGoingLessonInfo.tuteeName}</ValueText>
         </InfoItem>
+        <Gap />
         <InfoItem>
           <LabelText>레슨 방식 : </LabelText>
-          <ValueText>화상 레슨</ValueText>
+          {onGoingLessonInfo.lessonType === 'FACETOFACE' ? (
+            <ValueText>대면 레슨</ValueText>
+          ) : (
+            <ValueText>화상 레슨</ValueText>
+          )}
         </InfoItem>
         <InfoItem>
-          <LabelText>숙련도 : </LabelText>
-          <ValueText>하</ValueText>
-        </InfoItem>
-        <InfoItem>
-          <LabelText>상담 내용 : </LabelText>
+          <LabelText>레슨 시간 : </LabelText>
           <ValueText>
-            아직 많이 부족한 상태라서 기초부터 다지고 싶어요!
-            어라아ㅓㄹ니ㅏㅇ아러니ㅏ더ㅣ아ㅓㄹ니ㅏㅓ러니ㅏ어린아ㅓ린dlkjfs;lkjfa;lskdjfl; dklfjskdfjda;kgk;lk
+            {formattedStartTime} - {formattedEndTime}
           </ValueText>
         </InfoItem>
+        <Gap />
+        <InfoItem>
+          <LabelText>특이 사항 : </LabelText>
+          <ValueText>{onGoingLessonInfo.memo}</ValueText>
+        </InfoItem>
       </Info>
-      {/* <Photo>
-          <PhotoEx></PhotoEx>
-        </Photo> */}
     </Container>
   );
 }
@@ -63,17 +80,8 @@ const ValueText = styled.Text`
   overflow: hidden;
 `;
 
-// const Photo = styled.View`
-//   justify-content: center;
-//   align-items: center;
-//   margin: ${RFValue(5)}px;
-// `;
-
-// const PhotoEx = styled.View`
-//   border-width: 2px;
-//   border-color: ${COLORS.main};
-//   height: 80px;
-//   width: 200px;
-// `;
+const Gap = styled.View`
+  height: ${hp(2)}px;
+`;
 
 export default LessonInfoContent;
