@@ -1,13 +1,25 @@
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
+import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
-function LessonFeedbackItem(props) {
+LessonFeedbackItem.propTypes = {
+  notWriteData: PropTypes.shape({
+    lessonType: PropTypes.string.isRequired,
+    tuteeName: PropTypes.string.isRequired,
+    tutorName: PropTypes.string.isRequired,
+    startTime: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+function LessonFeedbackItem({ notWriteData }) {
   const navigation = useNavigation();
+
+  const formattedDate = notWriteData.startTime.split(':').join('.').substring(0, 10);
 
   const {
     loginUserInfo: [loginUser],
@@ -18,45 +30,47 @@ function LessonFeedbackItem(props) {
   const onPressTuteeEvaluation = () => {
     navigation.navigate('tuteeEvaluationScreen');
   };
+
   const onPressTutorFeedback = () => {
     navigation.navigate('tutorFeedbackScreen');
   };
+
   return (
-    <Container>
-      <FeedbackBtn onPress={isTutor ? onPressTutorFeedback : onPressTuteeEvaluation}>
-        <Feedback>
+    <Container onPress={isTutor ? onPressTutorFeedback : onPressTuteeEvaluation}>
+      <Feedback>
+        {notWriteData.lessonType === 'FACETOFACE' ? (
+          <LessonType>대면 레슨</LessonType>
+        ) : (
           <LessonType>화상 레슨</LessonType>
-          <Name>이가나 {isTutor ? '수강생' : '강사'}</Name>
-          <Date>2023-12-02</Date>
-          <AlertText>{isTutor ? '피드백지' : '평가지'} 미작성</AlertText>
-        </Feedback>
-      </FeedbackBtn>
+        )}
+        {isTutor ? <Name>{notWriteData.tuteeName} 수강생 </Name> : <Name>{notWriteData.tutorName} 강사 </Name>}
+        <Date>{formattedDate}</Date>
+        <AlertText>{isTutor ? '피드백지' : '평가지'} 미작성</AlertText>
+      </Feedback>
     </Container>
   );
 }
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   flex: 1;
+  width: ${wp(86)}px;
 `;
-
-const FeedbackBtn = styled.TouchableOpacity``;
 
 const Feedback = styled.View`
   flex-direction: row;
-  width: ${wp(86)}px;
-  height: ${hp(7.6)}px;
+  height: auto;
   border-bottom-width: ${RFValue(1)}px;
   border-bottom-color: ${COLORS.lightgray};
 
-  justify-content: space-around;
   align-items: center;
 
-  padding: ${RFValue(4)}px;
+  padding: ${wp(4)}px;
+  justify-content: space-between;
 `;
 
 const LessonType = styled.Text`
   font-size: ${RFValue(12)}px;
-  font-weight: 500;
+  font-weight: bold;
   color: ${COLORS.main};
 `;
 
@@ -73,7 +87,7 @@ const Date = styled.Text`
 
 const AlertText = styled.Text`
   font-size: ${RFValue(12)}px;
-  font-weight: 500;
+  font-weight: bold;
   color: red;
 `;
 

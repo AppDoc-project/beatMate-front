@@ -4,12 +4,12 @@ import CurrentOffLineLesson from '@components/lesson/currentLessonItem/CurrentOf
 import CurrentOnlineLesson from '@components/lesson/currentLessonItem/CurrentOnlineLesson';
 import LessonInfoModal from '@components/lesson/currentLessonItem/LessonInfoModal';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { onGoingLesson } from 'api/lesson';
+import { notWriteLesson, onGoingLesson } from 'api/lesson';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import React, { useContext, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -58,7 +58,29 @@ function LessonMainScreen(props) {
     }, []),
   );
 
-  if (isLoading) {
+  //아직 입력하지 않은 정보들
+  const [notWriteDatas, setNotWriteData] = useState(null);
+  const [isWriteLoading, setIsWriteLoading] = useState(false);
+  const [isWriteError, setWriteIsError] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsWriteLoading(true);
+      notWriteLesson()
+        .then((res) => {
+          console.log('안쓴 피드백지', format(res.data));
+          setNotWriteData(res.data);
+          setIsWriteLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setWriteIsError(true);
+          setIsWriteLoading(false);
+        });
+    }, []),
+  );
+
+  if (isLoading || isWriteLoading) {
     return (
       <View>
         <Text>로딩중...</Text>
@@ -66,7 +88,7 @@ function LessonMainScreen(props) {
     );
   }
 
-  if (isError) {
+  if (isError || isWriteError) {
     return (
       <View>
         <Text>에러 발생</Text>
@@ -92,13 +114,17 @@ function LessonMainScreen(props) {
 
         <MainTxt>레슨 {isTutor ? '피드백지' : '평가지'}를 작성해 주세요!</MainTxt>
         <SecondSection>
-          <Box>
-            <ScrollView>
-              <LessonFeedbackItem />
-              <LessonFeedbackItem />
-              <LessonFeedbackItem />
-            </ScrollView>
-          </Box>
+          {notWriteDatas ? (
+            <NotYetListScrollView>
+              {notWriteDatas.data.map((notWriteData) => (
+                <LessonFeedbackItem key={notWriteData.id} notWriteData={notWriteData} />
+              ))}
+            </NotYetListScrollView>
+          ) : (
+            <NotYetListView>
+              <NotYetText>모든 {isTutor ? '피드백지' : '평가지'}를 작성하셨습니다.</NotYetText>
+            </NotYetListView>
+          )}
         </SecondSection>
 
         <ThirdSection>
@@ -146,9 +172,8 @@ const SecondSection = styled.View`
   justify-content: center;
   align-items: center;
   margin-top: ${hp(1)}px;
-`;
+  margin-left: ${wp(6)}px;
 
-const Box = styled.View`
   width: ${wp(90)}px;
   height: ${hp(30)}px;
   border-width: ${RFValue(3)}px;
@@ -157,8 +182,24 @@ const Box = styled.View`
 
   justify-content: center;
   align-items: center;
+`;
 
-  padding: ${wp(2)}px;
+const NotYetListScrollView = styled.ScrollView`
+  flex-grow: 1;
+  flex-direction: row;
+`;
+
+const NotYetListView = styled.View`
+  align-items: center;
+  justify-content: center;
+`;
+
+const NotYetText = styled.Text`
+  font-size: ${RFValue(14)}px;
+  font-weight: 600;
+  color: ${COLORS.main};
+
+  text-decoration-line: underline;
 `;
 
 const ThirdSection = styled.View`
