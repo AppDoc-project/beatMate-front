@@ -1,35 +1,58 @@
 import { RegisterBtn } from '@assets/Icons/Buttons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { AirbnbRating } from 'react-native-ratings';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components';
+import { writeReview } from 'api/lesson';
+import format from 'pretty-format';
 
 function TuteeEvaluationScreen(props) {
+  const route = useRoute();
+  const { notWriteData } = route.params;
+
   const navigation = useNavigation();
 
   const [content, setContent] = useState('');
+  const [rating, setRating] = useState(0);
 
   const MAX_LENGTH = 1000;
 
   const onChangeContent = (text) => {
-    // 글자 수 제한 함수
     const truncatedText = text.slice(0, MAX_LENGTH);
     setContent(truncatedText);
   };
 
   //게시글 등록하기
   const onPressRegisterBtn = () => {
-    if (content.length === 0) {
+    if (content.length === 0 || content === ' ') {
       Alert.alert('알림', '내용을 입력해주세요.');
     } else {
-      navigation.navigate('home');
+      const data = {
+        lessonId: notWriteData.id,
+        review: content,
+        score: rating,
+      };
+
+      console.log(data);
+
+      writeReview(data)
+        .then((res) => {
+          const { data } = res;
+          console.log(format(data));
+          navigation.navigate('lessonMainScreen');
+        })
+        .catch((error) => console.log(format(error)));
     }
+  };
+
+  const handleRating = (rating) => {
+    setRating(rating);
   };
 
   return (
@@ -49,7 +72,15 @@ function TuteeEvaluationScreen(props) {
             <SubText>레슨은 어떠셨나요?</SubText>
             <RateGuideText>별점을 매겨주세요</RateGuideText>
           </RateTextSection>
-          <Ionicons name="star-outline" size={40} />
+          <AirbnbRating
+            selectedColor={COLORS.subMiddleblue}
+            unselectedColor={COLORS.gray01}
+            reviewColor={COLORS.black}
+            reviews={[1, 2, 3, 4, 5]}
+            size={RFValue(22)}
+            reviewSize={RFValue(17)}
+            onFinishRating={handleRating}
+          />
         </Rate>
         <Review>
           <SubText>레슨 후기를 작성해 주세요.</SubText>
@@ -138,7 +169,7 @@ const ContentInput = styled.TextInput`
   background-color: transparent;
 
   width: ${wp(90)}px;
-  height: ${hp(40)}px;
+  height: ${hp(25)}px;
   border-width: ${RFValue(1)}px;
   border-radius: ${RFValue(5)}px;
   border-color: ${COLORS.lightgray};

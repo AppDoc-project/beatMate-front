@@ -10,6 +10,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components';
 import { writeFeedBack } from 'api/lesson';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 function TutorFeedbackScreen(props) {
   const route = useRoute();
@@ -90,7 +91,7 @@ function TutorFeedbackScreen(props) {
     </SafeAreaView>
   );
 }
-const Container = styled.ScrollView`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
   background-color: ${COLORS.white};
 `;
@@ -139,7 +140,7 @@ const ContentInput = styled.TextInput`
   background-color: transparent;
 
   width: ${wp(90)}px;
-  height: ${hp(30)}px;
+  height: ${hp(25)}px;
   border-width: ${RFValue(1)}px;
   border-radius: ${RFValue(5)}px;
   border-color: ${COLORS.lightgray};

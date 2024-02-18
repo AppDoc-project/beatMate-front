@@ -1,6 +1,8 @@
 import { COLORS } from 'colors';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { SafeAreaView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
@@ -23,38 +25,40 @@ function LessonInfoContent({ notWriteData }) {
   const formattedStartTime = notWriteData.startTime.substring(11, 16);
   const formattedEndTime = notWriteData.endTime.substring(11, 16);
   return (
-    <Container>
-      <Info>
-        <InfoItem>
-          <LabelText>수강생 이름 : </LabelText>
-          <ValueText>{notWriteData.tuteeName}</ValueText>
-        </InfoItem>
-        <Gap />
-        <InfoItem>
-          <LabelText>레슨 방식 : </LabelText>
-          {notWriteData.lessonType === 'FACETOFACE' ? (
-            <ValueText>대면 레슨</ValueText>
-          ) : (
-            <ValueText>화상 레슨</ValueText>
-          )}
-        </InfoItem>
-        <InfoItem>
-          <LabelText>레슨 시간 : </LabelText>
-          <ValueText>
-            {formattedYear}년 {formattedMonth}월 {formattedDate}일 {formattedStartTime} - {formattedEndTime}
-          </ValueText>
-        </InfoItem>
-        <Gap />
-        <InfoItemEnd>
-          <LabelText>특이 사항 : </LabelText>
-          <ValueText>{notWriteData.memo ? notWriteData.memo : '없음'}</ValueText>
-        </InfoItemEnd>
-      </Info>
-    </Container>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
+        <Info>
+          <InfoItem>
+            <LabelText>수강생 이름 : </LabelText>
+            <ValueText>{notWriteData.tuteeName}</ValueText>
+          </InfoItem>
+          <Gap />
+          <InfoItem>
+            <LabelText>레슨 방식 : </LabelText>
+            {notWriteData.lessonType === 'FACETOFACE' ? (
+              <ValueText>대면 레슨</ValueText>
+            ) : (
+              <ValueText>화상 레슨</ValueText>
+            )}
+          </InfoItem>
+          <InfoItem>
+            <LabelText>레슨 시간 : </LabelText>
+            <ValueText>
+              {formattedYear}년 {formattedMonth}월 {formattedDate}일 {formattedStartTime} - {formattedEndTime}
+            </ValueText>
+          </InfoItem>
+          <Gap />
+          <InfoItemEnd>
+            <LabelText>특이 사항 : </LabelText>
+            <ValueText>{notWriteData.memo ? notWriteData.memo : '없음'}</ValueText>
+          </InfoItemEnd>
+        </Info>
+      </Container>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.ScrollView`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
   background-color: ${COLORS.white};
 `;

@@ -116,7 +116,7 @@ function LessonMainScreen(props) {
           <SubText>미작성</SubText>된 레슨 {isTutor ? '피드백지' : '평가지'}를 작성해 주세요!
         </MainTxt>
         <SecondSection>
-          {notWriteDatas ? (
+          {notWriteDatas && notWriteDatas.data.length > 0 ? (
             <NotYetListScrollView>
               {notWriteDatas.data.map((notWriteData) => (
                 <LessonFeedbackItem key={notWriteData.id} notWriteData={notWriteData} />
