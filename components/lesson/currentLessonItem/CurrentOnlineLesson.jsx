@@ -67,19 +67,18 @@ function CurrentOnlineLesson({ toggleModal, onGoingLessonInfo }) {
 
 const Container = styled.View`
   flex: 1;
-  bakcground-color: ${COLORS.white};
+  background-color: ${COLORS.white};
   justify-content: center;
   align-items: center;
 `;
 
 const Box = styled.View`
   width: ${wp(90)}px;
-  height: ${hp(16)}px;
-  border-width: ${RFValue(3)}px;
+  height: ${hp(18)}px;
+  border-width: ${wp(1)}px;
   border-radius: ${RFValue(10)}px;
   border-color: ${COLORS.main};
-
-  padding: ${RFValue(16)}px;
+  padding: ${wp(3)}px;
 `;
 
 const Info = styled.View`
@@ -90,7 +89,8 @@ const InfoItems = styled.View``;
 
 const InfoSub = styled.View`
   flex-direction: row;
-  margin-bottom: ${RFValue(5)}px;
+  margin-bottom: ${hp(1)}px;
+  align-items: center;
 `;
 
 const LabelText = styled.Text`
@@ -101,7 +101,6 @@ const LabelText = styled.Text`
 const ValueText = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 600;
-  margin-top: ${RFValue(2.5)}px;
 `;
 
 const LessonInfoBtn = styled.TouchableOpacity`
@@ -113,7 +112,8 @@ const LessonInfoBtn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 
-  margin: ${RFValue(5)}px 0 0 ${RFValue(60)}px;
+  margin-left: ${wp(12)}px;
+  margin-top: ${hp(1)}px;
 `;
 
 const LessonInfoBtnText = styled.Text`
@@ -130,7 +130,7 @@ const Guide = styled.View`
 const OnlineBtn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
-  margin: ${RFValue(8)}px 0 ${RFValue(2)}px 0;
+  margin: ${hp(1)}px 0 ${hp(1)}px 0;
 `;
 
 const OnlineBtnText = styled.Text`

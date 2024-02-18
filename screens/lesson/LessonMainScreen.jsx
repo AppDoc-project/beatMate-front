@@ -77,8 +77,8 @@ function LessonMainScreen(props) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
+        <CurrentLessonText>현재 진행 중인 레슨</CurrentLessonText>
         <FirstSection>
-          <CurrentLessonText>현재 진행 중인 레슨</CurrentLessonText>
           {onGoingLessonInfo ? (
             onGoingLessonInfo.lessonType === 'FACETOFACE' ? (
               <CurrentOffLineLesson toggleModal={toggleModal} onGoingLessonInfo={onGoingLessonInfo} />
@@ -90,8 +90,8 @@ function LessonMainScreen(props) {
           )}
         </FirstSection>
 
+        <MainTxt>레슨 {isTutor ? '피드백지' : '평가지'}를 작성해 주세요!</MainTxt>
         <SecondSection>
-          <MainTxt>레슨 {isTutor ? '피드백지' : '평가지'}를 작성해 주세요!</MainTxt>
           <Box>
             <ScrollView>
               <LessonFeedbackItem />
@@ -102,7 +102,7 @@ function LessonMainScreen(props) {
         </SecondSection>
 
         <ThirdSection>
-          <MainTxt>레슨 내역을 확인하세요!</MainTxt>
+          <MainTxt2>레슨 내역을 확인하세요!</MainTxt2>
           <ScheduleBtn onPress={onPressLessonSchedule}>
             <Txt>레슨 내역 확인하기</Txt>
           </ScheduleBtn>
@@ -120,34 +120,37 @@ const Container = styled.View`
   background-color: ${COLORS.white};
 `;
 
-const MainTxt = styled.Text`
-  font-size: ${RFValue(16)}px;
-  font-weight: 900;
-  align-self: flex-start;
-  margin: 0 0 ${RFValue(10)}px ${RFValue(18)}px;
-`;
-
-const FirstSection = styled.View`
-  flex: 0.3;
-  justify-content: center;
-  align-items: center;
-`;
 const CurrentLessonText = styled.Text`
   font-size: ${RFValue(16)}px;
   font-weight: 900;
   align-self: flex-start;
-  margin: ${RFValue(40)}px 0 ${RFValue(10)}px ${RFValue(18)}px;
+  margin-left: ${wp(6)}px;
+  margin-top: ${hp(5)}px;
+`;
+
+const FirstSection = styled.View`
+  justify-content: center;
+  align-items: center;
+  margin-top: ${hp(10)}px;
+`;
+
+const MainTxt = styled.Text`
+  font-size: ${RFValue(16)}px;
+  font-weight: 900;
+  align-self: flex-start;
+  margin-left: ${wp(6)}px;
+  margin-top: ${hp(13)}px;
 `;
 
 const SecondSection = styled.View`
-  flex: 0.4;
   justify-content: center;
   align-items: center;
+  margin-top: ${hp(1)}px;
 `;
 
 const Box = styled.View`
   width: ${wp(90)}px;
-  height: ${hp(16)}px;
+  height: ${hp(30)}px;
   border-width: ${RFValue(3)}px;
   border-radius: ${RFValue(10)}px;
   border-color: ${COLORS.main};
@@ -155,25 +158,30 @@ const Box = styled.View`
   justify-content: center;
   align-items: center;
 
-  padding: ${RFValue(2)}px;
+  padding: ${wp(2)}px;
 `;
 
 const ThirdSection = styled.View`
-  flex: 0.3;
   flex-direction: row;
+  align-items: center;
+  margin-top: ${hp(5)}px;
+  width: ${wp(90)}px;
+  justify-content: space-between;
+`;
+
+const MainTxt2 = styled.Text`
+  font-size: ${RFValue(16)}px;
+  font-weight: 900;
+
+  margin-left: ${wp(6)}px;
 `;
 
 const ScheduleBtn = styled.TouchableOpacity`
-  width: ${wp(30)}px;
-  height: ${hp(4)}px;
   border-radius: ${RFValue(10)}px;
   background-color: ${COLORS.subMiddleblue};
 
-  justify-content: center;
   align-items: center;
-
-  margin-top: ${RFValue(-5)}px;
-  margin-left: ${RFValue(20)}px;
+  padding: ${wp(2)}px;
 `;
 
 const Txt = styled.Text`
