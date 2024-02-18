@@ -4,16 +4,16 @@ import CurrentOffLineLesson from '@components/lesson/currentLessonItem/CurrentOf
 import CurrentOnlineLesson from '@components/lesson/currentLessonItem/CurrentOnlineLesson';
 import LessonInfoModal from '@components/lesson/currentLessonItem/LessonInfoModal';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { onGoingLesson } from 'api/lesson';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
+import format from 'pretty-format';
 import React, { useContext, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components';
-import { onGoingLesson } from 'api/lesson';
-import format from 'pretty-format';
 
 function LessonMainScreen(props) {
   const navigation = useNavigation();

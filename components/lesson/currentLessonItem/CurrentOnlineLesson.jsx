@@ -27,8 +27,6 @@ function CurrentOnlineLesson({ toggleModal, onGoingLessonInfo }) {
 
   const isTutor = loginUser.isTutor;
 
-  console.log(onGoingLessonInfo);
-
   return (
     <Container>
       <Box>
@@ -104,7 +102,7 @@ const ValueText = styled.Text`
 `;
 
 const LessonInfoBtn = styled.TouchableOpacity`
-  width: ${wp(30)}px;
+  width: auto;
   height: ${hp(4)}px;
   border-radius: ${RFValue(10)}px;
   background-color: ${COLORS.subMiddleblue};
@@ -114,6 +112,7 @@ const LessonInfoBtn = styled.TouchableOpacity`
 
   margin-left: ${wp(12)}px;
   margin-top: ${hp(1)}px;
+  padding: ${hp(1)}px;
 `;
 
 const LessonInfoBtnText = styled.Text`

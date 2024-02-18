@@ -1,12 +1,20 @@
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
+import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
-// eslint-disable-next-line react/prop-types
-function CurrentOffLineLesson({ toggleModal }) {
+CurrentOffLineLesson.propTypes = {
+  toggleModal: PropTypes.func.isRequired,
+  onGoingLessonInfo: PropTypes.shape({
+    tuteeName: PropTypes.string.isRequired,
+    tutorName: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+function CurrentOffLineLesson({ toggleModal, onGoingLessonInfo }) {
   const {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
@@ -19,12 +27,21 @@ function CurrentOffLineLesson({ toggleModal }) {
         <Info>
           <InfoItems>
             <InfoSub>
-              <LabelText>{isTutor ? '수강생' : '강사'} 이름 : </LabelText>
-              <ValueText>김철수</ValueText>
+              {isTutor ? (
+                <InfoSub>
+                  <LabelText>수강생 이름 : </LabelText>
+                  <ValueText>{onGoingLessonInfo.tuteeName}</ValueText>
+                </InfoSub>
+              ) : (
+                <InfoSub>
+                  <LabelText>강사 이름 : </LabelText>
+                  <ValueText>{onGoingLessonInfo.tutorName}</ValueText>
+                </InfoSub>
+              )}
             </InfoSub>
             <InfoSub>
               <LabelText>레슨 방식 : </LabelText>
-              <ValueText>화상 레슨</ValueText>
+              <ValueText>대면 레슨</ValueText>
             </InfoSub>
           </InfoItems>
           <LessonInfoBtn onPress={toggleModal}>
@@ -41,20 +58,20 @@ function CurrentOffLineLesson({ toggleModal }) {
 
 const Container = styled.View`
   flex: 1;
-  bakcground-color: ${COLORS.white};
+  background-color: ${COLORS.white};
   justify-content: center;
   align-items: center;
 `;
 
 const Box = styled.View`
   width: ${wp(90)}px;
-  height: ${hp(16)}px;
-  border-width: ${RFValue(3)}px;
+  height: ${hp(18)}px;
+  border-width: ${wp(1)}px;
   border-radius: ${RFValue(10)}px;
   border-color: ${COLORS.main};
-
-  padding: ${RFValue(16)}px;
+  padding: ${wp(3)}px;
 `;
+
 const Info = styled.View`
   flex-direction: row;
 `;
@@ -63,7 +80,8 @@ const InfoItems = styled.View``;
 
 const InfoSub = styled.View`
   flex-direction: row;
-  margin-bottom: ${RFValue(5)}px;
+  margin-bottom: ${hp(1)}px;
+  align-items: center;
 `;
 
 const LabelText = styled.Text`
@@ -74,11 +92,10 @@ const LabelText = styled.Text`
 const ValueText = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 600;
-  margin-top: ${RFValue(2.5)}px;
 `;
 
 const LessonInfoBtn = styled.TouchableOpacity`
-  width: ${wp(30)}px;
+  width: auto;
   height: ${hp(4)}px;
   border-radius: ${RFValue(10)}px;
   background-color: ${COLORS.subMiddleblue};
@@ -86,7 +103,9 @@ const LessonInfoBtn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 
-  margin: ${RFValue(5)}px 0 0 ${RFValue(60)}px;
+  margin-left: ${wp(12)}px;
+  margin-top: ${hp(1)}px;
+  padding: ${hp(1)}px;
 `;
 
 const LessonInfoBtnText = styled.Text`
@@ -98,8 +117,6 @@ const LessonInfoBtnText = styled.Text`
 const Guide = styled.View`
   justify-content: center;
   align-items: center;
-
-  margin-top: ${RFValue(16)}px;
 `;
 
 const Txt = styled.Text`

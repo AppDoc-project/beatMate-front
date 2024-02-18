@@ -16,7 +16,7 @@ function CurrentNoLesson(props) {
 
 const Container = styled.View`
   flex: 1;
-  bakcground-color: ${COLORS.white};
+  background-color: ${COLORS.white};
   justify-content: center;
   align-items: center;
 `;
