@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeScreen from '@screens/HomeScreen';
 import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
 import React, { useState } from 'react';
@@ -14,7 +15,6 @@ import LessonScreenNavigator from './lesson/LessonScreenNavigator';
 import MyPageScreenNavigator from './mypage/MyPageScreenNavigators';
 import ReservationScreenNavigator from './reservation/ReservationScreenNavigator';
 import SearchTutorScreenNavigators from './searchtutor/SearchTutorScreenNavigators';
-import HomeScreen from '@screens/HomeScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +33,7 @@ function HomeTabRoutes(props) {
         loginUserInfo: [loginUser, setLoginUser],
       }}
     >
-      <Tab.Navigator initialRouteName="home">
+      <Tab.Navigator initialRouteName="homeScreen">
         <Tab.Screen
           name="community"
           component={CommunityScreenNavigator}
@@ -124,6 +124,7 @@ function HomeTabRoutes(props) {
           name="lesson"
           component={LessonScreenNavigator}
           options={{
+            unmountOnBlur: true,
             headerShown: false,
             tabBarLabel: '레슨',
             tabBarActiveTintColor: COLORS.black,
