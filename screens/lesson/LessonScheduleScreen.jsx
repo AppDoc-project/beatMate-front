@@ -19,17 +19,18 @@ function LessonScheduleScreen(props) {
 
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
+  const [searchDate, setSearchDate] = useState(null);
   const [feedbackDates, setFeedbackDates] = useState([]);
 
   // 년 월별 레슨 정보
   const [lessonDatas, setLessonData] = useState(null);
 
   useEffect(() => {
+    setLessonData(null);
     getAllLessonInfo(year, month)
       .then((res) => {
         console.log('년.월별 레슨 정보', format(res.data));
         setLessonData(res.data);
-        console.log('lesson데이터', lessonDatas);
       })
       .catch((err) => {
         console.log(err);
@@ -37,8 +38,7 @@ function LessonScheduleScreen(props) {
   }, [year, month]);
 
   useEffect(() => {
-    // Extract feedback dates from lessonDatas and setFeedbackDates
-    const extractedDates = lessonDatas?.data?.map((lessonData) => lessonData.feedbackTime.substring(8, 10));
+    const extractedDates = lessonDatas?.data?.map((lessonData) => lessonData.endTime.substring(8, 10));
     setFeedbackDates(extractedDates);
   }, [lessonDatas]);
 
@@ -49,17 +49,52 @@ function LessonScheduleScreen(props) {
         <HeaderText>레슨 내역</HeaderText>
       </Header>
       <Calendear>
-        <LessonCalendar setYear={setYear} setMonth={setMonth} feedbackDates={feedbackDates} />
+        <LessonCalendar
+          setYear={setYear}
+          setMonth={setMonth}
+          setSearchDate={setSearchDate}
+          feedbackDates={feedbackDates}
+        />
       </Calendear>
+
       <LessonList>
         {lessonDatas && lessonDatas.data && lessonDatas.data.length >= 1 ? (
-          <ScheduleListScrollView>
-            {lessonDatas.data.map((lessonData) => (
-              <LessonScheduleItem key={lessonData.id} lessonData={lessonData} />
-            ))}
-          </ScheduleListScrollView>
+          <WholeContainer>
+            <ScheduleListScrollView>
+              {lessonDatas.data
+                .filter((lessonData) => {
+                  const endTimeDate =
+                    lessonData.endTime.split(':')[0] +
+                    ':' +
+                    lessonData.endTime.split(':')[1] +
+                    ':' +
+                    lessonData.endTime.split(':')[2];
+
+                  // Compare with searchDate
+                  return endTimeDate === searchDate;
+                })
+                .map((lessonData) => (
+                  <LessonScheduleItem key={lessonData.id} lessonData={lessonData} />
+                ))}
+            </ScheduleListScrollView>
+            {lessonDatas.data.filter((lessonData) => {
+              const endTimeDate =
+                lessonData.endTime.split(':')[0] +
+                ':' +
+                lessonData.endTime.split(':')[1] +
+                ':' +
+                lessonData.endTime.split(':')[2];
+
+              // Check for items where endTimeDate is not equal to searchDate
+              return endTimeDate !== searchDate;
+            }).length === lessonDatas.data.length ? (
+              <NoLesson>레슨 내역이 없어요.🥲</NoLesson>
+            ) : null}
+          </WholeContainer>
         ) : (
-          <NoLesson>레슨 내역이 없어요.🥲</NoLesson>
+          <WholeContainer>
+            <NoLesson>레슨 내역이 없어요.🥲</NoLesson>
+          </WholeContainer>
         )}
       </LessonList>
     </Container>
@@ -88,8 +123,6 @@ const Calendear = styled.View`
 
 const LessonList = styled.View`
   flex: 1;
-  justify-content: center;
-  align-items: center;
 `;
 
 const NoLesson = styled.Text`
@@ -97,6 +130,12 @@ const NoLesson = styled.Text`
   font-weight: 600;
   color: ${COLORS.lightgray};
   text-align: center;
+  margin-top: ${hp(5)}px;
+`;
+
+const WholeContainer = styled.View`
+  justify-content: center;
+  align-items: center;
 `;
 
 const ScheduleListScrollView = styled.ScrollView`

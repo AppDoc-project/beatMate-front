@@ -11,13 +11,14 @@ import RenderCalendarDate from './RenderCalendarDate';
 LessonCalendar.propTypes = {
   setYear: PropTypes.func.isRequired,
   setMonth: PropTypes.func.isRequired,
+  setSearchDate: PropTypes.func.isRequired,
   feedbackDates: PropTypes.array,
 };
 
-function LessonCalendar({ setYear, setMonth, feedbackDates }) {
+function LessonCalendar({ setYear, setMonth, setSearchDate, feedbackDates }) {
   const [thisCalendar, setThisCalendar] = useState(null);
-  const [date, setDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
+  const [date, setDate] = useState(new Date());
 
   const thisYear = date.getFullYear();
   const thisMonth = date.getMonth();
@@ -56,7 +57,14 @@ function LessonCalendar({ setYear, setMonth, feedbackDates }) {
     );
   };
 
-  console.log(feedbackDates);
+  useEffect(() => {
+    const dateObject = new Date(selectedDate);
+
+    const formattedDate = `${dateObject.getFullYear()}:${(dateObject.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}:${dateObject.getDate().toString().padStart(2, '0')}`;
+    setSearchDate(formattedDate);
+  }, [selectedDate]);
 
   return (
     <Container>
@@ -212,9 +220,10 @@ const Today = styled.TouchableOpacity`
   border-width: ${(props) => (props.isToday ? '2px' : '0')};
   border-color: ${(props) => (props.isToday ? COLORS.main : 'transparent')};
   background-color: ${(props) =>
-    props.isSelected || (props.feedbackDates && props.feedbackDates.includes(String(props.day)))
+    props.isSelected || (props.feedbackDates && props.feedbackDates.includes(String(props.day).padStart(2, '0')))
       ? COLORS.subLightblue
       : 'transparent'};
+
   justify-content: center;
   align-items: center;
 `;
