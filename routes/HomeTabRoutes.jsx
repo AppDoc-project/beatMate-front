@@ -10,11 +10,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import ChatScreenNavigator from './chat/ChatScreenNavigators';
 import CommunityScreenNavigator from './community/CommunityNavigators';
-import HomeScreenNavigator from './home/HomeScreenNavigator';
 import LessonScreenNavigator from './lesson/LessonScreenNavigator';
 import MyPageScreenNavigator from './mypage/MyPageScreenNavigators';
 import ReservationScreenNavigator from './reservation/ReservationScreenNavigator';
 import SearchTutorScreenNavigators from './searchtutor/SearchTutorScreenNavigators';
+import HomeScreen from '@screens/HomeScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -86,8 +86,8 @@ function HomeTabRoutes(props) {
           }}
         />
         <Tab.Screen
-          name="home"
-          component={HomeScreenNavigator}
+          name={'homeScreen'}
+          component={HomeScreen}
           options={{
             unmountOnBlur: true,
             headerShown: false,

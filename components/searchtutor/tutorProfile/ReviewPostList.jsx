@@ -1,17 +1,10 @@
 import ReviewPostItem from '@components/searchtutor/tutorProfile/ReviewPostItem';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { getDatailTutorInfo, postPickTutor } from 'api/tutorpage';
-import { COLORS } from 'colors';
-import { TutorFindCategory } from 'context/TutorFindCategoryContext';
-import format from 'pretty-format';
-import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, TouchableOpacity, Image, View, Text, FlatList } from 'react-native';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { ActivityIndicator } from 'react-native';
 import { getFirstTutorReview, getNextTutorReview } from 'api/tutorpage';
+import format from 'pretty-format';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import styled from 'styled-components';
 
 ReviewPostList.propTypes = {
   tutorId: PropTypes.number.isRequired,
