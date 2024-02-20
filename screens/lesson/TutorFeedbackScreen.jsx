@@ -1,16 +1,16 @@
 import { RegisterBtn } from '@assets/Icons/Buttons';
 import LessonInfoContent from '@components/lesson/notYetWroteItem/LessonInfoContent';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { writeFeedBack } from 'api/lesson';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components';
-import { writeFeedBack } from 'api/lesson';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 function TutorFeedbackScreen(props) {
   const route = useRoute();
