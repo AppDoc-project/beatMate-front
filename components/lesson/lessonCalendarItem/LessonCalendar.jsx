@@ -1,4 +1,6 @@
+// ... (other imports)
 import { COLORS } from 'colors';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -6,10 +8,16 @@ import styled from 'styled-components';
 
 import RenderCalendarDate from './RenderCalendarDate';
 
-function LessonCalendar(props) {
+LessonCalendar.propTypes = {
+  setYear: PropTypes.func.isRequired,
+  setMonth: PropTypes.func.isRequired,
+  feedbackDates: PropTypes.array,
+};
+
+function LessonCalendar({ setYear, setMonth, feedbackDates }) {
   const [thisCalendar, setThisCalendar] = useState(null);
   const [date, setDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null); //날짜 선택
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const thisYear = date.getFullYear();
   const thisMonth = date.getMonth();
@@ -18,9 +26,12 @@ function LessonCalendar(props) {
   useEffect(() => {
     const calendarData = RenderCalendarDate({ thisYear, thisMonth });
     setThisCalendar(calendarData);
+
+    // setYear와 setMonth를 사용해서 년도와 월을 설정
+    setYear(thisYear);
+    setMonth(thisMonth + 1);
   }, [date, thisMonth, thisYear]);
 
-  //달력 이동 버튼
   const prevMonth = () => {
     setDate(new Date(date.getFullYear(), date.getMonth() - 1));
   };
@@ -29,24 +40,23 @@ function LessonCalendar(props) {
     setDate(new Date(date.getFullYear(), date.getMonth() + 1));
   };
 
-  // 오늘 날짜로 이동
   const goToday = () => {
     setDate(new Date());
   };
 
-  //오늘 날짜 표시
   const isToday = (year, month, day) => {
     const today = new Date();
     return year === today.getFullYear() && month === today.getMonth() && day === today.getDate();
   };
 
-  //날짜 선택
   const selectDate = (year, month, day) => {
     const newDate = new Date(year, month, day);
     setSelectedDate((prevSelectedDate) =>
       prevSelectedDate && prevSelectedDate.getTime() === newDate.getTime() ? null : newDate,
     );
   };
+
+  console.log(feedbackDates);
 
   return (
     <Container>
@@ -89,6 +99,8 @@ function LessonCalendar(props) {
                   isToday={isToday(thisYear, thisMonth, day)}
                   isSelected={selectedDate && selectedDate.getDate() === day}
                   onPress={() => selectDate(thisYear, thisMonth, day)}
+                  day={day}
+                  feedbackDates={feedbackDates || []} // Ensure feedbackDates is an array
                 >
                   <DateText isSelected={selectedDate && selectedDate.getDate() === day}>{day}</DateText>
                 </Today>
@@ -194,12 +206,15 @@ const CurrentDate = styled.View`
 `;
 
 const Today = styled.TouchableOpacity`
-  width: ${RFValue(20)}px;
-  height: ${RFValue(20)}px;
+  width: ${RFValue(22)}px;
+  height: ${RFValue(22)}px;
   border-radius: 50%;
   border-width: ${(props) => (props.isToday ? '2px' : '0')};
   border-color: ${(props) => (props.isToday ? COLORS.main : 'transparent')};
-  background-color: ${(props) => (props.isSelected ? COLORS.main : 'transparent')};
+  background-color: ${(props) =>
+    props.isSelected || (props.feedbackDates && props.feedbackDates.includes(String(props.day)))
+      ? COLORS.subLightblue
+      : 'transparent'};
   justify-content: center;
   align-items: center;
 `;
