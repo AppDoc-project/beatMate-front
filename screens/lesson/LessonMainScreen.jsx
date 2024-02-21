@@ -13,6 +13,7 @@ import { Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styled from 'styled-components';
 
 function LessonMainScreen(props) {
@@ -32,6 +33,21 @@ function LessonMainScreen(props) {
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+  };
+
+  const reGetChatList = () => {
+    setIsLoading(true);
+    onGoingLesson()
+      .then((res) => {
+        console.log(format(res.data));
+        setOnGoingLessonInfo(res.data.object);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsError(true);
+        setIsLoading(false);
+      });
   };
 
   const [onGoingLessonInfo, setOnGoingLessonInfo] = useState(null);
@@ -99,6 +115,9 @@ function LessonMainScreen(props) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
+        <RedoWrapper onPress={reGetChatList}>
+          <MaterialIcons name="refresh" size={35} marginTop={hp(2)} marginBottom={hp(2)} marginRight={wp(2)} />
+        </RedoWrapper>
         <CurrentLessonText>현재 진행 중인 레슨</CurrentLessonText>
         <FirstSection>
           {onGoingLessonInfo ? (
@@ -148,12 +167,16 @@ const Container = styled.View`
   background-color: ${COLORS.white};
 `;
 
+const RedoWrapper = styled.TouchableOpacity`
+  flex-direction: row-reverse;
+  margin-left: ${wp(5)}px;
+`;
+
 const CurrentLessonText = styled.Text`
   font-size: ${RFValue(16)}px;
   font-weight: 900;
   align-self: flex-start;
   margin-left: ${wp(6)}px;
-  margin-top: ${hp(5)}px;
 `;
 
 const FirstSection = styled.View`
