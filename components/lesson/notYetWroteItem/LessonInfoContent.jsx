@@ -9,12 +9,12 @@ import styled from 'styled-components';
 
 LessonInfoContent.propTypes = {
   notWriteData: PropTypes.shape({
-    tuteeName: PropTypes.string.isRequired,
-    tutorName: PropTypes.string.isRequired,
-    lessonType: PropTypes.string.isRequired,
-    memo: PropTypes.string.isRequired,
-    startTime: PropTypes.string.isRequired,
-    endTime: PropTypes.string.isRequired,
+    tuteeName: PropTypes.string,
+    tutorName: PropTypes.string,
+    lessonType: PropTypes.string,
+    memo: PropTypes.string,
+    startTime: PropTypes.string,
+    endTime: PropTypes.string,
   }).isRequired,
 };
 

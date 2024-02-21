@@ -4,6 +4,7 @@ import LessonFeedbackScreen from '@screens/lesson/LessonFeedbackScreen';
 import LessonMainScreen from '@screens/lesson/LessonMainScreen';
 import LessonScheduleScreen from '@screens/lesson/LessonScheduleScreen';
 import TuteeEvaluationScreen from '@screens/lesson/TuteeEvaluationScreen';
+import TutorFeedbackModifyScreen from '@screens/lesson/TutorFeedbackModifyScreen';
 import TutorFeedbackScreen from '@screens/lesson/TutorFeedbackScreen';
 import VideoScreen from '@screens/lesson/VideoScreen';
 import React from 'react';
@@ -58,6 +59,13 @@ function LessonScreenNavigator(props) {
       <Stack.Screen
         name={'lessonEvaluationScreen'}
         component={LessonEvaluationScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'tutorFeedbackModifyScreen'}
+        component={TutorFeedbackModifyScreen}
         options={{
           headerShown: false,
         }}

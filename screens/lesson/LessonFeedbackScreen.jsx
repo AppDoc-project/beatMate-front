@@ -27,7 +27,7 @@ function LessonFeedbackScreen(props) {
   };
 
   const onPressFeedbackModify = () => {
-    navigation.navigate('tutorFeedbackScreen', { lessonData });
+    navigation.navigate('tutorFeedbackModifyScreen', { lessonData });
   };
 
   return (
