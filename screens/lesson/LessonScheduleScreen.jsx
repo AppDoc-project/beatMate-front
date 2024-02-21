@@ -1,14 +1,14 @@
 import LessonCalendar from '@components/lesson/lessonCalendarItem/LessonCalendar';
 import LessonScheduleItem from '@components/lesson/lessonCalendarItem/LessonScheduleItem';
 import { useNavigation } from '@react-navigation/native';
+import { getAllLessonInfo } from 'api/lesson';
 import { COLORS } from 'colors';
+import format from 'pretty-format';
 import React, { useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import styled from 'styled-components';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { getAllLessonInfo } from 'api/lesson';
-import format from 'pretty-format';
 
 function LessonScheduleScreen(props) {
   const navigation = useNavigation();
@@ -85,7 +85,6 @@ function LessonScheduleScreen(props) {
                 ':' +
                 lessonData.endTime.split(':')[2];
 
-              // Check for items where endTimeDate is not equal to searchDate
               return endTimeDate !== searchDate;
             }).length === lessonDatas.data.length ? (
               <NoLesson>레슨 내역이 없어요.🥲</NoLesson>
