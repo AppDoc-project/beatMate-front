@@ -18,7 +18,7 @@ function TutorFeedbackModifyScreen(props) {
 
   const navigation = useNavigation();
 
-  const [content, setContent] = useState(lessonData.feedBack || ''); // 초기값 설정
+  const [content, setContent] = useState(lessonData.feedBack || '');
 
   const MAX_LENGTH = 1000;
 
@@ -72,7 +72,7 @@ function TutorFeedbackModifyScreen(props) {
           <SubText>레슨 피드백을 입력해주세요.</SubText>
           <ContentInput
             onChangeText={onChangeContent}
-            value={content} // content 상태를 TextInput에 전달
+            value={content}
             placeholder="레슨 피드백을 입력하세요. (최대 1000자)"
             placeholderTextColor="lightgray"
             multiline

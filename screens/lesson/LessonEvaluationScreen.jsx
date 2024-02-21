@@ -1,24 +1,25 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { AirbnbRating } from 'react-native-ratings';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import styled from 'styled-components';
 
 function LessonEvaluationScreen(props) {
+  const route = useRoute();
+  const { lessonData } = route.params;
+
   const {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
   const isTutor = loginUser.isTutor;
 
   const navigation = useNavigation();
-
-  const [content] = useState('');
-  const MAX_LENGTH = 1000;
 
   const onPressPreviousBtn = () => {
     navigation.navigate('lessonScheduleScreen');
@@ -31,118 +32,125 @@ function LessonEvaluationScreen(props) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
+        <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
         <Header>
-          <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
           <HeaderTitle>
-            <HeaderText>OO님의 </HeaderText>
-            <HeaderText color={COLORS.main}>레슨 평가지</HeaderText>
+            <HeaderText1>{lessonData.tuteeName}님의 </HeaderText1>
+            <HeaderText2 color={COLORS.main}>레슨 평가지</HeaderText2>
           </HeaderTitle>
         </Header>
-        <Rate>
-          <RateTextSection>
-            <SubText>레슨 별점</SubText>
-          </RateTextSection>
-          <Ionicons name="star-outline" size={40} />
-        </Rate>
-        <Review>
-          <SubText>레슨 후기 내용</SubText>
-          <ReviewGuideText>(작성해주신 후기는 강사님의 프로필 상에 보여지게 됩니다.)</ReviewGuideText>
-          <ReviewBox>
-            <ReveiwText></ReveiwText>
-          </ReviewBox>
-          <TextCount>
-            {content.length}/{MAX_LENGTH} 자
-          </TextCount>
-        </Review>
-        {!isTutor && (
-          <Btn>
-            <ModifyBtn onPress={onPressEvaluationModify}>
-              <ModifyText>수정하기</ModifyText>
-            </ModifyBtn>
-          </Btn>
-        )}
+        <Body>
+          <Rate>
+            <SubText1>레슨 평점</SubText1>
+            <AirbnbRating
+              selectedColor={COLORS.subMiddleblue}
+              unselectedColor={COLORS.gray01}
+              reviewColor={COLORS.black}
+              reviews={[1, 2, 3, 4, 5]}
+              size={RFValue(22)}
+              reviewSize={RFValue(17)}
+              defaultRating={3}
+              isDisabled={true} // 사용자가 별을 선택하지 못하도록 함
+            />
+          </Rate>
+          <Review>
+            <SubText>레슨 후기</SubText>
+            <ReviewBox>
+              {lessonData.review ? (
+                <ReveiwText>{lessonData.review}</ReveiwText>
+              ) : (
+                <ReveiwText>아직 수강생님이 후기를 작성하지 않았습니다.</ReveiwText>
+              )}
+            </ReviewBox>
+          </Review>
+          {!isTutor && (
+            <Btn>
+              <ModifyBtn onPress={onPressEvaluationModify}>
+                <ModifyText>수정하기</ModifyText>
+              </ModifyBtn>
+            </Btn>
+          )}
+        </Body>
       </Container>
     </SafeAreaView>
   );
 }
 
-const Container = styled.View`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
   background-color: ${COLORS.white};
 `;
 
 const Header = styled.View`
-  flex-direction: row;
+  justify-items: center;
+  align-items: center;
+  margin-bottom: ${hp(5)}px;
 `;
 
 const HeaderTitle = styled.View`
   flex-direction: row;
 `;
 
-const HeaderText = styled.Text`
-  font-size: ${RFValue(20)}px;
+const HeaderText1 = styled.Text`
+  font-size: ${RFValue(18)}px;
+  font-weight: 600;
+  color: ${(props) => props.color || COLORS.black};
+`;
+
+const HeaderText2 = styled.Text`
+  font-size: ${RFValue(18)}px;
   font-weight: 900;
   color: ${(props) => props.color || COLORS.black};
 `;
 
-const Rate = styled.View`
-  flex: 0.13;
-  margin: ${RFValue(20)}px ${RFValue(18)}px;
+const Body = styled.View`
+  justify-content: center;
+  align-items: center;
+  flex: 0.9;
 `;
 
-const RateTextSection = styled.View`
-  flex-direction: row;
+const Rate = styled.View`
+  margin-top: ${hp(18)}px;
+  margin-bottom: ${hp(3)}px;
+`;
+
+const SubText1 = styled.Text`
+  font-size: ${RFValue(16)}px;
+  font-weight: 900;
+  margin-left: ${wp(-24)}px;
 `;
 
 const SubText = styled.Text`
-  font-size: ${RFValue(18)}px;
+  font-size: ${RFValue(16)}px;
   font-weight: 900;
-  margin: ${RFValue(5)}px 0;
+  margin-bottom: ${hp(1)}px;
 `;
 
 const Review = styled.View`
-  flex: 0.9;
-  margin: ${RFValue(10)}px ${RFValue(18)}px ${RFValue(30)}px ${RFValue(18)}px;
-`;
-
-const ReviewGuideText = styled.Text`
-  font-size: ${RFValue(10)}px;
-  font-weight: 600;
-  color: ${COLORS.lightgray};
-  margin-bottom: ${RFValue(10)}px;
+  margin-bottom: ${hp(5)}px;
 `;
 
 const ReviewBox = styled.ScrollView`
   width: ${wp(90)}px;
-  height: ${hp(50)}px;
   border-width: ${RFValue(1)}px;
   border-radius: ${RFValue(5)}px;
   border-color: ${COLORS.lightgray};
 
-  padding: ${RFValue(10)}px;
+  padding: ${wp(4)}px;
 `;
 
 const ReveiwText = styled.Text`
   font-size: ${RFValue(12)}px;
+  flex-shrink: 1;
 `;
 
-const TextCount = styled.Text`
-  font-size: ${RFValue(10)}px;
-  font-weight: 600;
-  color: ${COLORS.lightgray};
-  margin: ${RFValue(3)}px;
-`;
-
-const Btn = styled.View`
-  flex: 0.07;
-`;
+const Btn = styled.View``;
 
 const ModifyBtn = styled.TouchableOpacity`
   width: ${wp(22)}px;
   height: ${hp(4)}px;
   border-radius: ${RFValue(5)}px;
   background-color: ${COLORS.subMiddleblue};
-  margin-left: ${RFValue(250)}px;
 
   justify-content: center;
   align-items: center;
