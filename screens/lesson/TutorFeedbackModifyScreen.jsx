@@ -20,7 +20,7 @@ function TutorFeedbackModifyScreen(props) {
 
   const [content, setContent] = useState(lessonData.feedBack || '');
 
-  const MAX_LENGTH = 1000;
+  const MAX_LENGTH = 500;
 
   const onChangeContent = (text) => {
     // 글자 수 제한 함수

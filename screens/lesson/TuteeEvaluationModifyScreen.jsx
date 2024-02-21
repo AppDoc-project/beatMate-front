@@ -12,13 +12,13 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components';
 
-function TuteeEvaluationScreen(props) {
+function TuteeEvaluationModifyScreen(props) {
   const route = useRoute();
-  const { notWriteData } = route.params;
+  const { lessonData } = route.params;
 
   const navigation = useNavigation();
 
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(lessonData.review || '');
   const [rating, setRating] = useState(0);
 
   const MAX_LENGTH = 500;
@@ -34,7 +34,7 @@ function TuteeEvaluationScreen(props) {
       Alert.alert('알림', '내용을 입력해주세요.');
     } else {
       const data = {
-        lessonId: notWriteData.id,
+        lessonId: lessonData.id,
         review: content,
         score: rating,
       };
@@ -79,7 +79,6 @@ function TuteeEvaluationScreen(props) {
             reviews={[1, 2, 3, 4, 5]}
             size={RFValue(22)}
             reviewSize={RFValue(17)}
-            defaultRating={3}
             onFinishRating={handleRating}
           />
         </Rate>
@@ -88,6 +87,7 @@ function TuteeEvaluationScreen(props) {
           <ReviewGuideText>(작성해주신 후기는 강사님의 프로필 상에 보여지게 됩니다.)</ReviewGuideText>
           <ContentInput
             onChangeText={onChangeContent}
+            value={content}
             placeholder="레슨 후기를 입력하세요. (최대 1000자)"
             placeholderTextColor="lightgray"
             multiline
@@ -187,4 +187,4 @@ const TextCount = styled.Text`
   margin: ${RFValue(3)}px;
 `;
 
-export default TuteeEvaluationScreen;
+export default TuteeEvaluationModifyScreen;

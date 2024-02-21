@@ -26,13 +26,14 @@ function LessonEvaluationScreen(props) {
   };
 
   const onPressEvaluationModify = () => {
-    navigation.navigate('tuteeEvaluationScreen');
+    navigation.navigate('tuteeEvaluationModifyScreen', { lessonData });
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
         <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
+
         <Header>
           <HeaderTitle>
             <HeaderText1>{lessonData.tuteeName}님의 </HeaderText1>
@@ -50,7 +51,7 @@ function LessonEvaluationScreen(props) {
               size={RFValue(22)}
               reviewSize={RFValue(17)}
               defaultRating={3}
-              isDisabled={true} // 사용자가 별을 선택하지 못하도록 함
+              isDisabled={true}
             />
           </Rate>
           <Review>
@@ -63,6 +64,7 @@ function LessonEvaluationScreen(props) {
               )}
             </ReviewBox>
           </Review>
+
           {!isTutor && (
             <Btn>
               <ModifyBtn onPress={onPressEvaluationModify}>
@@ -106,11 +108,9 @@ const HeaderText2 = styled.Text`
 const Body = styled.View`
   justify-content: center;
   align-items: center;
-  flex: 0.9;
 `;
 
 const Rate = styled.View`
-  margin-top: ${hp(18)}px;
   margin-bottom: ${hp(3)}px;
 `;
 
@@ -130,13 +130,14 @@ const Review = styled.View`
   margin-bottom: ${hp(5)}px;
 `;
 
-const ReviewBox = styled.ScrollView`
+const ReviewBox = styled.View`
   width: ${wp(90)}px;
   border-width: ${RFValue(1)}px;
   border-radius: ${RFValue(5)}px;
   border-color: ${COLORS.lightgray};
 
   padding: ${wp(4)}px;
+  max-height: auto;
 `;
 
 const ReveiwText = styled.Text`

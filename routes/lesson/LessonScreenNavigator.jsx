@@ -3,6 +3,7 @@ import LessonEvaluationScreen from '@screens/lesson/LessonEvaluationScreen';
 import LessonFeedbackScreen from '@screens/lesson/LessonFeedbackScreen';
 import LessonMainScreen from '@screens/lesson/LessonMainScreen';
 import LessonScheduleScreen from '@screens/lesson/LessonScheduleScreen';
+import TuteeEvaluationModifyScreen from '@screens/lesson/TuteeEvaluationModifyScreen';
 import TuteeEvaluationScreen from '@screens/lesson/TuteeEvaluationScreen';
 import TutorFeedbackModifyScreen from '@screens/lesson/TutorFeedbackModifyScreen';
 import TutorFeedbackScreen from '@screens/lesson/TutorFeedbackScreen';
@@ -66,6 +67,13 @@ function LessonScreenNavigator(props) {
       <Stack.Screen
         name={'tutorFeedbackModifyScreen'}
         component={TutorFeedbackModifyScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name={'tuteeEvaluationModifyScreen'}
+        component={TuteeEvaluationModifyScreen}
         options={{
           headerShown: false,
         }}
