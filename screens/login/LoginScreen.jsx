@@ -1,7 +1,7 @@
 import { LoginBtn } from '@assets/Icons/Buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { login } from 'api/auth';
+import { getUserInfo, login } from 'api/auth';
 import { UserInfo } from 'context/UserInfoContext'; // AuthContext가 아니라 UserInfoContext로 수정
 import { format } from 'pretty-format';
 import React, { useState, useContext, useEffect } from 'react';
@@ -30,7 +30,6 @@ function LoginScreen(props) {
         // AsyncStorage에 토큰 저장
         await AsyncStorage.setItem('access_token', token);
 
-        // 데이터에서 필요한 정보 추출하여 loginUser 객체 업데이트
         const userData = res.data.object;
         const { id, email, name, tutor } = userData;
         setLoginUser({ id: id, email: email, name: name, isTutor: tutor });
@@ -42,6 +41,32 @@ function LoginScreen(props) {
       })
       .catch((error) => console.log(format(error)));
   };
+
+  //토큰이 있을시, 사용자의 정보 세팅 API
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = await AsyncStorage.getItem('access_token');
+
+        if (token) {
+          const res = await getUserInfo();
+          const { id, email, name, isTutor } = res.data;
+          setLoginUser({ id: id, email: email, name: name, isTutor: isTutor });
+
+          // 로그 찍을 때 loginUser가 업데이트된 이후에 확인
+          console.log('LoginUser 정보', { id, email, name, isTutor: isTutor });
+
+          navigation.navigate('home-tab');
+        } else {
+          console.log('No token found');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   const onPressSignUpBtn = () => {
     setEmail('');

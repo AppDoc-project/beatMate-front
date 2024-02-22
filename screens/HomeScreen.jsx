@@ -1,12 +1,39 @@
+import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import React from 'react';
 import { Text } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components/native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 function HomeScreen(props) {
+  const navigation = useNavigation();
+
+  const onPressLesson = () => {
+    navigation.navigate('lesson');
+  };
+
+  const onPressCommunity = () => {
+    navigation.navigate('community');
+  };
+
+  const onPressChat = () => {
+    navigation.navigate('chat');
+  };
+
+  const onPressSearchtutor = () => {
+    navigation.navigate('searchtutor');
+  };
+
+  const onPressReservation = () => {
+    navigation.navigate('reservation');
+  };
+
+  const onPressMypage = () => {
+    navigation.navigate('mypage');
+  };
+
   return (
     <Container>
       <MainTxt>BeatMate</MainTxt>
@@ -21,26 +48,26 @@ function HomeScreen(props) {
           <MaterialCommunityIcons name={'timer-outline'} color={COLORS.main} size={RFValue(50)} />
         </ShowTime>
         <SecondRow>
-          <ManageConsult>
+          <ManageConsult onPress={onPressLesson}>
             <Txt>레슨 관리</Txt>
           </ManageConsult>
           <RightSection>
-            <MidBox style={{ marginBottom: RFValue(10) }}>
+            <MidBox style={{ marginBottom: RFValue(10) }} onPress={onPressReservation}>
               <Txt>예약 관리</Txt>
             </MidBox>
-            <MidBox>
+            <MidBox onPress={onPressSearchtutor}>
               <Txt>강사 찾기</Txt>
             </MidBox>
           </RightSection>
         </SecondRow>
         <ThirdRow>
-          <SmallBox>
+          <SmallBox onPress={onPressCommunity}>
             <Txt>커뮤니티</Txt>
           </SmallBox>
-          <SmallBox>
+          <SmallBox onPress={onPressChat}>
             <Txt>채팅</Txt>
           </SmallBox>
-          <SmallBox>
+          <SmallBox onPress={onPressMypage}>
             <Txt>내 정보</Txt>
           </SmallBox>
         </ThirdRow>

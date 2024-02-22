@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { client } from './client';
 
 /* 인증 API 관련 사항들 */
@@ -52,6 +54,24 @@ const getNewAuthCode = (data) => client.post('/auth/password/code', data, {});
 // 비밀번호 찾기: 비밀번호 변경
 const changeNewPassword = (data) => client.patch('/auth/password', data, {});
 
+// 본인에 대한 정보 가져오기
+const getUserInfo = async () => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+
+    const response = await client.get('/auth/server/user/my', {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export {
   signupTutor,
   signupTutee,
@@ -64,4 +84,5 @@ export {
   getNewEmail,
   getNewAuthCode,
   changeNewPassword,
+  getUserInfo,
 };

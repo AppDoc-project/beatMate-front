@@ -132,7 +132,8 @@ function TuteeMyPageScreen() {
             <>
               <Username>{UserInfo.name}</Username>
               <Userinfocount>
-                게시글 {UserInfo.postCount} | 댓글 {UserInfo.threadCount} | 북마크 {UserInfo.bookmarkCount} | 찜한 강사
+                게시글 {UserInfo.postCount} | 댓글 {UserInfo.threadCount} | 북마크 {UserInfo.bookmarkCount} | 찜한 강사{' '}
+                {UserInfo.pickCount}
               </Userinfocount>
             </>
           )}

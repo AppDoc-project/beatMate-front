@@ -1,6 +1,4 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import CommunityOnePostScreen from '@screens/community/CommunityOnePostScreen';
-import LoginScreen from '@screens/login/LoginScreen';
 import TuteeMyPageScreen from '@screens/mypage/TuteeMyPageScreen';
 import TutorMyPageScreen from '@screens/mypage/TutorMyPageScreen';
 import MyPageSetScreen from '@screens/mypageset/MyPageSetScreen';
