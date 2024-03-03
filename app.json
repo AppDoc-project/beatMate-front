@@ -13,16 +13,37 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.kelly62.appDocfront",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Access the microphone.",
+        "NSCameraUsageDescription": "Access the camera."
+      },
+      "permissions": {
+        "camera": true,
+        "audioRecording": true,
+        "mediaLibrary": true
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/loadingPage.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.kelly62.appDocfront"
     },
     "web": {
       "favicon": "./assets/loadingPage.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9e8d182b-e2ec-42e0-b634-9cb44b20047c"
+      },
+      "expo-cli": {
+        "proxy": "https://beatmate.zapto.org"
+      },
+      "api": {
+        "baseUrl": "https://beatmate.zapto.org"
+      }
     }
   }
 }

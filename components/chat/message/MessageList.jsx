@@ -73,7 +73,7 @@ function MessageList({ roomID }) {
       socketRef.current.disconnect();
     }
 
-    socketRef.current = socketio(`http://211.253.26.21/chat/socket?roomId=${roomID}`, {
+    socketRef.current = socketio(`https://beatmate.zapto.org/chat/socket?roomId=${roomID}`, {
       transports: ['polling'],
       path: '/socket.io',
       extraHeaders: {
