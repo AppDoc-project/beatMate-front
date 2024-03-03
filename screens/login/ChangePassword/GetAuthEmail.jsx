@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getNewEmail } from 'api/auth';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native';
+import { Alert, SafeAreaView } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -30,7 +30,13 @@ function GetAuthEmail(props) {
         console.log(format(data));
         navigation.navigate('getAuthCode', { email });
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 405) {
+          Alert.alert('알림', '존재하지 않는 회원입니다.');
+        } else {
+          console.log(format(error.response.data));
+        }
+      });
   };
 
   return (

@@ -6,12 +6,11 @@ import * as ImagePicker from 'expo-image-picker';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
-import { Text, Image, TouchableOpacity, View } from 'react-native';
+import { Text, Image, TouchableOpacity, View, Alert } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 
 function ImageUpload() {
-
   const {
     tutor: [tutorSignUpRequest, setTutorSignUpRequest],
   } = useContext(Auth);
@@ -65,7 +64,14 @@ function ImageUpload() {
         setTutorSignUpRequest(updatedSignUpRequest); // 새로운 상태로 업데이트
         console.log(updatedSignUpRequest);
       })
-      .catch((error) => console.log(format(error))); // 에러 처리
+      .catch((error) => {
+        // 여기 수정 필요
+        if (error.response && error.response.data.status === 404) {
+          Alert.alert('알림', '파일의 크기가 큽니다. 파일당 1mb 크기내로 올려주세요.');
+        } else {
+          console.log(format(error.response.data.status));
+        }
+      });
   };
 
   const removeImage = (indexToRemove) => {

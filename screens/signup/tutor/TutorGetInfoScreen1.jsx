@@ -33,13 +33,14 @@ function TutorGetInfoScreen1(props) {
       .then((res) => {
         const { data } = res;
         console.log(format(data));
-
-        // 서버 응답에서 code와 subCode를 검사하여 알림 표시
-        if (data.code === 400 && data.subCode === 401) {
-          Alert.alert('알림', '중복된 이메일입니다. 다른 이메일을 작성해주세요.');
-        }
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 404) {
+          Alert.alert('알림', '이미 존재하는 이메일입니다. 다른 이메일을 작성해주세요.');
+        } else {
+          console.log(format(error.response));
+        }
+      });
   };
 
   const onPressPreviousBtn = () => {

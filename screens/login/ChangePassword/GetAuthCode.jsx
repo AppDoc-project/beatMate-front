@@ -5,7 +5,7 @@ import { COLORS } from 'colors';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
-import { Text, SafeAreaView } from 'react-native';
+import { Text, SafeAreaView, Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -60,9 +60,9 @@ const GetAuthCodeScreen = ({ route }) => {
     } else if (timeLeft === 0) {
       // 시간이 종료되면 추가 작업 수행
       clearInterval(timer);
-      // 여기에 alert를 띄우고 이전 페이지로 이동하는 코드를 넣어줄게요.
-      alert('시간이 종료되었습니다. 다시 인증해주세요.');
-      navigation.navigate('tuteeGetInfoScreen'); // 이전 페이지로 이동
+
+      Alert.alert('알림', '시간이 종료되었습니다. 다시 인증해주세요.');
+      navigation.goBack();
     }
 
     return () => {
@@ -77,7 +77,7 @@ const GetAuthCodeScreen = ({ route }) => {
 
   const onPressPreviousBtn = () => {
     setAuthCode('');
-    navigation.navigate('tuteeGetInfoScreen');
+    navigation.goBack();
   };
 
   //재발급 받기
@@ -109,7 +109,16 @@ const GetAuthCodeScreen = ({ route }) => {
         console.log(format(data));
         navigation.navigate('getChangedPassword', { email, token });
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 401) {
+          Alert.alert('알림', '시간이 종료되었습니다. 다시 인증해주세요.');
+          navigation.goBack();
+        } else if (error.response && error.response.data.code === 402) {
+          Alert.alert('알림', '인증번호가 틀렸습니다. 다시 인증해주세요.');
+        } else {
+          console.log(format(error.response.data));
+        }
+      });
   };
 
   GetAuthCodeScreen.propTypes = {

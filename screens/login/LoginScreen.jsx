@@ -5,6 +5,7 @@ import { getUserInfo, login } from 'api/auth';
 import { UserInfo } from 'context/UserInfoContext'; // AuthContext가 아니라 UserInfoContext로 수정
 import { format } from 'pretty-format';
 import React, { useState, useContext, useEffect } from 'react';
+import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
@@ -25,21 +26,31 @@ function LoginScreen(props) {
   const onPressLoginBtn = () => {
     login(email, password)
       .then(async (res) => {
-        const token = res.headers.authorization; // 실제 응답 객체에서 헤더에서 토큰을 가져오는 부분
+        const token = res.headers.authorization;
 
-        // AsyncStorage에 토큰 저장
+        // AsyncStorage: Save the token
         await AsyncStorage.setItem('access_token', token);
 
         const userData = res.data.object;
         const { id, email, name, tutor } = userData;
-        setLoginUser({ id: id, email: email, name: name, isTutor: tutor });
+        setLoginUser({ id, email, name, isTutor: tutor });
 
         setEmail('');
         setPassword('');
 
         navigation.navigate('home-tab');
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 403) {
+          Alert.alert('알림', '로그인에 실패하였습니다. 이메일 또는 비밀번호를 확인해주세요.');
+        } else if (error.response && error.response.data.code === 406) {
+          Alert.alert('알림', '인증이 거부되었습니다. 적절한 인증수단을 가지고 다시 회원가입 해주세요.');
+        } else if (error.response && error.response.data.code === 407) {
+          Alert.alert('알림', '인증 절차가 진행 중입니다.');
+        } else {
+          console.log(format(error.response.data));
+        }
+      });
   };
 
   //토큰이 있을시, 사용자의 정보 세팅 API
