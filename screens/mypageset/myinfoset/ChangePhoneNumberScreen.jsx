@@ -46,9 +46,18 @@ function ChangePhoneNumberScreen(props) {
           setIsLoading(false);
           navigation.goBack();
         })
-        .catch((err) => {
-          console.log('연락처 변경', err);
-          setIsError(true);
+        .catch((error) => {
+          if (error.response && error.response.data.code === 402) {
+            Alert.alert('알림', '비밀번호가 틀렸습니다.');
+          } else if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else if (error.response && error.response.data.code === 400) {
+            Alert.alert('알림', '값 검증에 실패하였습니다.');
+          } else {
+            console.log(format(error.response));
+            setIsError(true);
+          }
           setIsLoading(false);
         });
     }

@@ -1,14 +1,16 @@
 import ChatRoomList from '@components/chat/list/ChatRoomList';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getChatList } from 'api/chat';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { styled } from 'styled-components/native';
 
 function ChatListScreen() {
+  const navigation = useNavigation();
+
   const [chatListInfo, setChatListInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -21,9 +23,14 @@ function ChatListScreen() {
         setChatListInfo(res.data);
         setIsLoading(false);
       })
-      .catch((err) => {
-        console.log(err);
-        setIsError(true);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('채팅리스트 가져오기 실패', error);
+          setIsError(true);
+        }
         setIsLoading(false);
       });
   };
@@ -37,9 +44,14 @@ function ChatListScreen() {
           setChatListInfo(res.data);
           setIsLoading(false);
         })
-        .catch((err) => {
-          console.log(err);
-          setIsError(true);
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else {
+            console.log('채팅리스트 가져오기 실패', error);
+            setIsError(true);
+          }
           setIsLoading(false);
         });
     }, []),

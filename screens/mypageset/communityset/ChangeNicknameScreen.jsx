@@ -41,9 +41,14 @@ function ChangeNicknameScreen(props) {
           setIsLoading(false);
           navigation.goBack();
         })
-        .catch((err) => {
-          console.log('닉네임 변경', err);
-          setIsError(true);
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else {
+            console.log('닉네임 변경 실패', error);
+            setIsError(true);
+          }
           setIsLoading(false);
         });
     }

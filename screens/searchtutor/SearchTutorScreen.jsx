@@ -6,7 +6,7 @@ import { COLORS } from 'colors';
 import { TutorFindCategory } from 'context/TutorFindCategoryContext';
 import format from 'pretty-format';
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, FlatList, ActivityIndicator, Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -48,9 +48,14 @@ function SearchTutorScreen() {
             setSearchedNameTutor(res.data);
             setIsLoading(false);
           })
-          .catch((err) => {
-            console.log('이름으로 강사찾기', err);
-            setIsError(true);
+          .catch((error) => {
+            if (error.response && error.response.data.code === 408) {
+              Alert.alert('알림', '로그인을 해주세요.');
+              navigation.navigate('homeScreen');
+            } else {
+              console.log('이름으로 강사찾기 실패', error);
+              setIsError(true);
+            }
             setIsLoading(false);
           });
       }
@@ -72,9 +77,15 @@ function SearchTutorScreen() {
           setTutorPosts(res.data);
           setOptionedIsLoading(false);
         })
-        .catch((err) => {
-          console.log('검색 조건으로 강사찾기', err);
-          setOptionedIsError(true);
+
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else {
+            console.log('검색 조건으로 강사찾기 실패', error);
+            setOptionedIsError(true);
+          }
           setOptionedIsLoading(false);
         });
     }

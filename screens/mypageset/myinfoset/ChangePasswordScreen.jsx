@@ -60,9 +60,19 @@ function ChangePasswordScreen(props) {
           setIsLoading(false);
           navigation.goBack();
         })
-        .catch((err) => {
-          console.log('비밀번호 변경', err);
-          setIsError(true);
+        .catch((error) => {
+          console.log('비밀번호 변경', error);
+          if (error.response && error.response.data.code === 402) {
+            Alert.alert('알림', '비밀번호가 틀렸습니다.');
+          } else if (error.response && error.response.data.code === 400) {
+            Alert.alert('알림', '값 검증에 실패하였습니다.');
+          } else if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else {
+            console.log(format(error.response));
+            setIsError(true);
+          }
           setIsLoading(false);
         });
     }

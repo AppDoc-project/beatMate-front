@@ -4,6 +4,7 @@ import { logout } from 'api/auth';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
 import React, { useContext } from 'react';
+import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import styled from 'styled-components/native';
@@ -51,8 +52,13 @@ function MyPageSetScreen(props) {
           }),
         );
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('로그아웃 실패', error);
+        }
       });
   };
 

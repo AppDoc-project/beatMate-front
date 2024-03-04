@@ -6,7 +6,7 @@ import { getMyPageSection } from 'api/mypage';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Alert, Image, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -54,9 +54,15 @@ function TutorMyPageScreen(props) {
           setUserInfo(res.data.object);
           setIsLoading(false);
         })
-        .catch((err) => {
-          console.log(err);
-          setIsError(true);
+
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else {
+            console.log(format(error));
+            setIsError(true);
+          }
           setIsLoading(false);
         });
     }, []),

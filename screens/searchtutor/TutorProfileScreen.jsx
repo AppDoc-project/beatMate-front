@@ -9,7 +9,7 @@ import { UserInfo } from 'context/UserInfoContext';
 import { mapEnglishToKorean } from 'hook/TutorSpecialityKo';
 import format from 'pretty-format';
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, TouchableOpacity, Image, View, Text } from 'react-native';
+import { SafeAreaView, TouchableOpacity, Image, View, Text, Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -60,9 +60,16 @@ function TutorProfileScreen() {
         setIsLike(res.data.object?.pickYn || false);
         setIsLoading(false);
       })
-      .catch((err) => {
-        console.log('강사 상세정보 가져오기', err);
-        setIsError(true);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 405) {
+          Alert.alert('알림', '비정상적인 접근입니다.');
+        } else if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('강사 상세정보 가져오기', format(error.response));
+          setIsError(true);
+        }
         setIsLoading(false);
       });
   }, [tutorId]);
@@ -85,9 +92,15 @@ function TutorProfileScreen() {
         setIsLikeLoading(false);
         setIsLike(!isLike);
       })
-      .catch((err) => {
-        console.log('강사 찜하기', err);
-        setIsLikeError(true);
+
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('강사 찜하기 실패', error);
+          setIsLikeError(true);
+        }
         setIsLikeLoading(false);
       });
   };
@@ -119,9 +132,16 @@ function TutorProfileScreen() {
         setIsChatLoading(false);
         navigation.navigate('chat');
       })
-      .catch((err) => {
-        console.error('채팅방 만들기', err);
-        setIsChatError(true);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 410) {
+          Alert.alert('알림', '해당 강사와의 채팅방이 존재합니다.');
+        } else if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('채팅방 만들기', format(error.response));
+          setIsChatError(true);
+        }
         setIsChatLoading(false);
       });
   };

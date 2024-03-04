@@ -22,14 +22,14 @@ function GetChangedPassword({ route }) {
 
   const onPressPreviousBtn = () => {
     navigation.navigate('getAuthEmail');
-  }; 
+  };
 
   const onPressContinueBtn = () => {
     const data = {
       code: token,
       password: changedPassword,
       email: email,
-    }
+    };
 
     changeNewPassword(data)
       .then((res) => {

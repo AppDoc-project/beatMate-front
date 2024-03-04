@@ -1,9 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
 import { deleteComment } from 'api/commity';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
-import { Image, Modal, TouchableOpacity } from 'react-native';
+import { Alert, Image, Modal, TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -33,6 +34,7 @@ function CommentListItem({ comment, CommentData, setCommentData }) {
   const userId = loginUser.id;
 
   const formattedDate = comment && comment.createdAt.substring(0, 10).replace(/:/g, '.');
+  const navigation = useNavigation();
 
   // 댓글 삭제 팝업창 띄우기
   const [commentModal, setCommentModal] = useState(false);
@@ -46,8 +48,13 @@ function CommentListItem({ comment, CommentData, setCommentData }) {
         const updatedComments = CommentData.data.filter((c) => c.id !== comment.id);
         setCommentData({ ...CommentData, data: updatedComments });
       })
-      .catch((err) => {
-        console.log('삭제 실패', err.response.data);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('삭제 실패', error);
+        }
       });
   };
 

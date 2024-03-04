@@ -46,7 +46,14 @@ function TutorFeedbackScreen(props) {
           console.log(format(data));
           navigation.navigate('lessonMainScreen');
         })
-        .catch((error) => console.log(format(error)));
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else {
+            console.log('게시글 등록하기 실패', error);
+          }
+        });
     }
   };
 

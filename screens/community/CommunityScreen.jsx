@@ -4,7 +4,7 @@ import { getCommunitySection } from 'api/commity';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Text, View, SafeAreaView } from 'react-native';
+import { Text, View, SafeAreaView, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -36,9 +36,14 @@ function CommunityScreen() {
           setIsLoading(false);
           setIsError(false);
         })
-        .catch((err) => {
-          console.log(err);
-          setIsError(true);
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else {
+            console.log('게시글 가져오기 실패', error);
+            setIsError(true);
+          }
           setIsLoading(false);
         });
     }, [setIsLoading, setSectionData, setIsError]),

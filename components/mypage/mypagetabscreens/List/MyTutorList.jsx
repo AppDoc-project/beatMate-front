@@ -1,14 +1,16 @@
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getLikedTutor } from 'api/mypage';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 
 import MyTutorListItem from '../ListItem/MyTutorListitem';
 
 function MyTutorList() {
+  const navigation = useNavigation();
+
   //내가 찜한 튜터 API
   const [myTutorDatas, setmyTutorData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,9 +25,14 @@ function MyTutorList() {
           setmyTutorData(res.data);
           setIsLoading(false);
         })
-        .catch((err) => {
-          console.log(err);
-          setIsError(true);
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else {
+            console.log('찜한 튜터 가져오기 실패', error);
+            setIsError(true);
+          }
           setIsLoading(false);
         });
     }, []),

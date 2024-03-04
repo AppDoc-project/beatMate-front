@@ -4,7 +4,7 @@ import { changeDescription } from 'api/mypage';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -38,9 +38,14 @@ function ChangeIntroScreen(props) {
         setIsLoading(false);
         navigation.goBack();
       })
-      .catch((err) => {
-        console.log('자기소개 변경', err);
-        setIsError(true);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('자기소개 변경 실패', error);
+          setIsError(true);
+        }
         setIsLoading(false);
       });
   };

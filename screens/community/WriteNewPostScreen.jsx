@@ -6,7 +6,7 @@ import { modifyPost, postNewPost } from 'api/commity';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native';
+import { Alert, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -54,7 +54,14 @@ function WriteNewPostScreen({ route }) {
         console.log(format(data));
         navigation.goBack();
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('새글쓰기 실패', error);
+        }
+      });
   };
 
   // 게시글 수정하기
@@ -76,7 +83,14 @@ function WriteNewPostScreen({ route }) {
         console.log(format(data));
         navigation.goBack();
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('글수정하기 실패', error);
+        }
+      });
   };
 
   const onPressPreviousBtn = () => {

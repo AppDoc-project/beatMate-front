@@ -55,7 +55,20 @@ function ReservationFormScreen() {
         console.log('예약 생성하기', format(data));
         navigation.navigate('reservation');
       })
-      .catch((error) => console.log('예약 생성하기', format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 410) {
+          Alert.alert('알림', '강사 또는 해당 수강생의 겹치는 예약이 존재합니다.');
+        } else if (error.response && error.response.data.code === 412) {
+          Alert.alert('알림', '탈퇴한 수강생입니다.');
+        } else if (error.response && error.response.data.code === 400) {
+          Alert.alert('알림', '유효한 시간대를 입력해주세요.');
+        } else if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('예약 생성하기', format(error.response));
+        }
+      });
   };
 
   return (

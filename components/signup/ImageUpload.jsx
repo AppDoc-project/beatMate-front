@@ -1,4 +1,5 @@
 import AddImage from '@assets/PostItem/AddTmage';
+import { useNavigation } from '@react-navigation/native';
 import { postImages } from 'api/auth';
 import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
@@ -14,6 +15,7 @@ function ImageUpload() {
   const {
     tutor: [tutorSignUpRequest, setTutorSignUpRequest],
   } = useContext(Auth);
+  const navigation = useNavigation();
 
   const { authenticationAddress } = tutorSignUpRequest;
 
@@ -68,6 +70,9 @@ function ImageUpload() {
         // 여기 수정 필요
         if (error.response && error.response.data.status === 404) {
           Alert.alert('알림', '파일의 크기가 큽니다. 파일당 1mb 크기내로 올려주세요.');
+        } else if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
         } else {
           console.log(format(error.response.data.status));
         }

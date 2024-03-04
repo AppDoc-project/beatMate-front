@@ -1,17 +1,19 @@
 import AddImage from '@assets/PostItem/AddTmage';
+import { useNavigation } from '@react-navigation/native';
 import { postImages } from 'api/mypage';
 import { COLORS } from 'colors';
 import * as ImagePicker from 'expo-image-picker';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Text, Image, TouchableOpacity, View } from 'react-native';
+import { Text, Image, TouchableOpacity, View, Alert } from 'react-native';
 import { styled } from 'styled-components/native';
 
 function UploadImages({ addresses, setAddresses }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const navigation = useNavigation();
 
   const uploadImage = async () => {
     if (!status?.granted) {
@@ -53,7 +55,14 @@ function UploadImages({ addresses, setAddresses }) {
         setAddresses(res.data.message);
         console.log('이미지 url 변환', res.data.message);
       })
-      .catch((error) => console.log('이미지 url 변환', format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('이미지 url 변환', format(error));
+        }
+      });
   };
 
   const removeImage = () => {

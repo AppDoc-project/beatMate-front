@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { getMessage, readCertainChat } from 'api/chat';
 import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { FlatList } from 'react-native';
+import { Alert, FlatList } from 'react-native';
 import socketio from 'socket.io-client';
 
 import MyMessage from './MyMessage';
@@ -16,6 +16,8 @@ function MessageList({ roomID }) {
   const {
     loginUserInfo: [loginUser],
   } = useContext(UserInfo);
+
+  const navigation = useNavigation();
 
   const [messages, setMessages] = useState([]);
 
@@ -106,7 +108,16 @@ function MessageList({ roomID }) {
             const { data } = res;
             console.log('특정 채팅 확인 완료', format(data));
           })
-          .catch((error) => console.log('특정 채팅 확인 실패', format(error)));
+          .catch((error) => {
+            if (error.response && error.response.data.code === 408) {
+              Alert.alert('알림', '로그인을 해주세요.');
+              navigation.navigate('homeScreen');
+            } else {
+              console.log('특정 채팅 확인 실패', error);
+              setIsError(true);
+            }
+            setIsLoading(false);
+          });
       }
     });
   };

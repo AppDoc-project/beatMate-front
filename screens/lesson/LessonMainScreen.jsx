@@ -9,7 +9,7 @@ import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import React, { useContext, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -43,9 +43,14 @@ function LessonMainScreen(props) {
         setOnGoingLessonInfo(res.data.object);
         setIsLoading(false);
       })
-      .catch((err) => {
-        console.log(err);
-        setIsError(true);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log(format(error));
+          setIsError(true);
+        }
         setIsLoading(false);
       });
   };
@@ -88,9 +93,15 @@ function LessonMainScreen(props) {
           setNotWriteData(res.data);
           setIsWriteLoading(false);
         })
-        .catch((err) => {
-          console.log(err);
-          setWriteIsError(true);
+
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else {
+            console.log('안쓴 피드백지 가져오기 실패', error);
+            setWriteIsError(true);
+          }
           setIsWriteLoading(false);
         });
     }, []),

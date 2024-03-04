@@ -1,8 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
 import { getCommunitySection } from 'api/commity';
 import { COLORS } from 'colors';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Modal, FlatList } from 'react-native';
+import { TouchableOpacity, Modal, FlatList, Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -19,6 +20,7 @@ function SelectCategory({ setCommunityId, communityName }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [selectedObject, setSelectedObject] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     setIsLoading(true);
@@ -28,9 +30,14 @@ function SelectCategory({ setCommunityId, communityName }) {
         setIsLoading(false);
         setIsError(false);
       })
-      .catch((err) => {
-        console.log(err);
-        setIsError(true);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('커뮤니티 색션 가져오기 실패', error);
+          setIsError(true);
+        }
         setIsLoading(false);
       });
   }, []);

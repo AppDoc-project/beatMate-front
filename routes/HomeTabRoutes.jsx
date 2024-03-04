@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
 import HomeScreen from '@screens/HomeScreen';
 import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
@@ -18,8 +19,10 @@ import SearchTutorScreenNavigators from './searchtutor/SearchTutorScreenNavigato
 
 const Tab = createBottomTabNavigator();
 
-function HomeTabRoutes(props) {
-  //현재 접속자 정보 객체
+const HomeTabRoutes = () => {
+  const navigation = useNavigation();
+
+  // 현재 접속자 정보 객체
   const [loginUser, setLoginUser] = useState({
     id: null,
     email: '',
@@ -101,6 +104,12 @@ function HomeTabRoutes(props) {
                 <Ionicons name={'home-outline'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('homeScreen');
+            },
+          }}
         />
         <Tab.Screen
           name="reservation"
@@ -119,7 +128,6 @@ function HomeTabRoutes(props) {
               ),
           }}
         />
-
         <Tab.Screen
           name="lesson"
           component={LessonScreenNavigator}
@@ -137,7 +145,6 @@ function HomeTabRoutes(props) {
               ),
           }}
         />
-
         <Tab.Screen
           name="mypage"
           component={MyPageScreenNavigator}
@@ -158,6 +165,6 @@ function HomeTabRoutes(props) {
       </Tab.Navigator>
     </Auth.Provider>
   );
-}
+};
 
 export default HomeTabRoutes;

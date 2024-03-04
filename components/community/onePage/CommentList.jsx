@@ -1,9 +1,9 @@
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getAllComments } from 'api/commity';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { styled } from 'styled-components/native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -19,6 +19,7 @@ function CommentList({ postId }) {
   const [CommentData, setCommentData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const navigation = useNavigation();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -29,9 +30,14 @@ function CommentList({ postId }) {
           setCommentData(res.data);
           setIsLoading(false);
         })
-        .catch((err) => {
-          console.log(err);
-          setIsError(true);
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else {
+            console.log('모든 댓글들 가져오기 실패', error);
+            setIsError(true);
+          }
           setIsLoading(false);
         });
     }, []),

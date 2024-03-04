@@ -1,11 +1,11 @@
 import AddImage from '@assets/PostItem/AddTmage';
+import { useNavigation } from '@react-navigation/native';
 import { postImages } from 'api/commity';
 import { COLORS } from 'colors';
 import * as ImagePicker from 'expo-image-picker';
-import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Text, Image, TouchableOpacity, View } from 'react-native';
+import { Text, Image, TouchableOpacity, View, Alert } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
 
@@ -13,6 +13,7 @@ function UploadImages({ addresses, setAddresses }) {
   const [selectedImages, setSelectedImages] = useState([]);
 
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const navigation = useNavigation();
 
   const uploadImage = async () => {
     if (!status?.granted) {
@@ -54,7 +55,14 @@ function UploadImages({ addresses, setAddresses }) {
         setAddresses(updatedAddresses.addresses);
         console.log(updatedAddresses.addresses);
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else {
+          console.log('사진 올리기 실패', error);
+        }
+      });
   };
 
   const removeImage = (indexToRemove) => {
