@@ -112,8 +112,13 @@ function GetAuthCodeScreen(props) {
           const { data } = res;
           console.log(format(data));
         })
-        .catch((error) => console.log(format(error)));
-
+        .catch((error) => {
+          if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+          } else {
+            console.log(error);
+          }
+        });
       // 타이머를 초기화하고 3분으로 재설정
       setTimeLeft(180);
       setTimerRunning(true);
@@ -129,7 +134,13 @@ function GetAuthCodeScreen(props) {
           setTimeLeft(180);
           setTimerRunning(true);
         })
-        .catch((error) => console.log(format(error)));
+        .catch((error) => {
+          if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+          } else {
+            console.log(error);
+          }
+        });
     }
   };
 
@@ -150,7 +161,18 @@ function GetAuthCodeScreen(props) {
           console.log(format(data));
           navigation.navigate('loginScreen');
         })
-        .catch((error) => console.log(format(error)));
+        .catch((error) => {
+          if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+          } else if (error.response && error.response.data.code === 401) {
+            Alert.alert('알림', '시간이 종료되었습니다. 다시 인증해주세요.');
+            navigation.goBack();
+          } else if (error.response && error.response.data.code === 402) {
+            Alert.alert('알림', '인증번호가 틀렸습니다. 다시 인증해주세요.');
+          } else {
+            console.log(error);
+          }
+        });
     } else if (userType === 'tutee') {
       validTuteeEmail(authEmail)
         .then((res) => {
@@ -164,6 +186,8 @@ function GetAuthCodeScreen(props) {
             navigation.goBack();
           } else if (error.response && error.response.data.code === 402) {
             Alert.alert('알림', '인증번호가 틀렸습니다. 다시 인증해주세요.');
+          } else if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
           } else {
             console.log(format(error.response.data));
           }

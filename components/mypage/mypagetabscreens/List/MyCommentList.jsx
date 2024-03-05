@@ -27,6 +27,8 @@ function MyCommentList() {
           if (error.response && error.response.data.code === 408) {
             Alert.alert('알림', '로그인을 해주세요.');
             navigation.navigate('homeScreen');
+          } else if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
           } else {
             console.log('나의 게시물 가져오기 실패', error);
             setIsError(true);

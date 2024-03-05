@@ -7,7 +7,7 @@ import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
 import format from 'pretty-format';
 import React, { useContext } from 'react';
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -50,7 +50,13 @@ function TutorGetInfoScreen2(props) {
         console.log(format(data));
         navigation.navigate('getAuthCodeScreen');
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log(error);
+        }
+      });
   };
 
   return (

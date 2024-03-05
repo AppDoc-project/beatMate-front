@@ -47,6 +47,8 @@ function LoginScreen(props) {
           Alert.alert('알림', '인증이 거부되었습니다. 적절한 인증수단을 가지고 다시 회원가입 해주세요.');
         } else if (error.response && error.response.data.code === 407) {
           Alert.alert('알림', '인증 절차가 진행 중입니다.');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log(format(error.response.data));
         }

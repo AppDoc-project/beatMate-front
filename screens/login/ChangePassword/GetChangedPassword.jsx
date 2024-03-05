@@ -4,7 +4,7 @@ import { changeNewPassword } from 'api/auth';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native';
+import { Alert, SafeAreaView } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -37,7 +37,13 @@ function GetChangedPassword({ route }) {
         console.log(format(data));
         navigation.navigate('loginScreen');
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('비밀번호 변경 실패', format(error));
+        }
+      });
   };
 
   GetChangedPassword.propTypes = {

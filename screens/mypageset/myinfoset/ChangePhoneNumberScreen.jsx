@@ -54,6 +54,8 @@ function ChangePhoneNumberScreen(props) {
             navigation.navigate('homeScreen');
           } else if (error.response && error.response.data.code === 400) {
             Alert.alert('알림', '값 검증에 실패하였습니다.');
+          } else if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
           } else {
             console.log(format(error.response));
             setIsError(true);

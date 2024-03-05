@@ -37,6 +37,8 @@ function TuteeGetInfoScreen(props) {
       .catch((error) => {
         if (error.response && error.response.data.code === 404) {
           Alert.alert('알림', '이미 존재하는 이메일입니다. 다른 이메일을 작성해주세요.');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log(format(error.response));
         }
@@ -83,7 +85,13 @@ function TuteeGetInfoScreen(props) {
         console.log(format(data));
         navigation.navigate('getAuthCodeScreen');
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log(error);
+        }
+      });
   };
 
   return (

@@ -115,6 +115,8 @@ const GetAuthCodeScreen = ({ route }) => {
           navigation.goBack();
         } else if (error.response && error.response.data.code === 402) {
           Alert.alert('알림', '인증번호가 틀렸습니다. 다시 인증해주세요.');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log(format(error.response.data));
         }

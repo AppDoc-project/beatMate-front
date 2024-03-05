@@ -33,6 +33,8 @@ function GetAuthEmail(props) {
       .catch((error) => {
         if (error.response && error.response.data.code === 405) {
           Alert.alert('알림', '존재하지 않는 회원입니다.');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log(format(error.response.data));
         }
