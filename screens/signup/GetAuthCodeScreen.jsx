@@ -117,6 +117,8 @@ function GetAuthCodeScreen(props) {
             Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
           } else {
             console.log(error);
+            Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+            navigation.navigate('loginScreen');
           }
         });
       // 타이머를 초기화하고 3분으로 재설정
@@ -139,6 +141,8 @@ function GetAuthCodeScreen(props) {
             Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
           } else {
             console.log(error);
+            Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+            navigation.navigate('loginScreen');
           }
         });
     }
@@ -171,6 +175,8 @@ function GetAuthCodeScreen(props) {
             Alert.alert('알림', '인증번호가 틀렸습니다. 다시 인증해주세요.');
           } else {
             console.log(error);
+            Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+            navigation.navigate('loginScreen');
           }
         });
     } else if (userType === 'tutee') {
@@ -190,6 +196,8 @@ function GetAuthCodeScreen(props) {
             Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
           } else {
             console.log(format(error.response.data));
+            Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+            navigation.navigate('loginScreen');
           }
         });
     }

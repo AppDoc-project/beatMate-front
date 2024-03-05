@@ -42,6 +42,8 @@ function GetChangedPassword({ route }) {
           Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log('비밀번호 변경 실패', format(error));
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('loginScreen');
         }
       });
   };

@@ -70,6 +70,8 @@ function TutorProfileScreen() {
           Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log('강사 상세정보 가져오기', format(error.response));
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
           setIsError(true);
         }
         setIsLoading(false);
@@ -103,6 +105,8 @@ function TutorProfileScreen() {
           Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log('강사 찜하기 실패', error);
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
           setIsLikeError(true);
         }
         setIsLikeLoading(false);
@@ -146,6 +150,8 @@ function TutorProfileScreen() {
           Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log('채팅방 만들기', format(error.response));
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
           setIsChatError(true);
         }
         setIsChatLoading(false);

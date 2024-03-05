@@ -53,6 +53,8 @@ function CommunityOnePostScreen({ route }) {
           Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log('댓글 작성 실패', error);
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
           setIsError(true);
         }
         setIsLoading(false);
@@ -83,6 +85,8 @@ function CommunityOnePostScreen({ route }) {
             Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
           } else {
             console.log('단일 게시물 불러오기', format(error.response));
+            Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+            navigation.navigate('homeScreen');
             setPostIsError(true);
           }
           setPostIsLoading(false);
