@@ -1,8 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
+import { getRemoteLessonInfo } from 'api/lesson';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
+import format from 'pretty-format';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
@@ -10,6 +13,7 @@ import styled from 'styled-components';
 CurrentOnlineLesson.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   onGoingLessonInfo: PropTypes.shape({
+    id: PropTypes.number.isRequired,
     tuteeName: PropTypes.string.isRequired,
     tutorName: PropTypes.string.isRequired,
   }).isRequired,
@@ -17,8 +21,26 @@ CurrentOnlineLesson.propTypes = {
 
 function CurrentOnlineLesson({ toggleModal, onGoingLessonInfo }) {
   const navigation = useNavigation();
+
+  // 화상레슨 정보 불러오기
   const onPressOnlineLesson = () => {
-    navigation.navigate('videoScreen');
+    getRemoteLessonInfo(onGoingLessonInfo.id)
+      .then((res) => {
+        console.log('화상레슨 정보', format(res.data.object));
+        navigation.navigate('videoScreen', { remoteLessonInfo: res.data.object });
+      })
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('화상레슨 정보 불러오기 실패', error);
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+        }
+      });
   };
 
   const {

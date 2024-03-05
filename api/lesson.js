@@ -114,4 +114,31 @@ const finishLesson = async (lessonId) => {
   }
 };
 
-export { notWriteLesson, getAllLessonInfo, onGoingLesson, writeReview, writeFeedBack, finishLesson };
+// 화상 레슨 정보 가져오기
+const getRemoteLessonInfo = async (lessonId) => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+
+    const response = await client.get(`/lesson/${lessonId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export {
+  notWriteLesson,
+  getAllLessonInfo,
+  onGoingLesson,
+  writeReview,
+  writeFeedBack,
+  finishLesson,
+  getRemoteLessonInfo,
+};

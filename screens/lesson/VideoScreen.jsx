@@ -1,206 +1,137 @@
-import LessonInfoModal from '@components/lesson/currentLessonItem/LessonInfoModal';
-import { useNavigation } from '@react-navigation/native';
-import { COLORS } from 'colors';
-import { UserInfo } from 'context/UserInfoContext';
-import React, { useContext, useState } from 'react';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import styled from 'styled-components';
+import { useRoute } from '@react-navigation/native';
+import React, { useRef, useState, useEffect } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+// import { ClientRoleType, createAgoraRtcEngine, RtcSurfaceView, ChannelProfileType } from 'react-native-agora';
 
-function VideoScreen(props) {
-  const {
-    loginUserInfo: [loginUser],
-  } = useContext(UserInfo);
-  const isTutor = loginUser.isTutor;
+const VideoScreen = () => {
+  const route = useRoute();
+  const { remoteLessonInfo } = route.params;
 
-  const navigation = useNavigation();
+  console.log('ㅠㅠ', remoteLessonInfo);
 
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [isMicOn, setIsMicOn] = useState(true);
-  const [isCameraOn, setIsCameraOn] = useState(true);
-  const [isVideoBig, setIsVideoBig] = useState(false);
+  // const agoraEngineRef = useRef(); // Agora engine instance
+  // const [isJoined, setIsJoined] = useState(false); // Indicates if the local user has joined the channel
+  // const [remoteUid, setRemoteUid] = useState(0); // Uid of the remote user
+  // const [message, setMessage] = useState(''); // Message to the user
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
+  // const appId = '<--Insert app ID here-->';
+  // const channelName = '<--Insert channel name here-->';
+  // const token = '<--Insert authentication token here-->';
+  // const uid = 0;
 
-  const onPressMicOn = () => {
-    setIsMicOn((prevState) => !prevState);
-  };
+  // useEffect(() => {
+  //   // Initialize Agora engine when the app starts
+  //   setupVideoSDKEngine();
+  // });
 
-  const onPressCameraOn = () => {
-    setIsCameraOn((prevState) => !prevState);
-  };
+  // const setupVideoSDKEngine = async () => {
+  //   try {
+  //     agoraEngineRef.current = createAgoraRtcEngine();
+  //     const agoraEngine = agoraEngineRef.current;
+  //     agoraEngine.registerEventHandler({
+  //       onJoinChannelSuccess: () => {
+  //         showMessage('Successfully joined the channel ' + channelName);
+  //         setIsJoined(true);
+  //       },
+  //       onUserJoined: (_connection, Uid) => {
+  //         showMessage('Remote user joined with uid ' + Uid);
+  //         setRemoteUid(Uid);
+  //       },
+  //       onUserOffline: (_connection, Uid) => {
+  //         showMessage('Remote user left the channel. uid: ' + Uid);
+  //         setRemoteUid(0);
+  //       },
+  //     });
+  //     agoraEngine.initialize({
+  //       appId: appId,
+  //       channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
+  //     });
+  //     agoraEngine.enableVideo();
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
-  const toggleVideoSize = () => {
-    setIsVideoBig((prevState) => !prevState);
-  };
+  // const join = async () => {
+  //   if (isJoined) {
+  //     return;
+  //   }
+  //   try {
+  //     agoraEngineRef.current?.setChannelProfile(ChannelProfileType.ChannelProfileCommunication);
+  //     agoraEngineRef.current?.startPreview();
+  //     agoraEngineRef.current?.joinChannel(token, channelName, uid, {
+  //       clientRoleType: ClientRoleType.ClientRoleBroadcaster,
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
-  const onPressLessonClose = () => {
-    navigation.navigate('lessonMainScreen');
-  };
+  // const leave = () => {
+  //   try {
+  //     agoraEngineRef.current?.leaveChannel();
+  //     setRemoteUid(0);
+  //     setIsJoined(false);
+  //     showMessage('You left the channel');
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   return (
-    <Container>
-      <Info>
-        <LessonInfoBtn onPress={toggleModal}>
-          <LessonInfoBtnText>레슨 정보 확인하기</LessonInfoBtnText>
-        </LessonInfoBtn>
-      </Info>
-      <Video>
-        <Video1 big={isVideoBig}></Video1>
-        <Video2 onPress={toggleVideoSize} big={isVideoBig}></Video2>
-      </Video>
-      <Btns>
-        <MicBtn onPress={onPressMicOn}>
-          <FontAwesome5 name={isMicOn ? 'microphone' : 'microphone-slash'} size={28} />
-        </MicBtn>
-        <VideoBtn onPress={onPressCameraOn} isTutor={isTutor}>
-          <FontAwesome5 name={isCameraOn ? 'video' : 'video-slash'} size={26} />
-        </VideoBtn>
-        {isTutor && (
-          <LessonCloseBtn onPress={onPressLessonClose}>
-            <LessonCloseText>레슨 종료</LessonCloseText>
-          </LessonCloseBtn>
+    <SafeAreaView style={styles.main}>
+      {/* <Text style={styles.head}>Agora Video Calling Quickstart</Text>
+      <View style={styles.btnContainer}>
+        <Text onPress={join} style={styles.button}>
+          Join
+        </Text>
+        <Text onPress={leave} style={styles.button}>
+          Leave
+        </Text>
+      </View>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContainer}>
+        {isJoined ? (
+          <React.Fragment key={0}>
+            <RtcSurfaceView canvas={{ uid: 0 }} style={styles.videoView} />
+            <Text>Local user uid: {uid}</Text>
+          </React.Fragment>
+        ) : (
+          <Text>Join a channel</Text>
         )}
-      </Btns>
-      {isModalVisible && <LessonInfoModal closeModal={toggleModal} />}
-    </Container>
+        {isJoined && remoteUid !== 0 ? (
+          <React.Fragment key={remoteUid}>
+            <RtcSurfaceView canvas={{ uid: remoteUid }} style={styles.videoView} />
+            <Text>Remote user uid: {remoteUid}</Text>
+          </React.Fragment>
+        ) : (
+          <Text>Waiting for a remote user to join</Text>
+        )}
+        <Text style={styles.info}>{message}</Text>
+      </ScrollView> */}
+    </SafeAreaView>
   );
-}
 
-const Container = styled.View`
-  flex: 1;
-  background-color: ${COLORS.white};
-`;
+  // function showMessage(msg) {
+  //   setMessage(msg);
+  // }
+};
 
-const Info = styled.View`
-  flex: 0.06;
-  margin: ${RFValue(42)}px 0 ${RFValue(10)}px 0;
-`;
-
-const LessonInfoBtn = styled.TouchableOpacity`
-  width: ${wp(32)}px;
-  height: ${hp(5)}px;
-  border-radius: ${RFValue(10)}px;
-  background-color: ${COLORS.subMiddleblue};
-
-  justify-content: center;
-  align-items: center;
-
-  margin-left: ${RFValue(42)}px;
-`;
-
-const LessonInfoBtnText = styled.Text`
-  font-size: ${RFValue(12)}px;
-  font-weight: 500;
-  color: ${COLORS.white};
-`;
-
-const Video = styled.View`
-  flex: 0.87;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Video1 = styled.View`
-  width: ${(props) => (props.big ? RFValue(320) : RFValue(260))}px;
-  height: ${(props) => (props.big ? RFValue(430) : RFValue(260))}px;
-  background-color: lightgray;
-  margin: ${(props) => (props.big ? RFValue(5) : RFValue(10))}px;
-`;
-
-const Video2 = styled.TouchableOpacity`
-  width: ${(props) => (props.big ? RFValue(100) : RFValue(260))}px;
-  height: ${(props) => (props.big ? RFValue(100) : RFValue(260))}px;
-  background-color: lightgray;
-  margin: ${(props) => (props.big ? RFValue(5) : RFValue(10))}px;
-`;
-
-const Btns = styled.View`
-  flex: 0.07;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin: ${RFValue(5)}px 0 ${RFValue(5)}px 0;
-`;
-
-const MicBtn = styled.TouchableOpacity`
-  width: ${RFValue(40)}px;
-  height: ${RFValue(40)}px;
-  border-width: ${RFValue(2)}px;
-  border-color: ${COLORS.main};
-  border-radius: 50%;
-
-  justify-content: center;
-  align-items: center;
-
-  margin-right: ${RFValue(35)}px;
-`;
-
-const VideoBtn = styled.TouchableOpacity`
-  width: ${RFValue(40)}px;
-  height: ${RFValue(40)}px;
-  border-width: ${RFValue(2)}px;
-  border-color: ${COLORS.main};
-  border-radius: 50%;
-
-  justify-content: center;
-  align-items: center;
-
-  margin-right: ${(props) => (props.isTutor ? RFValue(35) : 0)}px;
-`;
-
-const LessonCloseBtn = styled.TouchableOpacity`
-  width: ${wp(22)}px;
-  height: ${hp(4)}px;
-  border-radius: ${RFValue(10)}px;
-  background-color: ${COLORS.main};
-
-  justify-content: center;
-  align-items: center;
-`;
-
-const LessonCloseText = styled.Text`
-  font-size: ${RFValue(12)}px;
-  font-weight: 500;
-  color: ${COLORS.white};
-`;
+const styles = StyleSheet.create({
+  button: {
+    paddingHorizontal: 25,
+    paddingVertical: 4,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    backgroundColor: '#0055cc',
+    margin: 5,
+  },
+  main: { flex: 1, alignItems: 'center' },
+  scroll: { flex: 1, backgroundColor: '#ddeeff', width: '100%' },
+  scrollContainer: { alignItems: 'center' },
+  videoView: { width: '90%', height: 200 },
+  btnContainer: { flexDirection: 'row', justifyContent: 'center' },
+  head: { fontSize: 20 },
+  info: { backgroundColor: '#ffffe0', color: '#0000ff' },
+});
 
 export default VideoScreen;
-
-// import 'expo-dev-client';
-// import AgoraUIKit from 'agora-rn-uikit';
-// import PropTypes from 'prop-types';
-// import React, { useState } from 'react';
-
-// function VideoScreen({ connectionData, rtcCallbacks }) {
-//   const [videoCall, setVideoCall] = useState(true);
-
-//   const props = {
-//     connectionData: {
-//       appId: '8a28d57155f14f6eba0cfe4cdc71e001',
-//       channel: 'test',
-//       ...connectionData,
-//     },
-//     rtcCallbacks: {
-//       EndCall: () => setVideoCall(false),
-//       ...rtcCallbacks,
-//     },
-//   };
-
-//   return videoCall ? <AgoraUIKit connectionData={props.connectionData} rtcCallbacks={props.rtcCallbacks} /> : null;
-// }
-
-// VideoScreen.propTypes = {
-//   connectionData: PropTypes.shape({
-//     appId: PropTypes.string.isRequired,
-//     channel: PropTypes.string.isRequired,
-//   }),
-//   rtcCallbacks: PropTypes.shape({
-//     EndCall: PropTypes.func.isRequired,
-//   }),
-// };
-
-// export default VideoScreen;
