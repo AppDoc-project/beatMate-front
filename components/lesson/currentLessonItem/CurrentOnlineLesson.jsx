@@ -4,7 +4,7 @@ import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -37,7 +37,7 @@ function CurrentOnlineLesson({ toggleModal, onGoingLessonInfo }) {
           Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log('화상레슨 정보 불러오기 실패', error);
-          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          Alert.alert('알림', ' 연결을 확인해주세요.');
           navigation.navigate('homeScreen');
         }
       });

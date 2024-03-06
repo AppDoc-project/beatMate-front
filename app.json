@@ -16,7 +16,16 @@
       "bundleIdentifier": "com.kelly62.appDocfront",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "Access the microphone.",
-        "NSCameraUsageDescription": "Access the camera."
+        "NSCameraUsageDescription": "Access the camera.",
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true,
+          "NSExceptionDomains": {
+            "beatmate.zapto.org": {
+              "NSIncludesSubdomains": true,
+              "NSExceptionAllowsInsecureHTTPLoads": true
+            }
+          }
+        }
       },
       "permissions": {
         "camera": true,
