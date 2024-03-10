@@ -245,3 +245,18 @@ const InfoText = styled.Text`
 `;
 
 export default VideoScreen;
+
+// import { useRoute } from '@react-navigation/native';
+// import React from 'react';
+// import { View } from 'react-native';
+
+// const VideoScreen = () => {
+//   const route = useRoute();
+//   const { remoteLessonInfo } = route.params;
+
+//   console.log(remoteLessonInfo);
+
+//   return <View></View>;
+// };
+
+// export default VideoScreen;
