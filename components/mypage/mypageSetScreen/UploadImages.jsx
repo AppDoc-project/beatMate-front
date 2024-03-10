@@ -16,6 +16,8 @@ function UploadImages({ addresses, setAddresses }) {
   const navigation = useNavigation();
 
   const uploadImage = async () => {
+    console.log('Image Picker Status:', status); // 확인을 위한 로그 추가
+
     if (!status?.granted) {
       const permission = await requestPermission();
       if (!permission.granted) {
@@ -24,7 +26,7 @@ function UploadImages({ addresses, setAddresses }) {
     }
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
+      allowsEditing: true,
       quality: 0.1,
       aspect: [1, 1],
       base64: false,
@@ -33,7 +35,8 @@ function UploadImages({ addresses, setAddresses }) {
     });
 
     if (!result.canceled) {
-      setSelectedImage(result);
+      setSelectedImage(result.assets[0].uri); // 이미지 URI를 setSelectedImage에 전달
+      console.log('Selected Images:', result.assets[0].uri);
     }
   };
 
@@ -44,7 +47,7 @@ function UploadImages({ addresses, setAddresses }) {
 
     const formData = new FormData();
     const file = {
-      uri: selectedImage.uri,
+      uri: selectedImage,
       type: 'image/jpeg',
       name: 'selectedImage.jpg',
     };
@@ -79,7 +82,7 @@ function UploadImages({ addresses, setAddresses }) {
         {selectedImage && (
           <TouchableOpacity onPress={removeImage}>
             <View style={styles.imageContainer}>
-              <Image source={{ uri: selectedImage.uri }} style={styles.image} />
+              <Image source={{ uri: selectedImage }} style={styles.image} />
             </View>
           </TouchableOpacity>
         )}

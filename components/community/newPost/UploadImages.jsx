@@ -4,7 +4,7 @@ import { postImages } from 'api/commity';
 import { COLORS } from 'colors';
 import * as ImagePicker from 'expo-image-picker';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, Image, TouchableOpacity, View, Alert } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
@@ -33,7 +33,7 @@ function UploadImages({ addresses, setAddresses }) {
     });
 
     if (!result.canceled) {
-      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, result]);
+      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, result.assets[0].uri]);
     }
   };
 
@@ -41,7 +41,7 @@ function UploadImages({ addresses, setAddresses }) {
     const formData = new FormData();
     selectedImages.forEach((image, index) => {
       const file = {
-        uri: image.uri,
+        uri: image,
         type: 'image/jpeg',
         name: `${index}.jpg`,
       };
@@ -79,13 +79,17 @@ function UploadImages({ addresses, setAddresses }) {
 
   const remainingSlots = 5 - selectedImages.length;
 
+  useEffect(() => {
+    console.log('Selected Images:', selectedImages);
+  }, [selectedImages]); // selectedImages가 업데이트될 때마다 useEffect 실행
+
   return (
     <Container>
       <View style={styles.row}>
         {selectedImages.map((image, index) => (
           <TouchableOpacity key={index} onPress={() => removeImage(index)}>
             <View style={styles.imageContainer}>
-              <Image source={{ uri: image.uri }} style={styles.image} />
+              <Image source={{ uri: image }} style={styles.image} />
             </View>
           </TouchableOpacity>
         ))}

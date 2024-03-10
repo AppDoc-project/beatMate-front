@@ -41,7 +41,7 @@ function ImageUpload() {
     });
 
     if (!result.canceled) {
-      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, result]);
+      setSelectedImages((prevSelectedImages) => [...prevSelectedImages, result.assets[0].uri]);
     }
   };
 
@@ -50,7 +50,7 @@ function ImageUpload() {
     const formData = new FormData();
     selectedImages.forEach((image, index) => {
       const file = {
-        uri: image.uri,
+        uri: image,
         type: 'image/jpeg', // 이미지 타입 설정 (JPEG 예시)
         name: `${index}.jpg`, // 파일명 설정
       };
@@ -103,7 +103,7 @@ function ImageUpload() {
         {selectedImages.map((image, index) => (
           <TouchableOpacity key={index} onPress={() => removeImage(index)}>
             <View style={styles.imageContainer}>
-              <Image source={{ uri: image.uri }} style={styles.image} />
+              <Image source={{ uri: image }} style={styles.image} />
             </View>
           </TouchableOpacity>
         ))}
