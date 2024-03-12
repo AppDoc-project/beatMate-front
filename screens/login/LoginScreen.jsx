@@ -107,7 +107,7 @@ function LoginScreen(props) {
       </Email>
       <Password>
         <MainText>비밀번호</MainText>
-        <Input value={password} onChangeText={onChangePassword} placeholderTextColor="gray" />
+        <Input value={password} secureTextEntry onChangeText={onChangePassword} placeholderTextColor="gray" />
       </Password>
       <LoginBtn
         fontColor={email && password ? 'white' : 'navy'}

@@ -148,6 +148,7 @@ function TuteeGetInfoScreen(props) {
             <SubTxt>최소 8자, 최대 18자 가능 / 알파벳, 숫자, 특수문자 반드시 포함</SubTxt>
             <Input
               value={password}
+              secureTextEntry
               onChangeText={onChangePassword}
               placeholder="( 예시 : kejwi375@! )"
               placeholderTextColor="lightgray"

@@ -34,7 +34,7 @@ function CommunityPostingItem({ post }) {
     navigation.navigate('communityOnePostScreen', { postId: post.id, communityName: post.communityName });
   };
 
-  const formattedDate = post.createdAt.substring(0, 10).replace(/:/g, '.');
+  const formattedDate = post.createdAt.substring(0, 10).replace(/:/g, '.') + ' ' + post.createdAt.substring(11, 16);
 
   return (
     <Container>

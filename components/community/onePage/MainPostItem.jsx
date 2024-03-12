@@ -34,7 +34,9 @@ MainPostitem.propTypes = {
 };
 
 function MainPostitem({ postInfo }) {
-  const formattedDate = postInfo && postInfo.createdAt.substring(0, 10).replace(/:/g, '.');
+  const formattedDate =
+    postInfo && postInfo.createdAt.substring(0, 10).replace(/:/g, '.') + ' ' + postInfo.createdAt.substring(11, 16);
+
   const navigation = useNavigation();
 
   const {

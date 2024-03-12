@@ -65,7 +65,7 @@ function GetChangedPassword({ route }) {
         <Component>
           <Txt>변경하실 비밀번호를 입력해주세요.</Txt>
           <SubTxt>최소 8자, 최대 18자 가능 / 알파벳, 숫자, 특수문자 반드시 포함</SubTxt>
-          <Input value={changedPassword} onChangeText={onChangePassword} />
+          <Input value={changedPassword} secureTextEntry onChangeText={onChangePassword} />
         </Component>
         <BtnGroup>
           <ContinueBtn
