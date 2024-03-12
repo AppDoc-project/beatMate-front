@@ -16,13 +16,19 @@ function ReservationFormScreen() {
 
   const navigation = useNavigation();
 
-  const [date, setDate] = useState('');
+  const [year, setYear] = useState('');
+  const [month, setMonth] = useState('');
+  const [day, setDay] = useState('');
+
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [lessonType, setLessonType] = useState('');
   const [memo, setMemo] = useState('');
 
-  const onChangeDate = (text) => setDate(text);
+  const onChangeYear = (text) => setYear(text);
+  const onChangeMonth = (text) => setMonth(text);
+  const onChangeDay = (text) => setDay(text);
+
   const onChangeStartTime = (text) => setStartTime(text);
   const onChangeEndTime = (text) => setEndTime(text);
   const onChangeMemo = (text) => setMemo(text);
@@ -31,13 +37,14 @@ function ReservationFormScreen() {
   const [isOffline, setisOffline] = useState(false);
 
   const onPressAlertBtn = () => {
-    if (!date.includes(':')) {
-      Alert.alert('알림', '예시와 같은 형식으로 레슨 날짜를 작성해주세요.');
+    if (!(year?.length === 4 && month?.length === 2 && day?.length === 2)) {
+      Alert.alert('알림', '날짜를 모두 예시의 형식과 같이 작성해주세요.');
     }
   };
 
   // 예약 생성하기 api
   const onPressReserveBtn = () => {
+    const date = year + ':' + month + ':' + day;
     const data = {
       tuteeId: tuteeId,
       lessonType: lessonType,
@@ -111,12 +118,30 @@ function ReservationFormScreen() {
           <Component>
             <Txt>레슨을 진행하실 날짜를 알려주세요.</Txt>
             <SubTxt>예시와 같은 형식으로 작성해주세요. (필수)</SubTxt>
-            <Input
-              value={date}
-              onChangeText={onChangeDate}
-              placeholder="( 예시. 2023:11:12 )"
-              placeholderTextColor="lightgray"
-            />
+            <SelectOptionWrapper>
+              <DateRow>
+                <DateInput
+                  value={year}
+                  onChangeText={onChangeYear}
+                  placeholder="2024"
+                  placeholderTextColor="lightgray"
+                />
+                <DateTxt>년</DateTxt>
+              </DateRow>
+              <DateRow>
+                <DateInput
+                  value={month}
+                  onChangeText={onChangeMonth}
+                  placeholder="08"
+                  placeholderTextColor="lightgray"
+                />
+                <DateTxt>월</DateTxt>
+              </DateRow>
+              <DateRow>
+                <DateInput value={day} onChangeText={onChangeDay} placeholder="01" placeholderTextColor="lightgray" />
+                <DateTxt>일</DateTxt>
+              </DateRow>
+            </SelectOptionWrapper>
           </Component>
           <Component>
             <Txt>레슨 시작 시간을 알려주세요.</Txt>
@@ -171,8 +196,8 @@ function ReservationFormScreen() {
           </Component>
         </Info>
         <ReserveBtn
-          fontColor={date && startTime && endTime && lessonType ? 'white' : 'navy'}
-          backColor={date && startTime && endTime && lessonType ? 'navy' : 'white'}
+          fontColor={year && month && day && startTime && endTime && lessonType ? 'white' : 'navy'}
+          backColor={year && month && day && startTime && endTime && lessonType ? 'navy' : 'white'}
           width={wp(100)}
           marginBottom={hp(6.15)}
           justifyContent="center"
@@ -237,6 +262,35 @@ const Txt = styled.Text`
   font-size: ${RFValue(14)}px;
 `;
 
+const DateRow = styled.View`
+  flex-direction: row;
+  top: ${hp(1.5)}px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const DateTxt = styled.Text`
+  font-weight: bold;
+  font-size: ${RFValue(12)}px;
+  margin-left: ${wp(2)}px;
+`;
+
+const DateInput = styled.TextInput`
+  background-color: transparent;
+  position: relative;
+
+  width: ${wp(20)}px;
+  height: auto;
+  border-radius: 8px;
+  border-color: lightgray;
+  border-width: 1px;
+
+  padding-left: ${RFValue(4)}px;
+  font-size: ${RFValue(12)}px;
+  font-weight: bold;
+  padding: ${RFValue(10)}px;
+`;
+
 const Input = styled.TextInput`
   background-color: transparent;
   position: relative;
@@ -258,6 +312,7 @@ const SelectOptionWrapper = styled.View`
   width: ${wp(90)}px;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const CategoryBtn = styled.TouchableOpacity`
