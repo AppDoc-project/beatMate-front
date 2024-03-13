@@ -2,10 +2,9 @@ import LessonInfoModal from '@components/lesson/currentLessonItem/LessonInfoModa
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import styled from 'styled-components';
 
 function VideoScreen(props) {
@@ -17,29 +16,39 @@ function VideoScreen(props) {
   const navigation = useNavigation();
 
   const [isModalVisible, setModalVisible] = useState(false);
-  const [isMicOn, setIsMicOn] = useState(true);
-  const [isCameraOn, setIsCameraOn] = useState(true);
-  const [isVideoBig, setIsVideoBig] = useState(false);
+  const [isMyVideoBig, setIsMyVideoBig] = useState(false);
+  const [isYourVideoBig, setIsYourVideoBig] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const onPressMicOn = () => {
-    setIsMicOn((prevState) => !prevState);
+  const toggleMyVideoSize = () => {
+    setIsMyVideoBig((prevState) => {
+      if (prevState && isYourVideoBig) {
+        setIsYourVideoBig(false);
+      }
+      return !prevState && !isYourVideoBig;
+    });
   };
 
-  const onPressCameraOn = () => {
-    setIsCameraOn((prevState) => !prevState);
-  };
-
-  const toggleVideoSize = () => {
-    setIsVideoBig((prevState) => !prevState);
+  const toggleYourVideoSize = () => {
+    setIsYourVideoBig((prevState) => {
+      if (prevState && isMyVideoBig) {
+        setIsMyVideoBig(false);
+      }
+      return !prevState && !isMyVideoBig;
+    });
   };
 
   const onPressLessonClose = () => {
     navigation.navigate('lessonMainScreen');
   };
+
+  useEffect(() => {
+    console.log('나', isMyVideoBig);
+    console.log('너', isYourVideoBig);
+  }, [isMyVideoBig, isYourVideoBig]);
 
   return (
     <Container>
@@ -47,24 +56,21 @@ function VideoScreen(props) {
         <LessonInfoBtn onPress={toggleModal}>
           <LessonInfoBtnText>레슨 정보 확인하기</LessonInfoBtnText>
         </LessonInfoBtn>
-      </Info>
-      <Video>
-        <Video1 big={isVideoBig}></Video1>
-        <Video2 onPress={toggleVideoSize} big={isVideoBig}></Video2>
-      </Video>
-      <Btns>
-        <MicBtn onPress={onPressMicOn}>
-          <FontAwesome5 name={isMicOn ? 'microphone' : 'microphone-slash'} size={28} />
-        </MicBtn>
-        <VideoBtn onPress={onPressCameraOn} isTutor={isTutor}>
-          <FontAwesome5 name={isCameraOn ? 'video' : 'video-slash'} size={26} />
-        </VideoBtn>
+
+        <LessonInfoBtn onPress={toggleModal}>
+          <LessonInfoBtnText>레슨 정보 확인하기</LessonInfoBtnText>
+        </LessonInfoBtn>
         {isTutor && (
           <LessonCloseBtn onPress={onPressLessonClose}>
             <LessonCloseText>레슨 종료</LessonCloseText>
           </LessonCloseBtn>
         )}
-      </Btns>
+      </Info>
+      <Video>
+        <MyVideo onPress={toggleMyVideoSize} meBig={isMyVideoBig} youBig={isYourVideoBig}></MyVideo>
+        <YourVideo onPress={toggleYourVideoSize} youBig={isYourVideoBig} meBig={isMyVideoBig}></YourVideo>
+      </Video>
+
       {isModalVisible && <LessonInfoModal closeModal={toggleModal} />}
     </Container>
   );
@@ -72,89 +78,24 @@ function VideoScreen(props) {
 
 const Container = styled.View`
   flex: 1;
-  background-color: ${COLORS.white};
+  background-color: ${COLORS.black};
+  justify-content: center;
+  align-items: center;
 `;
 
 const Info = styled.View`
-  flex: 0.06;
-  margin: ${RFValue(42)}px 0 ${RFValue(10)}px 0;
-`;
-
-const LessonInfoBtn = styled.TouchableOpacity`
-  width: ${wp(32)}px;
-  height: ${hp(5)}px;
-  border-radius: ${RFValue(10)}px;
-  background-color: ${COLORS.subMiddleblue};
-
-  justify-content: center;
-  align-items: center;
-
-  margin-left: ${RFValue(42)}px;
-`;
-
-const LessonInfoBtnText = styled.Text`
-  font-size: ${RFValue(12)}px;
-  font-weight: 500;
-  color: ${COLORS.white};
-`;
-
-const Video = styled.View`
-  flex: 0.87;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Video1 = styled.View`
-  width: ${(props) => (props.big ? RFValue(320) : RFValue(260))}px;
-  height: ${(props) => (props.big ? RFValue(430) : RFValue(260))}px;
-  background-color: lightgray;
-  margin: ${(props) => (props.big ? RFValue(5) : RFValue(10))}px;
-`;
-
-const Video2 = styled.TouchableOpacity`
-  width: ${(props) => (props.big ? RFValue(100) : RFValue(260))}px;
-  height: ${(props) => (props.big ? RFValue(100) : RFValue(260))}px;
-  background-color: lightgray;
-  margin: ${(props) => (props.big ? RFValue(5) : RFValue(10))}px;
-`;
-
-const Btns = styled.View`
-  flex: 0.07;
+  margin-top: ${hp(7)}px;
+  margin-right: ${wp(2)}px;
+  margin-left: ${wp(2)}px;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  margin: ${RFValue(5)}px 0 ${RFValue(5)}px 0;
-`;
-
-const MicBtn = styled.TouchableOpacity`
-  width: ${RFValue(40)}px;
-  height: ${RFValue(40)}px;
-  border-width: ${RFValue(2)}px;
-  border-color: ${COLORS.main};
-  border-radius: 50%;
-
-  justify-content: center;
-  align-items: center;
-
-  margin-right: ${RFValue(35)}px;
-`;
-
-const VideoBtn = styled.TouchableOpacity`
-  width: ${RFValue(40)}px;
-  height: ${RFValue(40)}px;
-  border-width: ${RFValue(2)}px;
-  border-color: ${COLORS.main};
-  border-radius: 50%;
-
-  justify-content: center;
-  align-items: center;
-
-  margin-right: ${(props) => (props.isTutor ? RFValue(35) : 0)}px;
+  width: ${wp(95)}px;
 `;
 
 const LessonCloseBtn = styled.TouchableOpacity`
   width: ${wp(22)}px;
-  height: ${hp(4)}px;
+  height: ${hp(5)}px;
   border-radius: ${RFValue(10)}px;
   background-color: ${COLORS.main};
 
@@ -166,6 +107,41 @@ const LessonCloseText = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 500;
   color: ${COLORS.white};
+`;
+
+const LessonInfoBtn = styled.TouchableOpacity`
+  width: ${wp(32)}px;
+  height: ${hp(5)}px;
+  border-radius: ${RFValue(10)}px;
+  background-color: ${COLORS.subMiddleblue};
+
+  justify-content: center;
+  align-items: center;
+`;
+
+const LessonInfoBtnText = styled.Text`
+  font-size: ${RFValue(12)}px;
+  font-weight: 500;
+  color: ${COLORS.white};
+`;
+
+const Video = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MyVideo = styled.TouchableOpacity`
+  width: ${(props) => (props.meBig ? `${wp(100)}px` : !props.meBig && !props.youBig ? `${wp(100)}px` : `${wp(30)}px`)};
+  height: ${(props) => (props.meBig ? `${hp(60)}px` : !props.meBig && !props.youBig ? `${hp(35)}px` : `${wp(30)}px`)};
+  background-color: lightgray;
+`;
+
+const YourVideo = styled.TouchableOpacity`
+  width: ${(props) => (props.youBig ? `${wp(100)}px` : !props.youBig && !props.meBig ? `${wp(100)}px` : `${wp(30)}px`)};
+  height: ${(props) => (props.youBig ? `${hp(60)}px` : !props.youBig && !props.meBig ? `${hp(35)}px` : `${wp(30)}px`)};
+  margin-top: ${hp(1)}px;
+  background-color: pink;
 `;
 
 export default VideoScreen;
