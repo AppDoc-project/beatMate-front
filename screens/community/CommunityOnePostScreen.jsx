@@ -21,7 +21,7 @@ function CommunityOnePostScreen({ route }) {
 
   const onPressPreviousBtn = () => {
     setComment('');
-    navigation.goBack();
+    navigation.navigate('communityScreen');
   };
 
   const { postId, communityName } = route.params;

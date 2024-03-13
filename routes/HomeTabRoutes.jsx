@@ -53,6 +53,12 @@ const HomeTabRoutes = () => {
                 <MaterialCommunityIcons name={'comment-text-multiple'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('community');
+            },
+          }}
         />
         <Tab.Screen
           name="chat"
@@ -70,6 +76,12 @@ const HomeTabRoutes = () => {
                 <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('chat');
+            },
+          }}
         />
         <Tab.Screen
           name="searchtutor"
@@ -86,6 +98,12 @@ const HomeTabRoutes = () => {
               ) : (
                 <Ionicons name={'search-sharp'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
+          }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('searchtutor');
+            },
           }}
         />
         <Tab.Screen
@@ -127,6 +145,12 @@ const HomeTabRoutes = () => {
                 <AntDesign name={'form'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('reservation');
+            },
+          }}
         />
         <Tab.Screen
           name="lesson"
@@ -144,6 +168,12 @@ const HomeTabRoutes = () => {
                 <Foundation name={'telephone'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('lesson');
+            },
+          }}
         />
         <Tab.Screen
           name="mypage"
@@ -160,6 +190,12 @@ const HomeTabRoutes = () => {
               ) : (
                 <Ionicons name={'person'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
+          }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('mypage');
+            },
           }}
         />
       </Tab.Navigator>
