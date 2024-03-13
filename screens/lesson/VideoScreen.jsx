@@ -17,9 +17,29 @@ const VideoScreen = () => {
   const { remoteLessonInfo } = route.params;
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isMyVideoBig, setIsMyVideoBig] = useState(false);
+  const [isYourVideoBig, setIsYourVideoBig] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+  };
+
+  const toggleMyVideoSize = () => {
+    setIsMyVideoBig((prevState) => {
+      if (prevState && isYourVideoBig) {
+        setIsYourVideoBig(false);
+      }
+      return !prevState && !isYourVideoBig;
+    });
+  };
+
+  const toggleYourVideoSize = () => {
+    setIsYourVideoBig((prevState) => {
+      if (prevState && isMyVideoBig) {
+        setIsMyVideoBig(false);
+      }
+      return !prevState && !isMyVideoBig;
+    });
   };
 
   const onPressLessonClose = () => {
@@ -213,44 +233,40 @@ const VideoScreen = () => {
   return (
     <MainContainer>
       <Info>
-        <ButtonContainer>
-          {!isJoined && <Button onPress={join}>레슨 참여하기</Button>}
-          {isJoined && <Button onPress={leave}>Leave</Button>}
-          <LessonInfoBtn onPress={toggleModal}>
-            <LessonInfoBtnText>레슨 정보 확인하기</LessonInfoBtnText>
-          </LessonInfoBtn>
-        </ButtonContainer>
-      </Info>
-      <ScrollContainer contentContainerStyle={{ alignItems: 'center' }}>
-        {isJoined ? (
-          <React.Fragment key={0}>
-            <VideoView big={isVideoBig}>
-              <RtcSurfaceView canvas={{ uid: 0 }} style={{ width: '100%', height: '100%' }} />
-            </VideoView>
-            <Text>Local user uid: {uid}</Text>
-          </React.Fragment>
-        ) : (
-          <Text>Join a channel</Text>
-        )}
-        {isJoined && remoteUid !== 0 ? (
-          <React.Fragment key={remoteUid}>
-            <VideoView>
-              <RtcSurfaceView canvas={{ uid: remoteUid }} style={{ width: '100%', height: '100%' }} />
-            </VideoView>
-            <Text>Remote user uid: {remoteUid}</Text>
-          </React.Fragment>
-        ) : (
-          <Text>Waiting for a remote user to join</Text>
-        )}
-        <InfoText>{message}</InfoText>
-      </ScrollContainer>
-      <Btns>
+        {!isJoined && <Button onPress={join}>레슨 참여하기</Button>}
+        {isJoined && <Button onPress={leave}>나가기</Button>}
+        <LessonInfoBtn onPress={toggleModal}>
+          <LessonInfoBtnText>레슨 정보 확인하기</LessonInfoBtnText>
+        </LessonInfoBtn>
         {isTutor && (
           <LessonCloseBtn onPress={onPressLessonClose}>
             <LessonCloseText>레슨 종료</LessonCloseText>
           </LessonCloseBtn>
         )}
-      </Btns>
+      </Info>
+      <ScrollContainer contentContainerStyle={{ alignItems: 'center', flex: 1 }}>
+        {isJoined ? (
+          <React.Fragment key={0}>
+            <MyVideo onPress={toggleMyVideoSize} meBig={isMyVideoBig} youBig={isYourVideoBig}>
+              <RtcSurfaceView canvas={{ uid: 0 }} style={{ width: '100%', height: '100%' }} />
+            </MyVideo>
+            <Text>Local user uid: {uid}</Text>
+          </React.Fragment>
+        ) : (
+          <Text>레슨에 참여하세요.</Text>
+        )}
+        {isJoined && remoteUid !== 0 ? (
+          <React.Fragment key={remoteUid}>
+            <YourVideo onPress={toggleYourVideoSize} youBig={isYourVideoBig} meBig={isMyVideoBig}>
+              <RtcSurfaceView canvas={{ uid: remoteUid }} style={{ width: '100%', height: '100%' }} />
+            </YourVideo>
+            <Text>Remote user uid: {remoteUid}</Text>
+          </React.Fragment>
+        ) : (
+          <Text>상대방이 입장할때까지 기다려주세요.</Text>
+        )}
+        <InfoText>{message}</InfoText>
+      </ScrollContainer>
       {isModalVisible && <LessonInfoModal closeModal={toggleModal} />}
     </MainContainer>
   );
@@ -266,70 +282,18 @@ const MainContainer = styled.SafeAreaView`
 `;
 
 const Info = styled.View`
-  flex: 0.03;
-  margin: ${hp(5)}px 0 ${wp(5)}px 0;
-`;
-
-const LessonInfoBtn = styled.TouchableOpacity`
-  width: ${wp(32)}px;
-  height: ${hp(5)}px;
-  border-radius: ${RFValue(10)}px;
-  background-color: ${COLORS.subMiddleblue};
-
-  justify-content: center;
-  align-items: center;
-
-  margin-left: ${wp(5)}px;
-  margin-right: ${wp(5)}px;
-`;
-
-const LessonInfoBtnText = styled.Text`
-  font-size: ${RFValue(12)}px;
-  font-weight: 500;
-  color: ${COLORS.white};
-`;
-
-const Button = styled.Text`
-  padding-horizontal: 25px;
-  padding-vertical: 4px;
-  font-weight: bold;
-  color: #ffffff;
-  background-color: #0055cc;
-  margin-right: ${wp(5)}px;
-`;
-
-const ScrollContainer = styled.ScrollView`
-  flex: 1;
-  background-color: #ddeeff;
-  width: 100%;
-`;
-
-const VideoView = styled.View`
-  width: 90%;
-  height: 200px;
-`;
-
-const ButtonContainer = styled.View`
+  margin-top: ${hp(7)}px;
+  margin-right: ${wp(2)}px;
+  margin-left: ${wp(2)}px;
   flex-direction: row;
-  justify-content: center;
-`;
-
-const InfoText = styled.Text`
-  background-color: #ffffe0;
-  color: #0000ff;
-`;
-
-const Btns = styled.View`
-  flex: 0.07;
-  flex-direction: row;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  margin-top: ${hp(5)}px;
+  width: ${wp(95)}px;
 `;
 
 const LessonCloseBtn = styled.TouchableOpacity`
   width: ${wp(22)}px;
-  height: ${hp(4)}px;
+  height: ${hp(5)}px;
   border-radius: ${RFValue(10)}px;
   background-color: ${COLORS.main};
 
@@ -341,6 +305,54 @@ const LessonCloseText = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 500;
   color: ${COLORS.white};
+`;
+
+const LessonInfoBtn = styled.TouchableOpacity`
+  width: ${wp(32)}px;
+  height: ${hp(5)}px;
+  border-radius: ${RFValue(10)}px;
+  background-color: ${COLORS.subMiddleblue};
+
+  justify-content: center;
+  align-items: center;
+`;
+
+const LessonInfoBtnText = styled.Text`
+  font-size: ${RFValue(12)}px;
+  font-weight: 500;
+  color: ${COLORS.white};
+`;
+
+const Button = styled.Text`
+  width: ${wp(22)}px;
+  height: ${hp(5)}px;
+  border-radius: ${RFValue(10)}px;
+  background-color: ${COLORS.subLightblue};
+
+  justify-content: center;
+  align-items: center;
+`;
+
+const ScrollContainer = styled.ScrollView`
+  flex: 1;
+  background-color: ${COLORS.black};
+  width: 100%;
+`;
+
+const MyVideo = styled.TouchableOpacity`
+  width: ${(props) => (props.meBig ? `${wp(100)}px` : !props.meBig && !props.youBig ? `${wp(100)}px` : `${wp(30)}px`)};
+  height: ${(props) => (props.meBig ? `${hp(60)}px` : !props.meBig && !props.youBig ? `${hp(35)}px` : `${wp(30)}px`)};
+`;
+
+const YourVideo = styled.TouchableOpacity`
+  width: ${(props) => (props.youBig ? `${wp(100)}px` : !props.youBig && !props.meBig ? `${wp(100)}px` : `${wp(30)}px`)};
+  height: ${(props) => (props.youBig ? `${hp(60)}px` : !props.youBig && !props.meBig ? `${hp(35)}px` : `${wp(30)}px`)};
+  margin-top: ${hp(1)}px;
+`;
+
+const InfoText = styled.Text`
+  background-color: #ffffe0;
+  color: #0000ff;
 `;
 
 export default VideoScreen;
