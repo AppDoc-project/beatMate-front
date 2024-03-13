@@ -56,4 +56,22 @@ const deleteReserve = async (reservationId) => {
   }
 };
 
-export { makeReserve, getReserveList, deleteReserve };
+// 다가오는 예약 가져오기
+const getUpcomingReserve = async () => {
+  try {
+    const token = await AsyncStorage.getItem('access_token');
+    console.log(token);
+    const response = await client.get(`/tutor/reservation/upcoming`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export { makeReserve, getReserveList, deleteReserve, getUpcomingReserve };
