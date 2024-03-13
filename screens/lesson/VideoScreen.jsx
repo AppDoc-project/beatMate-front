@@ -5,7 +5,7 @@ import { finishLesson } from 'api/lesson';
 import { COLORS } from 'colors';
 import { UserInfo } from 'context/UserInfoContext';
 import React, { useRef, useState, useEffect, useContext } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { ClientRoleType, createAgoraRtcEngine, RtcSurfaceView, ChannelProfileType } from 'react-native-agora';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -47,7 +47,6 @@ const VideoScreen = () => {
       socketRef.current.disconnect();
       leave();
 
-      showMessage('소켓 없음');
       console.log('소켓 없음');
     }
 
@@ -55,7 +54,6 @@ const VideoScreen = () => {
       .then((res) => {
         const { data } = res;
         console.log(data);
-        showMessage('레슨 종료 완료');
         navigation.navigate('lessonMainScreen');
       })
       .catch((error) => {
@@ -88,7 +86,6 @@ const VideoScreen = () => {
   const agoraEngineRef = useRef();
   const [isJoined, setIsJoined] = useState(false);
   const [remoteUid, setRemoteUid] = useState(0);
-  const [message, setMessage] = useState('');
 
   useEffect(() => {
     setupVideoSDKEngine();
@@ -106,15 +103,13 @@ const VideoScreen = () => {
       const agoraEngine = agoraEngineRef.current;
       agoraEngine.registerEventHandler({
         onJoinChannelSuccess: () => {
-          showMessage('Successfully joined the channel ' + channelName);
           setIsJoined(true);
         },
         onUserJoined: (_connection, Uid) => {
-          showMessage('Remote user joined with uid ' + Uid);
           setRemoteUid(Uid);
         },
         onUserOffline: (_connection, Uid) => {
-          showMessage('Remote user left the channel. uid: ' + Uid);
+          console.log('상대방이 방을 떠났습니다.', Uid);
           setRemoteUid(0);
         },
       });
@@ -124,7 +119,7 @@ const VideoScreen = () => {
       });
       agoraEngine.enableVideo();
     } catch (e) {
-      showMessage(e);
+      console.log(e);
     }
   };
 
@@ -139,7 +134,7 @@ const VideoScreen = () => {
         clientRoleType: ClientRoleType.ClientRoleBroadcaster,
       });
     } catch (e) {
-      showMessage(e);
+      console.log(e);
     }
   };
 
@@ -148,9 +143,9 @@ const VideoScreen = () => {
       agoraEngineRef.current?.leaveChannel();
       setRemoteUid(0);
       setIsJoined(false);
-      showMessage('You left the channel');
+      navigation.navigate('lessonMainScreen');
     } catch (e) {
-      showMessage(e);
+      console.log(e);
     }
   };
 
@@ -175,30 +170,29 @@ const VideoScreen = () => {
       });
 
       socketRef.current.on('connect', () => {
-        showMessage('Socket connected successfully');
+        Alert.alert('알림', '성공적으로 방에 연결되었습니다.');
       });
 
       socketRef.current.on('connect_error', (error) => {
-        showMessage('Socket connection failed:');
-        showMessage(error);
+        Alert.alert('알림', '방 연결에 실패하였습니다.');
+        console.log(error);
         setIsError(true);
       });
     } catch (error) {
-      console.log('Error initializing socket:', error);
-      showMessage('Error initializing socket');
+      Alert.alert('알림', '방 연결에 실패하였습니다.');
+      console.log('소켓 초기화에 오류가 있습니다.', error);
       setIsError(true);
     }
   };
 
   const handleDisconnectEvent = () => {
     socketRef.current.on('disconnect_event', (msg) => {
-      showMessage(msg);
+      Alert.alert('알림', msg);
 
       if (socketRef.current) {
         socketRef.current.disconnect();
         leave();
 
-        showMessage('소켓 없음');
         console.log('소켓 없음');
       }
 
@@ -206,7 +200,6 @@ const VideoScreen = () => {
         .then((res) => {
           const { data } = res;
           console.log(data);
-          showMessage('레슨 종료 완료');
           navigation.navigate('lessonMainScreen');
         })
         .catch((error) => {
@@ -233,8 +226,16 @@ const VideoScreen = () => {
   return (
     <MainContainer>
       <Info>
-        {!isJoined && <Button onPress={join}>레슨 참여하기</Button>}
-        {isJoined && <Button onPress={leave}>나가기</Button>}
+        {!isJoined && (
+          <MeetingInfoBtn onPress={join}>
+            <LessonInfoBtnText>레슨 참여하기</LessonInfoBtnText>
+          </MeetingInfoBtn>
+        )}
+        {isJoined && (
+          <MeetingInfoBtn onPress={leave}>
+            <LessonInfoBtnText>나가기</LessonInfoBtnText>
+          </MeetingInfoBtn>
+        )}
         <LessonInfoBtn onPress={toggleModal}>
           <LessonInfoBtnText>레슨 정보 확인하기</LessonInfoBtnText>
         </LessonInfoBtn>
@@ -244,13 +245,12 @@ const VideoScreen = () => {
           </LessonCloseBtn>
         )}
       </Info>
-      <ScrollContainer contentContainerStyle={{ alignItems: 'center', flex: 1 }}>
+      <ScrollContainer contentContainerStyle={{ alignItems: 'center' }}>
         {isJoined ? (
           <React.Fragment key={0}>
             <MyVideo onPress={toggleMyVideoSize} meBig={isMyVideoBig} youBig={isYourVideoBig}>
               <RtcSurfaceView canvas={{ uid: 0 }} style={{ width: '100%', height: '100%' }} />
             </MyVideo>
-            <Text>Local user uid: {uid}</Text>
           </React.Fragment>
         ) : (
           <Text>레슨에 참여하세요.</Text>
@@ -260,35 +260,32 @@ const VideoScreen = () => {
             <YourVideo onPress={toggleYourVideoSize} youBig={isYourVideoBig} meBig={isMyVideoBig}>
               <RtcSurfaceView canvas={{ uid: remoteUid }} style={{ width: '100%', height: '100%' }} />
             </YourVideo>
-            <Text>Remote user uid: {remoteUid}</Text>
           </React.Fragment>
         ) : (
           <Text>상대방이 입장할때까지 기다려주세요.</Text>
         )}
-        <InfoText>{message}</InfoText>
       </ScrollContainer>
-      {isModalVisible && <LessonInfoModal closeModal={toggleModal} />}
+      {isModalVisible && remoteLessonInfo && (
+        <LessonInfoModal closeModal={toggleModal} onGoingLessonInfo={remoteLessonInfo} />
+      )}
     </MainContainer>
   );
-
-  function showMessage(msg) {
-    setMessage(msg);
-  }
 };
 
 const MainContainer = styled.SafeAreaView`
   flex: 1;
   align-items: center;
+  background-color: ${COLORS.black};
 `;
 
 const Info = styled.View`
-  margin-top: ${hp(7)}px;
   margin-right: ${wp(2)}px;
   margin-left: ${wp(2)}px;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
   width: ${wp(95)}px;
+  height: ${hp(15)}px;
 `;
 
 const LessonCloseBtn = styled.TouchableOpacity`
@@ -299,6 +296,18 @@ const LessonCloseBtn = styled.TouchableOpacity`
 
   justify-content: center;
   align-items: center;
+`;
+
+const MeetingInfoBtn = styled.TouchableOpacity`
+  width: auto;
+  height: ${hp(5)}px;
+  border-radius: ${RFValue(10)}px;
+  background-color: ${COLORS.subLightblue};
+
+  justify-content: center;
+  align-items: center;
+  padding-left: ${wp(3)}px;
+  padding-right: ${wp(3)}px;
 `;
 
 const LessonCloseText = styled.Text`
@@ -323,16 +332,6 @@ const LessonInfoBtnText = styled.Text`
   color: ${COLORS.white};
 `;
 
-const Button = styled.Text`
-  width: ${wp(22)}px;
-  height: ${hp(5)}px;
-  border-radius: ${RFValue(10)}px;
-  background-color: ${COLORS.subLightblue};
-
-  justify-content: center;
-  align-items: center;
-`;
-
 const ScrollContainer = styled.ScrollView`
   flex: 1;
   background-color: ${COLORS.black};
@@ -341,18 +340,13 @@ const ScrollContainer = styled.ScrollView`
 
 const MyVideo = styled.TouchableOpacity`
   width: ${(props) => (props.meBig ? `${wp(100)}px` : !props.meBig && !props.youBig ? `${wp(100)}px` : `${wp(30)}px`)};
-  height: ${(props) => (props.meBig ? `${hp(60)}px` : !props.meBig && !props.youBig ? `${hp(35)}px` : `${wp(30)}px`)};
+  height: ${(props) => (props.meBig ? `${hp(55)}px` : !props.meBig && !props.youBig ? `${hp(35)}px` : `${wp(30)}px`)};
 `;
 
 const YourVideo = styled.TouchableOpacity`
   width: ${(props) => (props.youBig ? `${wp(100)}px` : !props.youBig && !props.meBig ? `${wp(100)}px` : `${wp(30)}px`)};
-  height: ${(props) => (props.youBig ? `${hp(60)}px` : !props.youBig && !props.meBig ? `${hp(35)}px` : `${wp(30)}px`)};
+  height: ${(props) => (props.youBig ? `${hp(55)}px` : !props.youBig && !props.meBig ? `${hp(35)}px` : `${wp(30)}px`)};
   margin-top: ${hp(1)}px;
-`;
-
-const InfoText = styled.Text`
-  background-color: #ffffe0;
-  color: #0000ff;
 `;
 
 export default VideoScreen;
