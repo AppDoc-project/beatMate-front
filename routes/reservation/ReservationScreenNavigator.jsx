@@ -7,7 +7,12 @@ const Stack = createNativeStackNavigator();
 
 function ReservationScreenNavigator(props) {
   return (
-    <Stack.Navigator initialRouteName="reserveMainScreen">
+    <Stack.Navigator
+      initialRouteName="reserveMainScreen"
+      screenOptions={{
+        gestureEnabled: false,
+      }}
+    >
       <Stack.Screen
         name={'reserveMainScreen'}
         component={ReserveMainScreen}

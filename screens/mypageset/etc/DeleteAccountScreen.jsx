@@ -18,13 +18,6 @@ function DeleteAccountScreen(props) {
   const [password, setPassword] = useState('');
   const onChangePassword = (text) => setPassword(text);
 
-  // const DeleteAccountAlert = () => {
-  // 회원탈퇴 경고창
-  //   if (setBooking.length === 0) {
-  //     Alert.alert('경고', '현재 진행 중인 예약이 없어야 탈퇴할 수 있습니다.');
-  //   }
-  // };
-
   const onPressPreviousBtn = () => {
     setPassword('');
     navigation.goBack();
@@ -57,10 +50,23 @@ function DeleteAccountScreen(props) {
           }),
         );
       })
-      .catch((err) => {
-        console.log('회원 탈퇴', err);
-        Alert.alert('경고', '회원 탈퇴에 실패하였습니다.');
-        setIsError(true);
+      .catch((error) => {
+        console.log('회원 탈퇴', format(error));
+        if (error.response && error.response.data.code === 410) {
+          Alert.alert('알림', '기존 예약이 있어 탈퇴가 불가능합니다.');
+        } else if (error.response && error.response.data.code === 402) {
+          Alert.alert('알림', '비밀번호가 틀렸습니다.');
+        } else if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log(format(error.response));
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+          setIsError(true);
+        }
         setIsLoading(false);
       });
   };

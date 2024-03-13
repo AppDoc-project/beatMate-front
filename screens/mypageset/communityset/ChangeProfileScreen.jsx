@@ -5,7 +5,7 @@ import { changeProfile } from 'api/mypage';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -37,9 +37,18 @@ function ChangeProfileScreen(props) {
         setIsLoading(false);
         navigation.goBack();
       })
-      .catch((err) => {
-        console.log('프로필 이미지 변경', err);
-        setIsError(true);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('프로필 이미지 변경 실패', error);
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+          setIsError(true);
+        }
         setIsLoading(false);
       });
   };

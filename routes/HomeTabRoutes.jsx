@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
 import HomeScreen from '@screens/HomeScreen';
 import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
@@ -18,8 +19,10 @@ import SearchTutorScreenNavigators from './searchtutor/SearchTutorScreenNavigato
 
 const Tab = createBottomTabNavigator();
 
-function HomeTabRoutes(props) {
-  //현재 접속자 정보 객체
+const HomeTabRoutes = () => {
+  const navigation = useNavigation();
+
+  // 현재 접속자 정보 객체
   const [loginUser, setLoginUser] = useState({
     id: null,
     email: '',
@@ -33,7 +36,12 @@ function HomeTabRoutes(props) {
         loginUserInfo: [loginUser, setLoginUser],
       }}
     >
-      <Tab.Navigator initialRouteName="homeScreen">
+      <Tab.Navigator
+        initialRouteName="homeScreen"
+        screenOptions={{
+          gestureEnabled: false,
+        }}
+      >
         <Tab.Screen
           name="community"
           component={CommunityScreenNavigator}
@@ -49,6 +57,12 @@ function HomeTabRoutes(props) {
               ) : (
                 <MaterialCommunityIcons name={'comment-text-multiple'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
+          }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('community');
+            },
           }}
         />
         <Tab.Screen
@@ -67,6 +81,12 @@ function HomeTabRoutes(props) {
                 <Ionicons name="chatbubble-ellipses-outline" size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('chat');
+            },
+          }}
         />
         <Tab.Screen
           name="searchtutor"
@@ -83,6 +103,12 @@ function HomeTabRoutes(props) {
               ) : (
                 <Ionicons name={'search-sharp'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
+          }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('searchtutor');
+            },
           }}
         />
         <Tab.Screen
@@ -101,6 +127,12 @@ function HomeTabRoutes(props) {
                 <Ionicons name={'home-outline'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('homeScreen');
+            },
+          }}
         />
         <Tab.Screen
           name="reservation"
@@ -118,8 +150,13 @@ function HomeTabRoutes(props) {
                 <AntDesign name={'form'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('reservation');
+            },
+          }}
         />
-
         <Tab.Screen
           name="lesson"
           component={LessonScreenNavigator}
@@ -136,8 +173,13 @@ function HomeTabRoutes(props) {
                 <Foundation name={'telephone'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('lesson');
+            },
+          }}
         />
-
         <Tab.Screen
           name="mypage"
           component={MyPageScreenNavigator}
@@ -154,10 +196,16 @@ function HomeTabRoutes(props) {
                 <Ionicons name={'person'} size={RFValue(20)} color={COLORS.lightgray} />
               ),
           }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+              navigation.navigate('mypage');
+            },
+          }}
         />
       </Tab.Navigator>
     </Auth.Provider>
   );
-}
+};
 
 export default HomeTabRoutes;

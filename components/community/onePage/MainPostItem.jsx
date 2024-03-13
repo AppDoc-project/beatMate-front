@@ -34,7 +34,9 @@ MainPostitem.propTypes = {
 };
 
 function MainPostitem({ postInfo }) {
-  const formattedDate = postInfo && postInfo.createdAt.substring(0, 10).replace(/:/g, '.');
+  const formattedDate =
+    postInfo && postInfo.createdAt.substring(0, 10).replace(/:/g, '.') + ' ' + postInfo.createdAt.substring(11, 16);
+
   const navigation = useNavigation();
 
   const {
@@ -56,8 +58,18 @@ function MainPostitem({ postInfo }) {
         Alert.alert('알림', '요청을 성공하였습니다.');
       })
       .catch((error) => {
-        console.log('좋아요 실패', format(error));
-        Alert.alert('알림', '좋아요를 이미 눌렀습니다.');
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 410) {
+          Alert.alert('알림', '좋아요를 이미 눌렀습니다.');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('좋아요 실패', format(error));
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+        }
       });
   };
 
@@ -74,7 +86,16 @@ function MainPostitem({ postInfo }) {
         Alert.alert('알림', '요청을 성공하였습니다.');
       })
       .catch((error) => {
-        console.log('북마크 실패', format(error));
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('북마크 실패', format(error));
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+        }
       });
   };
 
@@ -89,8 +110,17 @@ function MainPostitem({ postInfo }) {
         setBanModal(false);
         navigation.goBack();
       })
-      .catch((err) => {
-        console.log('삭제 실패', err.response.data);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('삭제 실패', error.response.data);
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+        }
       });
   };
 

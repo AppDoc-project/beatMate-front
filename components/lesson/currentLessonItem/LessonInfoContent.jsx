@@ -48,7 +48,7 @@ function LessonInfoContent({ onGoingLessonInfo }) {
         <Gap />
         <InfoItem>
           <LabelText>특이 사항 : </LabelText>
-          <ValueText>{onGoingLessonInfo.memo}</ValueText>
+          <ValueText>{onGoingLessonInfo.memo ? onGoingLessonInfo.memo : '없음'}</ValueText>
         </InfoItem>
       </Info>
     </Container>

@@ -5,6 +5,8 @@ import { getUserInfo, login } from 'api/auth';
 import { UserInfo } from 'context/UserInfoContext'; // AuthContext가 아니라 UserInfoContext로 수정
 import { format } from 'pretty-format';
 import React, { useState, useContext, useEffect } from 'react';
+import { Alert, SafeAreaView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
@@ -25,21 +27,34 @@ function LoginScreen(props) {
   const onPressLoginBtn = () => {
     login(email, password)
       .then(async (res) => {
-        const token = res.headers.authorization; // 실제 응답 객체에서 헤더에서 토큰을 가져오는 부분
+        const token = res.headers.authorization;
 
-        // AsyncStorage에 토큰 저장
+        // AsyncStorage: Save the token
         await AsyncStorage.setItem('access_token', token);
 
         const userData = res.data.object;
         const { id, email, name, tutor } = userData;
-        setLoginUser({ id: id, email: email, name: name, isTutor: tutor });
+        setLoginUser({ id, email, name, isTutor: tutor });
 
         setEmail('');
         setPassword('');
 
         navigation.navigate('home-tab');
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 403) {
+          Alert.alert('알림', '로그인에 실패하였습니다. 이메일 또는 비밀번호를 확인해주세요.');
+        } else if (error.response && error.response.data.code === 406) {
+          Alert.alert('알림', '인증이 거부되었습니다. 적절한 인증수단을 가지고 다시 회원가입 해주세요.');
+        } else if (error.response && error.response.data.code === 407) {
+          Alert.alert('알림', '인증 절차가 진행 중입니다.');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log(format(error.response.data));
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+        }
+      });
   };
 
   //토큰이 있을시, 사용자의 정보 세팅 API
@@ -85,57 +100,65 @@ function LoginScreen(props) {
   }, [loginUser]);
 
   return (
-    <Container>
-      <Logo>BeatMate</Logo>
-      <Email>
-        <MainText>이메일</MainText>
-        <Input value={email} onChangeText={onChangeEmail} placeholderTextColor="gray" />
-      </Email>
-      <Password>
-        <MainText>비밀번호</MainText>
-        <Input value={password} onChangeText={onChangePassword} placeholderTextColor="gray" />
-      </Password>
-      <LoginBtn
-        fontColor={email && password ? 'white' : 'navy'}
-        backColor={email && password ? 'navy' : 'white'}
-        width={wp(100)}
-        marginBottom={hp(6.15)}
-        marginTop={hp(8)}
-        justifyContent="center"
-        onPress={onPressLoginBtn}
-      />
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <Container>
+        <Wrapper>
+          <Logo>BeatMate</Logo>
+          <Email>
+            <MainText>이메일</MainText>
+            <Input value={email} onChangeText={onChangeEmail} placeholderTextColor="gray" />
+          </Email>
+          <Password>
+            <MainText>비밀번호</MainText>
+            <Input value={password} secureTextEntry onChangeText={onChangePassword} placeholderTextColor="gray" />
+          </Password>
+          <LoginBtn
+            fontColor={email && password ? 'white' : 'navy'}
+            backColor={email && password ? 'navy' : 'white'}
+            width={wp(100)}
+            marginBottom={hp(6.15)}
+            marginTop={hp(8)}
+            justifyContent="center"
+            onPress={onPressLoginBtn}
+          />
 
-      <BottomWrapper>
-        <First>
-          <Question>계정이 없나요?</Question>
-          <SignUp onPress={onPressSignUpBtn}>
-            <SignUpTxt>회원가입하기</SignUpTxt>
-          </SignUp>
-        </First>
-        <Second>
-          <Question>비밀번호를 잊었나요?</Question>
-          <SignUp onPress={onPressFindPasswordBtn}>
-            <SignUpTxt>비밀번호찾기</SignUpTxt>
-          </SignUp>
-        </Second>
-      </BottomWrapper>
-    </Container>
+          <BottomWrapper>
+            <First>
+              <Question>계정이 없나요?</Question>
+              <SignUp onPress={onPressSignUpBtn}>
+                <SignUpTxt>회원가입하기</SignUpTxt>
+              </SignUp>
+            </First>
+            <Second>
+              <Question>비밀번호를 잊었나요?</Question>
+              <SignUp onPress={onPressFindPasswordBtn}>
+                <SignUpTxt>비밀번호찾기</SignUpTxt>
+              </SignUp>
+            </Second>
+          </BottomWrapper>
+        </Wrapper>
+      </Container>
+    </SafeAreaView>
   );
 }
 
-const Container = styled.View`
+const Container = styled(KeyboardAwareScrollView)`
   flex: 1;
+  background-color: white;
+`;
+
+const Wrapper = styled.View`
   align-items: center;
+  justify-content: center;
 `;
 
 const Logo = styled.Text`
   font-size: ${RFValue(40)}px;
   font-weight: bold;
-  margin-top: ${hp(18.7)}px;
+  margin-top: ${hp(10)}px;
 `;
 
 const Email = styled.View`
-  margin-left: ${wp(5)}px;
   margin-top: ${hp(5)}px;
 `;
 
@@ -161,7 +184,6 @@ const MainText = styled.Text`
 `;
 
 const Password = styled.View`
-  margin-left: ${wp(5)}px;
   margin-top: ${hp(5)}px;
 `;
 
@@ -169,7 +191,7 @@ const BottomWrapper = styled.View`
   display: flex;
   width: 100%;
   justify-content: center;
-  margin-top: 60px;
+
   align-items: center;
 `;
 
@@ -183,7 +205,7 @@ const Question = styled.Text`
 const SignUp = styled.TouchableOpacity``;
 
 const SignUpTxt = styled.Text`
-  margin-left: 20px;
+  margin-left: ${wp(5)}px;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;

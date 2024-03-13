@@ -8,7 +8,7 @@ import { COLORS } from 'colors';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Image, SafeAreaView, Text, View } from 'react-native';
+import { Alert, Image, SafeAreaView, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -21,14 +21,14 @@ function CommunityOnePostScreen({ route }) {
 
   const onPressPreviousBtn = () => {
     setComment('');
-    navigation.goBack();
+    navigation.navigate('communityScreen');
   };
 
   const { postId, communityName } = route.params;
   const [comment, setComment] = useState('');
   const onChangeComment = (text) => setComment(text);
 
-  // 단일 게시물 불러오기 api
+  // 댓글 작성 api
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -45,9 +45,18 @@ function CommunityOnePostScreen({ route }) {
         setComment('');
         console.log('댓글 작성', format(res.data));
       })
-      .catch((err) => {
-        console.log('댓글 작성', err);
-        setIsError(true);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('댓글 작성 실패', error);
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+          setIsError(true);
+        }
         setIsLoading(false);
       });
   };
@@ -66,9 +75,20 @@ function CommunityOnePostScreen({ route }) {
           setPostInfo(res.data.object);
           setPostIsLoading(false);
         })
-        .catch((err) => {
-          console.log('단일 게시물 불러오기', err);
-          setPostIsError(true);
+        .catch((error) => {
+          if (error.response && error.response.data.code === 405) {
+            Alert.alert('알림', '삭제된 게시글입니다.');
+          } else if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+          } else {
+            console.log('단일 게시물 불러오기', format(error.response));
+            Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+            navigation.navigate('homeScreen');
+            setPostIsError(true);
+          }
           setPostIsLoading(false);
         });
     }, []),

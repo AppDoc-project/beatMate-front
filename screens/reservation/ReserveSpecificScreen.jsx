@@ -6,7 +6,7 @@ import { UserInfo } from 'context/UserInfoContext';
 import { mapEnglishToKorean } from 'hook/TutorSpecialityKo';
 import format from 'pretty-format';
 import React, { useContext } from 'react';
-import { Image } from 'react-native';
+import { Alert, Image } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -36,7 +36,18 @@ function ReserveSpecificScreen(props) {
         console.log('예약 삭제 성공', format(data));
         navigation.navigate('reserveMainScreen');
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('에약 삭제 실패', error);
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+        }
+      });
   };
 
   console.log(myReserveData);

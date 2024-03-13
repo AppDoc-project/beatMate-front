@@ -1,8 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
 import { getCommunitySection } from 'api/commity';
 import { COLORS } from 'colors';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Modal, FlatList } from 'react-native';
+import { TouchableOpacity, Modal, FlatList, Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -19,6 +20,7 @@ function SelectCategory({ setCommunityId, communityName }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [selectedObject, setSelectedObject] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     setIsLoading(true);
@@ -28,9 +30,18 @@ function SelectCategory({ setCommunityId, communityName }) {
         setIsLoading(false);
         setIsError(false);
       })
-      .catch((err) => {
-        console.log(err);
-        setIsError(true);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('커뮤니티 색션 가져오기 실패', error);
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+          setIsError(true);
+        }
         setIsLoading(false);
       });
   }, []);

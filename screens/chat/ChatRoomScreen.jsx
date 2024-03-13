@@ -3,13 +3,13 @@ import MessageInput from '@components/chat/message/MessageInput';
 import MessageList from '@components/chat/message/MessageList';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { readAllMessage } from 'api/chat';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { styled } from 'styled-components/native';
 
 /**
@@ -39,6 +39,7 @@ function ChatRoomScreen({ route }) {
   const { room } = route.params; //채팅방 정보 api
 
   console.log(room.target.userId);
+  const navigation = useNavigation();
 
   // 채팅방 들어갈때 모든 메세지 확인 API
   const [isLoading, setIsLoading] = useState(false);
@@ -51,9 +52,18 @@ function ChatRoomScreen({ route }) {
         console.log(format(res.data));
         setIsLoading(false);
       })
-      .catch((err) => {
-        console.log(err);
-        setIsError(true);
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('모든 메세지 확인 실패', error);
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+          setIsError(true);
+        }
         setIsLoading(false);
       });
   }, [room.id]);

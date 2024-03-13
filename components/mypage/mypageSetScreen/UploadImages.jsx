@@ -1,19 +1,23 @@
 import AddImage from '@assets/PostItem/AddTmage';
+import { useNavigation } from '@react-navigation/native';
 import { postImages } from 'api/mypage';
 import { COLORS } from 'colors';
 import * as ImagePicker from 'expo-image-picker';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Text, Image, TouchableOpacity, View } from 'react-native';
+import { Text, Image, TouchableOpacity, View, Alert } from 'react-native';
 import { styled } from 'styled-components/native';
 
 function UploadImages({ addresses, setAddresses }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const navigation = useNavigation();
 
   const uploadImage = async () => {
+    console.log('Image Picker Status:', status); // 확인을 위한 로그 추가
+
     if (!status?.granted) {
       const permission = await requestPermission();
       if (!permission.granted) {
@@ -22,7 +26,7 @@ function UploadImages({ addresses, setAddresses }) {
     }
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
+      allowsEditing: true,
       quality: 0.1,
       aspect: [1, 1],
       base64: false,
@@ -31,7 +35,8 @@ function UploadImages({ addresses, setAddresses }) {
     });
 
     if (!result.canceled) {
-      setSelectedImage(result);
+      setSelectedImage(result.assets[0].uri); // 이미지 URI를 setSelectedImage에 전달
+      console.log('Selected Images:', result.assets[0].uri);
     }
   };
 
@@ -42,7 +47,7 @@ function UploadImages({ addresses, setAddresses }) {
 
     const formData = new FormData();
     const file = {
-      uri: selectedImage.uri,
+      uri: selectedImage,
       type: 'image/jpeg',
       name: 'selectedImage.jpg',
     };
@@ -53,7 +58,18 @@ function UploadImages({ addresses, setAddresses }) {
         setAddresses(res.data.message);
         console.log('이미지 url 변환', res.data.message);
       })
-      .catch((error) => console.log('이미지 url 변환', format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 408) {
+          Alert.alert('알림', '로그인을 해주세요.');
+          navigation.navigate('homeScreen');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log('이미지 url 변환', format(error));
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('homeScreen');
+        }
+      });
   };
 
   const removeImage = () => {
@@ -66,7 +82,7 @@ function UploadImages({ addresses, setAddresses }) {
         {selectedImage && (
           <TouchableOpacity onPress={removeImage}>
             <View style={styles.imageContainer}>
-              <Image source={{ uri: selectedImage.uri }} style={styles.image} />
+              <Image source={{ uri: selectedImage }} style={styles.image} />
             </View>
           </TouchableOpacity>
         )}

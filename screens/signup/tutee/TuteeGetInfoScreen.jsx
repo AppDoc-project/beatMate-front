@@ -33,13 +33,18 @@ function TuteeGetInfoScreen(props) {
       .then((res) => {
         const { data } = res;
         console.log(format(data));
-
-        // 서버 응답에서 code와 subCode를 검사하여 알림 표시
-        if (data.code === 400 && data.subCode === 401) {
-          Alert.alert('알림', '중복된 이메일입니다. 다른 이메일을 작성해주세요.');
-        }
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 404) {
+          Alert.alert('알림', '이미 존재하는 이메일입니다. 다른 이메일을 작성해주세요.');
+        } else if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log(format(error.response));
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('loginScreen');
+        }
+      });
   };
 
   const onPressPreviousBtn = () => {
@@ -82,7 +87,15 @@ function TuteeGetInfoScreen(props) {
         console.log(format(data));
         navigation.navigate('getAuthCodeScreen');
       })
-      .catch((error) => console.log(format(error)));
+      .catch((error) => {
+        if (error.response && error.response.data.code === 500) {
+          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        } else {
+          console.log(error);
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('loginScreen');
+        }
+      });
   };
 
   return (
@@ -135,6 +148,7 @@ function TuteeGetInfoScreen(props) {
             <SubTxt>최소 8자, 최대 18자 가능 / 알파벳, 숫자, 특수문자 반드시 포함</SubTxt>
             <Input
               value={password}
+              secureTextEntry
               onChangeText={onChangePassword}
               placeholder="( 예시 : kejwi375@! )"
               placeholderTextColor="lightgray"

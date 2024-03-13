@@ -40,7 +40,12 @@ function AuthRoutes() {
         tutee: [tuteeSignUpRequest, setTuteeSignUpRequest],
       }}
     >
-      <Stack.Navigator initialRouteName="loginScreen">
+      <Stack.Navigator
+        initialRouteName="loginScreen"
+        screenOptions={{
+          gestureEnabled: false,
+        }}
+      >
         <Stack.Screen
           name={'loginScreen'}
           component={LoginScreen}
