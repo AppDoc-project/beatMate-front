@@ -18,7 +18,12 @@ function ChatScreenNavigator() {
   const _tabBartHeight = useBottomTabBarHeight();
 
   return (
-    <Stack.Navigator initialRouteName={'chat-list'}>
+    <Stack.Navigator
+      initialRouteName={'chat-list'}
+      screenOptions={{
+        gestureEnabled: false,
+      }}
+    >
       <Stack.Screen
         name={'chat-list'}
         component={ChatListScreen}

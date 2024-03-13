@@ -36,7 +36,12 @@ const HomeTabRoutes = () => {
         loginUserInfo: [loginUser, setLoginUser],
       }}
     >
-      <Tab.Navigator initialRouteName="homeScreen">
+      <Tab.Navigator
+        initialRouteName="homeScreen"
+        screenOptions={{
+          gestureEnabled: false,
+        }}
+      >
         <Tab.Screen
           name="community"
           component={CommunityScreenNavigator}

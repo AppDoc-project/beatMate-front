@@ -31,6 +31,7 @@ function MyPageScreenNavigator(props) {
           color: 'black',
         },
         headerBackTitleVisible: false,
+        gestureEnabled: false,
       }}
     >
       {isTutor ? ( //isTutor가 True라면

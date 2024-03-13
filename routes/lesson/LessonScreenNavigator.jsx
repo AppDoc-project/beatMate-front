@@ -14,7 +14,12 @@ const Stack = createNativeStackNavigator();
 
 function LessonScreenNavigator(props) {
   return (
-    <Stack.Navigator initialRouteName="lessonMainScreen">
+    <Stack.Navigator
+      initialRouteName="lessonMainScreen"
+      screenOptions={{
+        gestureEnabled: false,
+      }}
+    >
       <Stack.Screen
         name={'lessonMainScreen'}
         component={LessonMainScreen}

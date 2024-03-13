@@ -9,7 +9,12 @@ const Stack = createNativeStackNavigator();
 
 function CommunityScreenNavigator(props) {
   return (
-    <Stack.Navigator initialRouteName="communityScreen">
+    <Stack.Navigator
+      initialRouteName="communityScreen"
+      screenOptions={{
+        gestureEnabled: false,
+      }}
+    >
       <Stack.Screen
         name={'communityScreen'}
         component={CommunityScreen}

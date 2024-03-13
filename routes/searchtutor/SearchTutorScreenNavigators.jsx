@@ -21,7 +21,12 @@ function SearchTutorScreenNavigators() {
         category: [findTutorCategory, setFindTutorCategory],
       }}
     >
-      <Stack.Navigator initialRouteName="tutorCommunityListScreen">
+      <Stack.Navigator
+        initialRouteName="tutorCommunityListScreen"
+        screenOptions={{
+          gestureEnabled: false,
+        }}
+      >
         <Stack.Screen
           name={'tutorCommunityListScreen'}
           component={TutorCommunityListScreen}
