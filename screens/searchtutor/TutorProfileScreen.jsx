@@ -30,7 +30,7 @@ function TutorProfileScreen() {
   const { tutorId } = route.params;
 
   const onPressPreviousBtn = () => {
-    navigation.goBack();
+    navigation.navigate('tutorCommunityListScreen');
   };
 
   const [isLessonInfo, selectLessonInfo] = useState(true);
