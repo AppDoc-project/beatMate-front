@@ -30,8 +30,11 @@ function TutorProfileScreen() {
   const { tutorId } = route.params;
 
   const onPressPreviousBtn = () => {
-    navigation.navigate('tutorCommunityListScreen');
+    navigation.goBack();
   };
+
+  const canGoBack = navigation.canGoBack();
+  const previousRoute = canGoBack ? navigation.getState().routes[navigation.getState().index - 1] : null;
 
   const [isLessonInfo, selectLessonInfo] = useState(true);
   const [isReview, selectReview] = useState(false);
@@ -179,9 +182,13 @@ function TutorProfileScreen() {
       {specificTutorData && (
         <Container>
           <Header>
-            <TouchableOpacity onPress={onPressPreviousBtn}>
-              <AntDesign name="left" size={32} marginLeft={5} />
-            </TouchableOpacity>
+            {!previousRoute ||
+              (previousRoute.name !== 'myPageScreen' && (
+                <TouchableOpacity onPress={onPressPreviousBtn}>
+                  <AntDesign name="left" size={32} marginLeft={5} />
+                </TouchableOpacity>
+              ))}
+
             {!isTutor && (
               <TouchableOpacity onPress={toggleBookmark}>
                 <AntDesign
@@ -189,6 +196,8 @@ function TutorProfileScreen() {
                   size={RFValue(24)}
                   color={isLike || specificTutorData.pickYn ? COLORS.main : COLORS.lightgray}
                   marginRight={14}
+                  position="absolute"
+                  right={0}
                 />
               </TouchableOpacity>
             )}
@@ -277,7 +286,7 @@ const InfoSection = styled.View`
   width: ${wp(100)};
   height: auto;
   align-items: center;
-  margin-top: ${hp(3)}px;
+  margin-top: ${hp(5)}px;
 `;
 
 const NoticeTxt = styled.Text`
