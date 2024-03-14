@@ -53,7 +53,11 @@ function ChatRoomListItem({ room }) {
       </ProfileContainer>
       <ContentGroup>
         <Name numberOfLines={1}>{target.name}</Name>
-        {lastMessage && <LastChat numberOfLines={1}>{lastMessage}</LastChat>}
+        {lastMessage && (
+          <LastChat numberOfLines={1}>
+            {lastMessage.length > 10 ? `${lastMessage.substring(0, 15)}...` : lastMessage}
+          </LastChat>
+        )}
       </ContentGroup>
       <SubInfoGroup>
         {lastTime && <LastUpdated>{formatLastTime(lastTime)}</LastUpdated>}
@@ -99,6 +103,7 @@ const Name = styled.Text`
 const LastChat = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 500;
+  margin-top: ${hp(1)}px;
 `;
 
 const NotReadContainer = styled.View`

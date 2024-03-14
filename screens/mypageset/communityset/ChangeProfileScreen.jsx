@@ -13,6 +13,7 @@ import styled from 'styled-components/native';
 
 function ChangeProfileScreen(props) {
   const [profileAddress, setProfileAddress] = useState('');
+  const [isPhotoValid, setPhotoValid] = useState(false);
 
   const navigation = useNavigation();
 
@@ -76,15 +77,19 @@ function ChangeProfileScreen(props) {
         <Txt>변경하실 프로필 사진을 첨부해주세요.</Txt>
       </Section>
       <Image>
-        <StyledUploadImages addresses={profileAddress} setAddresses={setProfileAddress} />
+        <StyledUploadImages
+          isPhotoValid={isPhotoValid}
+          setAddresses={setProfileAddress}
+          setPhotoValid={setPhotoValid}
+        />
       </Image>
       <BottomContainer>
         <ChangeBtn
-          fontColor={profileAddress ? COLORS.white : COLORS.main}
-          backColor={profileAddress ? COLORS.main : COLORS.white}
+          fontColor={isPhotoValid ? COLORS.white : COLORS.main}
+          backColor={isPhotoValid ? COLORS.main : COLORS.white}
           width={wp(100)}
           justifyContent="center"
-          onPress={onPressChangeBtn}
+          onPress={isPhotoValid ? onPressChangeBtn : null}
         />
       </BottomContainer>
     </Container>

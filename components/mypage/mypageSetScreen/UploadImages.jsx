@@ -7,9 +7,17 @@ import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Text, Image, TouchableOpacity, View, Alert } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import Octicons from 'react-native-vector-icons/Octicons';
 import { styled } from 'styled-components/native';
 
-function UploadImages({ addresses, setAddresses }) {
+UploadImages.propTypes = {
+  isPhotoValid: PropTypes.bool.isRequired,
+  setPhotoValid: PropTypes.func.isRequired,
+  setAddresses: PropTypes.func.isRequired,
+};
+
+function UploadImages({ isPhotoValid, setAddresses, setPhotoValid }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
@@ -57,6 +65,8 @@ function UploadImages({ addresses, setAddresses }) {
       .then((res) => {
         setAddresses(res.data.message);
         console.log('이미지 url 변환', res.data.message);
+        setPhotoValid(true);
+        Alert.alert('알림', '사진 업로드에 성공하였습니다.');
       })
       .catch((error) => {
         if (error.response && error.response.data.code === 408) {
@@ -80,21 +90,26 @@ function UploadImages({ addresses, setAddresses }) {
     <Container>
       <View style={styles.row}>
         {selectedImage && (
-          <TouchableOpacity onPress={removeImage}>
+          <TouchableOpacity onPress={() => !isPhotoValid && removeImage()}>
             <View style={styles.imageContainer}>
               <Image source={{ uri: selectedImage }} style={styles.image} />
             </View>
           </TouchableOpacity>
         )}
         {!selectedImage && (
-          <TouchableOpacity onPress={uploadImage}>
+          <TouchableOpacity onPress={() => !isPhotoValid && uploadImage()}>
             <View style={styles.imageContainer}>
               <AddImage style={styles.addImage} />
             </View>
           </TouchableOpacity>
         )}
       </View>
-      {selectedImage && (
+
+      {isPhotoValid && selectedImage ? (
+        <View style={styles.iconContainer}>
+          <Octicons name="check" size={RFValue(20)} color={COLORS.subLightblue} />
+        </View>
+      ) : (
         <TouchableOpacity onPress={handleUpload} style={styles.uploadButton}>
           <Text style={styles.uploadText}>사진 업로드 하기</Text>
         </TouchableOpacity>
@@ -103,12 +118,9 @@ function UploadImages({ addresses, setAddresses }) {
   );
 }
 
-UploadImages.propTypes = {
-  addresses: PropTypes.string.isRequired,
-  setAddresses: PropTypes.func.isRequired,
-};
-
-const Container = styled.View``;
+const Container = styled.View`
+  justify-content: 'center';
+`;
 
 const styles = {
   row: {
@@ -138,6 +150,10 @@ const styles = {
     borderColor: COLORS.main,
     overflow: 'hidden',
     padding: 5,
+  },
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 };
 

@@ -8,12 +8,11 @@ import { COLORS } from 'colors';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Alert, Image, SafeAreaView, Text, View } from 'react-native';
+import { Alert, SafeAreaView, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components/native';
 
 function CommunityOnePostScreen({ route }) {
@@ -152,19 +151,6 @@ function CommunityOnePostScreen({ route }) {
           ))}
 
         <WriteWrapper>
-          <ProfileImg>
-            {postInfo && postInfo.profile && (
-              <Image
-                source={{
-                  uri: postInfo.profile,
-                }}
-                style={{ width: 40, height: 40, borderRadius: 50 }}
-              />
-            )}
-            {postInfo && !postInfo.profile && (
-              <FontAwesome name={'user-circle'} size={RFValue(30)} color={'lightgray'} />
-            )}
-          </ProfileImg>
           <Form>
             <CommentInput value={comment} onChangeText={onChangeComment} placeholder={'댓글을 입력해주세요'} />
             <EnterWrapper onPress={onPressSendBtn}>
@@ -221,12 +207,6 @@ const WriteWrapper = styled.View`
 
 const CommentWrapper = styled.View``;
 
-const ProfileImg = styled.View`
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-`;
-
 const Form = styled.View`
   min-height: 10%;
   padding: ${wp(4)}px;
@@ -238,7 +218,7 @@ const Form = styled.View`
 `;
 
 const CommentInput = styled.TextInput`
-  width: ${wp(75)}px;
+  width: ${wp(83)}px;
 
   padding: ${RFValue(12)}px;
   background-color: transparent;

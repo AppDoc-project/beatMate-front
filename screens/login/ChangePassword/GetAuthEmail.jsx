@@ -4,6 +4,7 @@ import { getNewEmail } from 'api/auth';
 import format from 'pretty-format';
 import React, { useState } from 'react';
 import { Alert, SafeAreaView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -45,26 +46,33 @@ function GetAuthEmail(props) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
-      <Container>
-        <Logo>BeatMate</Logo>
-        <InfoText>회원가입시 작성하신 이메일을 입력해주세요.{'\n \n'}인증 코드를 보내드립니다.</InfoText>
-        <Component>
-          <Input value={email} onChangeText={onChangeEmail} />
-        </Component>
-        <BtnGroup>
-          <ContinueBtn
-            fontColor={email ? 'white' : 'navy'}
-            backColor={email ? 'navy' : 'white'}
-            width={wp(100)}
-            justifyContent="center"
-            onPress={onPressContinueBtn}
-          />
-        </BtnGroup>
-      </Container>
+      <WholeWrapper>
+        <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
+        <Container>
+          <Logo>BeatMate</Logo>
+          <InfoText>회원가입시 작성하신 이메일을 입력해주세요.{'\n \n'}인증 코드를 보내드립니다.</InfoText>
+          <Component>
+            <Input value={email} onChangeText={onChangeEmail} />
+          </Component>
+          <BtnGroup>
+            <ContinueBtn
+              fontColor={email ? 'white' : 'navy'}
+              backColor={email ? 'navy' : 'white'}
+              width={wp(100)}
+              justifyContent="center"
+              onPress={onPressContinueBtn}
+            />
+          </BtnGroup>
+        </Container>
+      </WholeWrapper>
     </SafeAreaView>
   );
 }
+
+const WholeWrapper = styled(KeyboardAwareScrollView)`
+  flex: 1;
+  background-color: white;
+`;
 
 const Container = styled.View`
   flex: 1;
@@ -98,7 +106,7 @@ const Input = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(90.4)}px;
-  height: ${hp(5)}px;
+  height: auto;
   border-radius: 8px;
   border-color: lightgray;
   border-width: 1px;
@@ -110,7 +118,7 @@ const Input = styled.TextInput`
 `;
 
 const BtnGroup = styled.View`
-  flex: 1;
+  margin-top: ${hp(10)}px;
 `;
 
 export default GetAuthEmail;

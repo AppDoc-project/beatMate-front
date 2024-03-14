@@ -35,6 +35,19 @@ function WriteNewPostScreen({ route }) {
 
   const onChangeTitle = (text) => setTitle(text);
   const onChangeContent = (text) => setContent(text);
+  const [isPhotoValid, setPhotoValid] = useState(false);
+
+  const onPressAlertBtn = () => {
+    if (!title) {
+      Alert.alert('알림', '제목을 작성해주세요.');
+    } else if (!content) {
+      Alert.alert('알림', '내용을 입력해주세요.');
+    } else if (!communityId) {
+      Alert.alert('알림', '카테고리를 설정해주세요.');
+    } else if (!isPhotoValid) {
+      Alert.alert('알림', '사진 업로드 하기를 눌러주세요.');
+    }
+  };
 
   const onPressRegisterBtn = () => {
     console.log(title);
@@ -137,22 +150,37 @@ function WriteNewPostScreen({ route }) {
         </Component>
         <PictureMainTxt>사진 (선택)</PictureMainTxt>
         <PictureContent>최소 1장 이상, 최대 5장까지 첨부가 가능합니다.</PictureContent>
-        <StyledUploadImages addresses={addresses} setAddresses={setAddresses} />
+        <StyledUploadImages
+          isPhotoValid={isPhotoValid}
+          setPhotoValid={setPhotoValid}
+          addresses={addresses}
+          setAddresses={setAddresses}
+        />
         {postInfo ? (
           <ChangeBtn
-            fontColor={title && content && communityId ? 'white' : 'navy'}
-            backColor={title && content && communityId ? 'navy' : 'white'}
+            fontColor={title && content && communityId && isPhotoValid ? 'white' : 'navy'}
+            backColor={title && content && communityId && isPhotoValid ? 'navy' : 'white'}
             width={wp(100)}
             justifyContent="center"
-            onPress={onPressModifyBtn}
+            onPress={() => {
+              onPressAlertBtn();
+              if (isPhotoValid && title && content && communityId) {
+                onPressModifyBtn();
+              }
+            }}
           />
         ) : (
           <RegisterBtn
-            fontColor={title && content && communityId ? 'white' : 'navy'}
-            backColor={title && content && communityId ? 'navy' : 'white'}
+            fontColor={title && content && communityId && isPhotoValid ? 'white' : 'navy'}
+            backColor={title && content && communityId && isPhotoValid ? 'navy' : 'white'}
             width={wp(100)}
             justifyContent="center"
-            onPress={onPressRegisterBtn}
+            onPress={() => {
+              onPressAlertBtn();
+              if (isPhotoValid && title && content && communityId && isPhotoValid) {
+                onPressRegisterBtn();
+              }
+            }}
           />
         )}
       </Container>
@@ -212,7 +240,7 @@ const TitleInput = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(100)}px;
-  height: ${hp(5)}px;
+  height: auto;
   border-color: lightgray;
   border-width: 1px;
 

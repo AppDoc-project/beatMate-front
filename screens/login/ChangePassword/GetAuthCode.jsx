@@ -1,4 +1,4 @@
-import { GetReAuthCodeBtn, JoinBtn } from '@assets/Icons/Buttons';
+import { GetReAuthCodeBtn, CertificateBtn } from '@assets/Icons/Buttons';
 import { useNavigation } from '@react-navigation/native';
 import { getNewEmail, getNewAuthCode } from 'api/auth';
 import { COLORS } from 'colors';
@@ -6,6 +6,7 @@ import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import { Text, SafeAreaView, Alert } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -135,31 +136,33 @@ const GetAuthCodeScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
-      <Container>
-        <Logo>BeatMate</Logo>
-        <InfoText>{email}로 메일을 보냈습니다.</InfoText>
-        <Component>
-          <Txt>인증 코드를 입력해주세요.</Txt>
-          <Txt>
-            남은 시간: <Text style={{ color: COLORS.main }}>{formatTime(timeLeft)}</Text>
-          </Txt>
-          <Input value={authCode} onChangeText={onChangeCode} />
-        </Component>
-        <BtnGroup>
-          <ReBtn onPress={onPressReCodeBtn}>
-            <GetReAuthCodeBtn width={wp(100)} justifyContent="center" />
-          </ReBtn>
+      <WholeWrapper>
+        <AntDesign name="left" size={32} marginLeft={5} onPress={onPressPreviousBtn} />
+        <Container>
+          <Logo>BeatMate</Logo>
+          <InfoText>{email}로 메일을 보냈습니다.</InfoText>
+          <Component>
+            <Txt>인증 코드를 입력해주세요.</Txt>
+            <Txt>
+              남은 시간: <Text style={{ color: COLORS.main }}>{formatTime(timeLeft)}</Text>
+            </Txt>
+            <Input value={authCode} onChangeText={onChangeCode} />
+          </Component>
+          <BtnGroup>
+            <ReBtn onPress={onPressReCodeBtn}>
+              <GetReAuthCodeBtn width={wp(100)} justifyContent="center" />
+            </ReBtn>
 
-          <JoinBtn
-            fontColor={authCode ? 'white' : 'navy'}
-            backColor={authCode ? 'navy' : 'white'}
-            width={wp(100)}
-            justifyContent="center"
-            onPress={onPressJoinBtn}
-          />
-        </BtnGroup>
-      </Container>
+            <CertificateBtn
+              fontColor={authCode ? 'white' : 'navy'}
+              backColor={authCode ? 'navy' : 'white'}
+              width={wp(100)}
+              justifyContent="center"
+              onPress={onPressJoinBtn}
+            />
+          </BtnGroup>
+        </Container>
+      </WholeWrapper>
     </SafeAreaView>
   );
 };
@@ -167,6 +170,11 @@ const GetAuthCodeScreen = ({ route }) => {
 const Container = styled.View`
   flex: 1;
   align-items: center;
+`;
+
+const WholeWrapper = styled(KeyboardAwareScrollView)`
+  flex: 1;
+  background-color: white;
 `;
 
 const Logo = styled.Text`
@@ -204,7 +212,7 @@ const Input = styled.TextInput`
 
   top: ${hp(1.5)}px;
   width: ${wp(90.4)}px;
-  height: ${hp(5)}px;
+  height: auto;
   border-radius: 8px;
   border-color: lightgray;
   border-width: 1px;
@@ -216,7 +224,7 @@ const Input = styled.TextInput`
 `;
 
 const BtnGroup = styled.View`
-  flex: 1;
+  margin-top: ${hp(10)}px;
 `;
 
 const ReBtn = styled.TouchableOpacity`

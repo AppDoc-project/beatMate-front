@@ -163,6 +163,7 @@ function GetAuthCodeScreen(props) {
         .then((res) => {
           const { data } = res;
           console.log(format(data));
+          Alert.alert('알림', '별도의 강사 인증절차를 거치고 완료시 메일을 보내드리겠습니다.');
           navigation.navigate('loginScreen');
         })
         .catch((error) => {

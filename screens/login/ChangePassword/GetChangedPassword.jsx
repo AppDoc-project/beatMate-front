@@ -116,7 +116,7 @@ const BtnGroup = styled.View`
 
 const SubTxt = styled.Text`
   color: lightgray;
-  font-size: ${RFValue(12.5)}px;
+  font-size: ${RFValue(11)}px;
   margin-top: ${hp(1)}px;
 `;
 

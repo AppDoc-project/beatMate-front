@@ -6,7 +6,7 @@ import { signupTutor } from 'api/auth';
 import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
 import format from 'pretty-format';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, SafeAreaView, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -22,6 +22,7 @@ function TutorGetInfoScreen2(props) {
   const navigation = useNavigation();
   const { authenticationAddress, specialities, selfDescription } = tutorSignUpRequest;
 
+  const [isPhotoValid, setPhotoValid] = useState(false);
   const onChangeSelfDescription = (text) => setTutorSignUpRequest((prev) => ({ ...prev, selfDescription: text }));
 
   const onPressPreviousBtn = () => {
@@ -32,6 +33,16 @@ function TutorGetInfoScreen2(props) {
       selfDescription: '',
     }));
     navigation.navigate('tutorGetInfoScreen1');
+  };
+
+  const onPressAlertBtn = () => {
+    if (specialities.length <= 0) {
+      Alert.alert('알림', '음악 분야를 선택해주세요.');
+    } else if (authenticationAddress.length <= 0) {
+      Alert.alert('알림', '강사 자격을 인증할 수 있는 이미지를 첨부해주세요.');
+    } else if (!isPhotoValid) {
+      Alert.alert('알림', '이미지 첨부하기를 눌러주세요.');
+    }
   };
 
   const onPressContinueBtn = () => {
@@ -55,8 +66,8 @@ function TutorGetInfoScreen2(props) {
           Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
           console.log(error);
-          // Alert.alert('알림', '네트워크 연결을 확인해주세요.');
-          // navigation.navigate('loginScreen');
+          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+          navigation.navigate('loginScreen');
         }
       });
   };
@@ -84,7 +95,7 @@ function TutorGetInfoScreen2(props) {
                 예정입니다.{'\n'}
               </Text>
             </Txt>
-            <ImageUpload authenticationAddress={authenticationAddress} />
+            <ImageUpload isPhotoValid={isPhotoValid} setPhotoValid={setPhotoValid} />
           </Component>
 
           <Component>
@@ -103,11 +114,16 @@ function TutorGetInfoScreen2(props) {
 
         <View style={{ marginBottom: hp(3) }}>
           <ContinueBtn
-            fontColor={authenticationAddress && specialities ? 'white' : 'navy'}
-            backColor={authenticationAddress && specialities ? 'navy' : 'white'}
+            fontColor={authenticationAddress.length > 0 && specialities.length > 0 && isPhotoValid ? 'white' : 'navy'}
+            backColor={authenticationAddress.length > 0 && specialities.length > 0 && isPhotoValid ? 'navy' : 'white'}
             width={wp(100)}
             justifyContent="center"
-            onPress={onPressContinueBtn}
+            onPress={() => {
+              onPressAlertBtn();
+              if (isPhotoValid && authenticationAddress.length > 0 && specialities.length > 0) {
+                onPressContinueBtn();
+              }
+            }}
           />
         </View>
       </Container>

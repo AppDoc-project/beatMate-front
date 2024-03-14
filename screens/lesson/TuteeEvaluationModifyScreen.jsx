@@ -45,7 +45,7 @@ function TuteeEvaluationModifyScreen(props) {
         .then((res) => {
           const { data } = res;
           console.log(format(data));
-          navigation.goBack();
+          navigation.navigate('lessonScheduleScreen');
         })
         .catch((error) => {
           if (error.response && error.response.data.code === 408) {

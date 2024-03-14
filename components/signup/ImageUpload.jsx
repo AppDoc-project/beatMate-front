@@ -8,16 +8,23 @@ import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
 import { Text, Image, TouchableOpacity, View, Alert } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import Octicons from 'react-native-vector-icons/Octicons';
 import { styled } from 'styled-components/native';
 
-function ImageUpload() {
+ImageUpload.propTypes = {
+  isPhotoValid: PropTypes.bool.isRequired, // isPhotoValid는 불린 타입이며 필수입니다.
+  setPhotoValid: PropTypes.func.isRequired, // setPhotoValid는 함수 타입이며 필수입니다.
+};
+
+function ImageUpload({ isPhotoValid, setPhotoValid }) {
   const {
     tutor: [tutorSignUpRequest, setTutorSignUpRequest],
   } = useContext(Auth);
-  const navigation = useNavigation();
-
   const { authenticationAddress } = tutorSignUpRequest;
+
+  const navigation = useNavigation();
 
   const [selectedImages, setSelectedImages] = useState([]);
 
@@ -59,7 +66,9 @@ function ImageUpload() {
 
     postImages(formData)
       .then((res) => {
-        console.log(res); // 서버 응답 확인
+        console.log(format(res)); // 서버 응답 확인
+        setPhotoValid(true);
+        Alert.alert('알림', '사진 업로드에 성공하였습니다.');
 
         const updatedSignUpRequest = { ...tutorSignUpRequest }; // 이전 상태의 복사본 생성
         updatedSignUpRequest.authenticationAddress = res.data.data; // 새로운 값으로 업데이트
@@ -67,16 +76,14 @@ function ImageUpload() {
         console.log(updatedSignUpRequest);
       })
       .catch((error) => {
-        // 여기 수정 필요
-        if (error.response && error.response.data.status === 404) {
+        if (error.response && error.response.status === 413) {
+          console.log(format(error));
           Alert.alert('알림', '파일의 크기가 큽니다. 파일당 1mb 크기내로 올려주세요.');
-        } else if (error.response && error.response.data.code === 408) {
-          Alert.alert('알림', '로그인을 해주세요.');
-          navigation.navigate('homeScreen');
         } else if (error.response && error.response.data.code === 500) {
+          console.log(format(error));
           Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
-          console.log(format(error.response.data.status));
+          console.log(format(error));
           Alert.alert('알림', '네트워크 연결을 확인해주세요.');
           navigation.navigate('loginScreen');
         }
@@ -91,33 +98,42 @@ function ImageUpload() {
     });
   };
 
-  ImageUpload.propTypes = {
-    authenticationAddress: PropTypes.array.isRequired, // props validation 추가
-  };
-
   const remainingSlots = 5 - selectedImages.length;
 
   return (
     <Container>
       <View style={styles.row}>
-        {selectedImages.map((image, index) => (
-          <TouchableOpacity key={index} onPress={() => removeImage(index)}>
-            <View style={styles.imageContainer}>
+        {selectedImages.map((image, index) =>
+          isPhotoValid ? (
+            <View key={index} style={styles.imageContainer}>
               <Image source={{ uri: image }} style={styles.image} />
             </View>
-          </TouchableOpacity>
-        ))}
-        {[...Array(remainingSlots)].map((_, index) => (
-          <TouchableOpacity key={index + selectedImages.length} onPress={uploadImage}>
-            <View style={styles.imageContainer}>
-              <AddImage style={styles.addImage} />
-            </View>
-          </TouchableOpacity>
-        ))}
+          ) : (
+            <TouchableOpacity key={index} onPress={() => removeImage(index)}>
+              <View style={styles.imageContainer}>
+                <Image source={{ uri: image }} style={styles.image} />
+              </View>
+            </TouchableOpacity>
+          ),
+        )}
+        {!isPhotoValid &&
+          [...Array(remainingSlots)].map((_, index) => (
+            <TouchableOpacity key={index + selectedImages.length} onPress={uploadImage}>
+              <View style={styles.imageContainer}>
+                <AddImage style={styles.addImage} />
+              </View>
+            </TouchableOpacity>
+          ))}
       </View>
-      <TouchableOpacity onPress={handleUpload} style={styles.uploadButton}>
-        <Text style={styles.uploadText}>사진 업로드 하기</Text>
-      </TouchableOpacity>
+      {isPhotoValid ? (
+        <View style={styles.iconContainer}>
+          <Octicons name="check" size={RFValue(20)} color={COLORS.subLightblue} style={{ marginLeft: 10 }} />
+        </View>
+      ) : (
+        <TouchableOpacity onPress={handleUpload} style={styles.uploadButton}>
+          <Text style={styles.uploadText}>사진 업로드 하기</Text>
+        </TouchableOpacity>
+      )}
     </Container>
   );
 }
@@ -155,6 +171,12 @@ const styles = {
 
     overflow: 'hidden',
     padding: 5,
+  },
+  iconContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: RFValue(50),
   },
 };
 

@@ -1,14 +1,16 @@
 import { ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
 import { checkSingleEmail } from 'api/auth';
+import { COLORS } from 'colors';
 import { Auth } from 'context/AuthContext';
 import format from 'pretty-format';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Alert, Text, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Octicons from 'react-native-vector-icons/Octicons';
 import { styled } from 'styled-components/native';
 
 function TutorGetInfoScreen1(props) {
@@ -23,6 +25,7 @@ function TutorGetInfoScreen1(props) {
   const onChangeContact = (text) => setTutorSignUpRequest((prev) => ({ ...prev, contact: text }));
   const onChangeEmail = (text) => setTutorSignUpRequest((prev) => ({ ...prev, email: text }));
   const onChangePassword = (text) => setTutorSignUpRequest((prev) => ({ ...prev, password: text }));
+  const [isValidEmail, setValidEmail] = useState(false);
 
   const onPressCheckEmail = () => {
     const data = {
@@ -32,6 +35,7 @@ function TutorGetInfoScreen1(props) {
     checkSingleEmail(data)
       .then((res) => {
         const { data } = res;
+        setValidEmail(true);
         console.log(format(data));
       })
       .catch((error) => {
@@ -65,6 +69,8 @@ function TutorGetInfoScreen1(props) {
       Alert.alert('알림', '연락처는 11자여야 합니다.');
     } else if (!email || email.length > 50 || !email.includes('@')) {
       Alert.alert('알림', '이메일은 최대 50자이며 이메일 형식이어야 합니다.');
+    } else if (!isValidEmail && email) {
+      Alert.alert('알림', '이메일 중복 확인을 해주세요.');
     } else if (
       !password ||
       password.length < 8 ||
@@ -111,9 +117,14 @@ function TutorGetInfoScreen1(props) {
           <Component>
             <FirstLow>
               <Txt>이메일을 입력해주세요.</Txt>
-              <Check onPress={onPressCheckEmail}>
-                <Text style={{ color: 'navy' }}>이메일 중복 확인</Text>
-              </Check>
+
+              {isValidEmail ? (
+                <Octicons name="check" size={RFValue(20)} color={COLORS.subLightblue} style={{ marginLeft: 10 }} />
+              ) : (
+                <Check onPress={onPressCheckEmail}>
+                  <Text style={{ color: 'navy' }}>이메일 중복 확인</Text>
+                </Check>
+              )}
             </FirstLow>
             <SubTxt>본 이메일을 사용해서 로그인을 하게 됩니다.</SubTxt>
             <Input
@@ -121,6 +132,7 @@ function TutorGetInfoScreen1(props) {
               onChangeText={onChangeEmail}
               placeholder="( 예시. kedighyfn345@gmail.com )"
               placeholderTextColor="lightgray"
+              editable={!isValidEmail}
             />
           </Component>
 
@@ -138,8 +150,8 @@ function TutorGetInfoScreen1(props) {
         </Info>
 
         <ContinueBtn
-          fontColor={name && contact && email && password ? 'white' : 'navy'}
-          backColor={name && contact && email && password ? 'navy' : 'white'}
+          fontColor={name && contact && email && password && isValidEmail ? 'white' : 'navy'}
+          backColor={name && contact && email && password && isValidEmail ? 'navy' : 'white'}
           width={wp(100)}
           marginBottom={hp(6.15)}
           justifyContent="center"

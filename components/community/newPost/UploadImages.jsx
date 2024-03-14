@@ -8,8 +8,18 @@ import React, { useEffect, useState } from 'react';
 import { Text, Image, TouchableOpacity, View, Alert } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styled } from 'styled-components/native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import Octicons from 'react-native-vector-icons/Octicons';
+import format from 'pretty-format';
 
-function UploadImages({ addresses, setAddresses }) {
+UploadImages.propTypes = {
+  isPhotoValid: PropTypes.bool.isRequired,
+  setPhotoValid: PropTypes.func.isRequired,
+  addresses: PropTypes.object.isRequired,
+  setAddresses: PropTypes.func.isRequired,
+};
+
+function UploadImages({ isPhotoValid, setPhotoValid, addresses, setAddresses }) {
   const [selectedImages, setSelectedImages] = useState([]);
 
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
@@ -53,14 +63,21 @@ function UploadImages({ addresses, setAddresses }) {
         const updatedAddresses = { ...addresses };
         updatedAddresses.addresses = res.data.data;
         setAddresses(updatedAddresses.addresses);
+        setPhotoValid(true);
+        Alert.alert('알림', '사진 업로드에 성공하였습니다.');
         console.log(updatedAddresses.addresses);
       })
       .catch((error) => {
-        if (error.response && error.response.data.code === 408) {
+        if (error.response && error.response.status === 413) {
+          console.log(format(error));
+          Alert.alert('알림', '파일의 크기가 큽니다. 파일당 1mb 크기내로 올려주세요.');
+        } else if (error.response && error.response.data.code === 408) {
           Alert.alert('알림', '로그인을 해주세요.');
+          console.log(format(error));
           navigation.navigate('homeScreen');
         } else if (error.response && error.response.data.code === 500) {
           Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+          console.log(format(error));
         } else {
           console.log('사진 올리기 실패', error);
           Alert.alert('알림', '네트워크 연결을 확인해주세요.');
@@ -86,32 +103,40 @@ function UploadImages({ addresses, setAddresses }) {
   return (
     <Container>
       <View style={styles.row}>
-        {selectedImages.map((image, index) => (
-          <TouchableOpacity key={index} onPress={() => removeImage(index)}>
-            <View style={styles.imageContainer}>
+        {selectedImages.map((image, index) =>
+          isPhotoValid ? (
+            <View key={index} style={styles.imageContainer}>
               <Image source={{ uri: image }} style={styles.image} />
             </View>
-          </TouchableOpacity>
-        ))}
-        {[...Array(remainingSlots)].map((_, index) => (
-          <TouchableOpacity key={index + selectedImages.length} onPress={uploadImage}>
-            <View style={styles.imageContainer}>
-              <AddImage style={styles.addImage} />
-            </View>
-          </TouchableOpacity>
-        ))}
+          ) : (
+            <TouchableOpacity key={index} onPress={() => removeImage(index)}>
+              <View style={styles.imageContainer}>
+                <Image source={{ uri: image }} style={styles.image} />
+              </View>
+            </TouchableOpacity>
+          ),
+        )}
+        {!isPhotoValid &&
+          [...Array(remainingSlots)].map((_, index) => (
+            <TouchableOpacity key={index + selectedImages.length} onPress={uploadImage}>
+              <View style={styles.imageContainer}>
+                <AddImage style={styles.addImage} />
+              </View>
+            </TouchableOpacity>
+          ))}
       </View>
-      <TouchableOpacity onPress={handleUpload} style={styles.uploadButton}>
-        <Text style={styles.uploadText}>사진 업로드 하기</Text>
-      </TouchableOpacity>
+      {isPhotoValid ? (
+        <View style={styles.iconContainer}>
+          <Octicons name="check" size={RFValue(20)} color={COLORS.subLightblue} style={{ marginLeft: 10 }} />
+        </View>
+      ) : (
+        <TouchableOpacity onPress={handleUpload} style={styles.uploadButton}>
+          <Text style={styles.uploadText}>사진 업로드 하기</Text>
+        </TouchableOpacity>
+      )}
     </Container>
   );
 }
-
-UploadImages.propTypes = {
-  addresses: PropTypes.object.isRequired,
-  setAddresses: PropTypes.func.isRequired,
-};
 
 const Container = styled.View``;
 
@@ -145,6 +170,12 @@ const styles = {
 
     overflow: 'hidden',
     padding: 5,
+  },
+  iconContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: RFValue(50),
   },
 };
 

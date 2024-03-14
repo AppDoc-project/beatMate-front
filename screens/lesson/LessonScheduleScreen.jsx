@@ -1,6 +1,6 @@
 import LessonCalendar from '@components/lesson/lessonCalendarItem/LessonCalendar';
 import LessonScheduleItem from '@components/lesson/lessonCalendarItem/LessonScheduleItem';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getAllLessonInfo } from 'api/lesson';
 import { COLORS } from 'colors';
 import format from 'pretty-format';
@@ -26,24 +26,26 @@ function LessonScheduleScreen(props) {
   // 년 월별 레슨 정보
   const [lessonDatas, setLessonData] = useState(null);
 
-  useEffect(() => {
-    setLessonData(null);
-    getAllLessonInfo(year, month)
-      .then((res) => {
-        console.log('년.월별 레슨 정보', format(res.data));
-        setLessonData(res.data);
-      })
-      .catch((error) => {
-        if (error.response && error.response.data.code === 408) {
-          Alert.alert('알림', '로그인을 해주세요.');
-          navigation.navigate('loginScreen');
-        } else if (error.response && error.response.data.code === 500) {
-          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
-        } else {
-          console.log('년, 월별 레슨정보 가져오기 실패', error);
-        }
-      });
-  }, [year, month]);
+  useFocusEffect(
+    React.useCallback(() => {
+      setLessonData(null);
+      getAllLessonInfo(year, month)
+        .then((res) => {
+          console.log('년.월별 레슨 정보', format(res.data));
+          setLessonData(res.data);
+        })
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('loginScreen');
+          } else if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+          } else {
+            console.log('년, 월별 레슨정보 가져오기 실패', error);
+          }
+        });
+    }, [year, month]),
+  );
 
   useEffect(() => {
     const extractedDates = lessonDatas?.data?.map((lessonData) => lessonData.endTime.substring(8, 10));
