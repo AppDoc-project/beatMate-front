@@ -121,7 +121,7 @@ function TuteeMyPageScreen() {
               style={{ width: 100, height: 100, borderRadius: 50 }}
             />
           )}
-          {UserInfo && !UserInfo.profile && <FontAwesome name={'user-circle'} size={RFValue(90)} color={'lightgray'} />}
+          {UserInfo && !UserInfo.profile && <FontAwesome name={'user-circle'} size={RFValue(80)} color={'lightgray'} />}
         </ProfileImg>
 
         <Userbox>
