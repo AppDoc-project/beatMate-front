@@ -21,8 +21,11 @@ function CommunityOnePostScreen({ route }) {
 
   const onPressPreviousBtn = () => {
     setComment('');
-    navigation.navigate('communityScreen');
+    navigation.goBack();
   };
+
+  const canGoBack = navigation.canGoBack();
+  const previousRoute = canGoBack ? navigation.getState().routes[navigation.getState().index - 1] : null;
 
   const { postId, communityName } = route.params;
   const [comment, setComment] = useState('');
@@ -124,15 +127,30 @@ function CommunityOnePostScreen({ route }) {
       <Container>
         <WholeWrapper>
           <Top>
-            <AntDesign name="left" size={32} marginLeft={5} marginRight={5} onPress={() => onPressPreviousBtn()} />
-            <MainTxt>{communityName}</MainTxt>
+            {!previousRoute ||
+              (previousRoute.name !== 'myPageScreen' && (
+                <>
+                  <AntDesign
+                    name="left"
+                    size={32}
+                    marginLeft={5}
+                    marginRight={5}
+                    onPress={() => onPressPreviousBtn()}
+                  />
+                  <MainTxt>{communityName}</MainTxt>
+                </>
+              ))}
           </Top>
           <MainWrapper>{postInfo && <MainPostitem postInfo={postInfo} />}</MainWrapper>
         </WholeWrapper>
         <CommentWrapper>{postInfo && <CommentList postId={postInfo.id} />}</CommentWrapper>
-        <Btn onPress={() => navigation.navigate('writeNewPostScreen')}>
-          <WriteBtn />
-        </Btn>
+        {!previousRoute ||
+          (previousRoute.name !== 'myPageScreen' && (
+            <Btn onPress={() => navigation.navigate('writeNewPostScreen')}>
+              <WriteBtn />
+            </Btn>
+          ))}
+
         <WriteWrapper>
           <ProfileImg>
             {postInfo && postInfo.profile && (
