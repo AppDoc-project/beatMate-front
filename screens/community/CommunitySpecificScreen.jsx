@@ -6,7 +6,7 @@ import { getFirstPost, getNextPost, getFirstSearchPost, getNextSearchPost } from
 import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
-import { Text, View, FlatList, ActivityIndicator, TouchableOpacity, Modal } from 'react-native';
+import { Text, View, FlatList, ActivityIndicator, TouchableOpacity, Modal, Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -37,9 +37,15 @@ function CommunitySpecificScreen() {
   };
 
   const onPressSearchBtn = () => {
-    setPage(0);
-    fetchData(false, 0);
-    console.log(searchType);
+    if (!searchType) {
+      Alert.alert('알림', '검색 조건을 설정해주세요.');
+    } else if (!searchKeyword) {
+      Alert.alert('알림', '검색어를 작성해주세요.');
+    } else {
+      setPage(0);
+      fetchData(false, 0);
+      console.log(searchType);
+    }
   };
 
   useFocusEffect(
