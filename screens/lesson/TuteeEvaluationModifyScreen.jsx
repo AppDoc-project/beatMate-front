@@ -36,7 +36,7 @@ function TuteeEvaluationModifyScreen(props) {
       const data = {
         lessonId: lessonData.id,
         review: content,
-        score: rating,
+        score: rating === 0 ? lessonData.score : rating,
       };
 
       console.log(data);

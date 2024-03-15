@@ -100,6 +100,13 @@ function UploadImages({ isPhotoValid, setPhotoValid, addresses, setAddresses, se
     console.log('Selected Images:', selectedImages);
   }, [selectedImages]); // selectedImages가 업데이트될 때마다 useEffect 실행
 
+  useEffect(() => {
+    // addresses가 존재하고 selectedImages가 비어있을 경우에만 초기화
+    if (addresses.length > 0 && selectedImages.length === 0) {
+      setSelectedImages(addresses);
+    }
+  }, [addresses]);
+
   return (
     <Container>
       <View style={styles.row}>

@@ -50,7 +50,7 @@ function LessonEvaluationScreen(props) {
               reviews={[1, 2, 3, 4, 5]}
               size={RFValue(22)}
               reviewSize={RFValue(17)}
-              defaultRating={3}
+              defaultRating={lessonData.score}
               isDisabled={true}
             />
           </Rate>

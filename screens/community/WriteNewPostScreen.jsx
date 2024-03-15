@@ -3,6 +3,7 @@ import SelectCategory from '@components/community/newPost/SelectCategory';
 import UploadImages from '@components/community/newPost/UploadImages';
 import { useNavigation } from '@react-navigation/native';
 import { modifyPost, postNewPost } from 'api/commity';
+import { COLORS } from 'colors';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
@@ -35,8 +36,14 @@ function WriteNewPostScreen({ route }) {
   const [selectedImages, setSelectedImages] = useState([]);
 
   const onChangeTitle = (text) => setTitle(text);
-  const onChangeContent = (text) => setContent(text);
+  const onChangeContent = (text) => {
+    // 글자 수 제한 함수
+    const truncatedText = text.slice(0, MAX_LENGTH);
+    setContent(truncatedText);
+  };
   const [isPhotoValid, setPhotoValid] = useState(false);
+
+  const MAX_LENGTH = 500;
 
   const onPressAlertBtn = () => {
     if (!title) {
@@ -143,6 +150,7 @@ function WriteNewPostScreen({ route }) {
             onChangeText={onChangeTitle}
             placeholder="제목 (최대 20자까지 가능합니다)"
             placeholderTextColor="lightgray"
+            multiline
           />
         </Component>
         <Component>
@@ -151,7 +159,11 @@ function WriteNewPostScreen({ route }) {
             onChangeText={onChangeContent}
             placeholder="내용을 입력하세요 (최대 3000자까지 가능합니다)"
             placeholderTextColor="lightgray"
+            multiline
           />
+          <TextCount>
+            {content.length}/{MAX_LENGTH} 자
+          </TextCount>
         </Component>
         <PictureMainTxt>사진 (선택)</PictureMainTxt>
         <PictureContent>최소 1장 이상, 최대 5장까지 첨부가 가능합니다.</PictureContent>
@@ -280,8 +292,7 @@ const TitleInput = styled.TextInput`
   border-width: 1px;
 
   padding-left: ${RFValue(4)}px;
-  font-size: ${RFValue(16)}px;
-  font-weight: bold;
+  font-size: ${RFValue(13)}px;
   padding: ${RFValue(10)}px;
 `;
 
@@ -296,14 +307,22 @@ const ContentInput = styled.TextInput`
   border-bottom-width: 1px;
 
   padding-left: ${RFValue(4)}px;
-  font-size: ${RFValue(16)}px;
-  font-weight: bold;
+  font-size: ${RFValue(13)}px;
   padding: ${RFValue(10)}px;
   margin-bottom: ${hp(5)}px;
 `;
 
 const StyledUploadImages = styled(UploadImages)`
   margin-top: ${hp(20)}px;
+`;
+
+const TextCount = styled.Text`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: ${RFValue(10)}px;
+  font-weight: 600;
+  color: ${COLORS.lightgray};
 `;
 
 export default WriteNewPostScreen;

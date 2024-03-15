@@ -68,7 +68,7 @@ function ReserveMainScreen(props) {
             myReserveDatas.data.map((data) => <ReserveListItem key={data.id} myReserveData={data} />)
           ) : (
             <SubWrapper>
-              <NoDataText>예약된 수업이 없습니다.</NoDataText>
+              <NoDataText>예약된 레슨이 없습니다.</NoDataText>
             </SubWrapper>
           )}
         </MyPostingListScrollView>
