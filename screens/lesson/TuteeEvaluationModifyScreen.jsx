@@ -91,6 +91,7 @@ function TuteeEvaluationModifyScreen(props) {
             size={RFValue(22)}
             reviewSize={RFValue(17)}
             onFinishRating={handleRating}
+            defaultRating={lessonData.score}
           />
         </Rate>
         <Review>
