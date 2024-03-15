@@ -103,7 +103,6 @@ const Name = styled.Text`
 const LastChat = styled.Text`
   font-size: ${RFValue(12)}px;
   font-weight: 500;
-  margin-top: ${hp(1)}px;
 `;
 
 const NotReadContainer = styled.View`

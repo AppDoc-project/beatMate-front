@@ -1,10 +1,12 @@
 import ReserveListItem from '@components/reservation/ReserveListItem';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getReserveList } from 'api/reservation';
+import { COLORS } from 'colors';
 import format from 'pretty-format';
 import React, { useState } from 'react';
 import { Alert, Text, View } from 'react-native';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import styled from 'styled-components';
 
 function ReserveMainScreen(props) {
@@ -20,8 +22,9 @@ function ReserveMainScreen(props) {
       setIsLoading(true);
       getReserveList()
         .then((res) => {
-          console.log(format(res.data));
+          console.log('예약 리스트 가져오기', format(res.data));
           setmyReserveData(res.data);
+          console.log('예약', myReserveDatas);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -61,10 +64,13 @@ function ReserveMainScreen(props) {
     <Container>
       <MainWrapper>
         <MyPostingListScrollView>
-          {myReserveDatas &&
-            myReserveDatas.data.map((myReserveData) => (
-              <ReserveListItem key={myReserveData.id} myReserveData={myReserveData} />
-            ))}
+          {myReserveDatas && myReserveDatas.data && myReserveDatas.data.length > 0 ? (
+            myReserveDatas.data.map((data) => <ReserveListItem key={data.id} myReserveData={data} />)
+          ) : (
+            <SubWrapper>
+              <NoDataText>예약된 수업이 없습니다.</NoDataText>
+            </SubWrapper>
+          )}
         </MyPostingListScrollView>
       </MainWrapper>
     </Container>
@@ -82,6 +88,18 @@ const MainWrapper = styled.View`
 
 const MyPostingListScrollView = styled.ScrollView`
   flex-grow: 1;
+`;
+
+const SubWrapper = styled.View`
+  align-items: center;
+  justify-content: center;
+`;
+
+const NoDataText = styled.Text`
+  font-size: ${RFValue(18)}px;
+  font-weight: bold;
+  margin-top: ${hp(37)}px;
+  color: ${COLORS.main};
 `;
 
 export default ReserveMainScreen;
