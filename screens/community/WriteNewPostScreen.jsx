@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { modifyPost, postNewPost } from 'api/commity';
 import format from 'pretty-format';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -32,6 +32,7 @@ function WriteNewPostScreen({ route }) {
   const [content, setContent] = useState(postInfo ? postInfo.text : ''); //본문
   const [communityId, setCommunityId] = useState(0); //communityId
   const [addresses, setAddresses] = useState(postInfo ? postInfo.pictures : []); //사진들
+  const [selectedImages, setSelectedImages] = useState([]);
 
   const onChangeTitle = (text) => setTitle(text);
   const onChangeContent = (text) => setContent(text);
@@ -44,7 +45,7 @@ function WriteNewPostScreen({ route }) {
       Alert.alert('알림', '내용을 입력해주세요.');
     } else if (!communityId) {
       Alert.alert('알림', '카테고리를 설정해주세요.');
-    } else if (!isPhotoValid) {
+    } else if (addresses.length > 0 && !isPhotoValid) {
       Alert.alert('알림', '사진 업로드 하기를 눌러주세요.');
     }
   };
@@ -122,6 +123,10 @@ function WriteNewPostScreen({ route }) {
     navigation.goBack();
   };
 
+  useEffect(() => {
+    console.log(addresses);
+  }, [addresses]);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <Container>
@@ -155,29 +160,59 @@ function WriteNewPostScreen({ route }) {
           setPhotoValid={setPhotoValid}
           addresses={addresses}
           setAddresses={setAddresses}
+          selectedImages={selectedImages}
+          setSelectedImages={setSelectedImages}
         />
         {postInfo ? (
           <ChangeBtn
-            fontColor={title && content && communityId && isPhotoValid ? 'white' : 'navy'}
-            backColor={title && content && communityId && isPhotoValid ? 'navy' : 'white'}
+            fontColor={
+              title &&
+              content &&
+              communityId &&
+              (selectedImages.length <= 0 || (selectedImages.length > 0 ? isPhotoValid : true))
+                ? 'white'
+                : 'navy'
+            }
+            backColor={
+              title &&
+              content &&
+              communityId &&
+              (selectedImages.length <= 0 || (selectedImages.length > 0 ? isPhotoValid : true))
+                ? 'navy'
+                : 'white'
+            }
             width={wp(100)}
             justifyContent="center"
             onPress={() => {
               onPressAlertBtn();
-              if (isPhotoValid && title && content && communityId) {
+              if (
+                title &&
+                content &&
+                communityId &&
+                title &&
+                content &&
+                communityId &&
+                (selectedImages.length <= 0 || (selectedImages.length > 0 ? isPhotoValid : true))
+              ) {
                 onPressModifyBtn();
               }
             }}
           />
         ) : (
           <RegisterBtn
-            fontColor={title && content && communityId && isPhotoValid ? 'white' : 'navy'}
-            backColor={title && content && communityId && isPhotoValid ? 'navy' : 'white'}
+            fontColor={
+              title && content && communityId && (selectedImages.length === 0 || isPhotoValid) ? 'white' : 'navy'
+            }
+            backColor={
+              title && content && communityId && (selectedImages.length === 0 || isPhotoValid) ? 'navy' : 'white'
+            }
             width={wp(100)}
             justifyContent="center"
             onPress={() => {
               onPressAlertBtn();
-              if (isPhotoValid && title && content && communityId && isPhotoValid) {
+              if (title && content && communityId && selectedImages.length === 0) {
+                onPressRegisterBtn();
+              } else if (title && content && communityId && selectedImages.length > 0 && isPhotoValid) {
                 onPressRegisterBtn();
               }
             }}

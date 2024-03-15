@@ -17,11 +17,11 @@ UploadImages.propTypes = {
   setPhotoValid: PropTypes.func.isRequired,
   addresses: PropTypes.object.isRequired,
   setAddresses: PropTypes.func.isRequired,
+  selectedImages: PropTypes.array.isRequired,
+  setSelectedImages: PropTypes.func.isRequired,
 };
 
-function UploadImages({ isPhotoValid, setPhotoValid, addresses, setAddresses }) {
-  const [selectedImages, setSelectedImages] = useState([]);
-
+function UploadImages({ isPhotoValid, setPhotoValid, addresses, setAddresses, selectedImages, setSelectedImages }) {
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const navigation = useNavigation();
 
