@@ -58,32 +58,33 @@ function UploadImages({ isPhotoValid, setPhotoValid, addresses, setAddresses, se
       formData.append(`files`, file);
     });
 
-    postImages(formData)
-      .then((res) => {
-        const updatedAddresses = { ...addresses };
-        updatedAddresses.addresses = res.data.data;
-        setAddresses(updatedAddresses.addresses);
-        setPhotoValid(true);
-        Alert.alert('알림', '사진 업로드에 성공하였습니다.');
-        console.log(updatedAddresses.addresses);
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 413) {
-          console.log(format(error));
-          Alert.alert('알림', '파일의 크기가 큽니다. 파일당 1mb 크기내로 올려주세요.');
-        } else if (error.response && error.response.data.code === 408) {
-          Alert.alert('알림', '로그인을 해주세요.');
-          console.log(format(error));
-          navigation.navigate('homeScreen');
-        } else if (error.response && error.response.data.code === 500) {
-          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
-          console.log(format(error));
-        } else {
-          console.log('사진 올리기 실패', error);
-          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
-          navigation.navigate('homeScreen');
-        }
-      });
+    selectedImages.length > 0 &&
+      postImages(formData)
+        .then((res) => {
+          const updatedAddresses = { ...addresses };
+          updatedAddresses.addresses = res.data.data;
+          setAddresses(updatedAddresses.addresses);
+          setPhotoValid(true);
+          Alert.alert('알림', '사진 업로드에 성공하였습니다.');
+          console.log(updatedAddresses.addresses);
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 413) {
+            console.log(format(error));
+            Alert.alert('알림', '파일의 크기가 큽니다. 파일당 1mb 크기내로 올려주세요.');
+          } else if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            console.log(format(error));
+            navigation.navigate('homeScreen');
+          } else if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            console.log(format(error));
+          } else {
+            console.log('사진 올리기 실패', error);
+            Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+            navigation.navigate('homeScreen');
+          }
+        });
   };
 
   const removeImage = (indexToRemove) => {

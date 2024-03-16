@@ -64,30 +64,31 @@ function ImageUpload({ isPhotoValid, setPhotoValid }) {
       formData.append(`files`, file); // FormData에 이미지 추가
     });
 
-    postImages(formData)
-      .then((res) => {
-        console.log(format(res)); // 서버 응답 확인
-        setPhotoValid(true);
-        Alert.alert('알림', '사진 업로드에 성공하였습니다.');
+    selectedImages.length > 0 &&
+      postImages(formData)
+        .then((res) => {
+          console.log(format(res)); // 서버 응답 확인
+          setPhotoValid(true);
+          Alert.alert('알림', '사진 업로드에 성공하였습니다.');
 
-        const updatedSignUpRequest = { ...tutorSignUpRequest }; // 이전 상태의 복사본 생성
-        updatedSignUpRequest.authenticationAddress = res.data.data; // 새로운 값으로 업데이트
-        setTutorSignUpRequest(updatedSignUpRequest); // 새로운 상태로 업데이트
-        console.log(updatedSignUpRequest);
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 413) {
-          console.log(format(error));
-          Alert.alert('알림', '파일의 크기가 큽니다. 파일당 1mb 크기내로 올려주세요.');
-        } else if (error.response && error.response.data.code === 500) {
-          console.log(format(error));
-          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
-        } else {
-          console.log(format(error));
-          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
-          navigation.navigate('loginScreen');
-        }
-      });
+          const updatedSignUpRequest = { ...tutorSignUpRequest }; // 이전 상태의 복사본 생성
+          updatedSignUpRequest.authenticationAddress = res.data.data; // 새로운 값으로 업데이트
+          setTutorSignUpRequest(updatedSignUpRequest); // 새로운 상태로 업데이트
+          console.log(updatedSignUpRequest);
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 413) {
+            console.log(format(error));
+            Alert.alert('알림', '파일의 크기가 큽니다. 파일당 1mb 크기내로 올려주세요.');
+          } else if (error.response && error.response.data.code === 500) {
+            console.log(format(error));
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+          } else {
+            console.log(format(error));
+            Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+            navigation.navigate('loginScreen');
+          }
+        });
   };
 
   const removeImage = (indexToRemove) => {

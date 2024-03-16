@@ -46,6 +46,7 @@
 //     if (socketRef.current) {
 //       socketRef.current.disconnect();
 //       leave();
+//       Alert.alert('알림', '강사가 레슨을 종료하였습니다.');
 
 //       console.log('소켓 없음');
 //     }

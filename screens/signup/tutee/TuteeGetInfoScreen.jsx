@@ -167,14 +167,16 @@ function TuteeGetInfoScreen(props) {
           </Component>
         </Info>
         <ContinueBtn
-          fontColor={name && contact && email && password ? 'white' : 'navy'}
-          backColor={name && contact && email && password ? 'navy' : 'white'}
+          fontColor={name && contact && isValidEmail && password ? 'white' : 'navy'}
+          backColor={name && contact && isValidEmail && password ? 'navy' : 'white'}
           width={wp(100)}
           marginBottom={hp(6.15)}
           justifyContent="center"
           onPress={() => {
             onPressAlertBtn();
-            onPressContinueBtn();
+            if (name && contact && email && password && isValidEmail) {
+              onPressContinueBtn();
+            }
           }}
         />
       </Container>

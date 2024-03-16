@@ -91,7 +91,7 @@ const Comment = styled.Text`
   text-align: left;
   margin-left: ${wp(5)}px;
   margin-bottom: ${hp(2)}px;
-  margin-top: ${hp(22)}px;
+  margin-top: ${hp(2)}px;
 `;
 
 const MyPostingListScrollView = styled.ScrollView`

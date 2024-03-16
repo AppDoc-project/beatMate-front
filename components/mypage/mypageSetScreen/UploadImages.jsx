@@ -61,25 +61,26 @@ function UploadImages({ isPhotoValid, setAddresses, setPhotoValid }) {
     };
     formData.append('file', file);
 
-    postImages(formData)
-      .then((res) => {
-        setAddresses(res.data.message);
-        console.log('이미지 url 변환', res.data.message);
-        setPhotoValid(true);
-        Alert.alert('알림', '사진 업로드에 성공하였습니다.');
-      })
-      .catch((error) => {
-        if (error.response && error.response.data.code === 408) {
-          Alert.alert('알림', '로그인을 해주세요.');
-          navigation.navigate('homeScreen');
-        } else if (error.response && error.response.data.code === 500) {
-          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
-        } else {
-          console.log('이미지 url 변환', format(error));
-          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
-          navigation.navigate('homeScreen');
-        }
-      });
+    selectedImage.length > 0 &&
+      postImages(formData)
+        .then((res) => {
+          setAddresses(res.data.message);
+          console.log('이미지 url 변환', res.data.message);
+          setPhotoValid(true);
+          Alert.alert('알림', '사진 업로드에 성공하였습니다.');
+        })
+        .catch((error) => {
+          if (error.response && error.response.data.code === 408) {
+            Alert.alert('알림', '로그인을 해주세요.');
+            navigation.navigate('homeScreen');
+          } else if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+          } else {
+            console.log('이미지 url 변환', format(error));
+            Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+            navigation.navigate('homeScreen');
+          }
+        });
   };
 
   const removeImage = () => {
