@@ -37,6 +37,12 @@ function MainPostitem({ postInfo }) {
   const formattedDate =
     postInfo && postInfo.createdAt.substring(0, 10).replace(/:/g, '.') + ' ' + postInfo.createdAt.substring(11, 16);
 
+  const [liked, setLiked] = useState(postInfo.likeYN);
+  const [bookmarked, setBookmarked] = useState(postInfo.bookmarkYN);
+
+  const [likedCount, setLikedCount] = useState(postInfo.likeCount);
+  const [bookmarkedCount, setBookmarkedCount] = useState(postInfo.bookmarkCount);
+
   const navigation = useNavigation();
 
   const {
@@ -56,6 +62,10 @@ function MainPostitem({ postInfo }) {
         const { data } = res;
         console.log(format(data));
         Alert.alert('알림', '요청을 성공하였습니다.');
+        if (!liked) {
+          setLikedCount(likedCount + 1);
+        }
+        setLiked(true);
       })
       .catch((error) => {
         if (error.response && error.response.data.code === 408) {
@@ -83,6 +93,12 @@ function MainPostitem({ postInfo }) {
       .then((res) => {
         const { data } = res;
         console.log(format(data));
+        if (!bookmarked) {
+          setBookmarkedCount(bookmarkedCount + 1);
+        } else {
+          setBookmarkedCount(bookmarkedCount - 1);
+        }
+        setBookmarked(!bookmarked);
         Alert.alert('알림', '요청을 성공하였습니다.');
       })
       .catch((error) => {
@@ -204,20 +220,20 @@ function MainPostitem({ postInfo }) {
                 <IconText>{postInfo.threadCount}</IconText>
               </SingleIconWrapper>
               <SingleIconWrapper>
-                {postInfo.likeYN ? (
+                {liked ? (
                   <MaterialCommunityIcons name={'cards-heart'} color={COLORS.main} size={RFValue(17)} />
                 ) : (
                   <MaterialCommunityIcons name={'cards-heart'} color={COLORS.lightgray01} size={RFValue(17)} />
                 )}
-                <IconText>{postInfo.likeCount}</IconText>
+                <IconText>{likedCount}</IconText>
               </SingleIconWrapper>
               <SingleIconWrapper>
-                {postInfo.bookmarkYN ? (
+                {bookmarked ? (
                   <MaterialCommunityIcons name={'bookmark'} color={COLORS.main} size={RFValue(17)} />
                 ) : (
                   <MaterialCommunityIcons name={'bookmark'} color={COLORS.lightgray01} size={RFValue(17)} />
                 )}
-                <IconText>{postInfo.bookmarkCount}</IconText>
+                <IconText>{bookmarkedCount}</IconText>
               </SingleIconWrapper>
             </IconWrapper>
           </Wrapper>
