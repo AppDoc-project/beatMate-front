@@ -72,7 +72,7 @@ function MyPageSetScreen(props) {
 
   return (
     <Container>
-      <FirstList>
+      <List>
         <Header>내 정보</Header>
         <Btn onPress={PasswordSet}>
           <Txt>비밀번호 변경</Txt>
@@ -85,8 +85,8 @@ function MyPageSetScreen(props) {
             <Txt>자기소개 변경</Txt>
           </Btn>
         )}
-      </FirstList>
-      <SecondList>
+      </List>
+      <List>
         <Header>커뮤니티</Header>
         <Btn onPress={NicknameSet}>
           <Txt>닉네임 변경</Txt>
@@ -94,8 +94,8 @@ function MyPageSetScreen(props) {
         <Btn onPress={ProfileImageSet}>
           <Txt>프로필 이미지 변경</Txt>
         </Btn>
-      </SecondList>
-      <ThirdList>
+      </List>
+      <List>
         <Header>기타</Header>
         <Btn onPress={Logout}>
           <Txt>로그아웃</Txt>
@@ -103,7 +103,7 @@ function MyPageSetScreen(props) {
         <Btn onPress={DeleteAccount}>
           <Txt>회원 탈퇴</Txt>
         </Btn>
-      </ThirdList>
+      </List>
     </Container>
   );
 }
@@ -115,28 +115,10 @@ const Container = styled.View`
   justify-content: center;
 `;
 
-const FirstList = styled.View`
-  padding: ${wp(0)}px ${hp(5)}px;
-
-  width: ${wp(90)}px;
-  border-width: 3px;
-  border-radius: 15px;
-  border-color: ${COLORS.main};
-  margin-bottom: ${hp(3)}px;
-`;
-
-const SecondList = styled.View`
-  padding: ${wp(0)}px ${hp(5)}px;
-
-  width: ${wp(90)}px;
-  border-width: 3px;
-  border-radius: 15px;
-  border-color: ${COLORS.main};
-  margin-bottom: ${hp(3)}px;
-`;
-
-const ThirdList = styled.View`
-  padding: ${wp(0)}px ${hp(5)}px;
+const List = styled.View`
+  padding-left: ${hp(5)}px;
+  padding-top: ${hp(2)}px;
+  padding-bottom: ${hp(2)}px;
 
   width: ${wp(90)}px;
   border-width: 3px;
@@ -148,7 +130,7 @@ const ThirdList = styled.View`
 const Header = styled.Text`
   font-size: ${RFValue(18)}px;
   font-weight: bold;
-  margin: ${RFValue(15)}px 0px ${RFValue(11)}px 0px;
+  margin-bottom: ${hp(1)}px;
 `;
 
 const Btn = styled.TouchableOpacity``;
@@ -156,7 +138,7 @@ const Btn = styled.TouchableOpacity``;
 const Txt = styled.Text`
   font-size: ${RFValue(14)}px;
   font-weight: 600;
-  margin: ${RFValue(6.5)}px 0px;
+  margin-top: ${hp(1)}px;
 `;
 
 export default MyPageSetScreen;
