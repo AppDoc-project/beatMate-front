@@ -108,8 +108,6 @@ function CommentListItem({ comment, CommentData, setCommentData }) {
 }
 
 const Container = styled.View`
-  border-bottom-width: 1px;
-  border-bottom-color: ${COLORS.lightgray};
   padding: ${RFValue(10)}px;
   margin-left: ${wp(3)}px;
 `;

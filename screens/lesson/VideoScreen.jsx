@@ -1,6 +1,6 @@
 // import LessonInfoModal from '@components/lesson/currentLessonItem/LessonInfoModal';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { useNavigation, useRoute } from '@react-navigation/native';
+// import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 // import { finishLesson } from 'api/lesson';
 // import { COLORS } from 'colors';
 // import { UserInfo } from 'context/UserInfoContext';
@@ -11,14 +11,24 @@
 // import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 // import socketio from 'socket.io-client';
 // import styled from 'styled-components';
+// import PropTypes from 'prop-types';
 
-// const VideoScreen = () => {
+// const VideoScreen = ({ navigation }) => {
 //   const route = useRoute();
 //   const { remoteLessonInfo } = route.params;
 
 //   const [isModalVisible, setModalVisible] = useState(false);
 //   const [isMyVideoBig, setIsMyVideoBig] = useState(false);
 //   const [isYourVideoBig, setIsYourVideoBig] = useState(false);
+
+//   useFocusEffect(
+//     React.useCallback(() => {
+//       const parent = navigation.getParent();
+//       parent.setOptions({ tabBarStyle: { display: 'none' } });
+
+//       return () => parent.setOptions({ tabBarStyle: { display: 'flex' } });
+//     }, [navigation]),
+//   );
 
 //   const toggleModal = () => {
 //     setModalVisible(!isModalVisible);
@@ -61,8 +71,6 @@
 //         console.log(error);
 //       });
 //   };
-
-//   const navigation = useNavigation();
 
 //   const socketRef = useRef(null);
 
@@ -273,6 +281,13 @@
 //   );
 // };
 
+// VideoScreen.propTypes = {
+//   navigation: PropTypes.shape({
+//     navigate: PropTypes.func.isRequired,
+//     getParent: PropTypes.func.isRequired,
+//   }).isRequired,
+// };
+
 // const MainContainer = styled.SafeAreaView`
 //   flex: 1;
 //   align-items: center;
@@ -352,17 +367,34 @@
 
 // export default VideoScreen;
 
-import { useRoute } from '@react-navigation/native';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
+import PropTypes from 'prop-types';
 
-const VideoScreen = () => {
+const VideoScreen = ({ navigation }) => {
+  useFocusEffect(
+    React.useCallback(() => {
+      const parent = navigation.getParent();
+      parent.setOptions({ tabBarStyle: { display: 'none' } });
+
+      return () => parent.setOptions({ tabBarStyle: { display: 'flex' } });
+    }, [navigation]),
+  );
+
   const route = useRoute();
   const { remoteLessonInfo } = route.params;
 
   console.log(remoteLessonInfo);
 
   return <View></View>;
+};
+
+VideoScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+    getParent: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default VideoScreen;
