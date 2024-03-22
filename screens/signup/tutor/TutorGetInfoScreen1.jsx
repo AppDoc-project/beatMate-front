@@ -32,23 +32,31 @@ function TutorGetInfoScreen1(props) {
       email: email,
     };
 
-    checkSingleEmail(data)
-      .then((res) => {
-        const { data } = res;
-        setValidEmail(true);
-        console.log(format(data));
-      })
-      .catch((error) => {
-        if (error.response && error.response.data.code === 404) {
-          Alert.alert('알림', '이미 존재하는 이메일입니다. 다른 이메일을 작성해주세요.');
-        } else if (error.response && error.response.data.code === 500) {
-          Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
-        } else {
-          console.log(format(error.response));
-          Alert.alert('알림', '네트워크 연결을 확인해주세요.');
-          navigation.navigate('loginScreen');
-        }
-      });
+    if (!email || email.length > 50 || !email.includes('@')) {
+      Alert.alert('알림', '이메일은 최대 50자이며 이메일 형식이어야 합니다.');
+    } else {
+      setValidEmail(true);
+    }
+
+    if (email.length > 0 && isValidEmail) {
+      checkSingleEmail(data)
+        .then((res) => {
+          const { data } = res;
+          setValidEmail(true);
+          console.log(format(data));
+        })
+        .catch((error) => {
+          if (error.response && error.response.data.code === 404) {
+            Alert.alert('알림', '이미 존재하는 이메일입니다. 다른 이메일을 작성해주세요.');
+          } else if (error.response && error.response.data.code === 500) {
+            Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+          } else {
+            console.log(format(error.response));
+            Alert.alert('알림', '네트워크 연결을 확인해주세요.');
+            navigation.navigate('loginScreen');
+          }
+        });
+    }
   };
 
   const onPressPreviousBtn = () => {
@@ -67,8 +75,6 @@ function TutorGetInfoScreen1(props) {
       Alert.alert('알림', '이름은 2자 이상 10자 이하로 빈칸 없이 입력해주세요.');
     } else if (contact.length !== 11) {
       Alert.alert('알림', '연락처는 11자여야 합니다.');
-    } else if (!email || email.length > 50 || !email.includes('@')) {
-      Alert.alert('알림', '이메일은 최대 50자이며 이메일 형식이어야 합니다.');
     } else if (!isValidEmail && email) {
       Alert.alert('알림', '이메일 중복 확인을 해주세요.');
     } else if (
