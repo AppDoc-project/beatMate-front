@@ -51,7 +51,7 @@ function ChangePhoneNumberScreen(props) {
             Alert.alert('알림', '비밀번호가 틀렸습니다.');
           } else if (error.response && error.response.data.code === 408) {
             Alert.alert('알림', '로그인을 해주세요.');
-            navigation.navigate('homeScreen');
+            navigation.navigate('loginScreen');
           } else if (error.response && error.response.data.code === 400) {
             Alert.alert('알림', '값 검증에 실패하였습니다.');
           } else if (error.response && error.response.data.code === 500) {

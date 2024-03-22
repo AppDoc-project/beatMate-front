@@ -32,7 +32,7 @@ function SelectCategory({ setCommunityId }) {
       .catch((error) => {
         if (error.response && error.response.data.code === 408) {
           Alert.alert('알림', '로그인을 해주세요.');
-          navigation.navigate('homeScreen');
+          navigation.navigate('loginScreen');
         } else if (error.response && error.response.data.code === 500) {
           Alert.alert('알림', '서버에러가 발생했습니다. 잠시 후 다시 시도해 주세요.');
         } else {
