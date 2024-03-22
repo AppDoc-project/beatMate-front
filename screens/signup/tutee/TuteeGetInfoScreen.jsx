@@ -34,11 +34,9 @@ function TuteeGetInfoScreen(props) {
 
     if (!email || email.length > 50 || !email.includes('@')) {
       Alert.alert('알림', '이메일은 최대 50자이며 이메일 형식이어야 합니다.');
-    } else {
-      setValidEmail(true);
     }
 
-    if (email.length > 0 && isValidEmail) {
+    if (email && email.length <= 50 && email.includes('@')) {
       checkSingleEmail(data)
         .then((res) => {
           const { data } = res;
