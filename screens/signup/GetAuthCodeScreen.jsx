@@ -157,7 +157,7 @@ function GetAuthCodeScreen(props) {
 
     console.log(authEmail);
 
-    if (userType === 'tutor') {
+    if (userType === 'tutor' && code.length > 0) {
       console.log(tutorSignUpRequest);
       validTutorEmail(authEmail)
         .then((res) => {
@@ -180,7 +180,7 @@ function GetAuthCodeScreen(props) {
             navigation.navigate('loginScreen');
           }
         });
-    } else if (userType === 'tutee') {
+    } else if (userType === 'tutee' && code.length > 0) {
       validTuteeEmail(authEmail)
         .then((res) => {
           const { data } = res;
