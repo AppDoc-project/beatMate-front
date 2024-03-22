@@ -88,9 +88,11 @@ function MyPageSetScreen(props) {
       </List>
       <List>
         <Header>커뮤니티</Header>
-        <Btn onPress={NicknameSet}>
-          <Txt>닉네임 변경</Txt>
-        </Btn>
+        {!isTutor && (
+          <Btn onPress={NicknameSet}>
+            <Txt>닉네임 변경</Txt>
+          </Btn>
+        )}
         <Btn onPress={ProfileImageSet}>
           <Txt>프로필 이미지 변경</Txt>
         </Btn>
