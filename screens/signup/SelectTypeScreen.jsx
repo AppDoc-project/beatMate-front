@@ -1,12 +1,14 @@
-import { DoctorSelect, PatientSelect, PreviousBtn, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
+import { TutorSelect, TuteeSelect, ContinueBtn } from '@assets/SignUp/SelectUserScreen';
 import { useNavigation } from '@react-navigation/native';
 import { UserInfo } from 'context/UserInfoContext';
 import React, { useContext } from 'react';
 import { Text } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { styled } from 'styled-components/native';
 
+//계정 바뀌었나 확인용
 function SelectTypeScreen() {
   const navigation = useNavigation();
   const { userType, setUserType } = useContext(UserInfo);
@@ -17,10 +19,10 @@ function SelectTypeScreen() {
   };
 
   const onPressContinueBtn = () => {
-    if (userType === 1) {
-      navigation.navigate('doctorGetInfoScreen');
-    } else if (userType === 2) {
-      navigation.navigate('patientGetInfoScreen');
+    if (userType === 'tutor') {
+      navigation.navigate('tutorGetInfoScreen1');
+    } else if (userType === 'tutee') {
+      navigation.navigate('tuteeGetInfoScreen');
     }
   };
 
@@ -30,21 +32,22 @@ function SelectTypeScreen() {
 
   return (
     <Container>
+      <AntDesign name="left" size={32} marginLeft={5} marginTop={50} onPress={onPressPreviousBtn} />
       <MainInfoTxt1>사용자님,</MainInfoTxt1>
       <MainInfoTxt2>
         <Text style={{ color: 'navy' }}>유형</Text>을 선택해주세요!
       </MainInfoTxt2>
       <SubTxt>한 가지 유형을 선택해주세요. (필수)</SubTxt>
       <SelectOption>
-        <DoctorSelect
-          backColor={userType === 1 ? '#EBF5FF' : '#FFFFFF'}
-          fontColor={userType === 1 ? 'black' : '#666666'}
-          onPress={() => setUserType(1)}
+        <TutorSelect
+          backColor={userType === 'tutor' ? '#EBF5FF' : '#FFFFFF'}
+          fontColor={userType === 'tutor' ? 'black' : '#666666'}
+          onPress={() => setUserType('tutor')}
         />
-        <PatientSelect
-          backColor={userType === 2 ? '#EBF5FF' : '#FFFFFF'}
-          fontColor={userType === 2 ? 'black' : '#666666'}
-          onPress={() => setUserType(2)}
+        <TuteeSelect
+          backColor={userType === 'tutee' ? '#EBF5FF' : '#FFFFFF'}
+          fontColor={userType === 'tutee' ? 'black' : '#666666'}
+          onPress={() => setUserType('tutee')}
         />
       </SelectOption>
 
@@ -54,8 +57,6 @@ function SelectTypeScreen() {
           <SignUpTxt> 로그인하기</SignUpTxt>
         </SignUp>
       </BottomWrapper>
-
-      <PreviousBtn marginBottom={hp(2)} marginLeft={wp(4.8)} onPress={onPressPreviousBtn} />
 
       <ContinueBtn
         fontColor={userType ? 'white' : 'navy'}
@@ -78,7 +79,7 @@ const MainInfoTxt1 = styled.Text`
   font-size: ${RFValue(22)}px;
   font-weight: bold;
   margin-left: ${wp(4.8)}px;
-  margin-top: ${hp(18.7)}px;
+  margin-top: ${hp(12)}px;
 `;
 
 const MainInfoTxt2 = styled.Text`
